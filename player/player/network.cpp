@@ -4,7 +4,7 @@
 
 #include "network.h"
 
-int Network::init(int id_, string hostname) {
+int CNetwork::init(int id_, string hostname) {
 
 	/* Windows 独自の設定 */
 	WSADATA data;
@@ -37,7 +37,7 @@ int Network::init(int id_, string hostname) {
 	return 1;
 }
 
-string Network::check_msg() {
+string CNetwork::check_msg() {
 
 	FD_ZERO(&mask);
 	FD_SET(sofd, &mask);
@@ -54,7 +54,7 @@ string Network::check_msg() {
 
 }
 
-void Network::send_msg(string msg) {
+void CNetwork::send_msg(string msg) {
 	if(msg.length() > BUFMAX){
 		Err("send_msg　msgがBUFMAXを超えています");
 	}
@@ -64,7 +64,7 @@ void Network::send_msg(string msg) {
 	send(sofd, str, sizeof(str),0);
 }
 
-void Network::release(){
+void CNetwork::release(){
 	/* Windows 独自の設定 */
 	closesocket(sofd);
 	WSACleanup();

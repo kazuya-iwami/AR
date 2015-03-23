@@ -17,7 +17,7 @@ using namespace std;
 
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
-class Network {
+class CNetwork {
 	int id;//ユーザーのID：０〜３でそれぞれユーザーごとに異なる
 
 	//TCP接続用

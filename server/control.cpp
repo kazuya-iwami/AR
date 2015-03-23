@@ -9,5 +9,4 @@
 void recv_message(string msg, int id) {
     cout << " プレイヤー：" << id << " " << msg << endl;
 
-
 }

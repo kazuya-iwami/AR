@@ -3,43 +3,43 @@
 #pragma once
 #pragma comment(lib, "winmm.lib")
 
-#include <windows.h>
-#include <mmsystem.h>
-#include <list>
-
-using namespace std;
-
-
-#define FPSCOUNTER_QUERYPER_COUNTER        1
-#define FPSCOUNTER_TIMEGETTIME             2
-
-class CFPSCounter
-{
-private:
-    int m_iCounterFlag;                // 使用する計測関数の判定フラグ
-    LARGE_INTEGER m_Counter;           // クロックカウント数
-    double m_dFreq;                    // 1秒当たりクロックカウント数（周波数）
-    LONGLONG m_OldLongCount;           // 以前のクロックカウント数
-    DWORD m_dwTGTOldCount;             // 以前の時刻（ミリ秒）
-    list<double> m_dwDefTimeLst;       // 時間リスト
-    UINT m_uiNum;                      // 移動平均計算時のデータ数
-    double m_dwSumTimes;               // 共通部分の合計値
+class CFps{
+	int mStartTime;         //測定開始時刻
+	int mCount;             //カウンタ
+	float mFps;             //fps
+	static const int N = 30;//平均を取るサンプル数
+	static const int FPS = 30;	//設定したFPS
 
 public:
-    CFPSCounter(unsigned int smp = 10);
-public:
-    virtual ~CFPSCounter(void);
+	CFps(){
+		mStartTime = 0;
+		mCount = 0;
+		mFps = 0;
+	}
 
-    // FPS値を取得
-    double GetFPS();
+	bool Update(){
+		if( mCount == 0 ){ //1フレーム目なら時刻を記憶
+			mStartTime = GetNowCount();
+		}
+		if( mCount == N ){ //30フレーム目なら平均を計算する
+			int t = GetNowCount();
+			mFps = 1000.f/((t-mStartTime)/(float)N);
+			mCount = 0;
+			mStartTime = t;
+		}
+		mCount++;
+		return true;
+	}
 
-    // サンプル数を変更
-    void SetSampleNum( unsigned int smp);
+	void Draw(){
+		DrawFormatString(0, 0, GetColor(255,255,255), "%.1f", mFps);
+	}
 
-protected:
-    // 現在の時刻を取得
-    double GetCurDefTime();
-
-    // FPSを更新
-    double UpdateFPS( double Def );
+	void Wait(){
+		int tookTime = GetNowCount() - mStartTime;	//かかった時間
+		int waitTime = mCount*1000/FPS - tookTime;	//待つべき時間
+		if( waitTime > 0 ){
+			Sleep(waitTime);	//待機
+		}
+	}
 };

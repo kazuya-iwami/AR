@@ -42,11 +42,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	network->send_msg("HELLO");
 
 	//FPS測定器初期化 サンプル数10
-	 CFPSCounter FPS(10); 
+	CFps fps; 
 
 	//使用する画像の読み込み
 	//int image2[10];
-	//LoadDivGraph("suji.png",10,5,2,110,188,image2);
+	int img = LoadGraph("image/test.jpg");
 
 	// メインループ
 	while(1){
@@ -62,18 +62,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		// フレームを取得
 		//cv::imwrite("out.jpeg",image);
 		// フレームの内容を画面に描画。下に行くほど上に表示
-		LoadGraphScreen( 0 , 0 , "image/test.jpg" , FALSE ) ;
-		//DrawGraph(50,50,image2[i%10],0);
+		
+		DrawGraph(0,0,img,false);
+
+		fps.Update();//これが呼ばれる速度を測定
+		if( CheckHitKey( KEY_INPUT_F ) == 1 ){
+			fps.Draw();
+		}
 
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip() ;
-		FPS.GetFPS();
-		if( CheckHitKey( KEY_INPUT_F ) == 1 ){
-		
-			char str[40];
-			sprintf_s(str, "fps:%lf\n", FPS.GetFPS());
-			OutputDebugString(str); //FPS取得
-		}
+
+		fps.Wait();
 
 		// Windows システムからくる情報を処理する
 		if( ProcessMessage() == -1 ) break ;

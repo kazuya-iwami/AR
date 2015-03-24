@@ -103,6 +103,7 @@
     <ClInclude Include="effect.h" />
     <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="item.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="network.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="utility.h" />

@@ -8,6 +8,7 @@
 #include "network.h"
 #include <memory>
 #include "FPSCounter.h"
+#include "drawable.h"
 
 using namespace std;
 
@@ -45,8 +46,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CFps fps; 
 
 	//使用する画像の読み込み
-	//int image2[10];
-	int img = LoadGraph("image/test.jpg");
+	CDrawable::load();//すべての画像はこの中で読み込む
 
 	// メインループ
 	while(1){
@@ -63,7 +63,15 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//cv::imwrite("out.jpeg",image);
 		// フレームの内容を画面に描画。下に行くほど上に表示
 		
-		DrawGraph(0,0,img,false);
+		list<CDrawable*>::iterator it;
+		for(it=drawlist.begin(); it!=drawlist.end();){  // 最後の「it++」を消す
+			if( !(*it)->draw() ){
+				// オブジェクトをリストからはずす
+				it = drawlist.erase( it );
+				continue;
+			}
+		it++;   // ここでインクリメント
+		}
 
 		fps.Update();//これが呼ばれる速度を測定
 		if( CheckHitKey( KEY_INPUT_F ) == 1 ){

@@ -90,6 +90,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="drawable.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="main.cpp" />

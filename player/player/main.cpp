@@ -9,6 +9,8 @@
 #include <memory>
 #include "FPSCounter.h"
 #include "drawable.h"
+#include "player.h"
+#include "main.h"
 
 using namespace std;
 
@@ -39,7 +41,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	SetDrawScreen( DX_SCREEN_BACK ) ;
 
 	//network初期化
-	network->init(0,"192.168.11.2");
+	network->init(0,"192.168.10.100");
 	network->send_msg("HELLO");
 
 	//FPS測定器初期化 サンプル数10
@@ -47,6 +49,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	//使用する画像の読み込み
 	CDrawable::load();//すべての画像はこの中で読み込む
+
+	CPlayer *player = new CPlayer;
+	drawlist.push_back(player);
 
 	// メインループ
 	while(1){
@@ -80,7 +85,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		fps.Wait();
 
 		// 裏画面の内容を表画面に反映させる
-		ScreenFlip() ;
+		DxLib::ScreenFlip() ;
 
 		// Windows システムからくる情報を処理する
 		if( ProcessMessage() == -1 ) break ;

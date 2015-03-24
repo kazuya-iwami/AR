@@ -3,5 +3,6 @@
 
 bool CPlayer::draw(){
 
-	DrawGraph(0,0,graph["TEST"],false);
+	DrawGraph(0,0,figure_id["TEST"],false);
+	return true;
 };

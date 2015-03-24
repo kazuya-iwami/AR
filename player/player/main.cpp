@@ -69,11 +69,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		if( CheckHitKey( KEY_INPUT_F ) == 1 ){
 			fps.Draw();
 		}
+		fps.Wait();
 
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip() ;
-
-		fps.Wait();
 
 		// Windows システムからくる情報を処理する
 		if( ProcessMessage() == -1 ) break ;

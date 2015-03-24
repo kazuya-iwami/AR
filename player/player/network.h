@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by Iwami kazuya on 2015/03/21.
 //
 
@@ -19,7 +19,7 @@ using namespace std;
 
 class CNetwork {
 	int id;//ユーザーのID：０〜３でそれぞれユーザーごとに異なる
-
+	
 	//TCP接続用
 	int sofd, retval;
 	struct hostent *shost;

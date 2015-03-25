@@ -5,7 +5,8 @@
 #include "item.h"
 
 enum OPERATION_STATUS {
-	NOMAL
+	REGULAR,
+	STOP
 };
 
 
@@ -17,7 +18,10 @@ class CMytank : public CObject {
 	int ope_timer; //操作用タイマー
 	int vel_R,vel_L; //左右のタイヤの速度
 	int focus_x,focus_y;
+
+	
 public:
+	CMytank();
 	void set_ope_status(OPERATION_STATUS status);
 	void set_vel(int x_,int y_);
 	void get_msg(string str);

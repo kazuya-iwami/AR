@@ -51,8 +51,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	CObject::load();//すべての画像はこの中で読み込む
 
-	CMytank *player = new CMytank;
-	drawlist.push_back(player);
+	CMytank *tank = new CMytank;
+	drawlist.push_back(tank);
 
 	// メインループ
 	while(1){

@@ -8,7 +8,8 @@ enum EXPLOSION_KIND {
 
 class CExplosion : public CObject {
 	EXPLOSION_KIND kind;
-	CExplosion(int x_,int y_,EXPLOSION_KIND kind_);
+	
 public:
+	CExplosion(int x_,int y_,EXPLOSION_KIND kind_);
 	bool draw();
 };

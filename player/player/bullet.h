@@ -9,8 +9,9 @@ enum BULLET_KIND{
 
 class CBullet : public CObject{
 	BULLET_KIND kind;
-	CBullet(int x_,int y_,BULLET_KIND kind_);
+	
 
 public:
+	CBullet(int x_,int y_,BULLET_KIND kind_);
 	bool draw();
 };

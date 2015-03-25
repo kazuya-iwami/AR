@@ -13,6 +13,7 @@
 #include "main.h"
 #include "bullet.h"
 #include "explosion.h"
+#include "utility.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	auto network = make_shared<CNetwork>();
 	auto mytank = make_shared<CMytank>();
+	auto system_timer = make_shared<CSystem_timer>();
 
 	char key_buf [ 256 ] ;
 	char key_prev_buf [ 256 ] ;
@@ -57,8 +59,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//g—p‚·‚é‰æ‘œ‚Ì“Ç‚İ‚İ
 	CObject::load();//‚·‚×‚Ä‚Ì‰æ‘œ‚Í‚±‚Ì’†‚Å“Ç‚İ‚Ş
 
-	//mytank‚ğ•`‰æ‚É“o˜^
+	//•`‰æ‚É“o˜^
 	drawlist.push_back(mytank);
+	drawlist.push_back(system_timer);
 
 	// ƒƒCƒ“ƒ‹[ƒv
 	while(1){

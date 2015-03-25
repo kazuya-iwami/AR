@@ -18,3 +18,11 @@ public:
 	virtual bool draw();//falseが返ってきたら描画対象から外す
 	static void load();
 };
+
+/* 描画方法
+
+	auto bullet = make_shared<CBullet>(200,200,BULLET_KIND::BULLET_NOMAL);//スマートポインタ生成
+	drawlist.push_back(bullet);//描画リストに登録
+
+*/
+

@@ -8,8 +8,8 @@
 #include "network.h"
 #include <memory>
 #include "FPSCounter.h"
-#include "drawable.h"
-#include "player.h"
+#include "object.h"
+#include "mytank.h"
 #include "main.h"
 
 using namespace std;
@@ -49,9 +49,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CFps fps; 
 
 	//使用する画像の読み込み
-	CDrawable::load();//すべての画像はこの中で読み込む
+	CObject::load();//すべての画像はこの中で読み込む
 
-	CPlayer *player = new CPlayer;
+	CMytank *player = new CMytank;
 	drawlist.push_back(player);
 
 	// メインループ
@@ -69,7 +69,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//cv::imwrite("out.jpeg",image);
 		// フレームの内容を画面に描画。下に行くほど上に表示
 		
-		list<CDrawable*>::iterator it;
+		list<CObject*>::iterator it;
 		for(it=drawlist.begin(); it!=drawlist.end();){  // 最後の「it++」を消す
 			if( !(*it)->draw() ){
 				// オブジェクトをリストからはずす

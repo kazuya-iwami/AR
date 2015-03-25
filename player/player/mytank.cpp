@@ -1,7 +1,7 @@
 
-#include "player.h"
+#include "mytank.h"
 
-bool CPlayer::draw(){
+bool CMytank::draw(){
 
 	DrawGraph(0,0,figure_id["TEST"],false);
 	return true;

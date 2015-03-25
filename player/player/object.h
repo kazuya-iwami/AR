@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class CDrawable {
+class CObject {
 protected:
 	int x,y;
 	int draw_timer;//-1‚Åí•`‰æ

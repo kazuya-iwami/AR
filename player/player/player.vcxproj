@@ -90,22 +90,24 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="drawable.cpp" />
-    <ClCompile Include="effect.cpp" />
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="explosion.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mytank.cpp" />
     <ClCompile Include="network.cpp" />
-    <ClCompile Include="player.cpp" />
+    <ClCompile Include="object.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="drawable.h" />
-    <ClInclude Include="effect.h" />
+    <ClInclude Include="bullet.h" />
+    <ClInclude Include="explosion.h" />
     <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="mytank.h" />
     <ClInclude Include="network.h" />
-    <ClInclude Include="player.h" />
+    <ClInclude Include="object.h" />
     <ClInclude Include="utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

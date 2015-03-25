@@ -8,12 +8,14 @@ CExplosion::CExplosion(int x_,int y_,EXPLOSION_KIND kind_){
 }
 
 bool CExplosion::draw(){
-	draw_timer++;
+	
 
 	switch(kind){
-	case EXPLOSION_KIND::NOMAL :
+	case EXPLOSION_KIND::EXPLOSION_NOMAL :
 		break;
 	}
+
+	draw_timer++;
 
 	if(draw_timer != 300){
 		return true;

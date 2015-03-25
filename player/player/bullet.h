@@ -4,7 +4,7 @@
 #include "object.h"
 
 enum BULLET_KIND{
-	NOMAL
+	BULLET_NOMAL
 };
 
 class CBullet : public CObject{

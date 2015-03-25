@@ -3,7 +3,7 @@
 #include "object.h"
 
 enum EXPLOSION_KIND {
-	NOMAL
+	EXPLOSION_NOMAL
 };
 
 class CExplosion : public CObject {

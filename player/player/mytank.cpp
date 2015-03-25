@@ -6,7 +6,7 @@ bool CMytank::draw(){
 	//例　DrawGraph(0,0,figure_id["TEST"],false);
 	//ここで 照準、所有アイテム、残機描画
 	//それぞれ関数わけしても
-	DrawGraph(0,0,figure_id["TEST"],false);
+	DrawGraph(0,0,figure_id["F_TEST"],false);
 	return true;
 };
 
@@ -23,5 +23,14 @@ CMytank::CMytank(){
 };
 
 void CMytank::move(){
+
+}
+
+void CMytank::set_vel(int vr,int vl){
+	vel_R=vr;
+	vel_L=vl;
+}
+
+void CMytank::get_msg(string msg){
 
 }

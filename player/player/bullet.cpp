@@ -9,12 +9,16 @@ CBullet::CBullet(int x_,int y_,BULLET_KIND kind_){
 }
 
 bool CBullet::draw(){
-	draw_timer++;
+	
+
+	if(draw_timer==0)PlaySoundMem( sound_id["S_TEST"] , DX_PLAYTYPE_BACK ) ;
 
 	switch(kind){
-	case BULLET_KIND::NOMAL :
+	case BULLET_KIND::BULLET_NOMAL :
 		break;
 	}
+
+	draw_timer++;
 
 	if(draw_timer != 300){
 		return true;

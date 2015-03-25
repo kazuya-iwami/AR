@@ -92,7 +92,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		mytank->move();
 
 		//キー状態取得
-		for(int i;i<256;i++){
+		for(int i=0;i<256;i++){
 			key_prev_buf[i] = key_buf[i];
 		}
 
@@ -113,13 +113,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		
 		//テスト用　Bを押したタイミングでBullet生成
 		if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
-			auto mytank = make_shared<CBullet>();
-			drawlist.push_back(mytank);
+			auto bullet = make_shared<CBullet>(200,200,BULLET_KIND::BULLET_NOMAL);
+			drawlist.push_back(bullet);
 		}
 		//テスト用　Eを押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
-			auto mytank = make_shared<CExplosion>();
-			drawlist.push_back(mytank);
+			auto explosion = make_shared<CExplosion>(200,200,EXPLOSION_KIND::EXPLOSION_NOMAL);
+			drawlist.push_back(explosion);
 		}
 
 		fps.Update();//これが呼ばれる速度を測定

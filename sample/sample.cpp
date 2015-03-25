@@ -26,11 +26,11 @@ class Object{
     int minV, maxV;
 
 public:
-    
+
     int x,y;
-    
+
     bool visible;//視界に入っているかのフラグ
-    
+
     void init(int minH_, int maxH_, int minS_, int maxS_, int minV_, int maxV_){
         minH = minH_;
         minS = minS_;
@@ -54,18 +54,18 @@ void Object::detect(IplImage *image) {
     // HSVに変換
     IplImage *hsv = cvCloneImage(image);
     cvCvtColor(image, hsv, CV_RGB2HSV_FULL);
-    
+
     // 2値化画像
     IplImage *binalized = cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
-    
+
     // 2値化
     CvScalar lower = cvScalar(minH, minS, minV);
     CvScalar upper = cvScalar(maxH, maxS, maxV);
     cvInRangeS(hsv, lower, upper, binalized);
-    
+
     // ノイズの除去
     cvMorphologyEx(binalized, binalized, NULL, NULL, CV_MOP_CLOSE);
-    
+
     // 輪郭検出
     CvSeq *contour = NULL, *maxContour = NULL;
     CvMemStorage *contourStorage = cvCreateMemStorage();
@@ -81,13 +81,13 @@ void Object::detect(IplImage *image) {
         }
         contour = contour->h_next;
     }
-    
+
     // 検出できた
     if (maxContour && max_area > 150) {
         // 輪郭の描画
         cvZero(binalized);
         cvDrawContours(binalized, maxContour, cvScalarAll(255), cvScalarAll(255), -1, CV_FILLED, 8);
-        
+
         // 重心を求める
         CvMoments moments;
         cvMoments(binalized, &moments, 1);
@@ -96,7 +96,7 @@ void Object::detect(IplImage *image) {
         cvCircle(image, cvPoint(mx, my), 10, CV_RGB(255, 0, 0));
 
         cvShowImage("capture_image", binalized);
-        
+
         x=mx;
         y=my;
         visible=true;
@@ -110,11 +110,11 @@ void Object::detect(IplImage *image) {
 Object obj[E_NUM_OBJECTS];
 
 int main(int argc, char *argv[]) {
-    
+
     CvCapture *capture;
     IplImage *image;
 
-    capture = cvCaptureFromCAM(0);
+    capture = cvCaptureFromCAM(1);
 
     {
 

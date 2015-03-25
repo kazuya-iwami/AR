@@ -2,6 +2,7 @@
 #pragma once
 
 #include "object.h"
+#include "item.h"
 
 enum OPERATION_STATUS {
 	NOMAL

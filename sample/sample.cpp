@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
     CvCapture *capture;
     IplImage *image;
 
-    capture = cvCaptureFromCAM(1);
+    capture = cvCaptureFromCAM(0);
 
     {
 

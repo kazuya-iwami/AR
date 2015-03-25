@@ -5,3 +5,7 @@ CItem::CItem(int x_,int y_,ITEM_KIND kind_){
 	y=y_;
 	kind = kind_;
 }
+
+bool CItem::draw(){
+	return true;
+}

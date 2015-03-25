@@ -5,4 +5,4 @@
 
 using namespace std;
 
-list<CObject*> drawlist;
+std::list<std::shared_ptr<CObject>> drawlist;

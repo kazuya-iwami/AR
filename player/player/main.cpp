@@ -51,7 +51,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	CObject::load();//すべての画像はこの中で読み込む
 
-	CMytank *tank = new CMytank;
+	auto tank = make_shared<CMytank>();
 	drawlist.push_back(tank);
 
 	// メインループ
@@ -69,7 +69,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//cv::imwrite("out.jpeg",image);
 		// フレームの内容を画面に描画。下に行くほど上に表示
 		
-		list<CObject*>::iterator it;
+		std::list<std::shared_ptr<CObject>>::iterator it;
 		for(it=drawlist.begin(); it!=drawlist.end();){  // 最後の「it++」を消す
 			if( !(*it)->draw() ){
 				// オブジェクトをリストからはずす

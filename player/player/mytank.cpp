@@ -6,6 +6,7 @@ bool CMytank::draw(){
 	//例　DrawGraph(0,0,figure_id["TEST"],false);
 	//ここで 照準、所有アイテム、残機描画
 	//それぞれ関数わけしても
+	DrawGraph(0,0,figure_id["TEST"],false);
 	return true;
 };
 

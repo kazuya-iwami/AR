@@ -18,7 +18,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	cv::VideoCapture vcap;
 	cv::Mat image;
 
-	unique_ptr<CNetwork> network(new CNetwork);
+	//unique_ptr<CNetwork> network(new CNetwork);
+	CNetwork network;
 
 	// const std::string videoStreamAddress ="http://192.168.10.221:8080/?action=stream.mjpeg";
 
@@ -41,8 +42,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	SetDrawScreen( DX_SCREEN_BACK ) ;
 
 	//network‰Šú‰»
-	network->init(0,"192.168.10.100");
-	network->send_msg("HELLO");
+	network.init(0,"192.168.11.2");
+	network.send_msg("HELLO");
 
 	//FPS‘ª’èŠí‰Šú‰» ƒTƒ“ƒvƒ‹”10
 	CFps fps; 

@@ -21,3 +21,7 @@ CMytank::CMytank(){
 	focus_y = 200;
 
 };
+
+void CMytank::move(){
+
+}

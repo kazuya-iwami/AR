@@ -22,6 +22,7 @@ class CMytank : public CObject {
 	
 public:
 	CMytank();
+	void move();
 	void set_ope_status(OPERATION_STATUS status);
 	void set_vel(int x_,int y_);
 	void get_msg(string str);

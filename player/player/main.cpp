@@ -11,6 +11,8 @@
 #include "object.h"
 #include "mytank.h"
 #include "main.h"
+#include "bullet.h"
+#include "explosion.h"
 
 using namespace std;
 
@@ -18,8 +20,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	cv::VideoCapture vcap;
 	cv::Mat image;
 
-	//unique_ptr<CNetwork> network(new CNetwork);
-	CNetwork network;
+	auto network = make_shared<CNetwork>();
+	auto mytank = make_shared<CMytank>();
+
+	char key_buf [ 256 ] ;
+	char key_prev_buf [ 256 ] ;
+
 
 	// const std::string videoStreamAddress ="http://192.168.10.221:8080/?action=stream.mjpeg";
 
@@ -42,8 +48,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	SetDrawScreen( DX_SCREEN_BACK ) ;
 
 	//network初期化
-	network.init(0,"192.168.11.2");
-	network.send_msg("HELLO");
+	network->init(0,"192.168.11.2");
+	network->send_msg("HELLO");
 
 	//FPS測定器初期化 サンプル数10
 	CFps fps; 
@@ -51,8 +57,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	CObject::load();//すべての画像はこの中で読み込む
 
-	auto tank = make_shared<CMytank>();
-	drawlist.push_back(tank);
+	//mytankを描画に登録
+	drawlist.push_back(mytank);
 
 	// メインループ
 	while(1){
@@ -79,8 +85,45 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		it++;   // ここでインクリメント
 		}
 
+		//サーバーからmsgの受信
+		mytank->get_msg(network->check_msg());
+
+		//移動処理
+		mytank->move();
+
+		//キー状態取得
+		for(int i;i<256;i++){
+			key_prev_buf[i] = key_buf[i];
+		}
+
+		GetHitKeyStateAll( key_buf ) ;
+
+		if(  key_buf[ KEY_INPUT_UP ] == 1 ){
+			mytank->set_vel(1,1);
+		}
+		if(  key_buf[ KEY_INPUT_DOWN ] == 1 ){
+			mytank->set_vel(-1,-1);
+		}
+		if(  key_buf[ KEY_INPUT_LEFT ] == 1 ){
+			mytank->set_vel(-1,1);
+		}
+		if(  key_buf[ KEY_INPUT_RIGHT ] == 1 ){
+			mytank->set_vel(1,-1);
+		}
+		
+		//テスト用　Bを押したタイミングでBullet生成
+		if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
+			auto mytank = make_shared<CBullet>();
+			drawlist.push_back(mytank);
+		}
+		//テスト用　Eを押したタイミングでExplosion生成
+		if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
+			auto mytank = make_shared<CExplosion>();
+			drawlist.push_back(mytank);
+		}
+
 		fps.Update();//これが呼ばれる速度を測定
-		if( CheckHitKey( KEY_INPUT_F ) == 1 ){
+		if(  key_buf[ KEY_INPUT_F ] == 1 ){
 			fps.Draw();
 		}
 		fps.Wait();
@@ -92,7 +135,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		if( ProcessMessage() == -1 ) break ;
 
 		// ＥＳＣキーが押されたらループから抜ける
-		if( CheckHitKey( KEY_INPUT_ESCAPE ) == 1 ) break ;
+		if( key_buf[ KEY_INPUT_ESCAPE ] == 1 ) break ;
 	}
 	// ＤＸライブラリ使用の終了処理
 	DxLib_End() ;

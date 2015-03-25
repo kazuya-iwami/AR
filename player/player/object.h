@@ -21,8 +21,16 @@ public:
 
 /* 描画方法
 
-	auto bullet = make_shared<CBullet>(200,200,BULLET_KIND::BULLET_NOMAL);//スマートポインタ生成
+	まずobject.cppで画像、音声load（初期化）
+
+	描画を登録する際は下の２行
+	auto bullet = make_shared<CBullet>(200,200,BULLET_KIND::BULLET_NOMAL);//スマートポインタ生成　コンストラクタは各ヘッダファイル見て
 	drawlist.push_back(bullet);//描画リストに登録
+
+	draw()の中では
+	PlaySoundMem( sound_id["S_TEST"] , DX_PLAYTYPE_BACK ) ;音再生　drawtimer==0の時のみ鳴らすものに注意 ２つめの引数はこれ
+	DrawGraph(0,0,figure_id["F_TEST"],false);　描画　初めの２引数はx,y
+
 
 */
 

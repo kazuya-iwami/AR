@@ -8,30 +8,18 @@
 using namespace std;
 using namespace cv;
 
-enum EObject{
-    E_ENEMY1=0,
-    E_ENEMY2,
-    E_ENEMY3,
-    E_ITEM1,
-    E_NUM_OBJECTS //EObjectの個数を示す
-};
+class Object {
 
-void  detectAllObject(IplImage *image);
-
-
-class Object{
+public:
+    int x, y;
 
     int minH, maxH;
     int minS, maxS;
     int minV, maxV;
 
-public:
+    bool visible; //視界に入っているかのフラグ
 
-    int x,y;
-
-    bool visible;//視界に入っているかのフラグ
-
-    void init(int minH_, int maxH_, int minS_, int maxS_, int minV_, int maxV_){
+    void init(int minH_, int maxH_, int minS_, int maxS_, int minV_, int maxV_) {
         minH = minH_;
         minS = minS_;
         minV = minV_;
@@ -39,21 +27,20 @@ public:
         maxS = maxS_;
         maxV = maxV_;
 
-        x=0;
-        y=0;
+        x = 0;
+        y = 0;
 
-        visible=false;
-
+        visible = false;
     }
-    void detect(IplImage *image);
-    
+
+    IplImage *detect(IplImage *image);
 };
 
-void Object::detect(IplImage *image) {
+IplImage *Object::detect(IplImage *image) {
 
     // HSVに変換
     IplImage *hsv = cvCloneImage(image);
-    cvCvtColor(image, hsv, CV_RGB2HSV_FULL);
+    cvCvtColor(image, hsv, CV_BGR2HSV);
 
     // 2値化画像
     IplImage *binalized = cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
@@ -70,7 +57,7 @@ void Object::detect(IplImage *image) {
     CvSeq *contour = NULL, *maxContour = NULL;
     CvMemStorage *contourStorage = cvCreateMemStorage();
     cvFindContours(binalized, contourStorage, &contour, sizeof(CvContour), CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-    
+
     // 一番大きな輪郭を抽出
     double max_area = 0.0;
     while (contour) {
@@ -95,19 +82,41 @@ void Object::detect(IplImage *image) {
         int mx = (int) (moments.m10 / moments.m00);
         cvCircle(image, cvPoint(mx, my), 10, CV_RGB(255, 0, 0));
 
-        cvShowImage("capture_image", binalized);
-
-        x=mx;
-        y=my;
-        visible=true;
-        
-    }else{
-        visible=false;
+        x = mx;
+        y = my;
+        visible = true;
+    } else {
+        visible = false;
     }
 
+    return binalized;
 }
 
-Object obj[E_NUM_OBJECTS];
+Object obj;
+
+void callbackForLowerH(int lowerH, void *data) {
+    obj.minH = lowerH;
+}
+
+void callbackForUpperH(int upperH, void *data) {
+    obj.maxH = upperH;
+}
+
+void callbackForLowerS(int lowerS, void *data) {
+    obj.minS = lowerS;
+}
+
+void callbackForUpperS(int upperS, void *data) {
+    obj.maxS = upperS;
+}
+
+void callbackForLowerV(int lowerV, void *data) {
+    obj.minV = lowerV;
+}
+
+void callbackForUpperV(int upperV, void *data) {
+    obj.maxV = upperV;
+}
 
 int main(int argc, char *argv[]) {
 
@@ -116,43 +125,34 @@ int main(int argc, char *argv[]) {
 
     capture = cvCaptureFromCAM(1);
 
-    {
+    int lowerH = 100;
+    int upperH = 200;
+    int lowerS = 100;
+    int upperS = 200;
+    int lowerV = 100;
+    int upperV = 200;
+    obj.init(lowerH, upperH, lowerS, upperS, lowerV, upperV);
+    namedWindow("Captured Image", WINDOW_AUTOSIZE);
+    createTrackbar("Lower Hue", "Captured Image", &lowerH, 255, callbackForLowerH);
+    createTrackbar("Upper Hue", "Captured Image", &upperH, 255, callbackForUpperH);
+    createTrackbar("Lower Sat", "Captured Image", &lowerS, 255, callbackForLowerS);
+    createTrackbar("Upper Sat", "Captured Image", &upperS, 255, callbackForUpperS);
+    createTrackbar("Lower Val", "Captured Image", &lowerV, 255, callbackForLowerV);
+    createTrackbar("Upper Val", "Captured Image", &upperV, 255, callbackForUpperV);
 
-        obj[E_ENEMY1].init(100, 200, 100, 200, 100, 200);
-        obj[E_ENEMY2].init(100, 200, 100, 200, 100, 200);
-        obj[E_ENEMY3].init(100, 200, 100, 200, 100, 200);
-        obj[E_ITEM1].init(100, 200, 100, 200, 100, 200);
+    for (;;) {
+        image = cvQueryFrame(capture);
+        IplImage *binalized = obj.detect(image);
 
+        cvShowImage("Captured Image", binalized);
 
-        bool loop_flag = true;
-        while (loop_flag) {
-
-            image = cvQueryFrame(capture);
-
-            detectAllObject(image);
-
-            //cvShowImage("capture_image", image);
-
-            // 5. process according to input key
-            int k = cvWaitKey(1);
-            switch (k) {
-                case 'q':
-                case 'Q':
-                    loop_flag = false;
-                    break;
-
-            }
-        }
+        int k = cvWaitKey(1);
+        if (k == 'q' || k == 'Q') break;
     }
-    cvDestroyWindow("capture_image");
+
+    cvDestroyWindow("Captured Image");
     cvReleaseImage(&image);
 
     return 0;
 }
 
-
-void  detectAllObject(IplImage *image) {
-    for(int i = 0;i<E_NUM_OBJECTS;i++){
-        obj[i].detect(image);
-    }
-}

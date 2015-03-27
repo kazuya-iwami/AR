@@ -15,6 +15,7 @@ bool CExplosion::draw(){
 		break;
 	}
 
+
 	draw_timer++;
 
 	if(draw_timer != 300){

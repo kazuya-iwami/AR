@@ -14,6 +14,7 @@
 #include "bullet.h"
 #include "explosion.h"
 #include "utility.h"
+#include "image_processing.h"
 
 using namespace std;
 
@@ -23,19 +24,20 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	auto network = make_shared<CNetwork>();
 	auto mytank = make_shared<CMytank>();
-	auto system_timer = make_shared<CSystem_timer>();
+	auto system_timer = make_shared<CSystem_timer>(10,10);
+	auto image_processer = make_shared<CImage_processer>();
 
 	char key_buf [ 256 ] ;
 	char key_prev_buf [ 256 ] ;
 
 
-	// const std::string videoStreamAddress ="http://192.168.10.221:8080/?action=stream.mjpeg";
+ const std::string videoStreamAddress ="http://192.168.10.125:8080/?action=stream.mjpeg";
 
 	//if(!vcap.open(1)){//デフォルトのカメラを取得はこちら
-	//if(!vcap.open(videoStreamAddress)) { 　//ラズパイからの取得はこちら
-	//	std::cout << "Error opening video stream or file" << std::endl;
-	//	return -1;
-	//}
+	if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
+		std::cout << "Error opening video stream or file" << std::endl;
+		return -1;
+	}
 	// ウインドウモードで起動
 	SetMainWindowText( "リアルマリオカート" ) ;
 	ChangeWindowMode( TRUE ) ;
@@ -59,9 +61,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	CObject::load();//すべての画像はこの中で読み込む
 
+	//色指定
+	image_processer->init(80,180,100,200,100,200);
+
 	//描画に登録
 	drawlist.push_back(mytank);
-	drawlist.push_back(system_timer);
+	//drawlist.push_back(system_timer);
 
 	// メインループ
 	while(1){
@@ -69,13 +74,21 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		// 画面に描かれているものを一回全部消す
 		ClearDrawScreen() ;
 
-		//if(!vcap.read(image)) {
-		//	std::cout << "No frame" << std::endl;
-		//	cv::waitKey();
-		//	return -1;
-		//}
-		// フレームを取得
-		//cv::imwrite("out.jpeg",image);
+		if(!vcap.read(image)) {
+			std::cout << "No frame" << std::endl;
+			cv::waitKey();
+			return -1;
+		}
+		//フレームを取得
+		Mat output = image_processer->detect(image);
+
+		cv::imwrite("out.jpeg",output);
+
+		  // test1.bmpの読み込み
+		int GHandle = LoadGraph( "out.jpeg" ) ;
+
+		// 読みこんだグラフィックを拡大描画
+		DrawExtendGraph( 0 , 0 , 1000  , 750 , GHandle , TRUE ) ;
 		// フレームの内容を画面に描画。下に行くほど上に表示
 		
 		std::list<std::shared_ptr<CObject>>::iterator it;

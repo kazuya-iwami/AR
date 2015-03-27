@@ -129,8 +129,8 @@ int main(int argc, char *argv[]) {
     if(!cap.isOpened())  // 成功したかどうかをチェック
         return -1;
 
-    int lowerH = 100;
-    int upperH = 200;
+    int lowerH = 80;
+    int upperH = 160;
     int lowerS = 100;
     int upperS = 200;
     int lowerV = 100;

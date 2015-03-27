@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="explosion.cpp" />
+    <ClCompile Include="image_processing.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mytank.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="FPSCounter.h" />
+    <ClInclude Include="image_processing.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="mytank.h" />

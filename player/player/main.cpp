@@ -29,13 +29,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	char key_prev_buf [ 256 ] ;
 
 
- const std::string videoStreamAddress ="http://192.168.10.137:8080/?action=stream.mjpeg";
+	const std::string videoStreamAddress ="http://192.168.10.137:8080/?action=stream.mjpeg";
 
 	//if(!vcap.open(1)){//デフォルトのカメラを取得はこちら
-	if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
-		std::cout << "Error opening video stream or file" << std::endl;
-		return -1;
-	}
+	//if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
+	//	std::cout << "Error opening video stream or file" << std::endl;
+	//	return -1;
+	//}
 	// ウインドウモードで起動
 	SetMainWindowText( "リアルマリオカート" ) ;
 	ChangeWindowMode( TRUE ) ;
@@ -72,17 +72,20 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	drawlist.push_back(enemy2);
 	drawlist.push_back(enemy3);
 
+
 	// メインループ
 	while(1){
 
 		// 画面に描かれているものを一回全部消す
 		ClearDrawScreen() ;
 
-		if(!vcap.read(image)) {
-			std::cout << "No frame" << std::endl;
-			cv::waitKey();
-			return -1;
-		}
+		image = imread("out.jpeg");
+		//if(!vcap.read(image)) {
+		//	std::cout << "No frame" << std::endl;
+		//	cv::waitKey();
+		//	return -1;
+		//}
+
 		//フレームを取得
 		enemy1->detect(image);
 		enemy2->detect(image);
@@ -90,7 +93,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		
 
-		cv::imwrite("out.jpeg",image);
+		//cv::imwrite("out.jpeg",image);
 
 		  // test1.bmpの読み込み
 		int GHandle = LoadGraph( "out.jpeg" ) ;

@@ -33,63 +33,66 @@ public:
         visible = false;
     }
 
-    IplImage *detect(IplImage *image);
+   void detect(Mat image);
 };
 
-IplImage *Object::detect(IplImage *image) {
+void Object::detect(Mat image) {
 
     // HSVに変換
-    IplImage *hsv = cvCloneImage(image);
-    cvCvtColor(image, hsv, CV_BGR2HSV);
-
-    // 2値化画像
-    IplImage *binalized = cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
+    Mat hsv;
+    cvtColor(image, hsv, COLOR_BGR2HSV);
 
     // 2値化
-    CvScalar lower = cvScalar(minH, minS, minV);
-    CvScalar upper = cvScalar(maxH, maxS, maxV);
-    cvInRangeS(hsv, lower, upper, binalized);
+    Mat binalized;
+    Scalar lower(minH, minS, minV);
+    Scalar upper(maxH, maxS, maxV);
+    inRange(hsv, lower, upper, binalized);
 
-    // ノイズの除去
-    cvMorphologyEx(binalized, binalized, NULL, NULL, CV_MOP_CLOSE);
+    // ノイズ除去
+    Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
+    morphologyEx(binalized, binalized, MORPH_CLOSE, kernel);
+    //imshow("morphologyEx", binalized);
 
-    // 輪郭検出
-    CvSeq *contour = NULL, *maxContour = NULL;
-    CvMemStorage *contourStorage = cvCreateMemStorage();
-    cvFindContours(binalized, contourStorage, &contour, sizeof(CvContour), CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+    // 輪郭を検出
+    std::vector<std::vector<Point>> contours;
+    findContours(binalized.clone(), contours, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
 
-    // 一番大きな輪郭を抽出
+    // 一番大きい輪郭を抽出
+    int contour_index = -1;
     double max_area = 0.0;
-    while (contour) {
-        double area = fabs(cvContourArea(contour));
+    for (int i = 0; i < (int)contours.size(); i++) {
+        double area = fabs(contourArea(contours[i]));
         if (area > max_area) {
-            maxContour = contour;
+            contour_index = i;
             max_area = area;
         }
-        contour = contour->h_next;
     }
 
-    // 検出できた
-    if (maxContour && max_area > 150) {
-        // 輪郭の描画
-        cvZero(binalized);
-        cvDrawContours(binalized, maxContour, cvScalarAll(255), cvScalarAll(255), -1, CV_FILLED, 8);
+    Rect rect;
 
-        // 重心を求める
-        CvMoments moments;
-        cvMoments(binalized, &moments, 1);
-        int my = (int) (moments.m01 / moments.m00);
-        int mx = (int) (moments.m10 / moments.m00);
-        cvCircle(image, cvPoint(mx, my), 10, CV_RGB(255, 0, 0));
+    // マーカが見つかった
+    if (contour_index >= 0 && max_area > 150) {
+        // 重心
+        Moments moments = cv::moments(contours[contour_index], true);
+        y = (int)(moments.m01 / moments.m00);
+        x = (int)(moments.m10 / moments.m00);
 
-        x = mx;
-        y = my;
+        // 表示
+        rect = boundingRect(contours[contour_index]);
+
+        //drawContours(image, contours, contour_index, Scalar(0,255,0));
+
         visible = true;
     } else {
         visible = false;
     }
 
-    return binalized;
+    Mat output(image.size(),image.type(), Scalar::all(0));
+    image.copyTo(output ,binalized);
+    rectangle(output, rect, Scalar(0, 255, 0));
+
+    // 表示
+    imshow("Captured Image", output);
 }
 
 Object obj;
@@ -120,10 +123,11 @@ void callbackForUpperV(int upperV, void *data) {
 
 int main(int argc, char *argv[]) {
 
-    CvCapture *capture;
-    IplImage *image;
+    Mat image;
 
-    capture = cvCaptureFromCAM(1);
+    VideoCapture cap(1); // デフォルトカメラをオープン
+    if(!cap.isOpened())  // 成功したかどうかをチェック
+        return -1;
 
     int lowerH = 100;
     int upperH = 200;
@@ -132,26 +136,23 @@ int main(int argc, char *argv[]) {
     int lowerV = 100;
     int upperV = 200;
     obj.init(lowerH, upperH, lowerS, upperS, lowerV, upperV);
-    namedWindow("Captured Image", WINDOW_AUTOSIZE);
-    createTrackbar("Lower Hue", "Captured Image", &lowerH, 255, callbackForLowerH);
-    createTrackbar("Upper Hue", "Captured Image", &upperH, 255, callbackForUpperH);
+    namedWindow("Captured Image", WINDOW_NORMAL);
+
+    createTrackbar("Lower Hue/2", "Captured Image", &lowerH, 180, callbackForLowerH);
+    createTrackbar("Upper Hue/2", "Captured Image", &upperH, 180, callbackForUpperH);
     createTrackbar("Lower Sat", "Captured Image", &lowerS, 255, callbackForLowerS);
     createTrackbar("Upper Sat", "Captured Image", &upperS, 255, callbackForUpperS);
     createTrackbar("Lower Val", "Captured Image", &lowerV, 255, callbackForLowerV);
     createTrackbar("Upper Val", "Captured Image", &upperV, 255, callbackForUpperV);
 
     for (;;) {
-        image = cvQueryFrame(capture);
-        IplImage *binalized = obj.detect(image);
+        cap >> image; // カメラから新しいフレームを取得
 
-        cvShowImage("Captured Image", binalized);
+        obj.detect(image);
 
-        int k = cvWaitKey(1);
+        int k = waitKey(30);
         if (k == 'q' || k == 'Q') break;
     }
-
-    cvDestroyWindow("Captured Image");
-    cvReleaseImage(&image);
 
     return 0;
 }

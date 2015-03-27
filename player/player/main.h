@@ -1,8 +1,8 @@
 #pragma once
 #include <list>
 #include "DxLib.h"
-#include "drawable.h"
+#include "object.h"
 
 using namespace std;
 
-list<CDrawable*> drawlist;
+std::list<std::shared_ptr<CObject>> drawlist;

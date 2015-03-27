@@ -1,13 +1,14 @@
-#include "drawable.h"
+#include "object.h"
 
- map<string,int> CDrawable::figure_id;
+ map<string,int> CObject::figure_id;
+ map<string,int> CObject::sound_id;
 
-void CDrawable::load(){
-	figure_id["TEST"] =  LoadGraph("image/test.jpg");
-
+void CObject::load(){
+	figure_id["F_TEST"] =  LoadGraph("image/test.jpg");
+	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");
 }
 
-bool CDrawable::draw(){
+bool CObject::draw(){
 
 	//‰¼‘zŠÖ”‚È‚Ì‚Å’†g‚È‚µ
 	return true;

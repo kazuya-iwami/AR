@@ -9,8 +9,8 @@ void CImage_processer::init(int minH_, int maxH_, int minS_, int maxS_, int minV
     maxS = maxS_;
     maxV = maxV_;
 
-    x = 0;
-    y = 0;
+    ip_x = 0;
+    ip_y = 0;
     visible = false;
 }
 
@@ -52,8 +52,8 @@ Mat CImage_processer::detect(Mat image) {
     if (contour_index >= 0 && max_area > 150) {
         // dS
         Moments moments = cv::moments(contours[contour_index], true);
-        y = (int)(moments.m01 / moments.m00);
-        x = (int)(moments.m10 / moments.m00);
+        ip_y = (int)(moments.m01 / moments.m00);
+        ip_x = (int)(moments.m10 / moments.m00);
 
         // •\¦
         rect = boundingRect(contours[contour_index]);

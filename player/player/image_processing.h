@@ -13,7 +13,7 @@ using namespace cv;
 class CImage_processer {
 
 public:
-    int x, y;
+    int ip_x, ip_y;//ip : image_prosesser
 
     int minH, maxH;
     int minS, maxS;

@@ -17,6 +17,8 @@ using namespace std;
 
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
+// check_msg()とsend_msg()をつかえれば中身見なくてもよい
+
 class CNetwork {
 	int id;//ユーザーのID：０〜３でそれぞれユーザーごとに異なる
 	

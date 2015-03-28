@@ -1,5 +1,9 @@
 // FPS計測クラスヘッダーファイル
 
+
+//読まなくていい
+
+
 #pragma once
 #pragma comment(lib, "winmm.lib")
 
@@ -43,3 +47,5 @@ public:
 		}
 	}
 };
+
+//見なくていい

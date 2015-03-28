@@ -10,6 +10,8 @@
 using namespace std;
 using namespace cv;
 
+//“Ç‚Ü‚È‚­‚Ä‚¢‚¢
+
 class CImage_processer {
 
 public:
@@ -25,3 +27,5 @@ public:
 
 	Mat detect(Mat image);
 };
+
+//‚±‚±Œ©‚È‚­‚Ä‚¢‚¢

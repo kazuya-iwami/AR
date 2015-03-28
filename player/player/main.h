@@ -6,9 +6,12 @@
 
 using namespace std;
 
+//グローバル変数
+
 std::list<std::shared_ptr<CObject>> drawlist;
 
 auto enemy1 = make_shared<CEnemy>(); //スマートポインタに配列が実装されていないため
 auto enemy2 = make_shared<CEnemy>();
 auto enemy3 = make_shared<CEnemy>();
 
+auto network = make_shared<CNetwork>();

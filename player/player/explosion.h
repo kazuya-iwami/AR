@@ -2,6 +2,8 @@
 
 #include "object.h"
 
+//”š”­ƒNƒ‰ƒX
+
 enum EXPLOSION_KIND {
 	EXPLOSION_NOMAL
 };

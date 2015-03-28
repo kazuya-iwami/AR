@@ -3,6 +3,8 @@
 
 #include "object.h"
 
+//’eƒNƒ‰ƒX
+
 enum BULLET_KIND{
 	BULLET_NOMAL
 };

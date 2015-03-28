@@ -13,7 +13,7 @@
 
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
-#define PORT_NUM 4
+#define PORT_NUM 1
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
 static int n, retval, nsockfd[PORT_NUM], maxfd;

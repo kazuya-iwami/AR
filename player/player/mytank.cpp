@@ -11,6 +11,7 @@ bool CMytank::draw(){
 };
 
 CMytank::CMytank(){
+	//‰Šú‰»
 	score = 0;
 	num_bullet = 10;
 	ope_status = OPERATION_STATUS::REGULAR;

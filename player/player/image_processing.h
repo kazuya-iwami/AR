@@ -10,6 +10,7 @@
 using namespace std;
 using namespace cv;
 
+//‰æ‘œˆ—ƒNƒ‰ƒX
 //“Ç‚Ü‚È‚­‚Ä‚¢‚¢
 
 class CImage_processer {

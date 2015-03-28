@@ -7,6 +7,7 @@
 
 using namespace std;
 
+//描画、音声を取りまとめるクラス
 class CObject {
 protected:
 	int x,y; //描画位置

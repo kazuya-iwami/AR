@@ -2,6 +2,7 @@
 #pragma once
 #include "object.h"
 
+//アイテムクラス
 enum ITEM_KIND{
 	STER,
 	THUNDER

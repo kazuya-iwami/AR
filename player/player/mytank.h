@@ -9,6 +9,7 @@ enum OPERATION_STATUS {
 	STOP
 };
 
+//Ž©‹@ƒNƒ‰ƒX
 
 class CMytank : public CObject {
 	CItem *item;

@@ -5,6 +5,7 @@
 
 //細かいクラスはここにかき集めている
 
+//残り時間描画クラス
 class CSystem_timer : public CObject {
 
 public:
@@ -12,6 +13,7 @@ public:
 	bool draw();
 };
 
+//敵の位置情報管理クラス
 class CEnemy : public CImage_processer,public CObject {
 
 public:

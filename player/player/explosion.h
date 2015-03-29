@@ -5,7 +5,8 @@
 //”š”­ƒNƒ‰ƒX
 
 enum EXPLOSION_KIND {
-	EXPLOSION_NOMAL
+	EXPLOSION_NOMAL,
+	EXPLOSION_1
 };
 
 class CExplosion : public CObject {

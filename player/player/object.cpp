@@ -1,11 +1,11 @@
 #include "object.h"
-#define explosion_frame 44
 
 map<string,int> CObject::figure_id;
 map<string,int> CObject::sound_id;
 
 //爆発エフェクト用配列
 int explosion[45];
+int explosion1[140];
 
 void CObject::load(){
 	//このように書けばtest.jpgをメモリに読み込む。
@@ -21,6 +21,7 @@ void CObject::load(){
 	// explosion
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
 	LoadDivGraph("image/explosion_sample.png", 45, 9, 5, 600, 600, explosion);
+	LoadDivGraph("image/explosion1.png", 140, 14, 10, 600, 600, explosion1);
 }
 
 bool CObject::draw(){

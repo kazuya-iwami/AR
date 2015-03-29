@@ -9,6 +9,7 @@ using namespace std;
 
 // 爆発エフェクト用
 extern int explosion[45];
+extern int explosion1[140];
 
 //描画、音声を取りまとめるクラス
 class CObject {

@@ -10,21 +10,30 @@ CExplosion::CExplosion(int x_,int y_,EXPLOSION_KIND kind_){
 bool CExplosion::draw(){
 	
 
+
 	switch(kind){
 	case EXPLOSION_KIND::EXPLOSION_NOMAL :
-		break;
+		if(draw_timer != 44){
+			// 動作確認用 文字出力
+			DrawFormatString(0, 0, GetColor(255,255,255), "explosion:%d", draw_timer);
+			// 爆発エフェクトの描画
+			DrawGraph(530, 50, explosion[draw_timer], true);
+			draw_timer++;
+			return true;
+		} else {
+			return false;
+		}
+	case EXPLOSION_KIND::EXPLOSION_1 :
+		if(draw_timer != 140){
+			// 動作確認用 文字出力
+			DrawFormatString(0, 0, GetColor(255,255,255), "explosion:%d", draw_timer);
+			// 爆発エフェクトの描画
+			DrawGraph(530, 50, explosion1[draw_timer], true);
+			draw_timer++;
+			return true;
+		} else {
+			return false;
+		}
 	}
-
-
-	draw_timer++;
-
-	if(draw_timer != 44){
-		// 動作確認用 文字出力
-		DrawFormatString(0, 0, GetColor(255,255,255), "explosion:%d", draw_timer);
-		// 爆発エフェクトの描画
-		DrawGraph(530, 50, explosion[draw_timer], true);
-		return true;
-	} else {
-		return false;
-	}
+	return false;
 }

@@ -175,6 +175,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			auto explosion = make_shared<CExplosion>(200,200,EXPLOSION_KIND::EXPLOSION_NOMAL);
 			drawlist.push_back(explosion);
 		}
+		//テスト用　1を押したタイミングでExplosion生成
+		if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
+			auto explosion = make_shared<CExplosion>(200,200,EXPLOSION_KIND::EXPLOSION_1);
+			drawlist.push_back(explosion);
+		}
 
 		fps.Update();//1サイクルごとの速度を測定
 		if(  key_buf[ KEY_INPUT_F ] == 1 ){

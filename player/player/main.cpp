@@ -30,6 +30,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//何か間違ってたら教えて
 	//グローバル変数はmain.hに書いてる
 	//他のファイルで用いる時はexternして（externでググるべし）
+
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
 
@@ -119,25 +120,28 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		// 読みこんだグラフィックを拡大描画
 		DrawExtendGraph( 0 , 0 , 1000  , 750 , GHandle , TRUE ) ;
 
-		//すべての描画をここで受け持つ。
-		//drawlistに登録されてるオブジェクトのdraw()をすべて実行
-		//drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
 
+		//描画
+		/*	
+			すべての描画をここで受け持つ。
+			drawlistに登録されてるオブジェクトのdraw()をすべて実行
+			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
+		*/
 		std::list<std::shared_ptr<CObject>>::iterator it;
 		for(it=drawlist.begin(); it!=drawlist.end();){  // 最後の「it++」を消す
-			if( !(*it)->draw() ){
+			if( !(*it)->draw() ){ //アニメーション終了時
 				// オブジェクトをリストからはずす
 				it = drawlist.erase( it );
 				continue;
 			}
-		it++;   // ここでインクリメント
+			it++;   // インクリメント
 		}
 		
 		//サーバーからmsgの受信
-		//1サイクル1回呼ぶ
+		/* 1サイクル1回呼ぶ */
 		mytank->get_msg(network->check_msg());
 
-		//移動処理はこの中に書く
+		//移動処理　この中に書く
 		mytank->move();
 
 		//キー状態取得

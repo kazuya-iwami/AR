@@ -19,7 +19,18 @@ protected:
 	static map<string,int> sound_id;//ここにloadしたイメージに対応したidを連想配列として保存    S_から書き始める
 
 public:
-	virtual bool draw();//falseが返ってきたら描画対象から外す
+	/*
+		画像の描画を行う関数
+		falseが返ってきたら描画対象から外す
+		仮想関数なので、子クラス側で各々の実際の処理を書く
+	*/
+	virtual bool draw();
+
+	/*
+		画像の登録を行う関数
+		引数、戻り値　特になし
+		任意の描画画像はここに登録させる必要がある
+	*/
 	static void load();//ロード
 };
 

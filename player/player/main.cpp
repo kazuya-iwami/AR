@@ -1,12 +1,12 @@
 
 #include <stdio.h>
-#include<opencv2/opencv.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include"DxLib.h"
 #include <ctype.h>
-#include<iostream>
-#include "network.h"
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <memory>
+#include <iostream>
+#include "DxLib.h"
+#include "network.h"
 #include "FPSCounter.h"
 #include "object.h"
 #include "mytank.h"

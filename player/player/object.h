@@ -2,10 +2,13 @@
 #pragma once
 #include <map>
 #include <list>
-#include "DxLib.h"
 #include <string>
+#include "DxLib.h"
 
 using namespace std;
+
+// 爆発エフェクト用
+extern int explosion[45];
 
 //描画、音声を取りまとめるクラス
 class CObject {

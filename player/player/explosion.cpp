@@ -18,7 +18,13 @@ bool CExplosion::draw(){
 
 	draw_timer++;
 
-	if(draw_timer != 300){
+	if(draw_timer != 44){
+		// 動作確認用 文字出力
+		DrawFormatString(0, 0, GetColor(255,255,255), "explosion:%d", draw_timer);
+
+		DrawGraph(530, 50, figure_id["F_EXPLOSION" + std::to_string(draw_timer)], true);
 		return true;
-	}else return false;
+	} else {
+		return false;
+	}
 }

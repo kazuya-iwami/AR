@@ -97,7 +97,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	drawlist.push_back(enemy2);
 	drawlist.push_back(enemy3);
 
-
+	float bullet_z = 0.0;
 	// メインループ
 	while(1){
 		printf("ok\n");
@@ -183,17 +183,24 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		
 		//テスト用　Bを押したタイミングでBullet生成
 		if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
-			auto bullet = make_shared<CBullet>(200,200,BULLET_KIND::BULLET_NOMAL);
+			auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
 			drawlist.push_back(bullet);
 		}
+		//テスト用　3を押したタイミングで3D球(Bullet)生成
+		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
+			auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
+			drawlist.push_back(bullet);
+		}
+
+
 		//テスト用　Eを押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
-			auto explosion = make_shared<CExplosion>(200,200,EXPLOSION_KIND::EXPLOSION_NOMAL);
+			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
 			drawlist.push_back(explosion);
 		}
 		//テスト用　1を押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
-			auto explosion = make_shared<CExplosion>(200,200,EXPLOSION_KIND::EXPLOSION_1);
+			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
 			drawlist.push_back(explosion);
 		}
 

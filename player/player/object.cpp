@@ -7,6 +7,9 @@ map<string,int> CObject::sound_id;
 int explosion[45];
 int explosion1[140];
 
+//弾エフェクト用配列
+int bullet[30];
+
 void CObject::load(){
 	//このように書けばtest.jpgをメモリに読み込む。
 	//今後はdraw()内でfigure_id["F_TEST"]を用いるとこの画像に対応したidを取得できる。
@@ -22,6 +25,11 @@ void CObject::load(){
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
 	LoadDivGraph("image/explosion_sample.png", 45, 9, 5, 600, 600, explosion);
 	LoadDivGraph("image/explosion1.png", 140, 14, 10, 600, 600, explosion1);
+
+	// bullet
+	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
+	LoadDivGraph("image/bullet.png", 30, 10, 3, 256, 256, bullet);
+
 }
 
 bool CObject::draw(){

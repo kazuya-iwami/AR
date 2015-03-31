@@ -92,11 +92,13 @@
   <ItemGroup>
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="explosion.cpp" />
+    <ClCompile Include="HTTPConnection.cpp" />
     <ClCompile Include="image_processing.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mytank.cpp" />
     <ClCompile Include="network.cpp" />
+    <ClCompile Include="NhConversion.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
@@ -104,12 +106,15 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="FPSCounter.h" />
+    <ClInclude Include="HTTPConnection.h" />
     <ClInclude Include="image_processing.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="mytank.h" />
     <ClInclude Include="network.h" />
+    <ClInclude Include="NhConversion.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="tstring.h" />
     <ClInclude Include="utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

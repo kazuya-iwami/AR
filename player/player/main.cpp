@@ -14,12 +14,16 @@
 #include "bullet.h"
 #include "explosion.h"
 #include "utility.h"
+#include "tstring.h"
 
 using namespace std;
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ){
 	cv::VideoCapture vcap;
 	cv::Mat image;
+
+	//コンソールの表示
+	AllocConsole();
 
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
@@ -74,6 +78,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	CObject::load();//すべての画像はこの中で読み込む　
 
+	//自機のIPアドレスの設定
+	mytank->set_ip_address(_T("192.168.10.125"));
+
 	//敵クラス初期化
 	enemy1->init(80,180,100,200,100,200);//スマートポインタって配列に対応してないようなんですが何事
 	enemy2->init(0,30,100,200,100,200);//ここでHSV色領域（ググって）のminとmaxを指定するとその色の重心が取得できる
@@ -93,7 +100,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	// メインループ
 	while(1){
-
+		printf("ok\n");
 		// 画面に描かれているものを一回全部消す
 		ClearDrawScreen() ;
 
@@ -142,7 +149,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		mytank->get_msg(network->check_msg());
 
 		//移動処理　この中に書く
-		mytank->move();
+		//キー状態取得の後に移動します(2015/3/31 大杉追記)
+		//mytank->move();
 
 		//キー状態取得
 		//書き方は以下の通り
@@ -153,16 +161,24 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		GetHitKeyStateAll( key_buf ) ;
 
 		if(  key_buf[ KEY_INPUT_UP ] == 1 ){
-			mytank->set_vel(1,1);//自機の速度設定（引数適当。大杉君自由にclassいじって）
+			//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
+			mytank->move(_T("forward"));
+			printf("forward\n");
 		}
 		if(  key_buf[ KEY_INPUT_DOWN ] == 1 ){
-			mytank->set_vel(-1,-1);
+			//mytank->set_vel(-1,-1);
+			mytank->move(_T("backward"));
+			printf("backward\n");
 		}
 		if(  key_buf[ KEY_INPUT_LEFT ] == 1 ){
-			mytank->set_vel(-1,1);
+			//mytank->set_vel(-1,1);
+			mytank->move(_T("left"));
+			printf("left\n");
 		}
 		if(  key_buf[ KEY_INPUT_RIGHT ] == 1 ){
-			mytank->set_vel(1,-1);
+			//mytank->set_vel(1,-1);
+			mytank->move(_T("right"));
+			printf("right\n");
 		}
 		
 		//テスト用　Bを押したタイミングでBullet生成

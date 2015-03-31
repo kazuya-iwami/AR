@@ -23,8 +23,17 @@ CMytank::CMytank(){
 
 };
 
-void CMytank::move(){
+void CMytank::move(tstring direction){
+	//2015/3/31時点では正常運転のみ実装
+	//通信失敗の時の処理やプレイヤー状態変更の場合は考慮しない。
+	tstring strUrl = _T("http://") + ipAddress+_T("/move/");
+	bool isMethodGet = true;
+	tstring strResult;
+	HttpRequest(strUrl, isMethodGet, direction, strResult);
+}
 
+void CMytank::	set_ip_address(tstring address){
+	ipAddress = address;
 }
 
 void CMytank::set_vel(int vr,int vl){

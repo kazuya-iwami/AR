@@ -8,10 +8,8 @@
 #include<sys/time.h>
 #include<unistd.h>
 #include <stdlib.h>
-#include <iostream>
 #include "server.h"
-#include "control.h"
-
+//control.hをincludeしない！
 
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000

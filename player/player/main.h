@@ -19,3 +19,11 @@ auto network = make_shared<CNetwork>();
 int score=0;
 int cursur_x=500;
 int cursur_y=350;
+
+enum COMMAND_NAME{
+	USE_ITEM,
+	SHOOT_BULLET,
+	FINISH_ITEM,
+};
+
+char* encode(COMMAND_NAME, int, int, int);

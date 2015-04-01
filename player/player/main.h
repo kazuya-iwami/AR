@@ -26,4 +26,4 @@ enum COMMAND_NAME{
 	FINISH_ITEM,
 };
 
-char *encode(COMMAND_NAME, int, int, int);
+string encode(COMMAND_NAME, int, int, int);

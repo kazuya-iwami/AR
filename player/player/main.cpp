@@ -70,7 +70,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//network初期化
 	network->init(0,"192.168.1.8"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 	network->send_msg("HELLO"); //サーバーにメッセージ送る際はこう書く
-	network->send_msg(encode(COMMAND_NAME::USE_ITEM, 0, 1, 1));
+	
+
+	// このif文ではtrueが返ってくる(文字列は同じ)が。。
+	if (0 == strcmp(encode(COMMAND_NAME::USE_ITEM, 0, 1, 1),"0,0,1,1"))
+	{
+		printf("true\n");
+	}
+	else
+	{
+		printf("false\n");
+	}
+	//network->send_msg((char *)"0,0,1,1"); // これならサーバー側で正しく受け取れるが
+	network->send_msg((char *)encode(COMMAND_NAME::USE_ITEM, 0, 1, 1)); //　これではサーバー側で正しく受け取れない
 	
 	//FPS測定器初期化 
 	//これによって1秒に最大30回しかループが回らないようにする
@@ -256,7 +268,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	return 0 ;
 }
 
-char* encode(COMMAND_NAME command_name, int player_from, int player_to, int kind){
+char *encode(COMMAND_NAME command_name, int player_from, int player_to, int kind){
  char str[30];
  sprintf_s(str, "%d,%d,%d,%d", command_name, player_from, player_to, kind);
  return str;

@@ -68,12 +68,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	SetDrawScreen( DX_SCREEN_BACK ) ;
 
 	//network初期化
-	network->init(0,"192.168.43.152"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
+	network->init(0,"192.168.1.8"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 	network->send_msg("HELLO"); //サーバーにメッセージ送る際はこう書く
+	network->send_msg(encode(COMMAND_NAME::USE_ITEM, 0, 1, 1));
 
 	//FPS測定器初期化 
 	//これによって1秒に最大30回しかループが回らないようにする
-	//fps固定しないと一サイクルに一定数動くようなプログラムがうまく動かん
+	//fps固定しないと一サイクルに一定数動くようなプログラムがうまく動か
 	CFps fps; 
 
 	//使用する画像の読み込み
@@ -253,4 +254,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	
 	// ソフトの終了
 	return 0 ;
+}
+
+char* encode(COMMAND_NAME command_name, int player_from, int player_to, int kind){
+ char str[30];
+ sprintf_s(str, "%d, %d, %d, %d", command_name, player_from, player_to, kind);
+ return str;
 }

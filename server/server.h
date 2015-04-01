@@ -22,6 +22,12 @@ enum GAME_STATUS{
     GAME_PAUSE
 };
 
+enum COMMAND_NAME{
+    USE_ITEM,
+    SHOOT_BULLET,
+    FINISH_ITEM,
+};
+
 class CPlayer_param{
 public:
     int score;//スコア
@@ -30,7 +36,5 @@ public:
 };
 
 void send_message(std::string msg, int id);
-
-
 
 #endif //_AR_SOCKET_SERVER_H_

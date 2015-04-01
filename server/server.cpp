@@ -1,12 +1,12 @@
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include<arpa/inet.h>
-#include<netdb.h>
-#include<stdio.h>
-#include<string.h>
-#include<sys/time.h>
-#include<unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/time.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include "server.h"
 //control.hをincludeしない！
@@ -31,6 +31,8 @@ int set_tcp_socket(int portnum, struct hostent *shost);
 
 void recv_message(std::string msg, int n);
 void init();
+std::string decode(char const *str, std::string *target);
+std::string explode(int n,char const *y,char const *str,std::string *target=NULL);
 
 int main() {
 
@@ -54,7 +56,6 @@ int main() {
         std::cout << "プレイヤー:" << i << "が接続しました" << std::endl;
     }
 
-
     std::cout << "接続完了"<<std::endl;
 
     init();
@@ -76,6 +77,23 @@ int main() {
                     loop = false;
                     break;
                 };
+                std::string str[4];
+                decode(buf,str);
+
+                switch (std::stoi(str[0])) {
+                    case 0:
+                        printf("0");
+                        break;
+                    case 1:
+                        printf("1");
+                        break;
+                    case 2:
+                        printf("2");
+                        break;
+                    default:
+                        printf("error");
+                        break;
+                }
                 recv_message(buf, i);
                 bzero(buf, BUFMAX);
             }
@@ -92,6 +110,7 @@ int main() {
 int set_tcp_socket(int portnum, struct hostent *shost) {
     int sockfd, nsockfd;
     struct sockaddr_in server;
+    int yes = 1;
 
     /* create socket */
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -105,6 +124,12 @@ int set_tcp_socket(int portnum, struct hostent *shost) {
     server.sin_family = AF_INET;
     bcopy((char *) shost->h_addr, (char *) &server.sin_addr, shost->h_length);
     server.sin_port = htons(portnum);
+
+
+    if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
+        perror("setsockopt");
+        exit(1);
+    }
 
     /* bind socket */
     if (bind(sockfd, (struct sockaddr *) &server, sizeof(server)) < 0) {
@@ -147,4 +172,40 @@ void init(){
         player_param[i].score=0;
         player_param[i].using_item=-1;
     }
+}
+
+std::string decode(char const *msg, std::string *target) {
+    return explode(1, ",", msg, target);
+}
+
+std::string explode(int n,char const *y,char const *str,std::string *target){
+    bool option;
+    if(target==NULL) option=false;
+    else option=true;
+    n--;
+    std::string r_str[1000];
+    int d=0,g=0,t=strlen(y),a=0;
+    for(int i=0;i<strlen(str);i++){
+        if(y[a]==str[i]){
+            a++;
+            if(a==t){
+                for(int q=d;q<i-t+1;q++) r_str[g]+=str[q];
+                d=i+1;
+                i++;
+                g++;
+                a=0;
+            }
+        }else{
+            i-=a;
+            a=0;
+        }
+    }
+    for(int i=d;i<strlen(str);i++) r_str[g]+=str[i];
+    if(option){
+        for(int i=0;i<=g;i++){
+            *target=r_str[i];
+            target++;
+        }
+    }
+    return r_str[n];
 }

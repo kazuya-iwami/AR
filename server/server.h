@@ -16,6 +16,20 @@ enum ITEM_KIND{
     THUNDER
 };
 
+enum GAME_STATUS{
+    GAME_PLAY,
+    GAME_PAUSE
+};
+
+class CPlayer_param{
+public:
+    int score;//スコア
+    int using_item;//使用していなかったら-1
+    bool exist;//接続が切れたらfalse
+};
+
 void send_message(std::string msg, int id);
+
+
 
 #endif //_AR_SOCKET_SERVER_H_

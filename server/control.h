@@ -8,6 +8,10 @@
 #include <iostream>
 #include "server.h"
 
+extern GAME_STATUS game_status;//ゲームステータス
+extern int left_time;//今のところ実装放置
+extern CPlayer_param player_param[4];
+
 using namespace std;
 
 

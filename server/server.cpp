@@ -9,6 +9,8 @@
 #include<unistd.h>
 #include <stdlib.h>
 #include <iostream>
+#include "server.h"
+#include "control.h"
 
 
 #define BUFMAX 40
@@ -23,9 +25,14 @@ static char buf[BUFMAX], shostn[BUFMAX];
 static fd_set mask;
 static struct timeval tm;
 
+GAME_STATUS game_status;//ゲームステータス
+int left_time;//今のところ実装放置
+CPlayer_param player_param[4];
+
 int set_tcp_socket(int portnum, struct hostent *shost);
 
 void recv_message(std::string msg, int n);
+void init();
 
 int main() {
 
@@ -33,7 +40,6 @@ int main() {
 
     tm.tv_sec = 0;
     tm.tv_usec = 1;
-
 
     if (gethostname(shostn, sizeof(shostn)) < 0) Err("gethostname");
 
@@ -52,6 +58,8 @@ int main() {
 
 
     std::cout << "接続完了"<<std::endl;
+
+    init();
 
     while (loop) {
 
@@ -74,6 +82,8 @@ int main() {
                 bzero(buf, BUFMAX);
             }
         }
+
+        sleep(1);
     }
     for (int i = 0; i < PORT_NUM; i++) {
         close(nsockfd[i]);
@@ -131,4 +141,12 @@ void send_message(std::string msg, int id=4) {
     bzero(buf, BUFMAX);
 }
 
-
+void init(){
+    game_status=GAME_STATUS::GAME_PLAY;
+    left_time=300;
+    for(int i=0;i<4;i++){
+        player_param[i].exist=true;
+        player_param[i].score=0;
+        player_param[i].using_item=-1;
+    }
+}

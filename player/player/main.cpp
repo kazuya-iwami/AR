@@ -37,6 +37,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
+	auto mycursur=make_shared<CCursur>();
 
 	//キーボード用
 	char key_buf [ 256 ] ;
@@ -96,6 +97,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	drawlist.push_back(enemy1);
 	drawlist.push_back(enemy2);
 	drawlist.push_back(enemy3);
+	drawlist.push_back(mycursur);
 
 	float bullet_z = 0.0;
 	// メインループ
@@ -203,6 +205,32 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
 			drawlist.push_back(explosion);
 		}
+
+		//テスト用　0を押したタイミングでスコア追加
+		if(  key_buf[ KEY_INPUT_0 ] == 1 && key_prev_buf[ KEY_INPUT_0] == 0){
+			score++;
+		}
+		
+		//テスト用　Dを押すとカーソルが右に
+		if(  key_buf[ KEY_INPUT_D ] == 1){
+			cursur_x=cursur_x+4;
+		}
+
+		//テスト用　Wを押すとカーソルが上に
+		if(  key_buf[ KEY_INPUT_W ] == 1 ){
+			cursur_y=cursur_y-4;
+		}
+
+		//テスト用　Aを押すとカーソルが左に
+		if(  key_buf[ KEY_INPUT_A ] == 1){
+			cursur_x=cursur_x-4;
+		}
+
+		//テスト用　Sを押すとカーソルが下に
+		if(  key_buf[ KEY_INPUT_S ] == 1){ 
+			cursur_y=cursur_y+4;
+		}
+
 
 		fps.Update();//1サイクルごとの速度を測定
 		if(  key_buf[ KEY_INPUT_F ] == 1 ){

@@ -19,3 +19,10 @@ class CEnemy : public CImage_processer,public CObject {
 public:
 	bool draw();
 };
+
+//カーソルクラス
+class CCursur:public CObject{
+public:
+	bool draw();
+};
+

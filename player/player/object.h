@@ -12,6 +12,9 @@ extern int explosion[45];
 extern int explosion1[140];
 extern int bullet[30];
 
+//数字用
+extern int number[10];
+
 //描画、音声を取りまとめるクラス
 class CObject {
 protected:

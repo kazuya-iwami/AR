@@ -73,27 +73,36 @@ int main() {
 
                 n = read(nsockfd[i], buf, BUFMAX);
                 if (n <= 0) {
-                    printf("プレイヤー:%dが切断しました",i);
+                    printf("プレイヤー:%dが切断しました", i);
                     loop = false;
                     break;
                 };
-                std::string str[4];
-                decode(buf,str);
 
-                switch (std::stoi(str[0])) {
-                    case 0:
-                        printf("0");
-                        break;
-                    case 1:
-                        printf("1");
-                        break;
-                    case 2:
-                        printf("2");
-                        break;
-                    default:
-                        printf("error");
-                        break;
+                /* メッセージが送られてきた際の処理 */
+                std::string str[4];
+                decode(buf, str);
+                /* commandによる処理分岐 */
+                // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
+                if ("" != str[3]) {
+                    switch (std::stoi(str[0])) {
+                        case COMMAND_NAME::USE_ITEM:
+                            std::cout << "[USE_ITEM]:player" << str[1] << " used item" << str[3] << std::endl;
+                            break;
+                        case COMMAND_NAME::SHOOT_BULLET:
+                            std::cout << "[SHOOT_BULLET]:player" << str[2] << " was shooted by player" << str[1] <<
+                            std::endl;
+                            break;
+                        case COMMAND_NAME::FINISH_ITEM:
+                            std::cout << "[FINISH_ITEM]:player" << str[1] << " make full use of item" << str[3] <<
+                            std::endl;
+                            break;
+                        default:
+                            printf("error");
+                            break;
+                    }
                 }
+                /* commandによる処理分岐ここまで */
+                /* メッセージの処理ここまで */
                 recv_message(buf, i);
                 bzero(buf, BUFMAX);
             }

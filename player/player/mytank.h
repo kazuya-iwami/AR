@@ -4,6 +4,7 @@
 #include "object.h"
 #include "item.h"
 #include "HTTPConnection.h"
+#include "network.h"
 
 enum OPERATION_STATUS {
 	REGULAR,
@@ -12,7 +13,7 @@ enum OPERATION_STATUS {
 
 //自機クラス
 
-class CMytank : public CObject {
+class CMytank : public CObject,public CNetwork {
 	CItem *item;
 	int score;//撃墜数-被撃墜数
 	int num_bullet; //残弾
@@ -28,7 +29,7 @@ public:
 	void move(tstring direction);//移動
 	void set_ope_status(OPERATION_STATUS status);
 	void set_vel(int vr,int vl);
-	void get_msg(string str);//サーバーからのメッセージ用
+	void get_msg();//サーバーからのメッセージ用
 	bool draw();
 	void gen_bullet();//こういうの作ることになると思われ
 	void set_ip_address(tstring address);

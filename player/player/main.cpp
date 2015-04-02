@@ -69,21 +69,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	SetDrawScreen( DX_SCREEN_BACK ) ;
 
 	//network初期化
-	network->init(0,"192.168.99.72"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
-	network->send_msg("HELLO"); //サーバーにメッセージ送る際はこう書く
-	
-
-	// このif文ではtrueが返ってくる(文字列は同じ)が。。
-	if (encode(COMMAND_NAME::USE_ITEM, 0, 1, 1) == "0,0,1,1")
-	{
-		printf("true\n");
-	}
-	else
-	{
-		printf("false\n");
-	}
-	//network->send_msg((char *)"0,0,1,1"); // これならサーバー側で正しく受け取れるが
-	network->send_msg(encode(COMMAND_NAME::USE_ITEM, 0, 1, 1)); //　これではサーバー側で正しく受け取れない
+	CNetwork::network_init(0,"192.168.99.72"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 	
 	//FPS測定器初期化 
 	//これによって1秒に最大30回しかループが回らないようにする
@@ -162,7 +148,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		
 		//サーバーからmsgの受信
 		/* 1サイクル1回呼ぶ */
-		mytank->get_msg(network->check_msg());
+		mytank->get_msg();
 
 		//移動処理　この中に書く
 		//キー状態取得の後に移動します(2015/3/31 大杉追記)

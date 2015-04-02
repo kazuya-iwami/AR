@@ -14,8 +14,6 @@ auto enemy1 = make_shared<CEnemy>(); //ƒXƒ}[ƒgƒ|ƒCƒ“ƒ^‚É”z—ñ‚ªÀ‘•‚³‚ê‚Ä‚¢‚È‚¢‚
 auto enemy2 = make_shared<CEnemy>();
 auto enemy3 = make_shared<CEnemy>();
 
-auto network = make_shared<CNetwork>();
-
 int score=0;
 int cursur_x=500;
 int cursur_y=350;

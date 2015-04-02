@@ -21,18 +21,19 @@ using namespace std;
 // check_msg()とsend_msg()をつかえれば中身見なくてもよい
 
 class CNetwork {
-	int id;//ユーザーのID：０〜３でそれぞれユーザーごとに異なる
 	
 	//TCP接続用
-	int sofd, retval;
-	struct hostent *shost;
-	struct sockaddr_in svaddr;
-	char buf[BUFMAX];
-	fd_set mask;
-	struct timeval tm;
+	static int sofd, retval;
+	static struct hostent *shost;
+	static struct sockaddr_in svaddr;
+	static char buf[BUFMAX];
+	static fd_set mask;
+	static struct timeval tm;
 
+protected:
+	static int id;//ユーザーのID：０〜３でそれぞれユーザーごとに異なる
 public:
-	int init(int id_, string hostname);//初期化兼接続開始　成功したら1返す
+	static int network_init(int id_, string hostname);//初期化兼接続開始　成功したら1返す
 	string check_msg();//ループの度にこれを呼ぶ　エラーの場合は"EMPTY"返す
 	void send_msg(string msg); //メッセージをサーバーへ送信する
 	void release();//アプリ終了時に呼ぶ

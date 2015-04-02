@@ -42,6 +42,6 @@ void CMytank::set_vel(int vr,int vl){
 	vel_L=vl;
 }
 
-void CMytank::get_msg(string msg){
-
+void CMytank::get_msg(){
+	string msg = check_msg();
 }

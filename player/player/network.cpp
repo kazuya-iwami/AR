@@ -4,7 +4,16 @@
 
 #include "network.h"
 
-int CNetwork::init(int id_, string hostname) {
+int CNetwork::sofd;
+int CNetwork::retval;
+struct hostent *CNetwork::shost;
+struct sockaddr_in CNetwork::svaddr;
+char CNetwork::buf[BUFMAX];
+fd_set CNetwork::mask;
+struct timeval CNetwork::tm;
+int CNetwork::id;
+
+int CNetwork::network_init(int id_, string hostname) {
 
 	/* Windows 独自の設定 */
 	WSADATA data;

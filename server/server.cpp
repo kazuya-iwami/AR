@@ -8,6 +8,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sstream>
 #include "server.h"
 //control.hをincludeしない！
 
@@ -84,9 +85,24 @@ int main() {
                 /* commandによる処理分岐 */
                 // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
                 if ("" != str[3]) {
+                    std::ostringstream stream;
                     switch (std::stoi(str[0])) {
                         case COMMAND_NAME::USE_ITEM:
-                            std::cout << "[USE_ITEM]:player" << str[1] << " used item" << str[3] << std::endl;
+                            switch (std::stoi(str[3])) {
+                                case ITEM_KIND::STAR:
+                                    // スターの処理
+                                    stream << "[USE_ITEM]:player" << str[1] << " used STAR" << std::endl;
+                                    send_message(stream.str(), 4);
+                                    break;
+                                case ITEM_KIND::THUNDER:
+                                    // サンダーの処理
+                                    stream << "[USE_ITEM]:player" << str[1] << " used THUNDER" << std::endl;
+                                    send_message(stream.str(), 4);
+                                    break;
+                                default:
+                                    printf("ITEM_KIND ERROR¥n");
+                                    break;
+                            }
                             break;
                         case COMMAND_NAME::SHOOT_BULLET:
                             std::cout << "[SHOOT_BULLET]:player" << str[2] << " was shooted by player" << str[1] <<
@@ -97,7 +113,7 @@ int main() {
                             std::endl;
                             break;
                         default:
-                            printf("error");
+                            printf("COMMAND_NAME ERROR¥n");
                             break;
                     }
                 }

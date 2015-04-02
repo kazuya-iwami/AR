@@ -13,7 +13,7 @@ enum BULLET_KIND{
 };
 
 enum ITEM_KIND{
-    STER,
+    STAR,
     THUNDER
 };
 

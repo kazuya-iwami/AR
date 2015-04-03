@@ -172,7 +172,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		}
 
 		//テスト用　Bを押したタイミングでBullet生成
-		if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
+		if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 		}
 		//テスト用　3を押したタイミングで3D球(Bullet)生成

@@ -57,27 +57,27 @@ void recv_message(string msg, int id) {
     int command_name = std::stoi(str[0]);
     int player_from = std::stoi(str[1]);
     int player_to = std::stoi(str[2]);
-    int item_kind = std::stoi(str[3]);
+    int kind = std::stoi(str[3]);
     /* commandによる処理分岐 */
     // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
     if ("" != str[3]) {
         std::ostringstream stream;
         switch (command_name) {
             case COMMAND_NAME::USE_ITEM:
-                switch (item_kind) {
+                switch (kind) {
                     case ITEM_KIND::STAR:
                         // スターの処理
                         stream << "[USE_ITEM]:player" << player_from << " used STAR" << std::endl;
-                        player_param[player_from].using_item = (ITEM_KIND) item_kind;
+                        player_param[player_from].using_item = (ITEM_KIND) kind;
                         item_start_time[player_from] = time(NULL);
-                        send_message(encode(COMMAND_NAME::INFORM_ITEM,player_from,player_to,item_kind),4);
+                        send_message(encode(COMMAND_NAME::INFORM_ITEM,player_from,player_to,kind),4);
                         break;
                     case ITEM_KIND::THUNDER:
                         // サンダーの処理
                         stream << "[USE_ITEM]:player" << player_from << " used THUNDER" << std::endl;
-                        player_param[player_from].using_item = (ITEM_KIND) item_kind;
+                        player_param[player_from].using_item = (ITEM_KIND) kind;
                         item_start_time[player_from] = time(NULL);
-                        send_message(encode(COMMAND_NAME::INFORM_ITEM,player_from,player_to,item_kind),4);
+                        send_message(encode(COMMAND_NAME::INFORM_ITEM,player_from,player_to,kind),4);
                         break;
                     default:
                         std::cout << "ITEM_KIND ERROR" << std::endl;
@@ -88,9 +88,9 @@ void recv_message(string msg, int id) {
                 std::cout << "[SHOOT_BULLET]:player" << player_to << " was shooted by player" << player_from <<
                 std::endl;
 
-                if(item_kind) == BULLET_KIND::BULLET_NOMAL
+                if(kind == BULLET_KIND::BULLET_NOMAL
                    && player_param[player_from].using_item != ITEM_KIND::STAR) {
-                    send_message(encode(COMMAND_NAME::RETURN_BULLET,player_from,player_to,item_kind),4);
+                    send_message(encode(COMMAND_NAME::RETURN_BULLET,player_from,player_to,kind),4);
                 }
 
                 break;

@@ -57,13 +57,14 @@ CMytank::CMytank(){
 	}
 };
 
-void CMytank::move(tstring direction){
+void CMytank::move(tstring direction, tstring speed){
 	//2015/3/31時点では正常運転のみ実装
-	//通信失敗の時の処理やプレイヤー状態変更の場合は考慮しない。
-	tstring strUrl = _T("http://") + ip_address+_T("/move/");
+	//通信失敗の時の処理は考慮していない。
+	//2015/4/4において、方向によってURLを作成したため追記。
+	tstring strUrl = _T("http://") + ip_address+_T("/move/") + direction + _T("/") ;
 	bool isMethodGet = true;
 	tstring strResult;
-	HttpRequest(strUrl, isMethodGet, direction, strResult);
+	HttpRequest(strUrl, isMethodGet, speed, strResult);
 }
 
 

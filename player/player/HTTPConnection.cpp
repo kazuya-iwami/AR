@@ -44,7 +44,8 @@ void closeInternet(HINTERNET hInternetOpen,
 	InternetCloseHandle(hInternetOpen);
 }
 
-bool HttpRequest(tstring strUrl, bool isMethodGet, tstring parameter, tstring& rstrResult){
+//操作専用にカスタマイズ
+bool HttpRequest(tstring strUrl, bool isMethodGet, tstring speed, tstring& rstrResult){
 	tstring strUserAgent =  _T("MyApp");
 
 	// アウトプットの初期化
@@ -114,16 +115,16 @@ bool HttpRequest(tstring strUrl, bool isMethodGet, tstring parameter, tstring& r
 		// GET
 		strVerb = _T("GET");
 		strHeaders = _T("");
-		if (0 != parameter.length()){
-			strObject += parameter;
+		if (0 != speed.length()){
+			strObject += speed;
 		}
 	}else{
 		// POST
 		strVerb = _T("POST");
 		strHeaders = _T("Content-Type: application/x-www-form-urlencoded");
-		if (0 != parameter.length()){
+		if (0 != speed.length()){
 			// パラメータを、送信するオプションデータに変換する
-			pszOptional = NhT2M(parameter.c_str());	// char文字列に変換
+			pszOptional = NhT2M(speed.c_str());	// char文字列に変換
 		}
 	}
 

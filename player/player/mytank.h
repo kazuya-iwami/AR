@@ -40,7 +40,7 @@ public:
 	shared_ptr<CEnemy> enemy3;
 
 	CMytank();
-	void move(tstring direction);//移動
+	void move(tstring direction, tstring speed);//移動
 	void set_ope_status(OPERATION_STATUS status);
 	void set_vel(int vr,int vl);
 	void get_msg();//サーバーからのメッセージ用

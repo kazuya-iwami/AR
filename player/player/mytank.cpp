@@ -117,14 +117,18 @@ void CMytank::get_msg(){
     /* メッセージが送られてきた際の処理 */
     std::string str[4];
     decode(msg.c_str(), str);
+    int command_name = std::stoi(str[0]);
+    int player_from = std::stoi(str[1]);
+    int player_to = std::stoi(str[2]);
+    int kind = std::stoi(str[3]);
     /* commandによる処理分岐 */
     // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
     if ("" != str[3]) {
         std::ostringstream stream;
-        switch (std::stoi(str[0])) {
-		case COMMAND_NAME::CHANGE_STATUS:
+        switch (command_name) {
+        case COMMAND_NAME::CHANGE_STATUS:
 			
-			switch (std::stoi(str[1])) {
+			switch (player_from) {
 			case GAME_STATUS::GAME_PLAY:
 				game_status = GAME_STATUS::GAME_PLAY;
 				break;
@@ -134,18 +138,18 @@ void CMytank::get_msg(){
 			default:
 				break;
 			}
-			//game_status:str[1]に変更
+			//game_status:player_fromに変更
             break;
 		case COMMAND_NAME::RETURN_BULLET:
-			//player:str[1]がplayer:str[2]にbullet:str[3]を攻撃
+			//player:player_fromがplayer:player_toにbullet:kindを攻撃
 			
-			if(std::stoi(str[3]) == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
+			if(kind == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
 
-            switch (std::stoi(str[1])){
+            switch (player_from){
 			case 0:
 				if(id != 0){ //他人の攻撃
 					enemy0->score += bullet_score;
-					switch(std::stoi(str[2])){
+					switch(player_to){
 					case 1:
 						if(id != 1){//攻撃先が他人
 							enemy1->score -= bullet_score;
@@ -170,7 +174,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
-					switch(std::stoi(str[2])){
+					switch(player_to){
 					case 1:
 						enemy1->score -= bullet_score;
 						break;
@@ -187,7 +191,7 @@ void CMytank::get_msg(){
 			case 1:
 				if(id != 1){ //他人の攻撃
 					enemy1->score += bullet_score;
-					switch(std::stoi(str[2])){
+					switch(player_to){
 					case 0:
 						if(id != 0){//攻撃先が他人
 							enemy0->score -= bullet_score;
@@ -212,7 +216,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
-					switch(std::stoi(str[2])){
+					switch(player_to){
 					case 0:
 						enemy0->score -= bullet_score;
 						break;
@@ -229,7 +233,7 @@ void CMytank::get_msg(){
 			case 2:
 				if(id != 2){ //他人の攻撃
 					enemy2->score += bullet_score;
-					switch(std::stoi(str[2])){
+					switch(player_to){
 					case 1:
 						if(id != 1){//攻撃先が他人
 							enemy1->score -= bullet_score;
@@ -254,7 +258,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
-					switch(std::stoi(str[2])){
+					switch(player_to){
 					case 1:
 						enemy1->score -= bullet_score;
 						break;
@@ -270,7 +274,7 @@ void CMytank::get_msg(){
 			case 3:
 				if(id != 3){ //他人の攻撃
 					enemy3->score += bullet_score;
-					switch(std::stoi(str[2])){
+					switch(player_to){
 					case 1:
 						if(id != 1){//攻撃先が他人
 							enemy1->score -= bullet_score;
@@ -295,7 +299,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
-					switch(std::stoi(str[2])){
+					switch(player_to){
 					case 1:
 						enemy1->score -= bullet_score;
 						break;
@@ -308,10 +312,11 @@ void CMytank::get_msg(){
 					}
 				}
 				break;
-			}
+            }
             break;
+
 		case COMMAND_NAME::DISCONNECT://敵が切断した場合
-			switch(std::stoi(str[1])){ //自分のidを受け取ることはない前提
+			switch(player_from){ //自分のidを受け取ることはない前提
 			case 0:
 				enemy0->disconnect();
 				break;
@@ -330,12 +335,13 @@ void CMytank::get_msg(){
 			}
 			break;
 		case COMMAND_NAME::INFORM_ITEM:
-			switch(std::stoi(str[3])){//アイテムの種類で場合分け
-			case ITEM_KIND::ITEM_NONE:
-				break;
+			switch(kind){//アイテムの種類で場合分け
+		    case ITEM_KIND::ITEM_NONE:
+                break;
+
 			case ITEM_KIND::STAR:
-				if(std::stoi(str[1]) != id){ //アイテム使用者が自分でなければ
-					switch(std::stoi(str[2])){//アイテム被使用者にPopUP表示
+				if(player_from != id){ //アイテム使用者が自分でなければ
+					switch(player_to){//アイテム被使用者にPopUP表示
 					case 0:
 						{
 						auto popup = make_shared<CPopup>(enemy0->get_x(),enemy0->get_y(),"スター使った☆");

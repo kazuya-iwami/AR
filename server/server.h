@@ -24,8 +24,12 @@ enum GAME_STATUS{
 
 enum COMMAND_NAME{
     USE_ITEM,
+    INFORM_ITEM,
     SHOOT_BULLET,
     FINISH_ITEM,
+    RETURN_BULLET,
+    CHANGE_SCORE,
+    CHANGE_STATUS
 };
 
 class CPlayer_param{

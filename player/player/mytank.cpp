@@ -1,17 +1,21 @@
-
+ï»¿
 #include "mytank.h"
+#include <sstream>
+
+string decode(char const *str, string *target);
+string explode(int n,char const *y,char const *str,string *target=NULL);
 
 bool CMytank::draw(){
 
-	//—á@DrawGraph(0,0,figure_id["TEST"],false);
-	//‚±‚±‚Å Æ€AŠ—LƒAƒCƒeƒ€Ac‹@•`‰æ
-	//‚»‚ê‚¼‚êŠÖ”‚í‚¯‚µ‚Ä‚à
+	//ä¾‹ã€€DrawGraph(0,0,figure_id["TEST"],false);
+	//ã“ã“ã§ ç…§æº–ã€æ‰€æœ‰ã‚¢ã‚¤ãƒ†ãƒ ã€æ®‹æ©Ÿæç”»
+	//ãã‚Œãã‚Œé–¢æ•°ã‚ã‘ã—ã¦ã‚‚
 	//DrawGraph(0,0,figure_id["F_TEST"],false);
 	return true;
 };
 
 CMytank::CMytank(){
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	score = 0;
 	num_bullet = 10;
 	ope_status = OPERATION_STATUS::REGULAR;
@@ -24,9 +28,9 @@ CMytank::CMytank(){
 };
 
 void CMytank::move(tstring direction){
-	//2015/3/31“_‚Å‚Í³í‰^“]‚Ì‚İÀ‘•
-	//’ÊM¸”s‚Ì‚Ìˆ—‚âƒvƒŒƒCƒ„[ó‘Ô•ÏX‚Ìê‡‚Íl—¶‚µ‚È‚¢B
-	//‚Æ‚è‚ ‚¦‚¸AƒvƒƒWƒFƒNƒg‚ÉŠÖŒW‚È‚¢•Ê‚ÌURL‚Å‚Í³í‚É’ÊM‚ğI—¹‚µ‚½B
+	//2015/3/31æ™‚ç‚¹ã§ã¯æ­£å¸¸é‹è»¢ã®ã¿å®Ÿè£…
+	//é€šä¿¡å¤±æ•—ã®æ™‚ã®å‡¦ç†ã‚„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼çŠ¶æ…‹å¤‰æ›´ã®å ´åˆã¯è€ƒæ…®ã—ãªã„ã€‚
+	//ã¨ã‚Šã‚ãˆãšã€ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã«é–¢ä¿‚ãªã„åˆ¥ã®URLã§ã¯æ­£å¸¸ã«é€šä¿¡ã‚’çµ‚äº†ã—ãŸã€‚
 	tstring strUrl = _T("http://") + ipAddress+_T("/move/");
 	bool isMethodGet = true;
 	tstring strResult;
@@ -44,4 +48,76 @@ void CMytank::set_vel(int vr,int vl){
 
 void CMytank::get_msg(){
 	string msg = check_msg();
+
+    /* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒé€ã‚‰ã‚Œã¦ããŸéš›ã®å‡¦ç† */
+    std::string str[4];
+    decode(msg.c_str(), str);
+    /* commandã«ã‚ˆã‚‹å‡¦ç†åˆ†å² */
+    // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã§ç¬¬å››å¼•æ•°ã¾ã§ã‚‚ã£ã¦ã„ã‚Œã°ã€commandã¨ã¿ãªã™
+    if ("" != str[3]) {
+        std::ostringstream stream;
+        switch (std::stoi(str[0])) {
+		case COMMAND_NAME::CHANGE_SCORE:
+            //player:str[1]ãŒscore:str[2]ã‚¹ã‚³ã‚¢ä¸Šæ˜‡
+            break;
+		case COMMAND_NAME::CHANGE_STATUS:
+			//game_status:str[1]ã«å¤‰æ›´
+            break;
+		case COMMAND_NAME::RETURN_BULLET:
+			//player:str[1]ãŒplayer:str[2]ã«bullet:str[3]ã‚’æ”»æ’ƒ
+            
+            break;
+		case COMMAND_NAME::FINISH_ITEM:
+            
+            break;
+		case COMMAND_NAME::INFORM_ITEM:
+            std::cout << "[FINISH_ITEM]:player" << str[1] << " make full use of item" << str[3] <<
+            std::endl;
+            break;
+		default:
+            printf("COMMAND_NAME ERRORÂ¥n");
+            break;
+        }
+    }
+    /* commandã«ã‚ˆã‚‹å‡¦ç†åˆ†å²ã“ã“ã¾ã§ */
+    /* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å‡¦ç†ã“ã“ã¾ã§ */
 }
+
+
+
+string decode(char const *msg, string *target) {
+    return explode(1, ",", msg, target);
+}
+
+string explode(int n,char const *y,char const *str,string *target){
+    bool option;
+    if(target==NULL) option=false;
+    else option=true;
+    n--;
+    string r_str[1000];
+    int d=0,g=0,t=strlen(y),a=0;
+    for(int i=0;i<strlen(str);i++){
+        if(y[a]==str[i]){
+            a++;
+            if(a==t){
+                for(int q=d;q<i-t+1;q++) r_str[g]+=str[q];
+                d=i+1;
+                i++;
+                g++;
+                a=0;
+            }
+        }else{
+            i-=a;
+            a=0;
+        }
+    }
+    for(int i=d;i<strlen(str);i++) r_str[g]+=str[i];
+    if(option){
+        for(int i=0;i<=g;i++){
+            *target=r_str[i];
+            target++;
+        }
+    }
+    return r_str[n];
+}
+

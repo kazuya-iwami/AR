@@ -62,6 +62,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	ChangeWindowMode( TRUE ) ;//falseならフルスクリーン
 	SetGraphMode(1000,750,32);//画面サイズ1000×750に設定
 
+	//文字サイズ
+	SetFontSize( 40 ) ;                             //サイズを20に変更
+    SetFontThickness( 1 ) ;                         //太さを1に変更
+    ChangeFont( "HGS創英角ﾎﾟｯﾌﾟ体" ) ;              //HGS創英角ﾎﾟｯﾌﾟ体に変更
+    ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE );//アンチエイリアス＆エッジ付きフォントに変更
+
 	// ＤＸライブラリ初期化処理
 	if( DxLib_Init() == -1 ){
 		return -1;

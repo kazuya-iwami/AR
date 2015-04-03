@@ -49,4 +49,10 @@ bool CCursur::draw(){
 
 CEnemy::CEnemy(){
 	score = 0;
+	exist=true;
+}
+
+
+void CEnemy::disconnect(){
+	exist = false;
 }

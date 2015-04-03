@@ -146,7 +146,7 @@ void CMytank::get_msg(){
 			
 			//bulletによっていくつスコアが上昇するかをscoreに格納
 			int bullet_score=0;
-			if(std::stoi(str[1]) == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
+			if(std::stoi(str[3]) == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
 
             switch (std::stoi(str[1])){
 			case 0:
@@ -317,6 +317,25 @@ void CMytank::get_msg(){
 				break;
 			}
             break;
+		case COMMAND_NAME::DISCONNECT://敵が切断した場合
+			switch(std::stoi(str[1])){ //自分のidを受け取ることはない前提
+			case 0:
+				enemy0->disconnect();
+				break;
+			
+			case 1:
+				enemy1->disconnect();
+				break;
+			
+			case 2:
+				enemy2->disconnect();
+				break;
+			
+			case 3:
+				enemy3->disconnect();
+				break;
+			}
+			break;
 		case COMMAND_NAME::FINISH_ITEM:
             
             break;

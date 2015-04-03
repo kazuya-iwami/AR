@@ -17,7 +17,8 @@ enum COMMAND_NAME{
     FINISH_ITEM,
     RETURN_BULLET,
     CHANGE_SCORE,
-    CHANGE_STATUS
+    CHANGE_STATUS,
+	DISCONNECT
 };
 
 using namespace std;

@@ -1,6 +1,7 @@
 ﻿
 #include "mytank.h"
 #include <sstream>
+#include "debug.h"
 
 #define ENEMY_WIDTH 200
 #define FOCUS_WIDTH 50
@@ -99,6 +100,9 @@ void CMytank::gen_bullet(BULLET_KIND kind){
 
 void CMytank::get_msg(){
 	string msg = check_msg();
+
+	auto popup = make_shared<CPopup>(100,100,msg);
+	CObject::register_object(popup);
 
     /* メッセージが送られてきた際の処理 */
     std::string str[4];

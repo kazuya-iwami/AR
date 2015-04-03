@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="debug.cpp" />
     <ClCompile Include="explosion.cpp" />
     <ClCompile Include="HTTPConnection.cpp" />
     <ClCompile Include="image_processing.cpp" />
@@ -104,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="debug.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="HTTPConnection.h" />

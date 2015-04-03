@@ -15,6 +15,7 @@
 #include "explosion.h"
 #include "utility.h"
 #include "tstring.h"
+#include "debug.h"
 
 using namespace std;
 
@@ -39,6 +40,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//キーボード用
 	char key_buf [ 256 ] ;
 	char key_prev_buf [ 256 ] ;
+
+	CPopup::debug_flag = true; // デバッグフラグがtrueならポップアップを表示
 
 	//ラズパイからの映像取得用
 	const std::string videoStreamAddress ="http://192.168.10.137:8080/?action=stream.mjpeg";

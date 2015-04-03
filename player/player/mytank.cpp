@@ -74,6 +74,8 @@ void CMytank::set_vel(int vr,int vl){
 
 void CMytank::gen_bullet(BULLET_KIND kind){
 
+	
+
 	if((id != 0) && (enemy0->get_x() < focus_x && enemy0->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy0->get_y() < focus_y && enemy0->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH)){
 		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
 		CObject::register_object(bullet);

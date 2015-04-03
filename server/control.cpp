@@ -87,7 +87,7 @@ void recv_message(string msg, int id) {
 
                 if(std::stoi(str[3]) == BULLET_KIND::BULLET_NOMAL
                         && player_param[std::stoi(str[1])].using_item != ITEM_KIND::STAR) {
-                    send_message(encode(COMMAND_NAME::RETURN_BULLET,std::stoi(str[1]),std::stoi(str[2]),std::stoi(str[3]));
+                    send_message(encode(COMMAND_NAME::RETURN_BULLET,std::stoi(str[1]),std::stoi(str[2]),std::stoi(str[3])),4);
                 }
 
                 break;

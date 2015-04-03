@@ -57,7 +57,6 @@ CMytank::CMytank(){
 void CMytank::move(tstring direction){
 	//2015/3/31時点では正常運転のみ実装
 	//通信失敗の時の処理やプレイヤー状態変更の場合は考慮しない。
-	//とりあえず、プロジェクトに関係ない別のURLでは正常に通信を終了した。
 	tstring strUrl = _T("http://") + ipAddress+_T("/move/");
 	bool isMethodGet = true;
 	tstring strResult;

@@ -15,16 +15,12 @@
 #include "explosion.h"
 #include "utility.h"
 #include "tstring.h"
-#include <sstream>
 
 using namespace std;
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ){
 	cv::VideoCapture vcap;
 	cv::Mat image;
-
-	//コンソールの表示
-	AllocConsole();
 
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
@@ -82,22 +78,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//自機のIPアドレスの設定
 	mytank->set_ip_address(_T("192.168.10.125"));
 
-	//敵クラス初期化
-	enemy1->init(80,180,100,200,100,200);//スマートポインタって配列に対応してないようなんですが何事
-	enemy2->init(0,30,100,200,100,200);//ここでHSV色領域（ググって）のminとmaxを指定するとその色の重心が取得できる
-	enemy3->init(30,80,100,200,100,200);
-	
-
 	//色々描画リストに登録
 	//ここ大事。object.h見て
 	//後ここ参考　http://marupeke296.com/DXCLS_WhoIsDrawer.html
 
-	drawlist.push_back(mytank);
-	drawlist.push_back(system_timer);
-	drawlist.push_back(enemy1);
-	drawlist.push_back(enemy2);
-	drawlist.push_back(enemy3);
-	drawlist.push_back(mycursur);
+	CObject::register_object(mytank);
+	CObject::register_object(system_timer);
+	CObject::register_object(mycursur);
 
 	float bullet_z = 0.0;
 	// メインループ
@@ -114,12 +101,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//	return -1;
 		//}
 
-		//敵の位置データ更新
-		enemy1->detect(image);
-		enemy2->detect(image);
-		enemy3->detect(image);
-
-		
+		mytank->detect_enemy(image);
 
 		//cv::imwrite("out.jpeg",image);
 
@@ -137,10 +119,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
 		*/
 		std::list<std::shared_ptr<CObject>>::iterator it;
-		for(it=drawlist.begin(); it!=drawlist.end();){  // 最後の「it++」を消す
+		for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // 最後の「it++」を消す
 			if( !(*it)->draw() ){ //アニメーション終了時
 				// オブジェクトをリストからはずす
-				it = drawlist.erase( it );
+				it = CObject::drawlist.erase( it );
 				continue;
 			}
 			it++;   // インクリメント
@@ -162,48 +144,51 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		GetHitKeyStateAll( key_buf ) ;
 
-		if(  key_buf[ KEY_INPUT_UP ] == 1 ){
+		//各キーを押し続けるとその動作をする。
+		if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
 			//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
 			mytank->move(_T("forward"));
-			printf("forward\n");
 		}
-		if(  key_buf[ KEY_INPUT_DOWN ] == 1 ){
+		if(  key_buf[ KEY_INPUT_DOWN ] == 1 && key_prev_buf[ KEY_INPUT_DOWN] == 0 ){
 			//mytank->set_vel(-1,-1);
 			mytank->move(_T("backward"));
-			printf("backward\n");
 		}
-		if(  key_buf[ KEY_INPUT_LEFT ] == 1 ){
+		if(  key_buf[ KEY_INPUT_LEFT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
 			//mytank->set_vel(-1,1);
 			mytank->move(_T("left"));
-			printf("left\n");
 		}
-		if(  key_buf[ KEY_INPUT_RIGHT ] == 1 ){
+		if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
 			//mytank->set_vel(1,-1);
 			mytank->move(_T("right"));
-			printf("right\n");
 		}
-		
+		//各キーを離したらstop
+		if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 
+			(key_buf[ KEY_INPUT_DOWN ] == 0 && key_prev_buf[ KEY_INPUT_DOWN] == 1) ||
+			(key_buf[ KEY_INPUT_LEFT ] == 0 && key_prev_buf[ KEY_INPUT_LEFT] == 1) ||
+			(key_buf[ KEY_INPUT_RIGHT ] == 0 && key_prev_buf[ KEY_INPUT_RIGHT] == 1) ){
+			mytank->move(_T("stop"));
+		}
+
 		//テスト用　Bを押したタイミングでBullet生成
 		if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
-			auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
-			drawlist.push_back(bullet);
+			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 		}
 		//テスト用　3を押したタイミングで3D球(Bullet)生成
 		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
 			auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
-			drawlist.push_back(bullet);
+			CObject::register_object(bullet);
 		}
 
 
 		//テスト用　Eを押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
-			drawlist.push_back(explosion);
+			CObject::register_object(explosion);
 		}
 		//テスト用　1を押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
-			drawlist.push_back(explosion);
+			CObject::register_object(explosion);
 		}
 
 		//テスト用　0を押したタイミングでスコア追加
@@ -249,15 +234,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	}
 	// ＤＸライブラリ使用の終了処理
 	DxLib_End() ;
-
 	
 	// ソフトの終了
 	return 0 ;
 }
 
-string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind){
-
-std::ostringstream stream;
- stream << (int)command_name << ","  << player_from << "," << player_to << "," << kind;
- return stream.str();
-}

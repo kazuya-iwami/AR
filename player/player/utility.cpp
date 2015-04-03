@@ -46,3 +46,13 @@ bool CCursur::draw(){
 	DrawGraph(cursur_x,cursur_y,figure_id["F_CURSUR"],true);
 	return true;
 }
+
+CEnemy::CEnemy(){
+	score = 0;
+	exist=true;
+}
+
+
+void CEnemy::disconnect(){
+	exist = false;
+}

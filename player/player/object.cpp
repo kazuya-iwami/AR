@@ -2,6 +2,7 @@
 
 map<string,int> CObject::figure_id;
 map<string,int> CObject::sound_id;
+std::list<std::shared_ptr<CObject>> CObject::drawlist;
 
 //爆発エフェクト用配列
 int explosion[45];
@@ -45,5 +46,11 @@ bool CObject::draw(){
 
 	//仮想関数なので中身なし
 	return true;
+
+}
+
+void CObject::register_object(std::shared_ptr<CObject> obj){
+
+	drawlist.push_back(obj);
 
 }

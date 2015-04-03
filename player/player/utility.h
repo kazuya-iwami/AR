@@ -17,7 +17,14 @@ public:
 class CEnemy : public CImage_processer,public CObject {
 
 public:
+	int score;
+	bool exist;
+
+	CEnemy();
+	int get_x(){return x;}
+	int get_y(){return y;}
 	bool draw();
+	void disconnect();
 };
 
 //カーソルクラス

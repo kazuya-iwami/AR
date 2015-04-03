@@ -88,7 +88,7 @@ void recv_message(string msg, int id) {
                 std::cout << "[SHOOT_BULLET]:player" << player_to << " was shooted by player" << player_from <<
                 std::endl;
 
-                if(item_kind) == BULLET_KIND::BULLET_NOMAL
+                if(item_kind == BULLET_KIND::BULLET_NOMAL
                    && player_param[player_from].using_item != ITEM_KIND::STAR) {
                     send_message(encode(COMMAND_NAME::RETURN_BULLET,player_from,player_to,item_kind),4);
                 }
@@ -108,7 +108,7 @@ void check_item_valid() {
     item_end_time = time(NULL);
     /* 差分を求める */
     for (int i = 0; i < 4; i++) {
-        if (-1 == player_param[i].using_item) { continue; }
+        if (ITEM_KIND::ITEM_NONE == player_param[i].using_item) { continue; }
         diff = difftime(item_end_time, item_start_time[i]);
         switch (player_param[i].using_item) {
             case ITEM_KIND::STAR:

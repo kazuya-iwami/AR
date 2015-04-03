@@ -15,6 +15,8 @@ string decode(char const *msg, string *target) {
     return explode(1, ",", msg, target);
 }
 
+double diff;
+
 string explode(int n,char const *y,char const *str,string *target){
     bool option;
     if(target==NULL) option=false;
@@ -70,7 +72,9 @@ void recv_message(string msg, int id) {
                     case ITEM_KIND::THUNDER:
                         // サンダーの処理
                         stream << "[USE_ITEM]:player" << str[1] << " used THUNDER" << std::endl;
-                        send_message(stream.str(), 4);
+                        player_param[std::stoi(str[1])].using_item = std::stoi(str[3]);
+                        item_start_time[std::stoi(str[1])] = time(NULL);
+//                        send_message(stream.str(), 4);
                         break;
                     default:
                         std::cout << "ITEM_KIND ERROR" << std::endl;
@@ -89,6 +93,34 @@ void recv_message(string msg, int id) {
     /* commandによる処理分岐ここまで */
     /* メッセージの処理ここまで */
     cout << " プレイヤー：" << id << " " << msg << endl;
+}
+
+void check_item_valid() {
+    item_end_time = time(NULL);
+    /* 差分を求める */
+    for (int i = 0; i < 4; i++) {
+        if (-1 == player_param[i].using_item) { continue; }
+        diff = difftime(item_end_time, item_start_time[i]);
+        switch (player_param[i].using_item) {
+            case ITEM_KIND::STAR:
+                // アイテム使用から8秒以上たっていたら
+                if (8 <= diff) {
+                    std::cout << "player" << i << "のSTARの使用が終了しました。" << std::endl;
+                    player_param[i].using_item = -1;
+                }
+                break;
+            case ITEM_KIND::THUNDER:
+                // アイテム使用から4秒以上たっていたら
+                if (4 <= diff) {
+                    std::cout << "player" << i << "のTHUNDERの使用が終了しました。" << std::endl;
+                    player_param[i].using_item = -1;
+                }
+                break;
+            default:
+                std::cout << "ITEM_KIND ERROR" << std::endl;
+                break;
+        }
+    }
 }
 
 void encode_message(){}

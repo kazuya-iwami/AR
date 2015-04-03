@@ -31,10 +31,9 @@ CPlayer_param player_param[4];
 int set_tcp_socket(int portnum, struct hostent *shost);
 
 void recv_message(std::string msg, int n);
+void check_item_valid();
 void init();
-double diff;
 clock_t item_start_time[4], item_end_time;
-
 
 int main() {
 
@@ -65,24 +64,7 @@ int main() {
 
     while (loop) {
 
-        item_end_time = time(NULL);
-        /* 差分を求める */
-        for (int i = 0; i < 4; i++) {
-          if (-1 == player_param[i].using_item) { continue; }
-          diff = difftime(item_end_time, item_start_time[i]);
-          switch (player_param[i].using_item) {
-              case ITEM_KIND::STAR:
-                  // アイテム使用から8秒以上たっていたら
-                  if (8 <= diff) {
-                    std::cout << "player" << i << "のアイテム" << player_param[i].using_item << "の使用が終了しました。" << std::endl;
-                    player_param[i].using_item = -1;
-                  }
-                  break;
-              case ITEM_KIND::THUNDER:
-              std::cout << "THUNDER" << std::endl;
-                  break;
-          }
-        }
+        check_item_valid();
 
         FD_ZERO(&mask);
         for (int i = 0; i < PORT_NUM; i++) {

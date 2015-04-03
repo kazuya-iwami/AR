@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sstream>
 #include "server.h"
 //control.hをincludeしない！
 
@@ -78,7 +78,8 @@ int main() {
                 n = read(nsockfd[i], buf, BUFMAX);
                 if (n <= 0) {
                     printf("プレイヤー:%dが切断しました", i);
-                    loop = false;
+                    //loop = false;
+                    send_message(encode(COMMAND_NAME::DISCONNECT,i,0,0),4);
                     break;
                 };
 
@@ -160,3 +161,9 @@ void init(){
     }
 }
 
+std::string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind){
+
+    std::ostringstream stream;
+    stream << (int)command_name << ","  << player_from << "," << player_to << "," << kind;
+    return stream.str();
+}

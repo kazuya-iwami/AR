@@ -122,5 +122,3 @@ void check_item_valid() {
         }
     }
 }
-
-void encode_message(){}

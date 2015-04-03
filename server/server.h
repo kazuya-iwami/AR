@@ -29,7 +29,8 @@ enum COMMAND_NAME{
     FINISH_ITEM,
     RETURN_BULLET,
     CHANGE_SCORE,
-    CHANGE_STATUS
+    CHANGE_STATUS,
+    DISCONNECT
 };
 
 class CPlayer_param{
@@ -40,5 +41,7 @@ public:
 };
 
 void send_message(std::string msg, int id);
+
+std::string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind);
 
 #endif //_AR_SOCKET_SERVER_H_

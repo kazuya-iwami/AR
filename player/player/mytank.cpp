@@ -2,11 +2,10 @@
 #include "mytank.h"
 #include <sstream>
 #include "debug.h"
+#include "item.h"
 
 #define ENEMY_WIDTH 200
 #define FOCUS_WIDTH 50
-
-
 
 bool CMytank::draw(){
 
@@ -107,6 +106,14 @@ void CMytank::gen_bullet(BULLET_KIND kind){
 		}
 	}
 	
+}
+
+void CMytank::use_item(){
+	if (item_kind != ITEM_KIND::ITEM_NONE) {
+		send_msg(encode(COMMAND_NAME::USE_ITEM, id, 4, (int)item_kind));
+		auto item = make_shared<CItem>(530 , 50, item_kind);
+    	CObject::register_object(item);
+	}
 }
 
 void CMytank::get_msg(){

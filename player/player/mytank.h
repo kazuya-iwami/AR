@@ -46,5 +46,6 @@ public:
 	void get_msg();//サーバーからのメッセージ用
 	bool draw();
 	void gen_bullet(BULLET_KIND kind);//弾生成関数
+	void use_item(); // item生成関数
 	void detect_enemy(Mat image);
 };

@@ -26,7 +26,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
 	//network初期化
-	CNetwork::network_init(0,"192.168.10.100"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
+	CNetwork::network_init(0,"192.168.10.126"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 
 	//クラスのインスタンスはスマートポインタ(std::shared_ptr)で生成します。
 	//スマートポインタの詳細はググって
@@ -197,6 +197,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
 			CObject::register_object(explosion);
+		}
+		//テスト用　Iを押したタイミングでItem生成
+		if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
+			mytank->use_item();
 		}
 
 		//テスト用　0を押したタイミングでスコア追加

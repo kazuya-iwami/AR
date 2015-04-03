@@ -24,7 +24,7 @@ CMytank::CMytank(){
 	vel_L = 0;
 	focus_x = 200;
 	focus_y = 200;
-
+	game_status=GAME_STATUS::GAME_PLAY;
 };
 
 void CMytank::move(tstring direction){
@@ -59,20 +59,32 @@ void CMytank::get_msg(){
         switch (std::stoi(str[0])) {
 		case COMMAND_NAME::CHANGE_SCORE:
             //player:str[1]がscore:str[2]スコア上昇
+
             break;
 		case COMMAND_NAME::CHANGE_STATUS:
+			
+			switch (std::stoi(str[1])) {
+			case GAME_STATUS::GAME_PLAY:
+				game_status = GAME_STATUS::GAME_PLAY;
+				break;
+			case GAME_STATUS::GAME_PAUSE:
+				game_status = GAME_STATUS::GAME_PAUSE;
+				break;
+			default:
+				break;
+			}
 			//game_status:str[1]に変更
             break;
 		case COMMAND_NAME::RETURN_BULLET:
 			//player:str[1]がplayer:str[2]にbullet:str[3]を攻撃
+			//自分の攻撃が当たった場合はここでスコア上昇
             
             break;
 		case COMMAND_NAME::FINISH_ITEM:
             
             break;
 		case COMMAND_NAME::INFORM_ITEM:
-            std::cout << "[FINISH_ITEM]:player" << str[1] << " make full use of item" << str[3] <<
-            std::endl;
+           
             break;
 		default:
             printf("COMMAND_NAME ERROR¥n");

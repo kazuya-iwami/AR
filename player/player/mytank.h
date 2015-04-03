@@ -11,6 +11,12 @@ enum OPERATION_STATUS {
 	STOP
 };
 
+enum GAME_STATUS{
+    GAME_PLAY,
+    GAME_PAUSE
+};
+
+
 //自機クラス
 
 class CMytank : public CObject,public CNetwork {
@@ -22,6 +28,7 @@ class CMytank : public CObject,public CNetwork {
 	int vel_R,vel_L; //左右のタイヤの速度
 	int focus_x,focus_y;//照準の位置
 	tstring ipAddress; //このプログラムで操作する戦車のIPアドレス
+	GAME_STATUS game_status;
 
 	
 public:

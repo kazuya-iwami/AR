@@ -4,7 +4,8 @@
 
 //アイテムクラス
 enum ITEM_KIND{
-	STER,
+	ITEM_NONE,
+	STAR,
 	THUNDER
 };
 

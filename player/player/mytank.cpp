@@ -20,7 +20,7 @@ bool CMytank::draw(){
 CMytank::CMytank(){
 	//初期化
 	score = 0;
-	num_bullet = 10;
+	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
 	ope_timer = 0;
 	vel_R = 0;
@@ -28,6 +28,7 @@ CMytank::CMytank(){
 	focus_x = 200;
 	focus_y = 200;
 	game_status=GAME_STATUS::GAME_PLAY;
+	item_kind = ITEM_KIND::STAR; //スターを持たせる
 
 	send_msg("HELLO");
 
@@ -74,27 +75,36 @@ void CMytank::set_vel(int vr,int vl){
 
 void CMytank::gen_bullet(BULLET_KIND kind){
 
+	//残弾処理
+	if(num_bullet == 0)return;
+	num_bullet--;
+
+	//描画
+	auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
+	CObject::register_object(bullet);
+
+	
 	
 
 	if((id != 0) && (enemy0->get_x() < focus_x && enemy0->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy0->get_y() < focus_y && enemy0->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH)){
-		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
-		CObject::register_object(bullet);
-		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,0,(int)BULLET_KIND::BULLET_NOMAL));
+		if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
+			send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,0,(int)BULLET_KIND::BULLET_NOMAL));
+		}
 	}
 	if((id != 1) && (enemy1->get_x() < focus_x && enemy1->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy1->get_y() < focus_y && enemy1->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH)){
-		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
-		CObject::register_object(bullet);
-		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,1,(int)BULLET_KIND::BULLET_NOMAL));
+		if(enemy1->exist){
+			send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,1,(int)BULLET_KIND::BULLET_NOMAL));
+		}
 	}
 	if((id != 2) && (enemy2->get_x() < focus_x && enemy2->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy2->get_y() < focus_y && enemy2->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH)){
-		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
-		CObject::register_object(bullet);
-		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,2,(int)BULLET_KIND::BULLET_NOMAL));
+		if(enemy2->exist){
+			send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,2,(int)BULLET_KIND::BULLET_NOMAL));
+		}
 	}
 	if((id != 3) && (enemy3->get_x() < focus_x && enemy3->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy3->get_y() < focus_y && enemy3->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH)){
-		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
-		CObject::register_object(bullet);
-		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,3,(int)BULLET_KIND::BULLET_NOMAL));
+		if(enemy3->exist){
+			send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,3,(int)BULLET_KIND::BULLET_NOMAL));
+		}
 	}
 	
 }

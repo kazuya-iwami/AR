@@ -23,7 +23,7 @@ enum GAME_STATUS{
 //自機クラス
 
 class CMytank : public CObject,public CNetwork {
-	CItem *item;
+	ITEM_KIND item_kind;
 	int score;//撃墜数-被撃墜数
 	int num_bullet; //残弾
 	OPERATION_STATUS ope_status; //操作用ステータス

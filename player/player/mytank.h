@@ -35,12 +35,17 @@ class CMytank : public CObject,public CNetwork {
 
 	
 public:
+	shared_ptr<CEnemy> enemy1;
+	shared_ptr<CEnemy> enemy2;
+	shared_ptr<CEnemy> enemy3;
+
 	CMytank();
 	void move(tstring direction);//移動
 	void set_ope_status(OPERATION_STATUS status);
 	void set_vel(int vr,int vl);
 	void get_msg();//サーバーからのメッセージ用
 	bool draw();
-	void gen_bullet(BULLET_KIND kind,shared_ptr<CEnemy> enemy1,shared_ptr<CEnemy> enemy2,shared_ptr<CEnemy> enemy3);//弾生成関数
+	void gen_bullet(BULLET_KIND kind);//弾生成関数
 	void set_ip_address(tstring address);
+	void detect_enemy(Mat image);
 };

@@ -35,10 +35,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//グローバル変数はmain.hに書いてる
 	//他のファイルで用いる時はexternして（externでググるべし）
 
-	auto enemy1 = make_shared<CEnemy>(); //スマートポインタに配列が実装されていないため
-	auto enemy2 = make_shared<CEnemy>();
-	auto enemy3 = make_shared<CEnemy>();
-
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
 	auto mycursur=make_shared<CCursur>();
@@ -85,21 +81,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//自機のIPアドレスの設定
 	mytank->set_ip_address(_T("192.168.10.125"));
 
-	//敵クラス初期化
-	enemy1->init(80,180,100,200,100,200);//スマートポインタって配列に対応してないようなんですが何事
-	enemy2->init(0,30,100,200,100,200);//ここでHSV色領域（ググって）のminとmaxを指定するとその色の重心が取得できる
-	enemy3->init(30,80,100,200,100,200);
-	
-
 	//色々描画リストに登録
 	//ここ大事。object.h見て
 	//後ここ参考　http://marupeke296.com/DXCLS_WhoIsDrawer.html
 
 	CObject::register_object(mytank);
 	CObject::register_object(system_timer);
-	CObject::register_object(enemy1);
-	CObject::register_object(enemy2);
-	CObject::register_object(enemy3);
 	CObject::register_object(mycursur);
 
 	float bullet_z = 0.0;
@@ -117,12 +104,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//	return -1;
 		//}
 
-		//敵の位置データ更新
-		enemy1->detect(image);
-		enemy2->detect(image);
-		enemy3->detect(image);
-
-		
+		mytank->detect_enemy(image);
 
 		//cv::imwrite("out.jpeg",image);
 
@@ -188,7 +170,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		
 		//テスト用　Bを押したタイミングでBullet生成
 		if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
-			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL,enemy1,enemy2,enemy3);
+			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 		}
 		//テスト用　3を押したタイミングで3D球(Bullet)生成
 		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){

@@ -27,6 +27,22 @@ CMytank::CMytank(){
 	focus_x = 200;
 	focus_y = 200;
 	game_status=GAME_STATUS::GAME_PLAY;
+
+	auto enemy1_ = make_shared<CEnemy>(); //スマートポインタに配列が実装されていないため
+	enemy1 = enemy1_;
+	auto enemy2_ = make_shared<CEnemy>();
+	enemy2 = enemy2_;
+	auto enemy3_ = make_shared<CEnemy>();
+	enemy3 = enemy3_;
+
+	//敵クラス初期化
+	enemy1->init(80,180,100,200,100,200);//スマートポインタって配列に対応してないようなんですが何事
+	enemy2->init(0,30,100,200,100,200);//ここでHSV色領域（ググって）のminとmaxを指定するとその色の重心が取得できる
+	enemy3->init(30,80,100,200,100,200);
+
+	CObject::register_object(enemy1);
+	CObject::register_object(enemy2);
+	CObject::register_object(enemy3);
 };
 
 void CMytank::move(tstring direction){
@@ -48,7 +64,7 @@ void CMytank::set_vel(int vr,int vl){
 	vel_L=vl;
 }
 
-void CMytank::gen_bullet(BULLET_KIND kind,shared_ptr<CEnemy> enemy1,shared_ptr<CEnemy> enemy2,shared_ptr<CEnemy> enemy3){
+void CMytank::gen_bullet(BULLET_KIND kind){
 
 	if(enemy1->get_x() < focus_x && enemy1->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy1->get_y() < focus_y && enemy1->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH){
 		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
@@ -117,4 +133,10 @@ void CMytank::get_msg(){
 }
 
 
+void CMytank::detect_enemy(Mat image){
 
+	enemy1->detect(image);
+	enemy2->detect(image);
+	enemy3->detect(image);
+	
+}

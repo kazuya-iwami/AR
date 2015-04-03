@@ -8,6 +8,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
 #include "server.h"
 //control.hをincludeしない！
 
@@ -30,8 +31,9 @@ CPlayer_param player_param[4];
 int set_tcp_socket(int portnum, struct hostent *shost);
 
 void recv_message(std::string msg, int n);
+void check_item_valid();
 void init();
-
+clock_t item_start_time[4], item_end_time;
 
 int main() {
 
@@ -44,6 +46,7 @@ int main() {
 
     printf("hostname is %s", shostn);
     printf("\n");
+
 
     shost = gethostbyname(shostn);
     if (shost == NULL) Err("gethostbyname");
@@ -60,6 +63,8 @@ int main() {
     init();
 
     while (loop) {
+
+        check_item_valid();
 
         FD_ZERO(&mask);
         for (int i = 0; i < PORT_NUM; i++) {
@@ -81,8 +86,6 @@ int main() {
                 bzero(buf, BUFMAX);
             }
         }
-
-        sleep(1);
     }
     for (int i = 0; i < PORT_NUM; i++) {
         close(nsockfd[i]);
@@ -150,10 +153,12 @@ void send_message(std::string msg, int id=4) {
 void init(){
     game_status=GAME_STATUS::GAME_PLAY;
     left_time=300;
+    item_end_time = 0;
     for(int i=0;i<4;i++){
         player_param[i].exist=true;
         player_param[i].score=0;
         player_param[i].using_item=-1;
+        item_start_time[i] = 0;
     }
 }
 

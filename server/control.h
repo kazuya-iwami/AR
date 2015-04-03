@@ -6,11 +6,13 @@
 #define _AR_SOCKET_MAIN_H_
 
 #include <iostream>
+#include <time.h>
 #include "server.h"
 
 extern GAME_STATUS game_status;//ゲームステータス
 extern int left_time;//今のところ実装放置
 extern CPlayer_param player_param[4];
+extern clock_t item_start_time[4], item_end_time;
 
 using namespace std;
 

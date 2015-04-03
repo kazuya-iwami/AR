@@ -17,10 +17,11 @@ public:
 class CEnemy : public CImage_processer,public CObject {
 
 public:
+	int enemy_id;
 	int score;
 	bool exist;
 
-	CEnemy();
+	CEnemy(int enemy_id_);
 	int get_x(){return x;}
 	int get_y(){return y;}
 	bool draw();

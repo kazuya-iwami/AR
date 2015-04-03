@@ -65,14 +65,14 @@ void recv_message(string msg, int id) {
                     case ITEM_KIND::STAR:
                         // スターの処理
                         stream << "[USE_ITEM]:player" << str[1] << " used STAR" << std::endl;
-                        player_param[std::stoi(str[1])].using_item = std::stoi(str[3]);
+                        player_param[std::stoi(str[1])].using_item = (ITEM_KIND) std::stoi(str[3]);
                         item_start_time[std::stoi(str[1])] = time(NULL);
 //                        send_message(stream.str(), 4);
                         break;
                     case ITEM_KIND::THUNDER:
                         // サンダーの処理
                         stream << "[USE_ITEM]:player" << str[1] << " used THUNDER" << std::endl;
-                        player_param[std::stoi(str[1])].using_item = std::stoi(str[3]);
+                        player_param[std::stoi(str[1])].using_item = (ITEM_KIND) std::stoi(str[3]);
                         item_start_time[std::stoi(str[1])] = time(NULL);
 //                        send_message(stream.str(), 4);
                         break;
@@ -112,14 +112,14 @@ void check_item_valid() {
                 // アイテム使用から8秒以上たっていたら
                 if (8 <= diff) {
                     std::cout << "player" << i << "のSTARの使用が終了しました。" << std::endl;
-                    player_param[i].using_item = -1;
+                    player_param[i].using_item = ITEM_KIND::ITEM_NONE ;
                 }
                 break;
             case ITEM_KIND::THUNDER:
                 // アイテム使用から4秒以上たっていたら
                 if (4 <= diff) {
                     std::cout << "player" << i << "のTHUNDERの使用が終了しました。" << std::endl;
-                    player_param[i].using_item = -1;
+                    player_param[i].using_item = ITEM_KIND::ITEM_NONE ;
                 }
                 break;
             default:

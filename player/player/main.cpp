@@ -95,12 +95,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//ここ大事。object.h見て
 	//後ここ参考　http://marupeke296.com/DXCLS_WhoIsDrawer.html
 
-	drawlist.push_back(mytank);
-	drawlist.push_back(system_timer);
-	drawlist.push_back(enemy1);
-	drawlist.push_back(enemy2);
-	drawlist.push_back(enemy3);
-	drawlist.push_back(mycursur);
+	CObject::register_object(mytank);
+	CObject::register_object(system_timer);
+	CObject::register_object(enemy1);
+	CObject::register_object(enemy2);
+	CObject::register_object(enemy3);
+	CObject::register_object(mycursur);
 
 	float bullet_z = 0.0;
 	// メインループ
@@ -140,10 +140,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
 		*/
 		std::list<std::shared_ptr<CObject>>::iterator it;
-		for(it=drawlist.begin(); it!=drawlist.end();){  // 最後の「it++」を消す
+		for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // 最後の「it++」を消す
 			if( !(*it)->draw() ){ //アニメーション終了時
 				// オブジェクトをリストからはずす
-				it = drawlist.erase( it );
+				it = CObject::drawlist.erase( it );
 				continue;
 			}
 			it++;   // インクリメント
@@ -193,19 +193,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//テスト用　3を押したタイミングで3D球(Bullet)生成
 		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
 			auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
-			drawlist.push_back(bullet);
+			CObject::register_object(bullet);
 		}
 
 
 		//テスト用　Eを押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
-			drawlist.push_back(explosion);
+			CObject::register_object(explosion);
 		}
 		//テスト用　1を押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
-			drawlist.push_back(explosion);
+			CObject::register_object(explosion);
 		}
 
 		//テスト用　0を押したタイミングでスコア追加

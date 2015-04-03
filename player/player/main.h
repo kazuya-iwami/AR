@@ -8,7 +8,6 @@ using namespace std;
 
 //ƒOƒ[ƒoƒ‹•Ï”
 
-std::list<std::shared_ptr<CObject>> drawlist;
 
 int score=0;
 int cursur_x=500;

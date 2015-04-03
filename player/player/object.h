@@ -3,6 +3,7 @@
 #include <map>
 #include <list>
 #include <string>
+#include <memory>
 #include "DxLib.h"
 
 using namespace std;
@@ -22,8 +23,9 @@ protected:
 	int draw_timer; //アニメーション用
 	static map<string,int> figure_id;//ここにloadしたイメージに対応したidを連想配列として保存   F_から書き始める
 	static map<string,int> sound_id;//ここにloadしたイメージに対応したidを連想配列として保存    S_から書き始める
-
+	
 public:
+	static std::list<std::shared_ptr<CObject>> drawlist;
 	/*
 		画像の描画を行う関数
 		falseが返ってきたら描画対象から外す
@@ -37,6 +39,7 @@ public:
 		任意の描画画像はここに登録させる必要がある
 	*/
 	static void load();//ロード
+	static void register_object(std::shared_ptr<CObject> obj);//drawlistに登録
 };
 
 /* 描画方法
@@ -45,7 +48,7 @@ public:
 
 	描画を登録する際は下の２行使う
 	auto bullet = make_shared<CBullet>(200,200,BULLET_KIND::BULLET_NOMAL);//スマートポインタ生成　コンストラクタは各ヘッダファイル見て
-	drawlist.push_back(bullet);//描画リストに登録
+	CObject::register_object(bullet);//描画リストに登録
 
 	draw()の中では
 	PlaySoundMem( sound_id["S_TEST"] , DX_PLAYTYPE_BACK ) ;音再生　drawtimer==0の時のみ鳴らすものに注意 ２つめの引数はこれ

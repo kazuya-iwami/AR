@@ -35,7 +35,9 @@ bool CEnemy::draw(){
 	y=ip_y;
 
 	if(visible){//‹ŠE‚É“ü‚Á‚Ä‚¢‚é‚È‚ç
+		if(!lockon)SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
 		DrawGraph(x*1000/320 - 100,y*750/240 - 130,figure_id["F_DETECT"],true);//‰æ–Êˆø‚«‰„‚Î‚µ‚Ä‚é•ª‚Ì•â³
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		DrawFormatString(x*1000/320 - 100,y*750/240 - 100, GetColor(255,255,255), "%d P", enemy_id);
 	}
 
@@ -52,6 +54,7 @@ CEnemy::CEnemy(int enemy_id_){
 	score = 0;
 	exist=true;
 	enemy_id = enemy_id_;
+	lockon = false;
 }
 
 

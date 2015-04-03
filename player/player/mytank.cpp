@@ -58,6 +58,7 @@ CMytank::CMytank(){
 };
 
 void CMytank::move(tstring direction, tstring speed){
+	tstring ip_address = _T("192.168.10.125");
 	//2015/3/31時点では正常運転のみ実装
 	//通信失敗の時の処理は考慮していない。
 	//2015/4/4において、方向によってURLを作成したため追記。

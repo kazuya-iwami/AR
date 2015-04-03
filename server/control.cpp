@@ -49,32 +49,35 @@ string explode(int n,char const *y,char const *str,string *target){
     return r_str[n];
 }
 
-
 void recv_message(string msg, int id) {
 
     /* メッセージが送られてきた際の処理 */
     std::string str[4];
     decode(msg.c_str(), str);
+    int command_name = std::stoi(str[0]);
+    int player_from = std::stoi(str[1]);
+    int player_to = std::stoi(str[2]);
+    int item_kind = std::stoi(str[3]);
     /* commandによる処理分岐 */
     // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
     if ("" != str[3]) {
         std::ostringstream stream;
-        switch (std::stoi(str[0])) {
+        switch (command_name) {
             case COMMAND_NAME::USE_ITEM:
-                switch (std::stoi(str[3])) {
+                switch (item_kind) {
                     case ITEM_KIND::STAR:
                         // スターの処理
-                        stream << "[USE_ITEM]:player" << str[1] << " used STAR" << std::endl;
-                        player_param[std::stoi(str[1])].using_item = std::stoi(str[3]);
-                        item_start_time[std::stoi(str[1])] = time(NULL);
-//                        send_message(stream.str(), 4);
+                        stream << "[USE_ITEM]:player" << player_from << " used STAR" << std::endl;
+                        player_param[player_from].using_item = item_kind;
+                        item_start_time[player_from] = time(NULL);
+                        send_message(stream.str(), 4);
                         break;
                     case ITEM_KIND::THUNDER:
                         // サンダーの処理
-                        stream << "[USE_ITEM]:player" << str[1] << " used THUNDER" << std::endl;
-                        player_param[std::stoi(str[1])].using_item = std::stoi(str[3]);
-                        item_start_time[std::stoi(str[1])] = time(NULL);
-//                        send_message(stream.str(), 4);
+                        stream << "[USE_ITEM]:player" << player_from << " used THUNDER" << std::endl;
+                        player_param[player_from].using_item = item_kind;
+                        item_start_time[player_from] = time(NULL);
+                        send_message(stream.str(), 4);
                         break;
                     default:
                         std::cout << "ITEM_KIND ERROR" << std::endl;
@@ -82,7 +85,7 @@ void recv_message(string msg, int id) {
                 }
                 break;
             case COMMAND_NAME::SHOOT_BULLET:
-                std::cout << "[SHOOT_BULLET]:player" << str[2] << " was shooted by player" << str[1] <<
+                std::cout << "[SHOOT_BULLET]:player" << player_to << " was shooted by player" << player_from <<
                 std::endl;
                 break;
             default:

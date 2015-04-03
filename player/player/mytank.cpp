@@ -356,9 +356,9 @@ void CMytank::get_msg(){
 
 void CMytank::detect_enemy(Mat image){
 
-	enemy0->detect(image);
-	enemy1->detect(image);
-	enemy2->detect(image);
-	enemy3->detect(image);
+	if(id != 0)enemy0->detect(image);
+	if(id != 1)enemy1->detect(image);
+	if(id != 2)enemy2->detect(image);
+	if(id != 3)enemy3->detect(image);
 	
 }

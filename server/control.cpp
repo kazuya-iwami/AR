@@ -80,10 +80,6 @@ void recv_message(string msg, int id) {
                 std::cout << "[SHOOT_BULLET]:player" << str[2] << " was shooted by player" << str[1] <<
                 std::endl;
                 break;
-            case COMMAND_NAME::FINISH_ITEM:
-                std::cout << "[FINISH_ITEM]:player" << str[1] << " make full use of item" << str[3] <<
-                std::endl;
-                break;
             default:
                 printf("COMMAND_NAME ERROR¥n");
                 break;

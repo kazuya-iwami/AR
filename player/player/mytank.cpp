@@ -355,7 +355,7 @@ void CMytank::get_msg(){
 
 			case ITEM_KIND::STAR:
 				if(player_from != id){ //アイテム使用者が自分でなければ
-					switch(player_to){//アイテム被使用者にPopUP表示
+					switch(player_from){//アイテム被使用者にPopUP表示
 					case 0:
 						{
 						auto popup = make_shared<CPopup>(enemy0->get_x(),enemy0->get_y(),"スター使った☆");

@@ -20,6 +20,7 @@ public:
 	int enemy_id;
 	int score;
 	bool exist;
+	bool lockon;
 
 	CEnemy(int enemy_id_);
 	int get_x(){return x;}

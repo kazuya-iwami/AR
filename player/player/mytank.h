@@ -47,4 +47,5 @@ public:
 	bool draw();
 	void gen_bullet(BULLET_KIND kind);//íeê∂ê¨ä÷êî
 	void detect_enemy(Mat image);
+	void check_focus();
 };

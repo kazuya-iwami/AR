@@ -5,6 +5,9 @@
 #include "item.h"
 #include "HTTPConnection.h"
 #include "network.h"
+#include "bullet.h"
+#include "utility.h"
+#include <memory>
 
 enum OPERATION_STATUS {
 	REGULAR,
@@ -38,6 +41,6 @@ public:
 	void set_vel(int vr,int vl);
 	void get_msg();//サーバーからのメッセージ用
 	bool draw();
-	void gen_bullet();//こういうの作ることになると思われ
+	void gen_bullet(BULLET_KIND kind,shared_ptr<CEnemy> enemy1,shared_ptr<CEnemy> enemy2,shared_ptr<CEnemy> enemy3);//弾生成関数
 	void set_ip_address(tstring address);
 };

@@ -36,6 +36,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//グローバル変数はmain.hに書いてる
 	//他のファイルで用いる時はexternして（externでググるべし）
 
+	auto enemy1 = make_shared<CEnemy>(); //スマートポインタに配列が実装されていないため
+	auto enemy2 = make_shared<CEnemy>();
+	auto enemy3 = make_shared<CEnemy>();
+
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
 	auto mycursur=make_shared<CCursur>();

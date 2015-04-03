@@ -46,6 +46,9 @@ void CMytank::set_vel(int vr,int vl){
 	vel_L=vl;
 }
 
+void CMytank::gen_bullet(BULLET_KIND kind,shared_ptr<CEnemy> enemy1,shared_ptr<CEnemy> enemy2,shared_ptr<CEnemy> enemy3){
+}
+
 void CMytank::get_msg(){
 	string msg = check_msg();
 

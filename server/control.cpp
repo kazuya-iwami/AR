@@ -54,13 +54,13 @@ void recv_message(string msg, int id) {
     /* メッセージが送られてきた際の処理 */
     std::string str[4];
     decode(msg.c_str(), str);
+    /* commandによる処理分岐 */
+    // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
+    if ("" != str[3]) {
     int command_name = std::stoi(str[0]);
     int player_from = std::stoi(str[1]);
     int player_to = std::stoi(str[2]);
     int kind = std::stoi(str[3]);
-    /* commandによる処理分岐 */
-    // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
-    if ("" != str[3]) {
         std::ostringstream stream;
         switch (command_name) {
             case COMMAND_NAME::USE_ITEM:

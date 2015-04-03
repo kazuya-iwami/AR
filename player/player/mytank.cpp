@@ -29,6 +29,8 @@ CMytank::CMytank(){
 	focus_y = 200;
 	game_status=GAME_STATUS::GAME_PLAY;
 
+	send_msg("HELLO");
+
 	if(id != 0){
 		auto enemy0_ = make_shared<CEnemy>(); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;

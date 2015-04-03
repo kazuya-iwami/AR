@@ -25,6 +25,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
+	//network初期化
+	CNetwork::network_init(0,"192.168.99.72"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
+
 	//クラスのインスタンスはスマートポインタ(std::shared_ptr)で生成します。
 	//スマートポインタの詳細はググって
 	//普通のポインタと違って適切なタイミングで解放してくれる便利グッズ
@@ -67,8 +70,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	// 描画先を裏画面にする
 	SetDrawScreen( DX_SCREEN_BACK ) ;
 
-	//network初期化
-	CNetwork::network_init(0,"192.168.99.72"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 	
 	//FPS測定器初期化 
 	//これによって1秒に最大30回しかループが回らないようにする
@@ -195,6 +196,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		}
 
 		//テスト用　0を押したタイミングでスコア追加
+		
 		if(  key_buf[ KEY_INPUT_0 ] == 1 && key_prev_buf[ KEY_INPUT_0] == 0){
 			score++;
 		}

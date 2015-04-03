@@ -8,6 +8,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
 #include "server.h"
 //control.hをincludeしない！
 
@@ -31,6 +32,8 @@ int set_tcp_socket(int portnum, struct hostent *shost);
 
 void recv_message(std::string msg, int n);
 void init();
+double diff;
+clock_t item_start_time[4], item_end_time;
 
 
 int main() {
@@ -44,6 +47,7 @@ int main() {
 
     printf("hostname is %s", shostn);
     printf("\n");
+
 
     shost = gethostbyname(shostn);
     if (shost == NULL) Err("gethostbyname");
@@ -60,6 +64,25 @@ int main() {
     init();
 
     while (loop) {
+
+        item_end_time = time(NULL);
+        /* 差分を求める */
+        for (int i = 0; i < 4; i++) {
+          if (-1 == player_param[i].using_item) { continue; }
+          diff = difftime(item_end_time, item_start_time[i]);
+          switch (player_param[i].using_item) {
+              case ITEM_KIND::STAR:
+                  // アイテム使用から8秒以上たっていたら
+                  if (8 <= diff) {
+                    std::cout << "player" << i << "のアイテム" << player_param[i].using_item << "の使用が終了しました。" << std::endl;
+                    player_param[i].using_item = -1;
+                  }
+                  break;
+              case ITEM_KIND::THUNDER:
+              std::cout << "THUNDER" << std::endl;
+                  break;
+          }
+        }
 
         FD_ZERO(&mask);
         for (int i = 0; i < PORT_NUM; i++) {
@@ -81,8 +104,6 @@ int main() {
                 bzero(buf, BUFMAX);
             }
         }
-
-        sleep(1);
     }
     for (int i = 0; i < PORT_NUM; i++) {
         close(nsockfd[i]);
@@ -150,10 +171,12 @@ void send_message(std::string msg, int id=4) {
 void init(){
     game_status=GAME_STATUS::GAME_PLAY;
     left_time=300;
+    item_end_time = 0;
     for(int i=0;i<4;i++){
         player_param[i].exist=true;
         player_param[i].score=0;
         player_param[i].using_item=-1;
+        item_start_time[i] = 0;
     }
 }
 

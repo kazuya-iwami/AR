@@ -49,7 +49,6 @@ string explode(int n,char const *y,char const *str,string *target){
 
 
 void recv_message(string msg, int id) {
-    cout << " プレイヤー：" << id << " " << msg << endl;
 
     /* メッセージが送られてきた際の処理 */
     std::string str[4];
@@ -64,7 +63,9 @@ void recv_message(string msg, int id) {
                     case ITEM_KIND::STAR:
                         // スターの処理
                         stream << "[USE_ITEM]:player" << str[1] << " used STAR" << std::endl;
-                        send_message(stream.str(), 4);
+                        player_param[std::stoi(str[1])].using_item = std::stoi(str[3]);
+                        item_start_time[std::stoi(str[1])] = time(NULL);
+//                        send_message(stream.str(), 4);
                         break;
                     case ITEM_KIND::THUNDER:
                         // サンダーの処理
@@ -72,7 +73,7 @@ void recv_message(string msg, int id) {
                         send_message(stream.str(), 4);
                         break;
                     default:
-                        printf("ITEM_KIND ERROR¥n");
+                        std::cout << "ITEM_KIND ERROR" << std::endl;
                         break;
                 }
                 break;
@@ -80,17 +81,14 @@ void recv_message(string msg, int id) {
                 std::cout << "[SHOOT_BULLET]:player" << str[2] << " was shooted by player" << str[1] <<
                 std::endl;
                 break;
-            case COMMAND_NAME::FINISH_ITEM:
-                std::cout << "[FINISH_ITEM]:player" << str[1] << " make full use of item" << str[3] <<
-                std::endl;
-                break;
             default:
-                printf("COMMAND_NAME ERROR¥n");
+                std::cout << "COMMAND_NAME ERROR" << std::endl;
                 break;
         }
     }
     /* commandによる処理分岐ここまで */
     /* メッセージの処理ここまで */
+    cout << " プレイヤー：" << id << " " << msg << endl;
 }
 
 void encode_message(){}

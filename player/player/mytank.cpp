@@ -112,9 +112,6 @@ void CMytank::gen_bullet(BULLET_KIND kind){
 void CMytank::get_msg(){
 	string msg = check_msg();
 
-	auto popup = make_shared<CPopup>(100,100,msg);
-	CObject::register_object(popup);
-
 	int bullet_score=0; //bulletによっていくつスコアが上昇するかをscoreに格納
 
     /* メッセージが送られてきた際の処理 */
@@ -125,25 +122,6 @@ void CMytank::get_msg(){
     if ("" != str[3]) {
         std::ostringstream stream;
         switch (std::stoi(str[0])) {
-		case COMMAND_NAME::CHANGE_SCORE:
-            //player:str[1]がscore:str[2]スコア上昇
-			/*
-			switch (std::stoi(str[1])){
-			case 0:
-				if(id != 0)enemy0->score += std::stoi(str[2]);
-				break;
-			case 1:
-				if(id != 1)enemy1->score += std::stoi(str[2]);
-				break;
-			case 2:
-				if(id != 2)enemy2->score += std::stoi(str[2]);
-				break;
-			case 3:
-				if(id != 3)enemy3->score += std::stoi(str[2]);
-				break;
-			}
-            break;
-			*/
 		case COMMAND_NAME::CHANGE_STATUS:
 			
 			switch (std::stoi(str[1])) {
@@ -352,7 +330,44 @@ void CMytank::get_msg(){
 			}
 			break;
 		case COMMAND_NAME::INFORM_ITEM:
-           
+			switch(std::stoi(str[3])){//アイテムの種類で場合分け
+			case ITEM_KIND::ITEM_NONE:
+				break;
+			case ITEM_KIND::STAR:
+				if(std::stoi(str[1]) != id){ //アイテム使用者が自分でなければ
+					switch(std::stoi(str[2])){//アイテム被使用者にPopUP表示
+					case 0:
+						{
+						auto popup = make_shared<CPopup>(enemy0->get_x(),enemy0->get_y(),"スター使った☆");
+						CObject::register_object(popup);
+						break;
+						}
+					case 1:
+						{
+						auto popup = make_shared<CPopup>(enemy1->get_x(),enemy1->get_y(),"スター使った☆");
+						CObject::register_object(popup);
+						break;
+						}
+					case 2:
+						{
+						auto popup = make_shared<CPopup>(enemy2->get_x(),enemy2->get_y(),"スター使った☆");
+						CObject::register_object(popup);
+						break;
+						}
+					case 3:
+						{
+						auto popup = make_shared<CPopup>(enemy3->get_x(),enemy3->get_y(),"スター使った☆");
+						CObject::register_object(popup);
+						break;
+						}
+
+					}
+				}
+				break;
+			case ITEM_KIND::THUNDER:
+				break;
+
+			}
             break;
 		default:
             break;

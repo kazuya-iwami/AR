@@ -110,6 +110,7 @@ void CMytank::get_msg(){
         switch (std::stoi(str[0])) {
 		case COMMAND_NAME::CHANGE_SCORE:
             //player:str[1]がscore:str[2]スコア上昇
+			/*
 			switch (std::stoi(str[1])){
 			case 0:
 				if(id != 0)enemy0->score += std::stoi(str[2]);
@@ -125,6 +126,7 @@ void CMytank::get_msg(){
 				break;
 			}
             break;
+			*/
 		case COMMAND_NAME::CHANGE_STATUS:
 			
 			switch (std::stoi(str[1])) {
@@ -141,8 +143,179 @@ void CMytank::get_msg(){
             break;
 		case COMMAND_NAME::RETURN_BULLET:
 			//player:str[1]がplayer:str[2]にbullet:str[3]を攻撃
-			//自分の攻撃が当たった場合はここでスコア上昇
-            
+			
+			//bulletによっていくつスコアが上昇するかをscoreに格納
+			int bullet_score=0;
+			if(std::stoi(str[1]) == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
+
+            switch (std::stoi(str[1])){
+			case 0:
+				if(id != 0){ //他人の攻撃
+					enemy0->score += bullet_score;
+					switch(std::stoi(str[2])){
+					case 1:
+						if(id != 1){//攻撃先が他人
+							enemy1->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					case 2:
+						if(id != 2){//攻撃先が他人
+							enemy2->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					case 3:
+						if(id != 3){//攻撃先が他人
+							enemy3->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					}
+				}else{ //自分が攻撃 攻撃先はすべて敵 
+					score += bullet_score;
+					switch(std::stoi(str[2])){
+					case 1:
+						enemy1->score -= bullet_score;
+						break;
+					case 2:
+						enemy2->score -= bullet_score;
+						break;
+					case 3:
+						enemy3->score -= bullet_score;
+						break;
+					}
+				}
+				break;
+
+			case 1:
+				if(id != 1){ //他人の攻撃
+					enemy1->score += bullet_score;
+					switch(std::stoi(str[2])){
+					case 0:
+						if(id != 0){//攻撃先が他人
+							enemy0->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					case 2:
+						if(id != 2){//攻撃先が他人
+							enemy2->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					case 3:
+						if(id != 3){//攻撃先が他人
+							enemy3->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					}
+				}else{ //自分が攻撃 攻撃先はすべて敵 
+					score += bullet_score;
+					switch(std::stoi(str[2])){
+					case 0:
+						enemy0->score -= bullet_score;
+						break;
+					case 2:
+						enemy2->score -= bullet_score;
+						break;
+					case 3:
+						enemy3->score -= bullet_score;
+						break;
+					}
+				}
+				break;
+
+			case 2:
+				if(id != 2){ //他人の攻撃
+					enemy2->score += bullet_score;
+					switch(std::stoi(str[2])){
+					case 1:
+						if(id != 1){//攻撃先が他人
+							enemy1->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					case 0:
+						if(id != 0){//攻撃先が他人
+							enemy0->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					case 3:
+						if(id != 3){//攻撃先が他人
+							enemy3->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					}
+				}else{ //自分が攻撃 攻撃先はすべて敵 
+					score += bullet_score;
+					switch(std::stoi(str[2])){
+					case 1:
+						enemy1->score -= bullet_score;
+						break;
+					case 0:
+						enemy0->score -= bullet_score;
+						break;
+					case 3:
+						enemy3->score -= bullet_score;
+						break;
+					}
+				}
+				break;
+			case 3:
+				if(id != 3){ //他人の攻撃
+					enemy3->score += bullet_score;
+					switch(std::stoi(str[2])){
+					case 1:
+						if(id != 1){//攻撃先が他人
+							enemy1->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					case 2:
+						if(id != 2){//攻撃先が他人
+							enemy2->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					case 0:
+						if(id != 0){//攻撃先が他人
+							enemy0->score -= bullet_score;
+						}else{//攻撃先が自分
+							score -= bullet_score;
+						}
+						break;
+					}
+				}else{ //自分が攻撃 攻撃先はすべて敵 
+					score += bullet_score;
+					switch(std::stoi(str[2])){
+					case 1:
+						enemy1->score -= bullet_score;
+						break;
+					case 2:
+						enemy2->score -= bullet_score;
+						break;
+					case 0:
+						enemy0->score -= bullet_score;
+						break;
+					}
+				}
+				break;
+			}
             break;
 		case COMMAND_NAME::FINISH_ITEM:
             

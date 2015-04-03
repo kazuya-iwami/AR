@@ -104,6 +104,8 @@ void CMytank::get_msg(){
 	auto popup = make_shared<CPopup>(100,100,msg);
 	CObject::register_object(popup);
 
+	int bullet_score=0; //bulletによっていくつスコアが上昇するかをscoreに格納
+
     /* メッセージが送られてきた際の処理 */
     std::string str[4];
     decode(msg.c_str(), str);
@@ -148,8 +150,6 @@ void CMytank::get_msg(){
 		case COMMAND_NAME::RETURN_BULLET:
 			//player:str[1]がplayer:str[2]にbullet:str[3]を攻撃
 			
-			//bulletによっていくつスコアが上昇するかをscoreに格納
-			int bullet_score=0;
 			if(std::stoi(str[3]) == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
 
             switch (std::stoi(str[1])){

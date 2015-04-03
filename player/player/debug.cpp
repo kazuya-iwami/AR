@@ -1,6 +1,6 @@
 #include "debug.h"
 
-bool debug_flag;
+bool CPopup::debug_flag;
 
 bool CPopup::draw(){
 	if(debug_flag == false)return false;//debugƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚È‚¢Žž‚Í•`‰æ‚µ‚È‚¢

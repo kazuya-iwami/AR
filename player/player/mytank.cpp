@@ -28,21 +28,30 @@ CMytank::CMytank(){
 	focus_y = 200;
 	game_status=GAME_STATUS::GAME_PLAY;
 
-	auto enemy1_ = make_shared<CEnemy>(); //スマートポインタに配列が実装されていないため
-	enemy1 = enemy1_;
-	auto enemy2_ = make_shared<CEnemy>();
-	enemy2 = enemy2_;
-	auto enemy3_ = make_shared<CEnemy>();
-	enemy3 = enemy3_;
-
-	//敵クラス初期化
-	enemy1->init(80,180,100,200,100,200);//スマートポインタって配列に対応してないようなんですが何事
-	enemy2->init(0,30,100,200,100,200);//ここでHSV色領域（ググって）のminとmaxを指定するとその色の重心が取得できる
-	enemy3->init(30,80,100,200,100,200);
-
-	CObject::register_object(enemy1);
-	CObject::register_object(enemy2);
-	CObject::register_object(enemy3);
+	if(id != 0){
+		auto enemy0_ = make_shared<CEnemy>(); //スマートポインタに配列が実装されていないため
+		enemy0 = enemy0_;
+		enemy0->init(80,180,100,200,100,200);
+		CObject::register_object(enemy1);
+	}
+	if(id != 1){
+		auto enemy1_ = make_shared<CEnemy>();
+		enemy1 = enemy1_;
+		enemy1->init(80,180,100,200,100,200);
+		CObject::register_object(enemy1);
+	}
+	if(id != 2){
+		auto enemy2_ = make_shared<CEnemy>();
+		enemy2 = enemy2_;
+		enemy2->init(0,30,100,200,100,200);
+		CObject::register_object(enemy2);
+	}
+	if(id != 3){
+		auto enemy3_ = make_shared<CEnemy>();
+		enemy3 = enemy3_;
+		enemy3->init(30,80,100,200,100,200);
+		CObject::register_object(enemy3);
+	}
 };
 
 void CMytank::move(tstring direction){
@@ -66,17 +75,22 @@ void CMytank::set_vel(int vr,int vl){
 
 void CMytank::gen_bullet(BULLET_KIND kind){
 
-	if(enemy1->get_x() < focus_x && enemy1->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy1->get_y() < focus_y && enemy1->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH){
+	if((id != 0) && (enemy0->get_x() < focus_x && enemy0->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy0->get_y() < focus_y && enemy0->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH)){
+		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
+		CObject::register_object(bullet);
+		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,0,(int)BULLET_KIND::BULLET_NOMAL));
+	}
+	if((id != 1) && (enemy1->get_x() < focus_x && enemy1->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy1->get_y() < focus_y && enemy1->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH)){
 		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
 		CObject::register_object(bullet);
 		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,1,(int)BULLET_KIND::BULLET_NOMAL));
 	}
-	if(enemy2->get_x() < focus_x && enemy2->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy2->get_y() < focus_y && enemy2->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH){
+	if((id != 2) && (enemy2->get_x() < focus_x && enemy2->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy2->get_y() < focus_y && enemy2->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH)){
 		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
 		CObject::register_object(bullet);
 		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,2,(int)BULLET_KIND::BULLET_NOMAL));
 	}
-	if(enemy3->get_x() < focus_x && enemy3->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy3->get_y() < focus_y && enemy3->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH){
+	if((id != 3) && (enemy3->get_x() < focus_x && enemy3->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy3->get_y() < focus_y && enemy3->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH)){
 		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
 		CObject::register_object(bullet);
 		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,3,(int)BULLET_KIND::BULLET_NOMAL));
@@ -97,7 +111,20 @@ void CMytank::get_msg(){
         switch (std::stoi(str[0])) {
 		case COMMAND_NAME::CHANGE_SCORE:
             //player:str[1]がscore:str[2]スコア上昇
-
+			switch (std::stoi(str[1])){
+			case 0:
+				if(id != 0)enemy0->score += std::stoi(str[2]);
+				break;
+			case 1:
+				if(id != 1)enemy1->score += std::stoi(str[2]);
+				break;
+			case 2:
+				if(id != 2)enemy2->score += std::stoi(str[2]);
+				break;
+			case 3:
+				if(id != 3)enemy3->score += std::stoi(str[2]);
+				break;
+			}
             break;
 		case COMMAND_NAME::CHANGE_STATUS:
 			
@@ -135,6 +162,7 @@ void CMytank::get_msg(){
 
 void CMytank::detect_enemy(Mat image){
 
+	enemy0->detect(image);
 	enemy1->detect(image);
 	enemy2->detect(image);
 	enemy3->detect(image);

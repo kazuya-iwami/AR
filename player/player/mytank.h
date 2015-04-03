@@ -35,6 +35,7 @@ class CMytank : public CObject,public CNetwork {
 
 	
 public:
+	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;
 	shared_ptr<CEnemy> enemy3;

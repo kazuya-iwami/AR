@@ -68,14 +68,14 @@ void recv_message(string msg, int id) {
                     case ITEM_KIND::STAR:
                         // スターの処理
                         stream << "[USE_ITEM]:player" << player_from << " used STAR" << std::endl;
-                        player_param[player_from].using_item = item_kind;
+                        player_param[player_from].using_item = (ITEM_KIND) item_kind;
                         item_start_time[player_from] = time(NULL);
                         send_message(stream.str(), 4);
                         break;
                     case ITEM_KIND::THUNDER:
                         // サンダーの処理
                         stream << "[USE_ITEM]:player" << player_from << " used THUNDER" << std::endl;
-                        player_param[player_from].using_item = item_kind;
+                        player_param[player_from].using_item = (ITEM_KIND) item_kind;
                         item_start_time[player_from] = time(NULL);
                         send_message(stream.str(), 4);
                         break;
@@ -87,6 +87,12 @@ void recv_message(string msg, int id) {
             case COMMAND_NAME::SHOOT_BULLET:
                 std::cout << "[SHOOT_BULLET]:player" << player_to << " was shooted by player" << player_from <<
                 std::endl;
+
+                if(item_kind) == BULLET_KIND::BULLET_NOMAL
+                   && player_param[player_from].using_item != ITEM_KIND::STAR) {
+                    send_message(encode(COMMAND_NAME::RETURN_BULLET,player_from,player_to,item_kind),4);
+                }
+
                 break;
             default:
                 std::cout << "COMMAND_NAME ERROR" << std::endl;
@@ -109,14 +115,14 @@ void check_item_valid() {
                 // アイテム使用から8秒以上たっていたら
                 if (8 <= diff) {
                     std::cout << "player" << i << "のSTARの使用が終了しました。" << std::endl;
-                    player_param[i].using_item = -1;
+                    player_param[i].using_item = ITEM_KIND::ITEM_NONE ;
                 }
                 break;
             case ITEM_KIND::THUNDER:
                 // アイテム使用から4秒以上たっていたら
                 if (4 <= diff) {
                     std::cout << "player" << i << "のTHUNDERの使用が終了しました。" << std::endl;
-                    player_param[i].using_item = -1;
+                    player_param[i].using_item = ITEM_KIND::ITEM_NONE ;
                 }
                 break;
             default:

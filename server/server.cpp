@@ -79,6 +79,7 @@ int main() {
                 if (n <= 0) {
                     printf("プレイヤー:%dが切断しました", i);
                     //loop = false;
+                    player_param[i].exist = false;
                     send_message(encode(COMMAND_NAME::DISCONNECT,i,0,0),4);
                     break;
                 };
@@ -88,6 +89,8 @@ int main() {
             }
         }
     }
+    //現在無限ループだね
+
     for (int i = 0; i < PORT_NUM; i++) {
         close(nsockfd[i]);
     }
@@ -138,11 +141,18 @@ int set_tcp_socket(int portnum, struct hostent *shost) {
 void send_message(std::string msg, int id=4) {
     if (n == 4) {
         for (int i = 0; i < PORT_NUM; i++) {
+            if(!player_param[i].exist) {
+                std::cout << "切断したプレイヤーへメッセージを送ろうとしています" << std::endl;
+                continue;
+            }
             write(nsockfd[i], msg.c_str(), msg.length());
             if (n < 0) Err("socket disconnected");
             bzero(buf, BUFMAX);
         }
         return;
+    }
+    if(!player_param[id].exist) {
+        std::cout << "抜けたプレイヤーへメッセージを送ろうとしています" << std::endl;
     }
     write(nsockfd[id], msg.c_str(), msg.length());
     if (n < 0) Err("socket disconnected");
@@ -154,9 +164,6 @@ void init(){
     left_time=300;
     item_end_time = 0;
     for(int i=0;i<4;i++){
-        player_param[i].exist=true;
-        player_param[i].score=0;
-        player_param[i].using_item=-1;
         item_start_time[i] = 0;
     }
 }
@@ -166,4 +173,10 @@ std::string encode(COMMAND_NAME command_name, int player_from, int player_to, in
     std::ostringstream stream;
     stream << (int)command_name << ","  << player_from << "," << player_to << "," << kind;
     return stream.str();
+}
+
+CPlayer_param::CPlayer_param() {
+    exist = true;
+    score = 0;
+    using_item = ITEM_KIND::ITEM_NONE ;
 }

@@ -13,6 +13,7 @@ enum BULLET_KIND{
 };
 
 enum ITEM_KIND{
+    ITEM_NONE,
     STAR,
     THUNDER
 };
@@ -35,8 +36,9 @@ enum COMMAND_NAME{
 
 class CPlayer_param{
 public:
+    CPlayer_param();
     int score;//スコア
-    int using_item;//使用していなかったら-1
+    ITEM_KIND using_item;//使用していなかったら-1
     bool exist;//接続が切れたらfalse
 };
 

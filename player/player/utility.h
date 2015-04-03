@@ -17,6 +17,8 @@ public:
 class CEnemy : public CImage_processer,public CObject {
 
 public:
+	int get_x(){return x;}
+	int get_y(){return y;}
 	bool draw();
 };
 

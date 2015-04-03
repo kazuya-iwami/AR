@@ -15,7 +15,6 @@
 #include "explosion.h"
 #include "utility.h"
 #include "tstring.h"
-#include <sstream>
 
 using namespace std;
 
@@ -189,8 +188,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		
 		//テスト用　Bを押したタイミングでBullet生成
 		if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
-			auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
-			drawlist.push_back(bullet);
+			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL,enemy1,enemy2,enemy3);
 		}
 		//テスト用　3を押したタイミングで3D球(Bullet)生成
 		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
@@ -259,9 +257,3 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	return 0 ;
 }
 
-string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind){
-
-std::ostringstream stream;
- stream << (int)command_name << ","  << player_from << "," << player_to << "," << kind;
- return stream.str();
-}

@@ -2,8 +2,10 @@
 #include "mytank.h"
 #include <sstream>
 
-string decode(char const *str, string *target);
-string explode(int n,char const *y,char const *str,string *target=NULL);
+#define ENEMY_WIDTH 200
+#define FOCUS_WIDTH 50
+
+
 
 bool CMytank::draw(){
 
@@ -47,6 +49,23 @@ void CMytank::set_vel(int vr,int vl){
 }
 
 void CMytank::gen_bullet(BULLET_KIND kind,shared_ptr<CEnemy> enemy1,shared_ptr<CEnemy> enemy2,shared_ptr<CEnemy> enemy3){
+
+	/*if(enemy1->get_x() < focus_x && enemy1->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy1->get_y() < focus_y && enemy1->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH){
+		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
+		drawlist.push_back(bullet);
+		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,1,(int)BULLET_KIND::BULLET_NOMAL));
+	}
+	if(enemy2->get_x() < focus_x && enemy2->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy2->get_y() < focus_y && enemy2->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH){
+		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
+		drawlist.push_back(bullet);
+		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,2,(int)BULLET_KIND::BULLET_NOMAL));
+	}
+	if(enemy3->get_x() < focus_x && enemy3->get_x() + ENEMY_WIDTH < focus_x + FOCUS_WIDTH && enemy3->get_y() < focus_y && enemy3->get_y() + ENEMY_WIDTH < focus_y + FOCUS_WIDTH){
+		auto bullet = make_shared<CBullet>(530 , 50, 0, BULLET_KIND::BULLET_NOMAL);
+		drawlist.push_back(bullet);
+		send_msg(encode(COMMAND_NAME::SHOOT_BULLET,id,3,(int)BULLET_KIND::BULLET_NOMAL));
+	}
+	*/
 }
 
 void CMytank::get_msg(){
@@ -90,7 +109,6 @@ void CMytank::get_msg(){
            
             break;
 		default:
-            printf("COMMAND_NAME ERROR¥n");
             break;
         }
     }
@@ -99,40 +117,4 @@ void CMytank::get_msg(){
 }
 
 
-
-string decode(char const *msg, string *target) {
-    return explode(1, ",", msg, target);
-}
-
-string explode(int n,char const *y,char const *str,string *target){
-    bool option;
-    if(target==NULL) option=false;
-    else option=true;
-    n--;
-    string r_str[1000];
-    int d=0,g=0,t=strlen(y),a=0;
-    for(int i=0;i<strlen(str);i++){
-        if(y[a]==str[i]){
-            a++;
-            if(a==t){
-                for(int q=d;q<i-t+1;q++) r_str[g]+=str[q];
-                d=i+1;
-                i++;
-                g++;
-                a=0;
-            }
-        }else{
-            i-=a;
-            a=0;
-        }
-    }
-    for(int i=d;i<strlen(str);i++) r_str[g]+=str[i];
-    if(option){
-        for(int i=0;i<=g;i++){
-            *target=r_str[i];
-            target++;
-        }
-    }
-    return r_str[n];
-}
 

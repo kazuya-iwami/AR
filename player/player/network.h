@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <WinSock.h>
 #include <iostream>
+#include <sstream>
 
 enum COMMAND_NAME{
     USE_ITEM, 
@@ -25,6 +26,10 @@ using namespace std;
 #define BASE_PORT (u_short)20000
 
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
+
+string decode(char const *str, string *target);
+string explode(int n,char const *y,char const *str,string *target=NULL);
+string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind);
 
 //ネットワーク通信用クラス
 // check_msg()とsend_msg()をつかえれば中身見なくてもよい
@@ -47,5 +52,6 @@ public:
 	void send_msg(string msg); //メッセージをサーバーへ送信する
 	void release();//アプリ終了時に呼ぶ
 };
+
 
 

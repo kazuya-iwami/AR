@@ -88,6 +88,8 @@ int main() {
             }
         }
     }
+    //現在無限ループだね
+
     for (int i = 0; i < PORT_NUM; i++) {
         close(nsockfd[i]);
     }

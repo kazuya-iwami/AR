@@ -84,6 +84,12 @@ void recv_message(string msg, int id) {
             case COMMAND_NAME::SHOOT_BULLET:
                 std::cout << "[SHOOT_BULLET]:player" << str[2] << " was shooted by player" << str[1] <<
                 std::endl;
+
+                if(std::stoi(str[3]) == BULLET_KIND::BULLET_NOMAL
+                        && player_param[std::stoi(str[1])].using_item != ITEM_KIND::STAR) {
+                    send_message(encode(COMMAND_NAME::RETURN_BULLET,std::stoi(str[1]),std::stoi(str[2]),std::stoi(str[3]));
+                }
+
                 break;
             default:
                 std::cout << "COMMAND_NAME ERROR" << std::endl;

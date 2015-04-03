@@ -26,7 +26,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
 	//network初期化
-	CNetwork::network_init(0,"192.168.99.72"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
+	CNetwork::network_init(0,"192.168.10.100"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 
 	//クラスのインスタンスはスマートポインタ(std::shared_ptr)で生成します。
 	//スマートポインタの詳細はググって
@@ -79,8 +79,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	CObject::load();//すべての画像はこの中で読み込む　
 
-	//自機のIPアドレスの設定
-	mytank->set_ip_address(_T("192.168.10.125"));
 
 	//色々描画リストに登録
 	//ここ大事。object.h見て

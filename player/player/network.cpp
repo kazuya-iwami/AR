@@ -12,8 +12,11 @@ char CNetwork::buf[BUFMAX];
 fd_set CNetwork::mask;
 struct timeval CNetwork::tm;
 int CNetwork::id;
+tstring CNetwork::ip_address;
 
 int CNetwork::network_init(int id_, string hostname) {
+
+	ip_address = _T(hostname);
 
 	/* Windows 独自の設定 */
 	WSADATA data;

@@ -30,7 +30,6 @@ class CMytank : public CObject,public CNetwork {
 	int ope_timer; //操作用タイマー
 	int vel_R,vel_L; //左右のタイヤの速度
 	int focus_x,focus_y;//照準の位置
-	tstring ipAddress; //このプログラムで操作する戦車のIPアドレス
 	GAME_STATUS game_status;
 
 	
@@ -47,6 +46,5 @@ public:
 	void get_msg();//サーバーからのメッセージ用
 	bool draw();
 	void gen_bullet(BULLET_KIND kind);//弾生成関数
-	void set_ip_address(tstring address);
 	void detect_enemy(Mat image);
 };

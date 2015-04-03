@@ -137,15 +137,13 @@ int set_tcp_socket(int portnum, struct hostent *shost) {
 void send_message(std::string msg, int id=4) {
     if (n == 4) {
         for (int i = 0; i < PORT_NUM; i++) {
-            n = read(0, buf, BUFMAX);
-            write(nsockfd[i], buf, n);
+            write(nsockfd[i], msg.c_str(), msg.length());
             if (n < 0) Err("socket disconnected");
             bzero(buf, BUFMAX);
         }
         return;
     }
-    n = read(0, buf, BUFMAX);
-    write(nsockfd[id], buf, n);
+    write(nsockfd[id], msg.c_str(), msg.length());
     if (n < 0) Err("socket disconnected");
     bzero(buf, BUFMAX);
 }

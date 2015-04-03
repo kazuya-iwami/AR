@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <WinSock.h>
 #include <iostream>
+#include "HTTPConnection.h"
 #include <sstream>
 
 enum COMMAND_NAME{
@@ -47,7 +48,10 @@ class CNetwork {
 
 protected:
 	static int id;//ユーザーのID：０〜３でそれぞれユーザーごとに異なる
+	static tstring ip_address;
+
 public:
+	
 	static int network_init(int id_, string hostname);//初期化兼接続開始　成功したら1返す
 	string check_msg();//ループの度にこれを呼ぶ　エラーの場合は"EMPTY"返す
 	void send_msg(string msg); //メッセージをサーバーへ送信する

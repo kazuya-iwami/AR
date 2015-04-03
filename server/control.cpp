@@ -70,14 +70,14 @@ void recv_message(string msg, int id) {
                         stream << "[USE_ITEM]:player" << player_from << " used STAR" << std::endl;
                         player_param[player_from].using_item = (ITEM_KIND) item_kind;
                         item_start_time[player_from] = time(NULL);
-                        send_message(stream.str(), 4);
+                        send_message(encode(COMMAND_NAME::INFORM_ITEM,player_from,player_to,item_kind),4);
                         break;
                     case ITEM_KIND::THUNDER:
                         // サンダーの処理
                         stream << "[USE_ITEM]:player" << player_from << " used THUNDER" << std::endl;
                         player_param[player_from].using_item = (ITEM_KIND) item_kind;
                         item_start_time[player_from] = time(NULL);
-                        send_message(stream.str(), 4);
+                        send_message(encode(COMMAND_NAME::INFORM_ITEM,player_from,player_to,item_kind),4);
                         break;
                     default:
                         std::cout << "ITEM_KIND ERROR" << std::endl;

@@ -175,7 +175,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//mytank->set_vel(-1,1);
 			mytank->move(_T("left"));
 		}
-		if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
+		if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
 			//mytank->set_vel(1,-1);
 			mytank->move(_T("right"));
 		}

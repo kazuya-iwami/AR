@@ -351,9 +351,6 @@ void CMytank::get_msg(){
 				break;
 			}
 			break;
-		case COMMAND_NAME::FINISH_ITEM:
-            
-            break;
 		case COMMAND_NAME::INFORM_ITEM:
            
             break;

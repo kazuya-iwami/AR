@@ -36,6 +36,7 @@ bool CEnemy::draw(){
 
 	if(visible){//‹ŠE‚É“ü‚Á‚Ä‚¢‚é‚È‚ç
 		DrawGraph(x*1000/320 - 100,y*750/240 - 130,figure_id["F_DETECT"],true);//‰æ–Êˆø‚«‰„‚Î‚µ‚Ä‚é•ª‚Ì•â³
+		DrawFormatString(x*1000/320 - 100,y*750/240 - 100, GetColor(255,255,255), "%d P", enemy_id);
 	}
 
 
@@ -47,9 +48,10 @@ bool CCursur::draw(){
 	return true;
 }
 
-CEnemy::CEnemy(){
+CEnemy::CEnemy(int enemy_id_){
 	score = 0;
 	exist=true;
+	enemy_id = enemy_id_;
 }
 
 

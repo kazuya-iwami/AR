@@ -3,10 +3,6 @@
 //ゲームの制限時間。適当に調整
 int timer=3359;
 
-extern int score;
-extern int cursur_x;
-extern int cursur_y;
-
 bool CSystem_timer::draw(){
 	//残り時間表示
 	DrawGraph(760,20,number[timer/30/100],true);
@@ -14,13 +10,6 @@ bool CSystem_timer::draw(){
 	DrawGraph(880,20,number[timer/30%10],true);
 
 	timer--;
-
-	//スコア表示
-	DrawGraph(200,650,number[score/10],true);
-	DrawGraph(260,650,number[score%10],true);
-
-	//アイテム枠表示
-	DrawGraph(0,0,figure_id["F_FRAME"],true);
 
 	return true;//常に描画
 }
@@ -31,24 +20,22 @@ CSystem_timer::CSystem_timer(int x_,int y_){
 }
 
 bool CEnemy::draw(){
-	x=ip_x;
-	y=ip_y;
+	x=ip_x*1000/320;
+	y=ip_y*750/240;
 
 	if(visible){//視界に入っているなら
-		if(!lockon)SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
-		DrawGraph(x*1000/320 - 100,y*750/240 - 130,figure_id["F_DETECT"],true);//画面引き延ばしてる分の補正
+		if(!lockon){
+			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
+		}else DrawFormatString(x-50 ,y-80, GetColor(255,255,255), "TRUE");
+		DrawGraph(x - 100,y - 130,figure_id["F_DETECT"],true);//画面引き延ばしてる分の補正
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-		DrawFormatString(x*1000/320 - 100,y*750/240 - 100, GetColor(255,255,255), "%d P", enemy_id);
+		DrawFormatString(x - 50 ,y - 100, GetColor(255,255,255), "%dP", enemy_id);
 	}
 
 
 	return true;
 }
 
-bool CCursur::draw(){
-	DrawGraph(cursur_x,cursur_y,figure_id["F_CURSUR"],true);
-	return true;
-}
 
 CEnemy::CEnemy(int enemy_id_){
 	score = 0;

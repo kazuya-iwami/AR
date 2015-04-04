@@ -29,9 +29,3 @@ public:
 	void disconnect();
 };
 
-//カーソルクラス
-class CCursur:public CObject{
-public:
-	bool draw();
-};
-

@@ -19,6 +19,8 @@
 
 using namespace std;
 
+#define FOCUS_SPEED 8
+
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ){
 	cv::VideoCapture vcap;
 	cv::Mat image;
@@ -38,7 +40,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
-	auto mycursur=make_shared<CCursur>();
 
 	//キーボード用
 	char key_buf [ 256 ] ;
@@ -63,9 +64,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	SetGraphMode(1000,750,32);//画面サイズ1000×750に設定
 
 	//文字サイズ
-	SetFontSize( 40 ) ;                             //サイズを20に変更
-    SetFontThickness( 1 ) ;                         //太さを1に変更
-    ChangeFont( "HGS創英角ﾎﾟｯﾌﾟ体" ) ;              //HGS創英角ﾎﾟｯﾌﾟ体に変更
+	SetFontSize( 60 ) ;                             //サイズを20に変更
+    SetFontThickness( 8 ) ;                         //太さを8に変更
+    ChangeFont( "ＭＳ 明朝" ) ;                     //種類をMS明朝に変更
     ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE );//アンチエイリアス＆エッジ付きフォントに変更
 
 	// ＤＸライブラリ初期化処理
@@ -92,7 +93,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	CObject::register_object(mytank);
 	CObject::register_object(system_timer);
-	CObject::register_object(mycursur);
 
 	float bullet_z = 0.0;
 	// メインループ
@@ -177,9 +177,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			mytank->move(_T("stop"));
 		}
 
-		//テスト用　Bを押したタイミングでBullet生成
+		//Bullet生成
 		if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
+			auto popup = make_shared<CPopup>(200,200,"たまはっしゃ");
+			CObject::register_object(popup);
 		}
 		//テスト用　3を押したタイミングで3D球(Bullet)生成
 		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
@@ -203,30 +205,25 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			mytank->use_item();
 		}
 
-		//テスト用　0を押したタイミングでスコア追加
-		
-		if(  key_buf[ KEY_INPUT_0 ] == 1 && key_prev_buf[ KEY_INPUT_0] == 0){
-			score++;
-		}
 		
 		//テスト用　Dを押すとカーソルが右に
 		if(  key_buf[ KEY_INPUT_D ] == 1){
-			cursur_x=cursur_x+4;
+			mytank->focus_x += FOCUS_SPEED;
 		}
 
 		//テスト用　Wを押すとカーソルが上に
 		if(  key_buf[ KEY_INPUT_W ] == 1 ){
-			cursur_y=cursur_y-4;
+			mytank->focus_y -=  FOCUS_SPEED;
 		}
 
 		//テスト用　Aを押すとカーソルが左に
 		if(  key_buf[ KEY_INPUT_A ] == 1){
-			cursur_x=cursur_x-4;
+			mytank->focus_x -=  FOCUS_SPEED;
 		}
 
 		//テスト用　Sを押すとカーソルが下に
 		if(  key_buf[ KEY_INPUT_S ] == 1){ 
-			cursur_y=cursur_y+4;
+			mytank->focus_y +=  FOCUS_SPEED;
 		}
 
 

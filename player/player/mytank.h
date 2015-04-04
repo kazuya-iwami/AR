@@ -29,11 +29,13 @@ class CMytank : public CObject,public CNetwork {
 	OPERATION_STATUS ope_status; //操作用ステータス
 	int ope_timer; //操作用タイマー
 	int vel_R,vel_L; //左右のタイヤの速度
-	int focus_x,focus_y;//照準の位置
+	
 	GAME_STATUS game_status;
 
 	
 public:
+
+	int focus_x,focus_y;//照準の位置
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;

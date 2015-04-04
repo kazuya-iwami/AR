@@ -9,8 +9,4 @@ using namespace std;
 //ƒOƒ[ƒoƒ‹•Ï”
 
 
-int score=0;
-int cursur_x=500;
-int cursur_y=350;
-
 string encode(COMMAND_NAME, int, int, int);

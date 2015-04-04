@@ -1,4 +1,4 @@
-
+ï»¿
 #include "bullet.h"
 
 CBullet::CBullet(int x_, int y_, int z_, BULLET_KIND kind_){
@@ -10,10 +10,10 @@ CBullet::CBullet(int x_, int y_, int z_, BULLET_KIND kind_){
 }
 
 bool CBullet::draw(){
-	// “®ìŠm”F—p •¶šo—Í
+	// å‹•ä½œç¢ºèªç”¨ æ–‡å­—å‡ºåŠ›
 	//DrawFormatString(0, 20, GetColor(255,255,255), "bullet:%d", draw_timer);
 
-	//•`‰æŠJn‚Æ“¯‚É‰¹º”­¶
+	//æç”»é–‹å§‹ã¨åŒæ™‚ã«éŸ³å£°ç™ºç”Ÿ
 	if(draw_timer==0) PlaySoundMem( sound_id["S_TEST"] , DX_PLAYTYPE_BACK ) ;
 
 	switch(kind){

@@ -104,7 +104,7 @@ void recv_message(string msg, int id) {
     }
     /* commandによる処理分岐ここまで */
     /* メッセージの処理ここまで */
-    cout << " プレイヤー：" << id << " " << msg << endl;
+    cout << " recv_message from：" << id <<" msg:"<< " " << msg << endl;
 }
 
 void check_item_valid() {

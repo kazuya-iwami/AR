@@ -77,7 +77,7 @@ int main() {
 
                 n = read(nsockfd[i], buf, BUFMAX);
                 if (n <= 0) {
-                    printf("プレイヤー:%dが切断しました", i);
+                    std::cout << "プレイヤー:"<< i <<"が切断しました" <<std::endl;
                     //loop = false;
                     player_param[i].exist = false;
                     send_message(encode(COMMAND_NAME::DISCONNECT,i,0,0),4);
@@ -139,7 +139,7 @@ int set_tcp_socket(int portnum, struct hostent *shost) {
 
 //メッセージを送るときはこれを用いる　n=4で全体
 void send_message(std::string msg, int id=4) {
-    if (n == 4) {
+    if (id == 4) {
         for (int i = 0; i < PORT_NUM; i++) {
             if(!player_param[i].exist) {
                 std::cout << "切断したプレイヤーへメッセージを送ろうとしています" << std::endl;

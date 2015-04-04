@@ -18,8 +18,6 @@ bool CMytank::draw(){
 
 	//カーソル表示
 	DrawGraph(focus_x,focus_y,figure_id["F_CURSUR"],true);
-	DrawFormatString(200, 200, GetColor(255,255,255), "enemy:%d focus:%d",enemy2->get_x(),focus_x);
-	DrawFormatString(200, 300, GetColor(255,255,255), "enemy:%d focus:%d",enemy2->get_y(),focus_y);
 
 	return true;
 };
@@ -173,7 +171,10 @@ void CMytank::get_msg(){
 			//game_status:player_fromに変更
             break;
 		case COMMAND_NAME::RETURN_BULLET:
+			{
 			//player:player_fromがplayer:player_toにbullet:kindを攻撃
+			auto popup = make_shared<CPopup>(300,300,"RETURN"+msg);
+			CObject::register_object(popup);
 			
 			if(kind == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
 
@@ -346,7 +347,7 @@ void CMytank::get_msg(){
 				break;
             }
             break;
-
+			}
 		case COMMAND_NAME::DISCONNECT://敵が切断した場合
 			switch(player_from){ //自分のidを受け取ることはない前提
 			case 0:

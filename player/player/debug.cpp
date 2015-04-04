@@ -1,9 +1,9 @@
-#include "debug.h"
+ï»¿#include "debug.h"
 
 bool CPopup::debug_flag;
 
 bool CPopup::draw(){
-	if(debug_flag == false)return false;//debugƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚È‚¢‚Í•`‰æ‚µ‚È‚¢
+	if(debug_flag == false)return false;//debugãƒ•ãƒ©ã‚°ãŒç«‹ã£ã¦ã„ãªã„æ™‚ã¯æç”»ã—ãªã„
 
 	draw_timer++;
 

@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "object.h"
@@ -20,35 +20,35 @@ enum GAME_STATUS{
 };
 
 
-//©‹@ƒNƒ‰ƒX
+//è‡ªæ©Ÿã‚¯ãƒ©ã‚¹
 
 class CMytank : public CObject,public CNetwork {
 	ITEM_KIND item_kind;
-	int score;//Œ‚’Ä”-”íŒ‚’Ä”
-	int num_bullet; //c’e
-	OPERATION_STATUS ope_status; //‘€ì—pƒXƒe[ƒ^ƒX
-	int ope_timer; //‘€ì—pƒ^ƒCƒ}[
-	int vel_R,vel_L; //¶‰E‚Ìƒ^ƒCƒ„‚Ì‘¬“x
+	int score;//æ’ƒå¢œæ•°-è¢«æ’ƒå¢œæ•°
+	int num_bullet; //æ®‹å¼¾
+	OPERATION_STATUS ope_status; //æ“ä½œç”¨ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+	int ope_timer; //æ“ä½œç”¨ã‚¿ã‚¤ãƒãƒ¼
+	int vel_R,vel_L; //å·¦å³ã®ã‚¿ã‚¤ãƒ¤ã®é€Ÿåº¦
 	
 	GAME_STATUS game_status;
 
 	
 public:
 
-	int focus_x,focus_y;//Æ€‚ÌˆÊ’u
+	int focus_x,focus_y;//ç…§æº–ã®ä½ç½®
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;
 	shared_ptr<CEnemy> enemy3;
 
 	CMytank();
-	void move(tstring direction, tstring speed);//ˆÚ“®
+	void move(tstring direction, tstring speed);//ç§»å‹•
 	void set_ope_status(OPERATION_STATUS status);
 	void set_vel(int vr,int vl);
-	void get_msg();//ƒT[ƒo[‚©‚ç‚ÌƒƒbƒZ[ƒW—p
+	void get_msg();//ã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç”¨
 	bool draw();
-	void gen_bullet(BULLET_KIND kind);//’e¶¬ŠÖ”
-	void use_item(); // item¶¬ŠÖ”
+	void gen_bullet(BULLET_KIND kind);//å¼¾ç”Ÿæˆé–¢æ•°
+	void use_item(); // itemç”Ÿæˆé–¢æ•°
 	void detect_enemy(Mat image);
 	void check_focus();
 };

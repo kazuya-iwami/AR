@@ -1,4 +1,4 @@
-
+﻿
 #include <stdio.h>
 #include <ctype.h>
 #include <opencv2/opencv.hpp>
@@ -25,83 +25,83 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	cv::VideoCapture vcap;
 	cv::Mat image;
 
-	//�e�w�b�_�t�@�C���������class�\�����킩���
+	//各ヘッダファイルを見るとclass構成がわかるよ
 
-	//network������
-	CNetwork::network_init(0,"192.168.10.100"); //�����̃v���C���[�ԍ�0~3��IP�A�h���X�����Ɛڑ����݂�
+	//network初期化
+	CNetwork::network_init(0,"192.168.10.100"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 
-	//�N���X�̃C���X�^���X�̓X�}�[�g�|�C���^(std::shared_ptr)�Ő������܂��B
-	//�X�}�[�g�|�C���^�̏ڍׂ̓O�O����
-	//���ʂ̃|�C���^�ƈ���ēK�؂ȃ^�C�~���O�ŉ�����Ă����֗��O�b�Y
-	//�[���l�����Ɉȉ��̏������R�s��Γ����B
-	//�����Ԉ���Ă��狳����
-	//�O���[�o���ϐ���main.h�ɏ����Ă�
-	//���̃t�@�C���ŗp���鎞��extern���āiextern�ŃO�O��ׂ��j
+	//クラスのインスタンスはスマートポインタ(std::shared_ptr)で生成します。
+	//スマートポインタの詳細はググって
+	//普通のポインタと違って適切なタイミングで解放してくれる便利グッズ
+	//深く考えずに以下の書き方コピれば動く。
+	//何か間違ってたら教えて
+	//グローバル変数はmain.hに書いてる
+	//他のファイルで用いる時はexternして（externでググるべし）
 
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
 
-	//�L�[�{�[�h�p
+	//キーボード用
 	char key_buf [ 256 ] ;
 	char key_prev_buf [ 256 ] ;
 
-	CPopup::debug_flag = true; // �f�o�b�O�t���O��true�Ȃ�|�b�v�A�b�v��\��
+	CPopup::debug_flag = true; // デバッグフラグがtrueならポップアップを表示
 
-	//���Y�p�C����̉f���擾�p
+	//ラズパイからの映像取得用
 	const std::string videoStreamAddress ="http://192.168.10.137:8080/?action=stream.mjpeg";
 	
-	//���Y�p�C������10fps�ŉ摜�z�M���Ă�̂ŕʃX���b�h�i�񓯊��j�ŉ摜�擾���邱�Ƃɂ���\��
-	//CG�`���30fps�̗\��
+	//ラズパイが現在10fpsで画像配信してるので別スレッド（非同期）で画像取得することにする予定
+	//CG描画は30fpsの予定
 
-	//if(!vcap.open(1)){//�f�t�H���g�̃J�������擾�͂�����
-	//if(!vcap.open(videoStreamAddress)) { //���Y�p�C����̎擾�͂�����
+	//if(!vcap.open(1)){//デフォルトのカメラを取得はこちら
+	//if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
 	//	std::cout << "Error opening video stream or file" << std::endl;
 	//	return -1;
 	//}
-	// �E�C���h�E���[�h�ŋN��
-	SetMainWindowText( "���A���}���I�J�[�g" ) ;
-	ChangeWindowMode( TRUE ) ;//false�Ȃ�t���X�N���[��
-	SetGraphMode(1000,750,32);//��ʃT�C�Y1000�~750�ɐݒ�
+	// ウインドウモードで起動
+	SetMainWindowText( "リアルマリオカート" ) ;
+	ChangeWindowMode( TRUE ) ;//falseならフルスクリーン
+	SetGraphMode(1000,750,32);//画面サイズ1000×750に設定
 
-	//�����T�C�Y
-	SetFontSize( 60 ) ;                             //�T�C�Y��20�ɕύX
-    SetFontThickness( 8 ) ;                         //������8�ɕύX
-    ChangeFont( "�l�r ����" ) ;                     //��ނ�MS�����ɕύX
-    ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE );//�A���`�G�C���A�X���G�b�W�t���t�H���g�ɕύX
+	//文字サイズ
+	SetFontSize( 60 ) ;                             //サイズを20に変更
+    SetFontThickness( 8 ) ;                         //太さを8に変更
+    ChangeFont( "ＭＳ 明朝" ) ;                     //種類をMS明朝に変更
+    ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE );//アンチエイリアス＆エッジ付きフォントに変更
 
-	// �c�w���C�u��������������
+	// ＤＸライブラリ初期化処理
 	if( DxLib_Init() == -1 ){
 		return -1;
 	}
 
-	// �`���𗠉�ʂɂ���
+	// 描画先を裏画面にする
 	SetDrawScreen( DX_SCREEN_BACK ) ;
 
 	
-	//FPS����평���� 
-	//����ɂ����1�b�ɍő�30�񂵂����[�v�����Ȃ��悤�ɂ���
-	//fps�Œ肵�Ȃ��ƈ�T�C�N���Ɉ�萔�����悤�ȃv���O���������܂�����
+	//FPS測定器初期化 
+	//これによって1秒に最大30回しかループが回らないようにする
+	//fps固定しないと一サイクルに一定数動くようなプログラムがうまく動か
 	CFps fps; 
 
-	//�g�p����摜�̓ǂݍ���
-	CObject::load();//���ׂẲ摜�͂��̒��œǂݍ��ށ@
+	//使用する画像の読み込み
+	CObject::load();//すべての画像はこの中で読み込む　
 
 
-	//�F�X�`�惊�X�g�ɓo�^
-	//�����厖�Bobject.h����
-	//�ケ���Q�l�@http://marupeke296.com/DXCLS_WhoIsDrawer.html
+	//色々描画リストに登録
+	//ここ大事。object.h見て
+	//後ここ参考　http://marupeke296.com/DXCLS_WhoIsDrawer.html
 
 	CObject::register_object(mytank);
 	CObject::register_object(system_timer);
 
 	float bullet_z = 0.0;
-	// ���C�����[�v
+	// メインループ
 	while(1){
 		printf("ok\n");
-		// ��ʂɕ`����Ă�����̂����S������
+		// 画面に描かれているものを一回全部消す
 		ClearDrawScreen() ;
 
-		//�Î~���openCV�Ŏ擾
+		//静止画をopenCVで取得
 		image = imread("out.jpeg");
 		//if(!vcap.read(image)) {
 		//	std::cout << "No frame" << std::endl;
@@ -113,42 +113,42 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		//cv::imwrite("out.jpeg",image);
 
-		// DX���C�u�����ŐÎ~��擾 
+		// DXライブラリで静止画取得 
 		int GHandle = LoadGraph( "out.jpeg" ) ;
 
-		// �ǂ݂��񂾃O���t�B�b�N���g��`��
+		// 読みこんだグラフィックを拡大描画
 		DrawExtendGraph( 0 , 0 , 1000  , 750 , GHandle , TRUE ) ;
 
 
-		//�`��
+		//描画
 		/*	
-			���ׂĂ̕`��������Ŏ󂯎��B
-			drawlist�ɓo�^����Ă�I�u�W�F�N�g��draw()�����ׂĎ��s
-			draw�̖߂�l��false���ƃ��X�g���珜��(�A�j���[�V�����`��I����false��Ԃ�)
+			すべての描画をここで受け持つ。
+			drawlistに登録されてるオブジェクトのdraw()をすべて実行
+			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
 		*/
 		std::list<std::shared_ptr<CObject>>::iterator it;
-		for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // �Ō�́uit++�v������
-			if( !(*it)->draw() ){ //�A�j���[�V�����I����
-				// �I�u�W�F�N�g�����X�g����͂���
+		for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // 最後の「it++」を消す
+			if( !(*it)->draw() ){ //アニメーション終了時
+				// オブジェクトをリストからはずす
 				it = CObject::drawlist.erase( it );
 				continue;
 			}
-			it++;   // �C���N�������g
+			it++;   // インクリメント
 		}
 		
-		//�T�[�o�[����msg�̎�M
-		/* 1�T�C�N��1��Ă� */
+		//サーバーからmsgの受信
+		/* 1サイクル1回呼ぶ */
 		mytank->get_msg();
 
-		//�Ə��ƓG���d�Ȃ��Ă��邩�`�F�b�N
+		//照準と敵が重なっているかチェック
 		mytank->check_focus();
 
-		//�ړ������@���̒��ɏ���
-		//�L�[��Ԏ擾�̌�Ɉړ����܂�(2015/3/31 �吙�ǋL)
+		//移動処理　この中に書く
+		//キー状態取得の後に移動します(2015/3/31 大杉追記)
 		//mytank->move();
 
-		//�L�[��Ԏ擾
-		//�������͈ȉ��̒ʂ�
+		//キー状態取得
+		//書き方は以下の通り
 		for(int i=0;i<256;i++){
 			key_prev_buf[i] = key_buf[i];
 		}
@@ -156,18 +156,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		GetHitKeyStateAll( key_buf ) ;
 
 		tstring speed;
-		//���x�ݒ�̕�������Ɋւ��Ă͑吙�͒m��Ȃ��ł�...
+		//速度設定の分岐条件に関しては大杉は知らないです...
 		if(true){
-			//�ʏ�
+			//通常
 			speed = _T("full");
 		}else {
-			//�T�[�o���猸�����߂������Ă����ꍇ
+			//サーバから減速命令が送られてきた場合
 			speed = _T("half");
 		}
 
-		//�e�L�[������������Ƃ��̓��������B
+		//各キーを押し続けるとその動作をする。
 		if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
-			//mytank->set_vel(1,1);//���@�̑��x�ݒ� (pwm����̏ꍇ��)
+			//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
 			mytank->move(_T("forward"), speed);
 		}
 		if(  key_buf[ KEY_INPUT_DOWN ] == 1 && key_prev_buf[ KEY_INPUT_DOWN] == 0 ){
@@ -182,7 +182,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//mytank->set_vel(1,-1);
 			mytank->move(_T("right"), speed);
 		}
-		//�e�L�[�𗣂�����stop
+		//各キーを離したらstop
 		if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 
 			(key_buf[ KEY_INPUT_DOWN ] == 0 && key_prev_buf[ KEY_INPUT_DOWN] == 1) ||
 			(key_buf[ KEY_INPUT_LEFT ] == 0 && key_prev_buf[ KEY_INPUT_LEFT] == 1) ||
@@ -190,73 +190,73 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			mytank->move(_T("stop"), speed);
 		}
 
-		//Bullet����
+		//Bullet生成
 		if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 		}
-		//�e�X�g�p�@3���������^�C�~���O��3D��(Bullet)����
+		//テスト用　3を押したタイミングで3D球(Bullet)生成
 		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
 			auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
 			CObject::register_object(bullet);
 		}
 
 
-		//�e�X�g�p�@E���������^�C�~���O��Explosion����
+		//テスト用　Eを押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
 			CObject::register_object(explosion);
 		}
-		//�e�X�g�p�@1���������^�C�~���O��Explosion����
+		//テスト用　1を押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
 			CObject::register_object(explosion);
 		}
-		//�e�X�g�p�@I���������^�C�~���O��Item����
+		//テスト用　Iを押したタイミングでItem生成
 		if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
 			mytank->use_item();
 		}
 
 		
-		//�e�X�g�p�@D�������ƃJ�[�\�����E��
+		//テスト用　Dを押すとカーソルが右に
 		if(  key_buf[ KEY_INPUT_D ] == 1){
 			mytank->focus_x += FOCUS_SPEED;
 		}
 
-		//�e�X�g�p�@W�������ƃJ�[�\�������
+		//テスト用　Wを押すとカーソルが上に
 		if(  key_buf[ KEY_INPUT_W ] == 1 ){
 			mytank->focus_y -=  FOCUS_SPEED;
 		}
 
-		//�e�X�g�p�@A�������ƃJ�[�\��������
+		//テスト用　Aを押すとカーソルが左に
 		if(  key_buf[ KEY_INPUT_A ] == 1){
 			mytank->focus_x -=  FOCUS_SPEED;
 		}
 
-		//�e�X�g�p�@S�������ƃJ�[�\��������
+		//テスト用　Sを押すとカーソルが下に
 		if(  key_buf[ KEY_INPUT_S ] == 1){ 
 			mytank->focus_y +=  FOCUS_SPEED;
 		}
 
 
-		fps.Update();//1�T�C�N�����Ƃ̑��x�𑪒�
+		fps.Update();//1サイクルごとの速度を測定
 		if(  key_buf[ KEY_INPUT_F ] == 1 ){
 			fps.Draw();
 		}
-		fps.Wait();//���������炿����Ƒ҂�
+		fps.Wait();//早すぎたらちょっと待つ
 
-		// ����ʂ̓��e��\��ʂɔ��f������
+		// 裏画面の内容を表画面に反映させる
 		DxLib::ScreenFlip() ;
 
-		// Windows �V�X�e�����炭�������������
+		// Windows システムからくる情報を処理する
 		if( ProcessMessage() == -1 ) break ;
 
-		// �d�r�b�L�[�������ꂽ�烋�[�v���甲����
+		// ＥＳＣキーが押されたらループから抜ける
 		if( key_buf[ KEY_INPUT_ESCAPE ] == 1 ) break ;
 	}
-	// �c�w���C�u�����g�p�̏I������
+	// ＤＸライブラリ使用の終了処理
 	DxLib_End() ;
 	
-	// �\�t�g�̏I��
+	// ソフトの終了
 	return 0 ;
 }
 

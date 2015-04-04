@@ -1,8 +1,8 @@
-
+ï»¿
 #pragma once
 #include "object.h"
 
-//ƒAƒCƒeƒ€ƒNƒ‰ƒX
+//ã‚¢ã‚¤ãƒ†ãƒ ã‚¯ãƒ©ã‚¹
 enum ITEM_KIND{
 	ITEM_NONE,
 	STAR,
@@ -14,23 +14,23 @@ class CItem : public CObject{
 	
 public:
 	/*
-		ƒRƒ“ƒXƒgƒ‰ƒNƒ^i‰Šú‰»j
-		ˆø”F
-			int x_	ƒAƒCƒeƒ€•\Ž¦‰æ–Ê‚Ì‰¡Ž²À•W
-			int y_	ƒAƒCƒeƒ€•\Ž¦‰æ–Ê‚ÌcŽ²À•W
-			ITEM_KIND kind_	ƒAƒCƒeƒ€‚ÌŽí—Þ 
-		–ß‚è’lF
-			‚È‚µ
+		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ˆåˆæœŸåŒ–ï¼‰
+		å¼•æ•°ï¼š
+			int x_	ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤ºç”»é¢ã®æ¨ªè»¸åº§æ¨™
+			int y_	ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤ºç”»é¢ã®ç¸¦è»¸åº§æ¨™
+			ITEM_KIND kind_	ã‚¢ã‚¤ãƒ†ãƒ ã®ç¨®é¡ž 
+		æˆ»ã‚Šå€¤ï¼š
+			ãªã—
 	*/
 	CItem(int x_,int y_,ITEM_KIND kind_);
 
 	/*
-		ƒAƒCƒeƒ€•\Ž¦‰æ–Ê‚Ì•`‰æ‚ðs‚¤ŠÖ”
-		ˆø”F
-			‚È‚µ
-		–ß‚è’lF
-			true ƒGƒtƒFƒNƒg•`‰æ’†
-			false ƒGƒtƒFƒNƒgI—¹Žž
+		ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤ºç”»é¢ã®æç”»ã‚’è¡Œã†é–¢æ•°
+		å¼•æ•°ï¼š
+			ãªã—
+		æˆ»ã‚Šå€¤ï¼š
+			true ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæç”»ä¸­
+			false ã‚¨ãƒ•ã‚§ã‚¯ãƒˆçµ‚äº†æ™‚
 	*/
 	bool draw();
 };

@@ -1,11 +1,11 @@
-
+ï»¿
 #pragma once
 #include "object.h"
 #include "image_processing.h"
 
-//×‚©‚¢ƒNƒ‰ƒX‚Í‚±‚±‚É‚©‚«W‚ß‚Ä‚¢‚é
+//ç´°ã‹ã„ã‚¯ãƒ©ã‚¹ã¯ã“ã“ã«ã‹ãé›†ã‚ã¦ã„ã‚‹
 
-//c‚èŠÔ•`‰æƒNƒ‰ƒX
+//æ®‹ã‚Šæ™‚é–“æç”»ã‚¯ãƒ©ã‚¹
 class CSystem_timer : public CObject {
 
 public:
@@ -13,7 +13,7 @@ public:
 	bool draw();
 };
 
-//“G‚ÌˆÊ’uî•ñŠÇ—ƒNƒ‰ƒX
+//æ•µã®ä½ç½®æƒ…å ±ç®¡ç†ã‚¯ãƒ©ã‚¹
 class CEnemy : public CImage_processer,public CObject {
 
 public:

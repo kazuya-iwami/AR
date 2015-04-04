@@ -1,17 +1,17 @@
-#include "utility.h"
+ï»¿#include "utility.h"
 
-//ƒQ[ƒ€‚Ì§ŒÀŠÔB“K“–‚É’²®
+//ã‚²ãƒ¼ãƒ ã®åˆ¶é™æ™‚é–“ã€‚é©å½“ã«èª¿æ•´
 int timer=3359;
 
 bool CSystem_timer::draw(){
-	//c‚èŠÔ•\¦
+	//æ®‹ã‚Šæ™‚é–“è¡¨ç¤º
 	DrawGraph(760,20,number[timer/30/100],true);
 	DrawGraph(820,20,number[(timer/30%100)/10],true);
 	DrawGraph(880,20,number[timer/30%10],true);
 
 	timer--;
 
-	return true;//í‚É•`‰æ
+	return true;//å¸¸ã«æç”»
 }
 
 CSystem_timer::CSystem_timer(int x_,int y_){
@@ -23,11 +23,11 @@ bool CEnemy::draw(){
 	x=ip_x*1000/320;
 	y=ip_y*750/240;
 
-	if(visible){//‹ŠE‚É“ü‚Á‚Ä‚¢‚é‚È‚ç
+	if(visible){//è¦–ç•Œã«å…¥ã£ã¦ã„ã‚‹ãªã‚‰
 		if(!lockon){
 			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
 		}else
-		DrawGraph(x - 100,y - 130,figure_id["F_DETECT"],true);//‰æ–Êˆø‚«‰„‚Î‚µ‚Ä‚é•ª‚Ì•â³
+		DrawGraph(x - 100,y - 130,figure_id["F_DETECT"],true);//ç”»é¢å¼•ãå»¶ã°ã—ã¦ã‚‹åˆ†ã®è£œæ­£
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		DrawFormatString(x - 50 ,y , GetColor(255,255,255), "%dP", enemy_id);
 	}

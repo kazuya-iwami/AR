@@ -1,9 +1,9 @@
-
+ï»¿
 #pragma once
 
 #include "object.h"
 
-//’eƒNƒ‰ƒX
+//å¼¾ã‚¯ãƒ©ã‚¹
 
 enum BULLET_KIND{
 	BULLET_NOMAL,
@@ -12,29 +12,29 @@ enum BULLET_KIND{
 
 class CBullet : public CObject{
 	BULLET_KIND kind;
-	int z; //bullet‚Ì‚Ý‚ªŽ‚Â‰œs‚«‚ÌÀ•W
+	int z; //bulletã®ã¿ãŒæŒã¤å¥¥è¡Œãã®åº§æ¨™
 	
 
 public:
 	/*
-		ƒRƒ“ƒXƒgƒ‰ƒNƒ^i‰Šú‰»j
-		ˆø”F
-			int x_	’eƒGƒtƒFƒNƒg‚ÌxÀ•W
-			int y_	’eƒGƒtƒFƒNƒg‚ÌyÀ•W
-			int z_	’eƒGƒtƒFƒNƒg‚ÌzÀ•W
-			BULLET_KIND kind_	’eƒGƒtƒFƒNƒg‚ÌŽí—Þ 
-		–ß‚è’lF
-			‚È‚µ
+		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ˆåˆæœŸåŒ–ï¼‰
+		å¼•æ•°ï¼š
+			int x_	å¼¾ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®xåº§æ¨™
+			int y_	å¼¾ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®yåº§æ¨™
+			int z_	å¼¾ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®zåº§æ¨™
+			BULLET_KIND kind_	å¼¾ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ç¨®é¡ž 
+		æˆ»ã‚Šå€¤ï¼š
+			ãªã—
 	*/
 	CBullet(int x_, int y_, int z_, BULLET_KIND kind_);
 
 	/*
-		’eƒGƒtƒFƒNƒg‚Ì•`‰æ‚ðs‚¤ŠÖ”
-		ˆø”F
-			‚È‚µ
-		–ß‚è’lF
-			true ƒGƒtƒFƒNƒg•`‰æ’†
-			false ƒGƒtƒFƒNƒgI—¹Žž
+		å¼¾ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æç”»ã‚’è¡Œã†é–¢æ•°
+		å¼•æ•°ï¼š
+			ãªã—
+		æˆ»ã‚Šå€¤ï¼š
+			true ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæç”»ä¸­
+			false ã‚¨ãƒ•ã‚§ã‚¯ãƒˆçµ‚äº†æ™‚
 	*/
 	bool draw();
 };

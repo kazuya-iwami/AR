@@ -1,4 +1,4 @@
-#include "item.h"
+﻿#include "item.h"
 
 CItem::CItem(int x_,int y_,ITEM_KIND kind_){
 	x=x_;

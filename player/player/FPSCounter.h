@@ -1,18 +1,18 @@
-// FPS�v���N���X�w�b�_�[�t�@�C��
+﻿// FPS計測クラスヘッダーファイル
 
 
-//�ǂ܂Ȃ��Ă���
+//読まなくていい
 
 
 #pragma once
 #pragma comment(lib, "winmm.lib")
 
 class CFps{
-	int mStartTime;         //����J�n����
-	int mCount;             //�J�E���^
+	int mStartTime;         //測定開始時刻
+	int mCount;             //カウンタ
 	float mFps;             //fps
-	static const int N = 30;//���ς����T���v����
-	static const int FPS = 30;	//�ݒ肵��FPS
+	static const int N = 30;//平均を取るサンプル数
+	static const int FPS = 30;	//設定したFPS
 
 public:
 	CFps(){
@@ -22,10 +22,10 @@ public:
 	}
 
 	bool Update(){
-		if( mCount == 0 ){ //1�t���[���ڂȂ玞�����L��
+		if( mCount == 0 ){ //1フレーム目なら時刻を記憶
 			mStartTime = GetNowCount();
 		}
-		if( mCount == N ){ //30�t���[���ڂȂ畽�ς��v�Z����
+		if( mCount == N ){ //30フレーム目なら平均を計算する
 			int t = GetNowCount();
 			mFps = 1000.f/((t-mStartTime)/(float)N);
 			mCount = 0;
@@ -40,12 +40,12 @@ public:
 	}
 
 	void Wait(){
-		int tookTime = GetNowCount() - mStartTime;	//������������
-		int waitTime = mCount*1000/FPS - tookTime;	//�҂ׂ�����
+		int tookTime = GetNowCount() - mStartTime;	//かかった時間
+		int waitTime = mCount*1000/FPS - tookTime;	//待つべき時間
 		if( waitTime > 0 ){
-			Sleep(waitTime);	//�ҋ@
+			Sleep(waitTime);	//待機
 		}
 	}
 };
 
-//���Ȃ��Ă���
+//見なくていい

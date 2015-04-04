@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include <map>
 #include <list>
@@ -8,56 +8,56 @@
 
 using namespace std;
 
-// ”š”­ƒGƒtƒFƒNƒg—p
+// çˆ†ç™ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”¨
 extern int explosion[45];
 extern int explosion1[140];
 extern int bullet[30];
 
-//”š—p
+//æ•°å­—ç”¨
 extern int number[10];
 
-//•`‰æA‰¹º‚ğæ‚è‚Ü‚Æ‚ß‚éƒNƒ‰ƒX
+//æç”»ã€éŸ³å£°ã‚’å–ã‚Šã¾ã¨ã‚ã‚‹ã‚¯ãƒ©ã‚¹
 class CObject {
 protected:
-	int x,y; //•`‰æˆÊ’u
-	int draw_timer; //ƒAƒjƒ[ƒVƒ‡ƒ“—p
-	static map<string,int> figure_id;//‚±‚±‚Éload‚µ‚½ƒCƒ[ƒW‚É‘Î‰‚µ‚½id‚ğ˜A‘z”z—ñ‚Æ‚µ‚Ä•Û‘¶   F_‚©‚ç‘‚«n‚ß‚é
-	static map<string,int> sound_id;//‚±‚±‚Éload‚µ‚½ƒCƒ[ƒW‚É‘Î‰‚µ‚½id‚ğ˜A‘z”z—ñ‚Æ‚µ‚Ä•Û‘¶    S_‚©‚ç‘‚«n‚ß‚é
+	int x,y; //æç”»ä½ç½®
+	int draw_timer; //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç”¨
+	static map<string,int> figure_id;//ã“ã“ã«loadã—ãŸã‚¤ãƒ¡ãƒ¼ã‚¸ã«å¯¾å¿œã—ãŸidã‚’é€£æƒ³é…åˆ—ã¨ã—ã¦ä¿å­˜   F_ã‹ã‚‰æ›¸ãå§‹ã‚ã‚‹
+	static map<string,int> sound_id;//ã“ã“ã«loadã—ãŸã‚¤ãƒ¡ãƒ¼ã‚¸ã«å¯¾å¿œã—ãŸidã‚’é€£æƒ³é…åˆ—ã¨ã—ã¦ä¿å­˜    S_ã‹ã‚‰æ›¸ãå§‹ã‚ã‚‹
 	
 public:
 	static std::list<std::shared_ptr<CObject>> drawlist;
 	/*
-		‰æ‘œ‚Ì•`‰æ‚ğs‚¤ŠÖ”
-		false‚ª•Ô‚Á‚Ä‚«‚½‚ç•`‰æ‘ÎÛ‚©‚çŠO‚·
-		‰¼‘zŠÖ”‚È‚Ì‚ÅAqƒNƒ‰ƒX‘¤‚ÅŠeX‚ÌÀÛ‚Ìˆ—‚ğ‘‚­
+		ç”»åƒã®æç”»ã‚’è¡Œã†é–¢æ•°
+		falseãŒè¿”ã£ã¦ããŸã‚‰æç”»å¯¾è±¡ã‹ã‚‰å¤–ã™
+		ä»®æƒ³é–¢æ•°ãªã®ã§ã€å­ã‚¯ãƒ©ã‚¹å´ã§å„ã€…ã®å®Ÿéš›ã®å‡¦ç†ã‚’æ›¸ã
 	*/
 	virtual bool draw();
 
 	/*
-		‰æ‘œ‚Ì“o˜^‚ğs‚¤ŠÖ”
-		ˆø”A–ß‚è’l@“Á‚É‚È‚µ
-		”CˆÓ‚Ì•`‰æ‰æ‘œ‚Í‚±‚±‚É“o˜^‚³‚¹‚é•K—v‚ª‚ ‚é
+		ç”»åƒã®ç™»éŒ²ã‚’è¡Œã†é–¢æ•°
+		å¼•æ•°ã€æˆ»ã‚Šå€¤ã€€ç‰¹ã«ãªã—
+		ä»»æ„ã®æç”»ç”»åƒã¯ã“ã“ã«ç™»éŒ²ã•ã›ã‚‹å¿…è¦ãŒã‚ã‚‹
 	*/
-	static void load();//ƒ[ƒh
-	static void register_object(std::shared_ptr<CObject> obj);//drawlist‚É“o˜^
+	static void load();//ãƒ­ãƒ¼ãƒ‰
+	static void register_object(std::shared_ptr<CObject> obj);//drawlistã«ç™»éŒ²
 };
 
-/* •`‰æ•û–@
+/* æç”»æ–¹æ³•
 
-	‚Ü‚¸object.cpp‚Å‰æ‘œA‰¹ºloadi‰Šú‰»j
+	ã¾ãšobject.cppã§ç”»åƒã€éŸ³å£°loadï¼ˆåˆæœŸåŒ–ï¼‰
 
-	•`‰æ‚ğ“o˜^‚·‚éÛ‚Í‰º‚Ì‚Qsg‚¤
-	auto bullet = make_shared<CBullet>(200,200,BULLET_KIND::BULLET_NOMAL);//ƒXƒ}[ƒgƒ|ƒCƒ“ƒ^¶¬@ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÍŠeƒwƒbƒ_ƒtƒ@ƒCƒ‹Œ©‚Ä
-	CObject::register_object(bullet);//•`‰æƒŠƒXƒg‚É“o˜^
+	æç”»ã‚’ç™»éŒ²ã™ã‚‹éš›ã¯ä¸‹ã®ï¼’è¡Œä½¿ã†
+	auto bullet = make_shared<CBullet>(200,200,BULLET_KIND::BULLET_NOMAL);//ã‚¹ãƒãƒ¼ãƒˆãƒã‚¤ãƒ³ã‚¿ç”Ÿæˆã€€ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯å„ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«è¦‹ã¦
+	CObject::register_object(bullet);//æç”»ãƒªã‚¹ãƒˆã«ç™»éŒ²
 
-	draw()‚Ì’†‚Å‚Í
-	PlaySoundMem( sound_id["S_TEST"] , DX_PLAYTYPE_BACK ) ;‰¹Ä¶@drawtimer==0‚Ì‚Ì‚İ–Â‚ç‚·‚à‚Ì‚É’ˆÓ ‚Q‚Â‚ß‚Ìˆø”‚Í‚±‚ê
-	DrawGraph(0,0,figure_id["F_TEST"],false);@•`‰æ@‰‚ß‚Ì‚Qˆø”‚Íx,y
+	draw()ã®ä¸­ã§ã¯
+	PlaySoundMem( sound_id["S_TEST"] , DX_PLAYTYPE_BACK ) ;éŸ³å†ç”Ÿã€€drawtimer==0ã®æ™‚ã®ã¿é³´ã‚‰ã™ã‚‚ã®ã«æ³¨æ„ ï¼’ã¤ã‚ã®å¼•æ•°ã¯ã“ã‚Œ
+	DrawGraph(0,0,figure_id["F_TEST"],false);ã€€æç”»ã€€åˆã‚ã®ï¼’å¼•æ•°ã¯x,y
 
-	//DXƒ‰ƒCƒuƒ‰ƒŠ‚É‚Â‚¢‚Ä‚Í‰ºŒ©‚Ä
-	DXƒ‰ƒCƒuƒ‰ƒŠÚ×
+	//DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã«ã¤ã„ã¦ã¯ä¸‹è¦‹ã¦
+	DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªè©³ç´°
 	http://homepage2.nifty.com/natupaji/DxLib/dxlecture_main.html
-	DXƒ‰ƒCƒuƒ‰ƒŠ@ƒGƒtƒFƒNƒg‚É‚Â‚¢‚Äipdfj
+	DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã€€ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã«ã¤ã„ã¦ï¼ˆpdfï¼‰
 	http://sherbet.transjiggen.com/ccs/ccs_wiki2/index.php?plugin=attach&pcmd=open&file=DXLib_Effect_h002.pdf&refer=%A5%CF%A5%EB%A5%C8
 
 

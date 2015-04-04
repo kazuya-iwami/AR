@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <iostream>
 
@@ -10,8 +10,8 @@
 using namespace std;
 using namespace cv;
 
-//‰æ‘œˆ—ƒNƒ‰ƒX
-//“Ç‚Ü‚È‚­‚Ä‚¢‚¢
+//ç”»åƒå‡¦ç†ã‚¯ãƒ©ã‚¹
+//èª­ã¾ãªãã¦ã„ã„
 
 class CImage_processer {
 
@@ -22,11 +22,11 @@ public:
     int minS, maxS;
     int minV, maxV;
 
-    bool visible; //‹ŠE‚É“ü‚Á‚Ä‚¢‚é‚©‚Ìƒtƒ‰ƒO
+    bool visible; //è¦–ç•Œã«å…¥ã£ã¦ã„ã‚‹ã‹ã®ãƒ•ãƒ©ã‚°
 
     void init(int minH_, int maxH_, int minS_, int maxS_, int minV_, int maxV_);
 
 	Mat detect(Mat image);
 };
 
-//‚±‚±Œ©‚È‚­‚Ä‚¢‚¢
+//ã“ã“è¦‹ãªãã¦ã„ã„

@@ -1,8 +1,8 @@
-#pragma once
+ï»¿#pragma once
 
 #include "object.h"
 
-//”š”­ƒNƒ‰ƒX
+//çˆ†ç™ºã‚¯ãƒ©ã‚¹
 
 enum EXPLOSION_KIND {
 	EXPLOSION_NOMAL,
@@ -14,23 +14,23 @@ class CExplosion : public CObject {
 	
 public:
 	/*
-		ƒRƒ“ƒXƒgƒ‰ƒNƒ^i‰Šú‰»j
-		ˆø”F
-			int x_	”š”­ƒGƒtƒFƒNƒg‚Ì‰¡Ž²À•W
-			int y_	”š”­ƒGƒtƒFƒNƒg‚ÌcŽ²À•W
-			EXPLOSION_KIND kind_	”š”­‚ÌŽí—Þ 
-		–ß‚è’lF
-			‚È‚µ
+		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ˆåˆæœŸåŒ–ï¼‰
+		å¼•æ•°ï¼š
+			int x_	çˆ†ç™ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æ¨ªè»¸åº§æ¨™
+			int y_	çˆ†ç™ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ç¸¦è»¸åº§æ¨™
+			EXPLOSION_KIND kind_	çˆ†ç™ºã®ç¨®é¡ž 
+		æˆ»ã‚Šå€¤ï¼š
+			ãªã—
 	*/
 	CExplosion(int x_,int y_,EXPLOSION_KIND kind_);
 
 	/*
-		”š”­ƒGƒtƒFƒNƒg‚Ì•`‰æ‚ðs‚¤ŠÖ”
-		ˆø”F
-			‚È‚µ
-		–ß‚è’lF
-			true ƒGƒtƒFƒNƒg•`‰æ’†
-			false ƒGƒtƒFƒNƒgI—¹Žž
+		çˆ†ç™ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æç”»ã‚’è¡Œã†é–¢æ•°
+		å¼•æ•°ï¼š
+			ãªã—
+		æˆ»ã‚Šå€¤ï¼š
+			true ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæç”»ä¸­
+			false ã‚¨ãƒ•ã‚§ã‚¯ãƒˆçµ‚äº†æ™‚
 	*/
 	bool draw();
 };

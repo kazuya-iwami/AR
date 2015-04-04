@@ -1,4 +1,4 @@
-#include "image_processing.h"
+ï»¿#include "image_processing.h"
 
 
 void CImage_processer::init(int minH_, int maxH_, int minS_, int maxS_, int minV_, int maxV_) {
@@ -16,26 +16,26 @@ void CImage_processer::init(int minH_, int maxH_, int minS_, int maxS_, int minV
 
 Mat CImage_processer::detect(Mat image) {
 
-    // HSV‚É•ÏŠ·
+    // HSVã«å¤‰æ›
     Mat hsv;
     cvtColor(image, hsv, COLOR_BGR2HSV);
 
-    // 2’l‰»
+    // 2å€¤åŒ–
     Mat binalized;
     Scalar lower(minH, minS, minV);
     Scalar upper(maxH, maxS, maxV);
     inRange(hsv, lower, upper, binalized);
 
-    // ƒmƒCƒYœ‹
+    // ãƒã‚¤ã‚ºé™¤å»
     Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
     morphologyEx(binalized, binalized, MORPH_CLOSE, kernel);
     //imshow("morphologyEx", binalized);
 
-    // —ÖŠs‚ğŒŸo
+    // è¼ªéƒ­ã‚’æ¤œå‡º
     std::vector<std::vector<Point>> contours;
     findContours(binalized.clone(), contours, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
 
-    // ˆê”Ô‘å‚«‚¢—ÖŠs‚ğ’Šo
+    // ä¸€ç•ªå¤§ãã„è¼ªéƒ­ã‚’æŠ½å‡º
     int contour_index = -1;
     double max_area = 0.0;
     for (int i = 0; i < (int)contours.size(); i++) {
@@ -48,14 +48,14 @@ Mat CImage_processer::detect(Mat image) {
 
     Rect rect;
 
-    // ƒ}[ƒJ‚ªŒ©‚Â‚©‚Á‚½
+    // ãƒãƒ¼ã‚«ãŒè¦‹ã¤ã‹ã£ãŸ
     if (contour_index >= 0 && max_area > 150) {
-        // dS
+        // é‡å¿ƒ
         Moments moments = cv::moments(contours[contour_index], true);
         ip_y = (int)(moments.m01 / moments.m00);
         ip_x = (int)(moments.m10 / moments.m00);
 
-        // •\¦
+        // è¡¨ç¤º
         rect = boundingRect(contours[contour_index]);
 
         //drawContours(image, contours, contour_index, Scalar(0,255,0));
@@ -69,6 +69,6 @@ Mat CImage_processer::detect(Mat image) {
 	image.copyTo(output);
     rectangle(output, rect, Scalar(0, 255, 0));
 
-    // •\¦
+    // è¡¨ç¤º
     return output;
 }

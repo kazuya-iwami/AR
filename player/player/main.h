@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <list>
 #include "DxLib.h"
 #include "object.h"
@@ -6,7 +6,7 @@
 
 using namespace std;
 
-//ƒOƒ[ƒoƒ‹•Ï”
+//ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
 
 
 string encode(COMMAND_NAME, int, int, int);

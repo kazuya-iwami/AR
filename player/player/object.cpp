@@ -1,50 +1,50 @@
-#include "object.h"
+ï»¿#include "object.h"
 
 map<string,int> CObject::figure_id;
 map<string,int> CObject::sound_id;
 std::list<std::shared_ptr<CObject>> CObject::drawlist;
 
-//”š”­ƒGƒtƒFƒNƒg—p”z—ñ
+//çˆ†ç™ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”¨é…åˆ—
 int explosion[45];
 int explosion1[140];
 
-//’eƒGƒtƒFƒNƒg—p”z—ñ
+//å¼¾ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”¨é…åˆ—
 int bullet[30];
 
-//”š—p”z—ñ
+//æ•°å­—ç”¨é…åˆ—
 int number[10];
 
 void CObject::load(){
-	//‚±‚Ì‚æ‚¤‚É‘‚¯‚Îtest.jpg‚ğƒƒ‚ƒŠ‚É“Ç‚İ‚ŞB
-	//¡Œã‚Ídraw()“à‚Åfigure_id["F_TEST"]‚ğ—p‚¢‚é‚Æ‚±‚Ì‰æ‘œ‚É‘Î‰‚µ‚½id‚ğæ“¾‚Å‚«‚éB
-	//F_TEST‚Ì•”•ª‚Í‘¼‚Æ”í‚ç‚È‚¢‚æ‚¤‚É©—R‚ÉŒˆ‚ß‚Ä‚­‚¾‚³‚¢B‚½‚¾‚µF_‚©‚ç‰‚ß‚ÄB
+	//ã“ã®ã‚ˆã†ã«æ›¸ã‘ã°test.jpgã‚’ãƒ¡ãƒ¢ãƒªã«èª­ã¿è¾¼ã‚€ã€‚
+	//ä»Šå¾Œã¯draw()å†…ã§figure_id["F_TEST"]ã‚’ç”¨ã„ã‚‹ã¨ã“ã®ç”»åƒã«å¯¾å¿œã—ãŸidã‚’å–å¾—ã§ãã‚‹ã€‚
+	//F_TESTã®éƒ¨åˆ†ã¯ä»–ã¨è¢«ã‚‰ãªã„ã‚ˆã†ã«è‡ªç”±ã«æ±ºã‚ã¦ãã ã•ã„ã€‚ãŸã ã—F_ã‹ã‚‰åˆã‚ã¦ã€‚
 	figure_id["F_TEST"] =  LoadGraph("image/test.jpg");
 	figure_id["F_DETECT"] =  LoadGraph("image/detect.png");
 	figure_id["F_FRAME"]=LoadGraph("image/frame.png");
 	figure_id["F_CURSUR"]=LoadGraph("image/cursur.png");
 
 
-	//ã‚ÌŒø‰Ê‰¹”Å
+	//ä¸Šã®åŠ¹æœéŸ³ç‰ˆ
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");
 
 
 	// explosion
-	// ‰æ‘œƒtƒ@ƒCƒ‹•ªŠ„‚ğs‚¤‚Ì‚ÅA•Ê‚ÉintŒ^”z—ñ‚ğ—pˆÓ‚µ‚Ä‰æ‘œ‚ğƒ[ƒh
+	// ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«åˆ†å‰²ã‚’è¡Œã†ã®ã§ã€åˆ¥ã«intå‹é…åˆ—ã‚’ç”¨æ„ã—ã¦ç”»åƒã‚’ãƒ­ãƒ¼ãƒ‰
 	LoadDivGraph("image/explosion_sample.png", 45, 9, 5, 600, 600, explosion);
 	LoadDivGraph("image/explosion1.png", 140, 14, 10, 600, 600, explosion1);
 
 	// bullet
-	// ‰æ‘œƒtƒ@ƒCƒ‹•ªŠ„‚ğs‚¤‚Ì‚ÅA•Ê‚ÉintŒ^”z—ñ‚ğ—pˆÓ‚µ‚Ä‰æ‘œ‚ğƒ[ƒh
+	// ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«åˆ†å‰²ã‚’è¡Œã†ã®ã§ã€åˆ¥ã«intå‹é…åˆ—ã‚’ç”¨æ„ã—ã¦ç”»åƒã‚’ãƒ­ãƒ¼ãƒ‰
 	LoadDivGraph("image/bullet.png", 30, 10, 3, 256, 256, bullet);
 
 	//number
-	//”š”­‚Æ“¯‚¶‚­•ªŠ„‚µ‚Ä“Ç‚İ‚İB
+	//çˆ†ç™ºã¨åŒã˜ãåˆ†å‰²ã—ã¦èª­ã¿è¾¼ã¿ã€‚
 	LoadDivGraph("image/number.png",10,5,2,55,100,number);
 }
 
 bool CObject::draw(){
 
-	//‰¼‘zŠÖ”‚È‚Ì‚Å’†g‚È‚µ
+	//ä»®æƒ³é–¢æ•°ãªã®ã§ä¸­èº«ãªã—
 	return true;
 
 }

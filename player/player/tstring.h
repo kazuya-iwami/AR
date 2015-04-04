@@ -1,6 +1,6 @@
-/**
- * java‚ÌString‚Á‚Û‚¢©ìƒNƒ‰ƒX(?)
- * ‚Æ‚¢‚Á‚Ä‚à http://www.hiramine.com/programming/windows/httprequest.html ‚ğQÆ‚µ‚½‚¾‚¯B
+ï»¿/**
+ * javaã®Stringã£ã½ã„è‡ªä½œã‚¯ãƒ©ã‚¹(?)
+ * ã¨ã„ã£ã¦ã‚‚ http://www.hiramine.com/programming/windows/httprequest.html ã‚’å‚ç…§ã—ãŸã ã‘ã€‚
  */
 
 #include <tchar.h>

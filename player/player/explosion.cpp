@@ -1,4 +1,4 @@
-#include "explosion.h"
+ï»¿#include "explosion.h"
 
 CExplosion::CExplosion(int x_,int y_,EXPLOSION_KIND kind_){
 	x=x_;
@@ -9,13 +9,13 @@ CExplosion::CExplosion(int x_,int y_,EXPLOSION_KIND kind_){
 
 bool CExplosion::draw(){
 	
-	// “®ìŠm”F—p •¶šo—Í
+	// å‹•ä½œç¢ºèªç”¨ æ–‡å­—å‡ºåŠ›
 	//DrawFormatString(0, 10, GetColor(255,255,255), "explosion:%d", draw_timer);
 
 	switch(kind){
 	case EXPLOSION_KIND::EXPLOSION_NOMAL :
 		if(draw_timer != 44){
-			// ”š”­ƒGƒtƒFƒNƒg‚Ì•`‰æ
+			// çˆ†ç™ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æç”»
 			DrawGraph(x, y, explosion[draw_timer], true);
 			draw_timer++;
 			return true;
@@ -24,7 +24,7 @@ bool CExplosion::draw(){
 		}
 	case EXPLOSION_KIND::EXPLOSION_1 :
 		if(draw_timer != 140){
-			// ”š”­ƒGƒtƒFƒNƒg‚Ì•`‰æ
+			// çˆ†ç™ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æç”»
 			DrawGraph(x, y, explosion1[draw_timer], true);
 			draw_timer++;
 			return true;

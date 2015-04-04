@@ -140,6 +140,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		/* 1サイクル1回呼ぶ */
 		mytank->get_msg();
 
+		//照準と敵が重なっているかチェック
+		mytank->check_focus();
+
 		//移動処理　この中に書く
 		//キー状態取得の後に移動します(2015/3/31 大杉追記)
 		//mytank->move();
@@ -190,8 +193,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//Bullet生成
 		if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
-			auto popup = make_shared<CPopup>(200,200,"たまはっしゃ");
-			CObject::register_object(popup);
 		}
 		//テスト用　3を押したタイミングで3D球(Bullet)生成
 		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){

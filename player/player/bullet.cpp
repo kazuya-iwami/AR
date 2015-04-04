@@ -18,10 +18,10 @@ bool CBullet::draw(){
 
 	switch(kind){
 	case BULLET_KIND::BULLET_NOMAL :
-		DrawGraph(530, 50, bullet[draw_timer], true);
+		DrawGraph(x,y, bullet[draw_timer], true);
 		break;
 	case BULLET_KIND::BULLET_3D :
-		DrawSphere3D(VGet(320.0f, 100.0f, z), 80.0f, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), true);
+		DrawSphere3D(VGet(x, y, z), 80.0f, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), true);
 		z += 30;
 		break;
 	}

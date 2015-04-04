@@ -4,8 +4,8 @@
 #include "debug.h"
 #include "item.h"
 
-#define ENEMY_WIDTH 200
-#define FOCUS_WIDTH 50
+#define MARGIN1 150
+#define MARGIN2 50
 
 bool CMytank::draw(){
 
@@ -19,6 +19,7 @@ bool CMytank::draw(){
 	//カーソル表示
 	DrawGraph(focus_x,focus_y,figure_id["F_CURSUR"],true);
 	DrawFormatString(200, 200, GetColor(255,255,255), "enemy:%d focus:%d",enemy2->get_x(),focus_x);
+	DrawFormatString(200, 300, GetColor(255,255,255), "enemy:%d focus:%d",enemy2->get_y(),focus_y);
 
 	return true;
 };
@@ -88,7 +89,7 @@ void CMytank::gen_bullet(BULLET_KIND kind){
 	num_bullet--;
 
 	//描画
-	auto bullet = make_shared<CBullet>(focus_x+50 , focus_y+50, 0, BULLET_KIND::BULLET_NOMAL);
+	auto bullet = make_shared<CBullet>(focus_x-30 , focus_y-30, 0, BULLET_KIND::BULLET_NOMAL);
 	CObject::register_object(bullet);
 
 	
@@ -101,26 +102,34 @@ void CMytank::gen_bullet(BULLET_KIND kind){
 
 void CMytank::check_focus(){
 	
-	if((id != 0) && (enemy0->get_x() < focus_x && enemy0->get_x() + ENEMY_WIDTH > focus_x + FOCUS_WIDTH && enemy0->get_y() < focus_y && enemy0->get_y() + ENEMY_WIDTH > focus_y + FOCUS_WIDTH)){
-		if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
-			enemy0->lockon = true;
-		}
-	}else enemy0->lockon = false;
-	if((id != 1) && (enemy1->get_x() < focus_x && enemy1->get_x() + ENEMY_WIDTH > focus_x + FOCUS_WIDTH && enemy1->get_y() < focus_y && enemy1->get_y() + ENEMY_WIDTH > focus_y + FOCUS_WIDTH)){
-		if(enemy1->exist){
-			enemy1->lockon = true;
-		}
-	}else enemy1->lockon = false;
-	if((id != 2) && (enemy2->get_x() < focus_x && enemy2->get_x() + ENEMY_WIDTH > focus_x + FOCUS_WIDTH && enemy2->get_y() < focus_y && enemy2->get_y() + ENEMY_WIDTH > focus_y + FOCUS_WIDTH)){
-		if(enemy2->exist){
-			enemy2->lockon = true;
-		}
-	}else enemy2->lockon = false;
-	if((id != 3) && (enemy3->get_x() < focus_x && enemy3->get_x() + ENEMY_WIDTH > focus_x + FOCUS_WIDTH && enemy3->get_y() < focus_y && enemy3->get_y() + ENEMY_WIDTH > focus_y + FOCUS_WIDTH)){
-		if(enemy3->exist){
-			enemy3->lockon = true;
-		}
-	}else enemy3->lockon = true;
+	if(id != 0){
+		if(enemy0->get_x() - MARGIN1 < focus_x && enemy0->get_x() + MARGIN2 > focus_x && enemy0->get_y() -MARGIN1 < focus_y && enemy0->get_y() + MARGIN2 > focus_y){
+			if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
+				enemy0->lockon = true;
+			}
+		}else enemy0->lockon = false;
+	}
+	if(id != 1){
+		if(enemy1->get_x() - MARGIN1 < focus_x && enemy1->get_x() + MARGIN2 > focus_x && enemy1->get_y() -MARGIN1 < focus_y && enemy1->get_y() + MARGIN2 > focus_y){
+			if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
+				enemy1->lockon = true;
+			}
+		}else enemy1->lockon = false;
+	}
+	if(id != 2){
+		if(enemy2->get_x() - MARGIN1 < focus_x && enemy2->get_x() + MARGIN2 > focus_x && enemy2->get_y() -MARGIN1 < focus_y && enemy2->get_y() + MARGIN2 > focus_y){
+			if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
+				enemy2->lockon = true;
+			}
+		}else enemy2->lockon = false;
+	}
+	if(id != 3){
+		if(enemy3->get_x() - MARGIN1 < focus_x && enemy3->get_x() + MARGIN2 > focus_x && enemy3->get_y() -MARGIN1 < focus_y && enemy3->get_y() + MARGIN2 > focus_y){
+			if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
+				enemy3->lockon = true;
+			}
+		}else enemy3->lockon = false;
+	}
 
 }
 

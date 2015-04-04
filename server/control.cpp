@@ -4,6 +4,9 @@
 
 #include "control.h"
 #include <sstream>
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
 
 //メッセージを受け取った際に呼ばれる関数
 //実装の加減でこの関数のみファイル分けしてます
@@ -57,10 +60,10 @@ void recv_message(string msg, int id) {
     /* commandによる処理分岐 */
     // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
     if ("" != str[3]) {
-    int command_name = std::stoi(str[0]);
-    int player_from = std::stoi(str[1]);
-    int player_to = std::stoi(str[2]);
-    int kind = std::stoi(str[3]);
+    int command_name = atoi(str[0].c_str());
+    int player_from = atoi(str[1].c_str());
+    int player_to = atoi(str[2].c_str());
+    int kind = atoi(str[3].c_str());
         std::ostringstream stream;
         switch (command_name) {
             case COMMAND_NAME::USE_ITEM:

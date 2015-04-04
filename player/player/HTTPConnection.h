@@ -14,4 +14,4 @@
  */
 #include "tstring.h"
 //HTTP’ÊM—pŠÖ”
-bool HttpRequest(tstring strUrl, bool isMethodGet, tstring parameter, tstring& rstrResult);
+bool HttpRequest(tstring strUrl, bool isMethodGet, tstring speed, tstring& rstrResult);

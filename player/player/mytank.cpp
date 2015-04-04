@@ -89,7 +89,7 @@ void CMytank::gen_bullet(BULLET_KIND kind){
 	num_bullet--;
 
 	//描画
-	auto bullet = make_shared<CBullet>(focus_x-30 , focus_y-30, 0, BULLET_KIND::BULLET_NOMAL);
+	auto bullet = make_shared<CBullet>(focus_x-50 , focus_y-50, 0, BULLET_KIND::BULLET_NOMAL);
 	CObject::register_object(bullet);
 
 	

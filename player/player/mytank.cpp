@@ -173,8 +173,8 @@ void CMytank::get_msg(){
 		case COMMAND_NAME::RETURN_BULLET:
 			{
 			//player:player_fromがplayer:player_toにbullet:kindを攻撃
-			auto popup = make_shared<CPopup>(300,300,"RETURN"+msg);
-			CObject::register_object(popup);
+			//auto popup = make_shared<CPopup>(300,300,"RETURN"+msg);
+			//CObject::register_object(popup);
 			
 			if(kind == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
 

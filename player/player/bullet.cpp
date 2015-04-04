@@ -11,7 +11,7 @@ CBullet::CBullet(int x_, int y_, int z_, BULLET_KIND kind_){
 
 bool CBullet::draw(){
 	// 動作確認用 文字出力
-	DrawFormatString(0, 20, GetColor(255,255,255), "bullet:%d", draw_timer);
+	//DrawFormatString(0, 20, GetColor(255,255,255), "bullet:%d", draw_timer);
 
 	//描画開始と同時に音声発生
 	if(draw_timer==0) PlaySoundMem( sound_id["S_TEST"] , DX_PLAYTYPE_BACK ) ;

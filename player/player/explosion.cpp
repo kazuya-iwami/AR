@@ -10,7 +10,7 @@ CExplosion::CExplosion(int x_,int y_,EXPLOSION_KIND kind_){
 bool CExplosion::draw(){
 	
 	// 動作確認用 文字出力
-	DrawFormatString(0, 10, GetColor(255,255,255), "explosion:%d", draw_timer);
+	//DrawFormatString(0, 10, GetColor(255,255,255), "explosion:%d", draw_timer);
 
 	switch(kind){
 	case EXPLOSION_KIND::EXPLOSION_NOMAL :

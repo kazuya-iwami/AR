@@ -26,10 +26,10 @@ bool CEnemy::draw(){
 	if(visible){//‹ŠE‚É“ü‚Á‚Ä‚¢‚é‚È‚ç
 		if(!lockon){
 			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
-		}else DrawFormatString(x-50 ,y-80, GetColor(255,255,255), "TRUE");
+		}else
 		DrawGraph(x - 100,y - 130,figure_id["F_DETECT"],true);//‰æ–Êˆø‚«‰„‚Î‚µ‚Ä‚é•ª‚Ì•â³
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-		DrawFormatString(x - 50 ,y - 100, GetColor(255,255,255), "%dP", enemy_id);
+		DrawFormatString(x - 50 ,y , GetColor(255,255,255), "%dP", enemy_id);
 	}
 
 

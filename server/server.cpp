@@ -73,6 +73,7 @@ int main() {
         retval = select(maxfd, &mask, NULL, NULL, &tm);
         if (retval < 0) Err("select");
         for (int i = 0; i < PORT_NUM; i++) {
+            if(!player_param[i].exist)continue;
             if (FD_ISSET(nsockfd[i], &mask)) {
 
                 n = read(nsockfd[i], buf, BUFMAX);

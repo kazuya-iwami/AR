@@ -26,7 +26,7 @@ void CObject::load(){
 
 	//上の効果音版
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");
-
+	sound_id["BOMB_TEST"]=LoadSoundMem("sound/bomb1.mp3");
 
 	// explosion
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード

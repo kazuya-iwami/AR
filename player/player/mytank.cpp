@@ -141,6 +141,59 @@ void CMytank::use_item(){
 	}
 }
 
+//君だけのオリジナル画面振動を実装しよう！
+int CMytank::shake(int n){
+	switch(n){
+	case 10:
+		PlaySoundMem( sound_id["BOMB_TEST"] , DX_PLAYTYPE_BACK ) ;
+		shake_x=100;
+		shake_y=50;
+		break;
+	case 9:
+		shake_x=-100;
+		shake_y=-50;
+		break;
+	case 8:
+		shake_x=80;
+		shake_y=40;
+		break;
+	case 7:
+		shake_x=-80;
+		shake_y=-40;
+		break;
+	case 6:
+		shake_x=60;
+		shake_y=30;
+		break;
+	case 5:
+		shake_x=-60;
+		shake_y=-30;
+		break;
+	case 4:
+		shake_x=40;
+		shake_y=20;
+		break;
+	case 3:
+		shake_x=-40;
+		shake_y=-20;
+		break;
+	case 2:
+		shake_x=20;
+		shake_y=10;
+		break;
+	case 1:
+		shake_x=-20;
+		shake_y=-10;
+		break;
+	case 0:
+		shake_x=shake_y=0;
+		break;
+	default:
+		break;
+	}
+	return 1;
+}
+
 void CMytank::get_msg(){
 	string msg = check_msg();
 

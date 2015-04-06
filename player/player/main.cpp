@@ -98,6 +98,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	CObject::register_object(mytank);
 	CObject::register_object(system_timer);
+	mytank->shake_x=0;
+	mytank->shake_y=0;
+
+	int shaketimer=10;
+	bool shakeflag=false;
 
 	float bullet_z = 0.0;
 	// メインループ
@@ -122,7 +127,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		int GHandle = LoadGraph( "out.jpeg" ) ;
 
 		// 読みこんだグラフィックを拡大描画
-		DrawExtendGraph( 0 , 0 , 1000  , 750 , GHandle , TRUE ) ;
+		DrawExtendGraph( mytank->shake_x , mytank->shake_y, 1000+mytank->shake_x  , 750+mytank->shake_y , GHandle , TRUE ) ;
 
 
 		//描画
@@ -242,6 +247,20 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			mytank->focus_y +=  FOCUS_SPEED;
 		}
 
+		//テスト用　とりあえずX押したら画面が振動するよ
+		if(shakeflag==true || (key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0)){
+			mytank->shake(shaketimer);
+			mytank->focus_x+=mytank->shake_x;
+			mytank->focus_y+=mytank->shake_y;
+			shakeflag=true;
+			shaketimer--;
+			if(shaketimer==0){
+				shaketimer=10;
+				shakeflag=false;
+				mytank->shake_x=0;
+				mytank->shake_y=0;
+			}
+		}
 
 		fps.Update();//1サイクルごとの速度を測定
 		if(  key_buf[ KEY_INPUT_F ] == 1 ){

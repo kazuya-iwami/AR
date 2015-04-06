@@ -40,25 +40,25 @@ CMytank::CMytank(){
 	if(id != 0){
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
-		enemy0->init(80,180,100,200,100,200);
+		enemy0->init(137,180,100,255,56,184);//スマホの赤
 		CObject::register_object(enemy1);
 	}
 	if(id != 1){
 		auto enemy1_ = make_shared<CEnemy>(1);
 		enemy1 = enemy1_;
-		enemy1->init(80,180,100,200,100,200);
+		enemy1->init(70,93,65,255,56,184);//サボテンだー
 		CObject::register_object(enemy1);
 	}
 	if(id != 2){
 		auto enemy2_ = make_shared<CEnemy>(2);
 		enemy2 = enemy2_;
-		enemy2->init(0,30,100,200,100,200);
+		enemy2->init(0,0,100,200,100,200);
 		CObject::register_object(enemy2);
 	}
 	if(id != 3){
 		auto enemy3_ = make_shared<CEnemy>(3);
 		enemy3 = enemy3_;
-		enemy3->init(30,80,100,200,100,200);
+		enemy3->init(30,30,100,200,100,200);
 		CObject::register_object(enemy3);
 	}
 };

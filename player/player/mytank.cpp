@@ -41,7 +41,7 @@ CMytank::CMytank(){
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
 		enemy0->init(137,180,100,255,56,184);//スマホの赤
-		CObject::register_object(enemy1);
+		CObject::register_object(enemy0);
 	}
 	if(id != 1){
 		auto enemy1_ = make_shared<CEnemy>(1);

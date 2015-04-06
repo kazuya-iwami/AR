@@ -133,8 +133,11 @@ void CMytank::check_focus(){
 void CMytank::use_item(){
 	if (item_kind != ITEM_KIND::ITEM_NONE) {
 		send_msg(encode(COMMAND_NAME::USE_ITEM, id, 4, (int)item_kind));
-		auto item = make_shared<CItem>(530 , 50, item_kind);
+		
+		auto item = make_shared<CItem>(200 , 200, item_kind);
     	CObject::register_object(item);
+		
+		item_kind = ITEM_KIND::ITEM_NONE;
 	}
 }
 

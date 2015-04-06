@@ -53,12 +53,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//ラズパイが現在10fpsで画像配信してるので別スレッド（非同期）で画像取得することにする予定
 	//CG描画は30fpsの予定
 
-	if(!vcap.open(1)){//デフォルトのカメラを取得はこちら
+	if(!vcap.open(0)){//デフォルトのカメラを取得はこちら
 	//if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
 		std::cout << "Error opening video stream or file" << std::endl;
 		return -1;
 	}
-	vcap.set(CV_CAP_PROP_FPS,10);
+	//vcap.set(CV_CAP_PROP_FPS,10);
 	vcap.set(CV_CAP_PROP_FRAME_WIDTH,320);
 	vcap.set(CV_CAP_PROP_FRAME_HEIGHT,240);
 
@@ -107,7 +107,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		ClearDrawScreen() ;
 
 		//静止画をopenCVで取得
-		//image = imread("out.jpeg");
+		image = imread("out.jpeg");
 		if(!vcap.read(image)) {
 			std::cout << "No frame" << std::endl;
 			cv::waitKey();

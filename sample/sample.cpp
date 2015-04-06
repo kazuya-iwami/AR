@@ -125,16 +125,16 @@ int main(int argc, char *argv[]) {
 
     Mat image;
 
-    VideoCapture cap(1); // デフォルトカメラをオープン
+    VideoCapture cap(0); // デフォルトカメラをオープン
     if(!cap.isOpened())  // 成功したかどうかをチェック
         return -1;
 
-    int lowerH = 80;
-    int upperH = 160;
-    int lowerS = 100;
-    int upperS = 200;
-    int lowerV = 100;
-    int upperV = 200;
+    int lowerH = 0;
+    int upperH = 180;
+    int lowerS = 0;
+    int upperS = 255;
+    int lowerV = 0;
+    int upperV = 255;
     obj.init(lowerH, upperH, lowerS, upperS, lowerV, upperV);
     namedWindow("Captured Image", WINDOW_NORMAL);
 

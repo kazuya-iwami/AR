@@ -58,7 +58,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		std::cout << "Error opening video stream or file" << std::endl;
 		return -1;
 	}
-	//vcap.set(CV_CAP_PROP_FPS,10);
+	vcap.set(CV_CAP_PROP_FPS,10);
 	vcap.set(CV_CAP_PROP_FRAME_WIDTH,320);
 	vcap.set(CV_CAP_PROP_FRAME_HEIGHT,240);
 
@@ -107,7 +107,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		ClearDrawScreen() ;
 
 		//静止画をopenCVで取得
-		image = imread("out.jpeg");
+		//image = imread("out.jpeg");
 		if(!vcap.read(image)) {
 			std::cout << "No frame" << std::endl;
 			cv::waitKey();

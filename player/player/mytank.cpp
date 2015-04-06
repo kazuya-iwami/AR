@@ -4,8 +4,7 @@
 #include "debug.h"
 #include "item.h"
 
-#define MARGIN1 150
-#define MARGIN2 50
+#define ENEMY_MARGIN 100
 
 bool CMytank::draw(){
 
@@ -17,14 +16,14 @@ bool CMytank::draw(){
 	DrawGraph(0,0,figure_id["F_FRAME"],true);
 
 	//カーソル表示
-	DrawGraph(focus_x,focus_y,figure_id["F_CURSUR"],true);
+	DrawGraph(focus_x-64,focus_y-64,figure_id["F_CURSUR"],true);
 
 	return true;
 };
 
 CMytank::CMytank(){
 	//初期化
-	score = 0;
+	score = 10;
 	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
 	ope_timer = 0;
@@ -87,7 +86,7 @@ void CMytank::gen_bullet(BULLET_KIND kind){
 	num_bullet--;
 
 	//描画
-	auto bullet = make_shared<CBullet>(focus_x-50 , focus_y-50, 0, BULLET_KIND::BULLET_NOMAL);
+	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);
 	CObject::register_object(bullet);
 
 	
@@ -101,28 +100,28 @@ void CMytank::gen_bullet(BULLET_KIND kind){
 void CMytank::check_focus(){
 	
 	if(id != 0){
-		if(enemy0->get_x() - MARGIN1 < focus_x && enemy0->get_x() + MARGIN2 > focus_x && enemy0->get_y() -MARGIN1 < focus_y && enemy0->get_y() + MARGIN2 > focus_y){
+		if(enemy0->get_x() - ENEMY_MARGIN < focus_x && enemy0->get_x() + ENEMY_MARGIN > focus_x && enemy0->get_y() -ENEMY_MARGIN < focus_y && enemy0->get_y() + ENEMY_MARGIN > focus_y){
 			if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 				enemy0->lockon = true;
 			}
 		}else enemy0->lockon = false;
 	}
 	if(id != 1){
-		if(enemy1->get_x() - MARGIN1 < focus_x && enemy1->get_x() + MARGIN2 > focus_x && enemy1->get_y() -MARGIN1 < focus_y && enemy1->get_y() + MARGIN2 > focus_y){
+		if(enemy1->get_x() - ENEMY_MARGIN < focus_x && enemy1->get_x() + ENEMY_MARGIN > focus_x && enemy1->get_y() -ENEMY_MARGIN < focus_y && enemy1->get_y() + ENEMY_MARGIN > focus_y){
 			if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 				enemy1->lockon = true;
 			}
 		}else enemy1->lockon = false;
 	}
 	if(id != 2){
-		if(enemy2->get_x() - MARGIN1 < focus_x && enemy2->get_x() + MARGIN2 > focus_x && enemy2->get_y() -MARGIN1 < focus_y && enemy2->get_y() + MARGIN2 > focus_y){
+		if(enemy2->get_x() - ENEMY_MARGIN < focus_x && enemy2->get_x() + ENEMY_MARGIN > focus_x && enemy2->get_y() -ENEMY_MARGIN < focus_y && enemy2->get_y() + ENEMY_MARGIN > focus_y){
 			if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 				enemy2->lockon = true;
 			}
 		}else enemy2->lockon = false;
 	}
 	if(id != 3){
-		if(enemy3->get_x() - MARGIN1 < focus_x && enemy3->get_x() + MARGIN2 > focus_x && enemy3->get_y() -MARGIN1 < focus_y && enemy3->get_y() + MARGIN2 > focus_y){
+		if(enemy3->get_x() - ENEMY_MARGIN < focus_x && enemy3->get_x() + ENEMY_MARGIN > focus_x && enemy3->get_y() -ENEMY_MARGIN < focus_y && enemy3->get_y() + ENEMY_MARGIN > focus_y){
 			if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 				enemy3->lockon = true;
 			}
@@ -185,23 +184,23 @@ void CMytank::get_msg(){
 					switch(player_to){
 					case 1:
 						if(id != 1){//攻撃先が他人
-							enemy1->score -= bullet_score;
+							enemy1->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					case 2:
 						if(id != 2){//攻撃先が他人
-							enemy2->score -= bullet_score;
+							enemy2->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					case 3:
 						if(id != 3){//攻撃先が他人
-							enemy3->score -= bullet_score;
+							enemy3->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					}
@@ -209,13 +208,13 @@ void CMytank::get_msg(){
 					score += bullet_score;
 					switch(player_to){
 					case 1:
-						enemy1->score -= bullet_score;
+						enemy1->attacked(bullet_score);
 						break;
 					case 2:
-						enemy2->score -= bullet_score;
+						enemy2->attacked(bullet_score);
 						break;
 					case 3:
-						enemy3->score -= bullet_score;
+						enemy3->attacked(bullet_score);
 						break;
 					}
 				}
@@ -227,23 +226,23 @@ void CMytank::get_msg(){
 					switch(player_to){
 					case 0:
 						if(id != 0){//攻撃先が他人
-							enemy0->score -= bullet_score;
+							enemy0->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					case 2:
 						if(id != 2){//攻撃先が他人
-							enemy2->score -= bullet_score;
+							enemy2->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					case 3:
 						if(id != 3){//攻撃先が他人
-							enemy3->score -= bullet_score;
+							enemy3->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					}
@@ -251,13 +250,13 @@ void CMytank::get_msg(){
 					score += bullet_score;
 					switch(player_to){
 					case 0:
-						enemy0->score -= bullet_score;
+						enemy0->attacked(bullet_score);
 						break;
 					case 2:
-						enemy2->score -= bullet_score;
+						enemy2->attacked(bullet_score);
 						break;
 					case 3:
-						enemy3->score -= bullet_score;
+						enemy3->attacked(bullet_score);
 						break;
 					}
 				}
@@ -269,23 +268,23 @@ void CMytank::get_msg(){
 					switch(player_to){
 					case 1:
 						if(id != 1){//攻撃先が他人
-							enemy1->score -= bullet_score;
+							enemy1->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					case 0:
 						if(id != 0){//攻撃先が他人
-							enemy0->score -= bullet_score;
+							enemy0->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					case 3:
 						if(id != 3){//攻撃先が他人
-							enemy3->score -= bullet_score;
+							enemy3->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					}
@@ -293,13 +292,13 @@ void CMytank::get_msg(){
 					score += bullet_score;
 					switch(player_to){
 					case 1:
-						enemy1->score -= bullet_score;
+						enemy1->attacked(bullet_score);
 						break;
 					case 0:
-						enemy0->score -= bullet_score;
+						enemy0->attacked(bullet_score);
 						break;
 					case 3:
-						enemy3->score -= bullet_score;
+						enemy3->attacked(bullet_score);
 						break;
 					}
 				}
@@ -310,23 +309,23 @@ void CMytank::get_msg(){
 					switch(player_to){
 					case 1:
 						if(id != 1){//攻撃先が他人
-							enemy1->score -= bullet_score;
+							enemy1->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					case 2:
 						if(id != 2){//攻撃先が他人
-							enemy2->score -= bullet_score;
+							enemy2->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					case 0:
 						if(id != 0){//攻撃先が他人
-							enemy0->score -= bullet_score;
+							enemy0->attacked(bullet_score);
 						}else{//攻撃先が自分
-							score -= bullet_score;
+							attacked(bullet_score);
 						}
 						break;
 					}
@@ -334,13 +333,13 @@ void CMytank::get_msg(){
 					score += bullet_score;
 					switch(player_to){
 					case 1:
-						enemy1->score -= bullet_score;
+						enemy1->attacked(bullet_score);
 						break;
 					case 2:
-						enemy2->score -= bullet_score;
+						enemy2->attacked(bullet_score);
 						break;
 					case 0:
-						enemy0->score -= bullet_score;
+						enemy0->attacked(bullet_score);
 						break;
 					}
 				}
@@ -425,3 +424,7 @@ void CMytank::detect_enemy(Mat image){
 	if(id != 3)enemy3->detect(image);
 	
 }
+
+void CMytank::attacked(int score_){
+	score += score_;
+};

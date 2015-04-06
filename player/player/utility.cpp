@@ -48,3 +48,9 @@ CEnemy::CEnemy(int enemy_id_){
 void CEnemy::disconnect(){
 	exist = false;
 }
+
+void CEnemy::attacked(int score_){
+	score += score_;
+	auto explosion = make_shared<CExplosion>(x , y, EXPLOSION_KIND::EXPLOSION_NOMAL);
+    CObject::register_object(explosion);
+}

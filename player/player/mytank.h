@@ -51,4 +51,5 @@ public:
 	void use_item(); // item生成関数
 	void detect_enemy(Mat image);
 	void check_focus();
+	void attacked(int score_);
 };

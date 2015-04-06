@@ -2,6 +2,7 @@
 #pragma once
 #include "object.h"
 #include "image_processing.h"
+#include "explosion.h"
 
 //細かいクラスはここにかき集めている
 
@@ -27,5 +28,6 @@ public:
 	int get_y(){return y;}
 	bool draw();
 	void disconnect();
+	void attacked(int score_);
 };
 

@@ -1,4 +1,3 @@
-﻿
 ﻿#include "mytank.h"
 #include <sstream>
 #include "debug.h"
@@ -410,6 +409,7 @@ void CMytank::get_msg() {
 		default:
 			break;
 		}
+		}	
 	}
 }
 /* commandによる処理分岐ここまで */

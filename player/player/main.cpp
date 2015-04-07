@@ -22,6 +22,9 @@ using namespace std;
 #define FOCUS_SPEED 8
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ){
+
+
+
 	cv::VideoCapture vcap;
 	cv::Mat image;
 
@@ -40,6 +43,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
+	auto redback=make_shared<CEffect>();
 
 	//キーボード用
 	char key_buf [ 256 ] ;
@@ -71,7 +75,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//文字サイズ
 	SetFontSize( 60 ) ;                             //サイズを20に変更
     SetFontThickness( 8 ) ;                         //太さを8に変更
-    ChangeFont( "ＭＳ 明朝" ) ;                     //種類をMS明朝に変更
+    ChangeFont("07ロゴたいぷゴシック7");              //種類をMS明朝に変更
     ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE );//アンチエイリアス＆エッジ付きフォントに変更
 
 	// ＤＸライブラリ初期化処理
@@ -100,9 +104,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CObject::register_object(system_timer);
 	mytank->shake_x=0;
 	mytank->shake_y=0;
-
-	int shaketimer=10;
-	bool shakeflag=false;
 
 	float bullet_z = 0.0;
 	// メインループ
@@ -247,15 +248,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		}
 
 		//テスト用　とりあえずX押したら画面が振動するよ
-		if(shakeflag==true || (key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0)){
-			mytank->shake(shaketimer);
+		if(mytank->shakeflag==true || (key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0)){
+			mytank->shake(mytank->shaketimer);
 			mytank->focus_x+=mytank->shake_x;
 			mytank->focus_y+=mytank->shake_y;
-			shakeflag=true;
-			shaketimer--;
-			if(shaketimer==0){
-				shaketimer=10;
-				shakeflag=false;
+			redback->shaketiemr=mytank->shaketimer;
+			if(mytank->shaketimer==0){				
 				mytank->shake_x=0;
 				mytank->shake_y=0;
 			}

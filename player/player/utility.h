@@ -21,6 +21,8 @@ public:
 	int score;
 	bool exist;
 	bool lockon;
+	int map_x;
+	int map_y;
 
 	CEnemy(int enemy_id_);
 	int get_x(){return x;}

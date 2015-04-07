@@ -33,7 +33,7 @@ CMytank::CMytank() {
 	focus_x = 200;
 	focus_y = 200;
 	game_status = GAME_STATUS::GAME_PLAY;
-	item_kind = ITEM_KIND::STAR; //スターを持たせる
+	item_data[3] = ITEM_KIND::STAR; //スターを持たせる
 
 	send_msg("HELLO");
 
@@ -80,7 +80,7 @@ void CMytank::set_vel(int vr, int vl) {
 	vel_L = vl;
 }
 
-void CMytank::gen_bullet(BULLET_KIND kind) {
+void CMytank::gen_bullet(BULLET_KIND data[3]) {
 
 	//残弾処理
 	if (num_bullet == 0)return;
@@ -132,9 +132,9 @@ void CMytank::check_focus() {
 }
 
 void CMytank::use_item() {
-	if (item_kind != ITEM_KIND::ITEM_NONE) {
-		send_msg(encode(COMMAND_NAME::USE_ITEM, id, 4, (int)item_kind));
-		auto item = make_shared<CItem>(530 , 50, item_kind);
+	if (item_data[3] != ITEM_KIND::ITEM_NONE) {
+		send_msg(encode(COMMAND_NAME::USE_ITEM, id, 4, (int)item_data[3]));
+		auto item = make_shared<CItem>(530 , 50, item_data[3]);
 		CObject::register_object(item);
 	}
 }
@@ -145,19 +145,20 @@ void CMytank::get_msg() {
 	int bullet_score = 0; //bulletによっていくつスコアが上昇するかをscoreに格納
 
 	/* メッセージが送られてきた際の処理 */
-	std::string str[4];
+	std::string str[10];
+	int data[10];
 	decode(msg.c_str(), str);
 	/* commandによる処理分岐 */
 	// メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
 	if ("" != str[3]) {
 		int command_name = std::stoi(str[0]);
-		int player_from = std::stoi(str[1]);
-		int player_to = std::stoi(str[2]);
-		int kind = std::stoi(str[3]);
+		for (int i = 0; i < 10; ++i) {
+			data[i] = std::stoi(str[i]);
+		}
 		std::ostringstream stream;
 		switch (command_name) {
 		case COMMAND_NAME::CHANGE_STATUS:
-			switch (player_from) {
+			switch (data[1]) {
 			case GAME_STATUS::GAME_PLAY:
 				game_status = GAME_STATUS::GAME_PLAY;
 				break;
@@ -168,15 +169,15 @@ void CMytank::get_msg() {
 				break;
 				break;
 			}
-		//game_status:player_fromに変更
+		//game_status:data[1]に変更
 		case COMMAND_NAME::RETURN_BULLET:
-			if (kind == BULLET_KIND::BULLET_NOMAL) bullet_score = 1;
+			if (data[3] == BULLET_KIND::BULLET_NOMAL) bullet_score = 1;
 
-			switch (player_from) {
+			switch (data[1]) {
 			case 0:
 				if id != 0) { //他人の攻撃
 				enemy0->score += bullet_score;
-				switch (player_to) {
+				switch (data[2]) {
 					case 1:
 						if (id != 1) {//攻撃先が他人
 							enemy1->score -= bullet_score;
@@ -201,7 +202,7 @@ void CMytank::get_msg() {
 					}
 				} else { //自分が攻撃 攻撃先はすべて敵
 					score += bullet_score;
-					switch (player_to) {
+					switch (data[2]) {
 					case 1:
 						enemy1->score -= bullet_score;
 						break;
@@ -218,7 +219,7 @@ void CMytank::get_msg() {
 			case 1:
 					if (id != 1) { //他人の攻撃
 					enemy1->score += bullet_score;
-					switch (player_to) {
+					switch (data[2]) {
 						case 0:
 							if (id != 0) {//攻撃先が他人
 								enemy0->score -= bullet_score;
@@ -243,7 +244,7 @@ void CMytank::get_msg() {
 						}
 					} else { //自分が攻撃 攻撃先はすべて敵
 						score += bullet_score;
-						switch (player_to) {
+						switch (data[2]) {
 						case 0:
 							enemy0->score -= bullet_score;
 							break;
@@ -260,7 +261,7 @@ void CMytank::get_msg() {
 			case 2:
 					if (id != 2) { //他人の攻撃
 					enemy2->score += bullet_score;
-					switch (player_to) {
+					switch (data[2]) {
 						case 1:
 							if (id != 1) {//攻撃先が他人
 								enemy1->score -= bullet_score;
@@ -285,7 +286,7 @@ void CMytank::get_msg() {
 						}
 					} else { //自分が攻撃 攻撃先はすべて敵
 						score += bullet_score;
-						switch (player_to) {
+						switch (data[2]) {
 						case 1:
 							enemy1->score -= bullet_score;
 							break;
@@ -301,7 +302,7 @@ void CMytank::get_msg() {
 			case 3:
 					if (id != 3) { //他人の攻撃
 					enemy3->score += bullet_score;
-					switch (player_to) {
+					switch (data[2]) {
 						case 1:
 							if (id != 1) { //攻撃先が他人
 								enemy1->score -= bullet_score;
@@ -326,7 +327,7 @@ void CMytank::get_msg() {
 						}
 					} else { //自分が攻撃 攻撃先はすべて敵
 						score += bullet_score;
-						switch (player_to) {
+						switch (data[2]) {
 						case 1:
 							enemy1->score -= bullet_score;
 							break;
@@ -343,7 +344,7 @@ void CMytank::get_msg() {
 			break;
 		}
 		case COMMAND_NAME::DISCONNECT://敵が切断した場合
-			switch (player_from) { //自分のidを受け取ることはない前提
+			switch (data[1]) { //自分のidを受け取ることはない前提
 			case 0:
 				enemy0->disconnect();
 				break;
@@ -359,12 +360,12 @@ void CMytank::get_msg() {
 			}
 			break;
 		case COMMAND_NAME::INFORM_ITEM:
-			switch (kind) { //アイテムの種類で場合分け
+			switch (data[3]) { //アイテムの種類で場合分け
 			case ITEM_KIND::ITEM_NONE:
 				break;
 			case ITEM_KIND::STAR:
-				if (player_from != id) { //アイテム使用者が自分でなければ
-					switch (player_from) {//アイテム被使用者にPopUP表示
+				if (data[1] != id) { //アイテム使用者が自分でなければ
+					switch (data[1]) {//アイテム被使用者にPopUP表示
 					case 0:
 						auto popup = make_shared<CPopup>(enemy0->get_x(), enemy0->get_y(), "スター使った☆");
 						CObject::register_object(popup);
@@ -388,8 +389,18 @@ void CMytank::get_msg() {
 				break;
 			}
 			break;
-			default:
-				break;
+		case COMMAND_NAME::UPDATE_LOCATIONS:
+			enemy0->map_x = data[1];
+			enemy0->map_y = data[2];
+			enemy1->map_x = data[3];
+			enemy1->map_y = data[4];
+			enemy2->map_x = data[5];
+			enemy2->map_y = data[6];
+			enemy3->map_x = data[7];
+			enemy3->map_y = data[8];
+			break;
+		default:
+			break;
 	}
 }
 /* commandによる処理分岐ここまで */

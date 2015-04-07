@@ -29,13 +29,14 @@ class CMytank : public CObject,public CNetwork {
 	OPERATION_STATUS ope_status; //操作用ステータス
 	int ope_timer; //操作用タイマー
 	int vel_R,vel_L; //左右のタイヤの速度
-	
+
 
 	GAME_STATUS game_status;
 
 	
 public:
-
+	int shaketimer;
+	bool shakeflag;
 	int focus_x,focus_y;//照準の位置
 	int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
 	shared_ptr<CEnemy> enemy0;

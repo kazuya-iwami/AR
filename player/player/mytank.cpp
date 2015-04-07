@@ -3,14 +3,16 @@
 #include <sstream>
 #include "debug.h"
 #include "item.h"
+#include<stdio.h>
+#include<stdlib.h>
 
 #define ENEMY_MARGIN 100
 
 bool CMytank::draw(){
 
 	//スコア表示
-	DrawGraph(200,650,number[score/10],true);
-	DrawGraph(260,650,number[score%10],true);
+	SetFontSize(80);
+	DrawFormatString(50,600,GetColor(255,122,0),"Score:%d",score);
 
 	//アイテム枠表示
 	DrawGraph(0,0,figure_id["F_FRAME"],true);
@@ -23,7 +25,7 @@ bool CMytank::draw(){
 
 CMytank::CMytank(){
 	//初期化
-	score = 10;
+	score = 20;
 	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
 	ope_timer = 0;
@@ -33,6 +35,8 @@ CMytank::CMytank(){
 	focus_y = 200;
 	game_status=GAME_STATUS::GAME_PLAY;
 	item_kind = ITEM_KIND::STAR; //スターを持たせる
+	shaketimer=10;
+	shakeflag=false;
 
 	send_msg("HELLO");
 
@@ -143,9 +147,18 @@ void CMytank::use_item(){
 
 //君だけのオリジナル画面振動を実装しよう！
 int CMytank::shake(int n){
+	shakeflag=true;
+	shake_x=(rand()%40-20)*n;
+	shake_y=(rand()%40-20)*n;
+	if(n==0){
+		shaketimer=11;
+		shakeflag=false;
+	}
+	/*
 	switch(n){
 	case 10:
-		PlaySoundMem( sound_id["BOMB_TEST"] , DX_PLAYTYPE_BACK ) ;
+		shakeflag=true;
+		PlaySoundMem( sound_id["S_BOMB"] , DX_PLAYTYPE_BACK ) ;
 		shake_x=100;
 		shake_y=50;
 		break;
@@ -187,10 +200,13 @@ int CMytank::shake(int n){
 		break;
 	case 0:
 		shake_x=shake_y=0;
+		shaketimer=11;
+		shakeflag=false;
 		break;
 	default:
 		break;
-	}
+	}*/
+	shaketimer--;
 	return 1;
 }
 

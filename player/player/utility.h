@@ -10,6 +10,7 @@
 class CSystem_timer : public CObject {
 
 public:
+	int handle;
 	CSystem_timer(int x_,int y_);
 	bool draw();
 };
@@ -31,3 +32,9 @@ public:
 	void attacked(int score_);
 };
 
+//画面効果クラス
+class CEffect:public CObject{
+public:
+	int shaketiemr;
+	bool draw();
+};

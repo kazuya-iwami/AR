@@ -64,7 +64,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 
 	// ウインドウモードで起動
-	SetMainWindowText( "リアルマリオカート" ) ;
+	SetMainWindowText( "Real Tank Battle -４機の戦車が集いし時、現実と仮想空間が交差する-" ) ;
 	ChangeWindowMode( TRUE ) ;//falseならフルスクリーン
 	SetGraphMode(1000,750,32);//画面サイズ1000×750に設定
 
@@ -107,7 +107,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	float bullet_z = 0.0;
 	// メインループ
 	while(1){
-		printf("ok\n");
 		// 画面に描かれているものを一回全部消す
 		ClearDrawScreen() ;
 

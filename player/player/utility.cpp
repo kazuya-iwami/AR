@@ -20,14 +20,14 @@ CSystem_timer::CSystem_timer(int x_,int y_){
 }
 
 bool CEnemy::draw(){
-	x=ip_x*1000/320;
+	x=ip_x*1000/320;//画面引き延ばしてる分の補正
 	y=ip_y*750/240;
 
 	if(visible){//視界に入っているなら
 		if(!lockon){
 			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
 		}else
-		DrawGraph(x - 100,y - 130,figure_id["F_DETECT"],true);//画面引き延ばしてる分の補正
+		DrawGraph(x - 100,y - 130,figure_id["F_DETECT"],true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		DrawFormatString(x - 50 ,y , GetColor(255,255,255), "%dP", enemy_id);
 	}

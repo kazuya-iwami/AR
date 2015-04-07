@@ -28,7 +28,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
 	//network初期化
-	CNetwork::network_init(0,"172.16.100.22"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
+	CNetwork::network_init(0,"157.82.7.61"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 
 	//クラスのインスタンスはスマートポインタ(std::shared_ptr)で生成します。
 	//スマートポインタの詳細はググって

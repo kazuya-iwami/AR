@@ -2,6 +2,7 @@
 #pragma once
 #include "object.h"
 #include "image_processing.h"
+#include "explosion.h"
 
 //細かいクラスはここにかき集めている
 
@@ -9,6 +10,7 @@
 class CSystem_timer : public CObject {
 
 public:
+	int handle;
 	CSystem_timer(int x_,int y_);
 	bool draw();
 };
@@ -29,11 +31,21 @@ public:
 	int get_y(){return y;}
 	bool draw();
 	void disconnect();
+	void attacked(int score_);
 };
+
 
 class CBullet_image : public CObject {
 
 public:
 	CBullet_image(int x_,int y_);
+    bool draw();
+};
+
+
+//画面効果クラス
+class CEffect:public CObject{
+public:
+	int shaketiemr;
 	bool draw();
 };

@@ -22,13 +22,16 @@ using namespace std;
 #define FOCUS_SPEED 8
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ){
+
+
+
 	cv::VideoCapture vcap;
 	cv::Mat image;
 
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
 	//network初期化
-	CNetwork::network_init(0,"172.16.100.22"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
+	CNetwork::network_init(0,"157.82.7.61"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 
 	//クラスのインスタンスはスマートポインタ(std::shared_ptr)で生成します。
 	//スマートポインタの詳細はググって
@@ -41,6 +44,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
 	auto bullet_image = make_shared<CBullet_image>(10,10);
+	auto redback=make_shared<CEffect>();
 
 	//キーボード用
 	char key_buf [ 256 ] ;
@@ -54,20 +58,25 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//ラズパイが現在10fpsで画像配信してるので別スレッド（非同期）で画像取得することにする予定
 	//CG描画は30fpsの予定
 
-	//if(!vcap.open(1)){//デフォルトのカメラを取得はこちら
+	//if(!vcap.open(0)){//デフォルトのカメラを取得はこちら
 	//if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
 	//	std::cout << "Error opening video stream or file" << std::endl;
 	//	return -1;
 	//}
+	//vcap.set(CV_CAP_PROP_FPS,10);
+	//vcap.set(CV_CAP_PROP_FRAME_WIDTH,320);
+	//vcap.set(CV_CAP_PROP_FRAME_HEIGHT,240);
+
+
 	// ウインドウモードで起動
-	SetMainWindowText( "リアルマリオカート" ) ;
+	SetMainWindowText( "Real Tank Battle -４機の戦車が集いし時、現実と仮想空間が交差する-" ) ;
 	ChangeWindowMode( TRUE ) ;//falseならフルスクリーン
 	SetGraphMode(1000,750,32);//画面サイズ1000×750に設定
 
 	//文字サイズ
 	SetFontSize( 60 ) ;                             //サイズを20に変更
     SetFontThickness( 8 ) ;                         //太さを8に変更
-    ChangeFont( "ＭＳ 明朝" ) ;                     //種類をMS明朝に変更
+    ChangeFont("07ロゴたいぷゴシック7");              //種類をMS明朝に変更
     ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE );//アンチエイリアス＆エッジ付きフォントに変更
 
 	// ＤＸライブラリ初期化処理
@@ -95,11 +104,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CObject::register_object(mytank);
 	CObject::register_object(system_timer);
 	CObject::register_object(bullet_image);
+	mytank->shake_x=0;
+	mytank->shake_y=0;
 
 	float bullet_z = 0.0;
 	// メインループ
 	while(1){
-		printf("ok\n");
 		// 画面に描かれているものを一回全部消す
 		ClearDrawScreen() ;
 
@@ -113,13 +123,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		mytank->detect_enemy(image);
 
-		//cv::imwrite("out.jpeg",image);
+		cv::imwrite("out.jpeg",image);
 
 		// DXライブラリで静止画取得 
 		int GHandle = LoadGraph( "out.jpeg" ) ;
 
 		// 読みこんだグラフィックを拡大描画
-		DrawExtendGraph( 0 , 0 , 1000  , 750 , GHandle , TRUE ) ;
+		DrawExtendGraph( mytank->shake_x , mytank->shake_y, 1000+mytank->shake_x  , 750+mytank->shake_y , GHandle , TRUE ) ;
 
 
 		//描画
@@ -239,6 +249,17 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			mytank->focus_y +=  FOCUS_SPEED;
 		}
 
+		//テスト用　とりあえずX押したら画面が振動するよ
+		if(mytank->shakeflag==true || (key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0)){
+			mytank->shake(mytank->shaketimer);
+			mytank->focus_x+=mytank->shake_x;
+			mytank->focus_y+=mytank->shake_y;
+			redback->shaketiemr=mytank->shaketimer;
+			if(mytank->shaketimer==0){				
+				mytank->shake_x=0;
+				mytank->shake_y=0;
+			}
+		}
 
 		fps.Update();//1サイクルごとの速度を測定
 		if(  key_buf[ KEY_INPUT_F ] == 1 ){

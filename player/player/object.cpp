@@ -23,10 +23,11 @@ void CObject::load(){
 	figure_id["F_FRAME"]=LoadGraph("image/frame.png");
 	figure_id["F_CURSUR"]=LoadGraph("image/cursur.png");
 	figure_id["F_BULLETNOKORI"]=LoadGraph("image/bullet_nokori.png");
+	figure_id["F_REDBACK"]=LoadGraph("image/redback.png");
 
 	//上の効果音版
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");
-
+	sound_id["S_BOMB"]=LoadSoundMem("sound/bomb1.mp3");
 
 	// explosion
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード

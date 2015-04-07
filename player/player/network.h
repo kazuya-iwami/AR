@@ -11,12 +11,12 @@
 #include "HTTPConnection.h"
 #include <sstream>
 
-enum COMMAND_NAME{
-    USE_ITEM, 
-    INFORM_ITEM,
-    SHOOT_BULLET,
-    RETURN_BULLET,
-    CHANGE_STATUS,
+enum COMMAND_NAME {
+	USE_ITEM,
+	INFORM_ITEM,
+	SHOOT_BULLET,
+	RETURN_BULLET,
+	CHANGE_STATUS,
 	DISCONNECT
 };
 
@@ -28,14 +28,14 @@ using namespace std;
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
 string decode(char const *str, string *target);
-string explode(int n,char const *y,char const *str,string *target=NULL);
+string explode(int n, char const *y, char const *str, string *target = NULL);
 string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind);
 
 //ネットワーク通信用クラス
 // check_msg()とsend_msg()をつかえれば中身見なくてもよい
 
 class CNetwork {
-	
+
 	//TCP接続用
 	static int sofd, retval;
 	static struct hostent *shost;
@@ -49,7 +49,7 @@ protected:
 	static tstring ip_address;
 
 public:
-	
+
 	static int network_init(int id_, string hostname);//初期化兼接続開始　成功したら1返す
 	string check_msg();//ループの度にこれを呼ぶ　エラーの場合は"EMPTY"返す
 	void send_msg(string msg); //メッセージをサーバーへ送信する

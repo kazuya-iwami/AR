@@ -1,5 +1,5 @@
 ﻿
-#include "mytank.h"
+﻿#include "mytank.h"
 #include <sstream>
 #include "debug.h"
 #include "item.h"
@@ -33,7 +33,7 @@ CMytank::CMytank() {
 	focus_x = 200;
 	focus_y = 200;
 	game_status = GAME_STATUS::GAME_PLAY;
-	item_data[3] = ITEM_KIND::STAR; //スターを持たせる
+	item_kind = ITEM_KIND::STAR; //スターを持たせる
 
 	send_msg("HELLO");
 
@@ -80,7 +80,7 @@ void CMytank::set_vel(int vr, int vl) {
 	vel_L = vl;
 }
 
-void CMytank::gen_bullet(BULLET_KIND data[3]) {
+void CMytank::gen_bullet(BULLET_KIND item_data) {
 
 	//残弾処理
 	if (num_bullet == 0)return;
@@ -132,9 +132,9 @@ void CMytank::check_focus() {
 }
 
 void CMytank::use_item() {
-	if (item_data[3] != ITEM_KIND::ITEM_NONE) {
-		send_msg(encode(COMMAND_NAME::USE_ITEM, id, 4, (int)item_data[3]));
-		auto item = make_shared<CItem>(530 , 50, item_data[3]);
+	if (item_kind != ITEM_KIND::ITEM_NONE) {
+		send_msg(encode(COMMAND_NAME::USE_ITEM, id, 4, (int)item_kind));
+		auto item = make_shared<CItem>(530 , 50, item_kind);
 		CObject::register_object(item);
 	}
 }
@@ -167,15 +167,15 @@ void CMytank::get_msg() {
 				break;
 			default:
 				break;
-				break;
 			}
+			break;
 		//game_status:data[1]に変更
 		case COMMAND_NAME::RETURN_BULLET:
 			if (data[3] == BULLET_KIND::BULLET_NOMAL) bullet_score = 1;
 
 			switch (data[1]) {
 			case 0:
-				if id != 0) { //他人の攻撃
+				if (id != 0) { //他人の攻撃
 				enemy0->score += bullet_score;
 				switch (data[2]) {
 					case 1:
@@ -342,7 +342,6 @@ void CMytank::get_msg() {
 				break;
 			}
 			break;
-		}
 		case COMMAND_NAME::DISCONNECT://敵が切断した場合
 			switch (data[1]) { //自分のidを受け取ることはない前提
 			case 0:
@@ -368,21 +367,29 @@ void CMytank::get_msg() {
 				if (data[1] != id) { //アイテム使用者が自分でなければ
 					switch (data[1]) {//アイテム被使用者にPopUP表示
 					case 0:
+						{
 						auto popup = make_shared<CPopup>(enemy0->get_x(), enemy0->get_y(), "スター使った☆");
 						CObject::register_object(popup);
 						break;
+						}
 					case 1:
+						{
 						auto popup = make_shared<CPopup>(enemy1->get_x(), enemy1->get_y(), "スター使った☆");
 						CObject::register_object(popup);
 						break;
+						}
 					case 2:
+						{
 						auto popup = make_shared<CPopup>(enemy2->get_x(), enemy2->get_y(), "スター使った☆");
 						CObject::register_object(popup);
 						break;
+						}
 					case 3:
+						{
 						auto popup = make_shared<CPopup>(enemy3->get_x(), enemy3->get_y(), "スター使った☆");
 						CObject::register_object(popup);
 						break;
+						}
 					}
 				}
 				break;
@@ -402,11 +409,12 @@ void CMytank::get_msg() {
 			break;
 		default:
 			break;
+		}
 	}
 }
 /* commandによる処理分岐ここまで */
 /* メッセージの処理ここまで */
-}
+
 
 
 void CMytank::detect_enemy(Mat image) {

@@ -48,3 +48,14 @@ CEnemy::CEnemy(int enemy_id_){
 void CEnemy::disconnect(){
 	exist = false;
 }
+
+
+bool CBullet_image :: draw(){
+	DrawGraph(200,0,figure_id["F_BULLETNOKORI"],true);
+	return true;
+}
+
+CBullet_image :: CBullet_image(int x_,int y_){
+	x=x_;
+	y=y_;
+}

@@ -1,4 +1,4 @@
-
+﻿
 #include "mytank.h"
 #include <sstream>
 #include "debug.h"
@@ -360,6 +360,7 @@ void CMytank::get_msg() {
 			}
 			break;
 		case COMMAND_NAME::INFORM_ITEM:
+			{
 			switch (data[3]) { //アイテムの種類で場合分け
 			case ITEM_KIND::ITEM_NONE:
 				break;

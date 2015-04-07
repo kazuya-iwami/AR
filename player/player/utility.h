@@ -31,3 +31,9 @@ public:
 	void disconnect();
 };
 
+class CBullet_image : public CObject {
+
+public:
+	CBullet_image(int x_,int y_);
+	bool draw();
+};

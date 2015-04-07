@@ -40,7 +40,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
-	auto bullet_image = make_shared<CBullet_image>(10,10);
+	auto bullet_image = make_shared<CBullet_image>(0,0);
 
 	//キーボード用
 	char key_buf [ 256 ] ;

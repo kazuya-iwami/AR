@@ -51,7 +51,7 @@ void CEnemy::disconnect(){
 
 
 bool CBullet_image :: draw(){
-	DrawGraph(200,0,figure_id["F_BULLETNOKORI"],true);
+	DrawGraph(0,200,figure_id["F_BULLETNOKORI"],true);
 	return true;
 }
 

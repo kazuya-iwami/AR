@@ -41,7 +41,7 @@ public:
 	int num_bullet;
 	CBullet_image(int x_,int y_,int num_bullet_);
     bool draw();
-	void bullet_count();
+	void bullet_count(int bullet_change);
 };
 
 

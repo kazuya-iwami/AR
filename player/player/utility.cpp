@@ -88,9 +88,11 @@ CBullet_image :: CBullet_image(int x_, int y_, int num_bullet_){
 	num_bullet=num_bullet_;
 }
 
-void CBullet_image :: bullet_count(){
-	if (num_bullet == 0)return;
-	num_bullet--;
+void CBullet_image :: bullet_count(int bullet_change){
+	if (num_bullet + bullet_change < 0)return;
+	num_bullet += bullet_change;
+
+	if(num_bullet > 10) num_bullet=10;
 }
 
 

@@ -43,7 +43,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	auto mytank = make_shared<CMytank>();
 	auto system_timer = make_shared<CSystem_timer>(10,10);
-	auto bullet_image = make_shared<CBullet_image>(10,10,10);
 	auto redback=make_shared<CEffect>();
 
 
@@ -104,9 +103,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	CObject::register_object(mytank);
 	CObject::register_object(system_timer);
-	CObject::register_object(bullet_image);
-	mytank->shake_x=0;
-	mytank->shake_y=0;
 
 	float bullet_z = 0.0;
 	// メインループ
@@ -206,7 +202,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//Bullet生成
 		if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
-			bullet_image->bullet_count(-1);
 		}
 		//テスト用　3を押したタイミングで3D球(Bullet)生成
 		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){

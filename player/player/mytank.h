@@ -43,6 +43,8 @@ public:
 	shared_ptr<CEnemy> enemy2;
 	shared_ptr<CEnemy> enemy3;
 
+	shared_ptr<CBullet_image> bullet_image;//残弾描画
+
 	CMytank();
 	void move(tstring direction, tstring speed);//移動
 	void set_ope_status(OPERATION_STATUS status);

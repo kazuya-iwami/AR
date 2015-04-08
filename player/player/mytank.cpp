@@ -36,8 +36,14 @@ CMytank::CMytank() {
 	item_kind = ITEM_KIND::STAR; //スターを持たせる
 	shaketimer=10;
 	shakeflag=false;
+	shake_x=0;
+	shake_y=0;
 
 	send_msg("HELLO");
+
+	auto bullet_image_ = make_shared<CBullet_image>(10,10);
+	bullet_image = bullet_image_;
+	CObject::register_object(bullet_image);
 
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
@@ -87,6 +93,8 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	//残弾処理
 	if (num_bullet == 0)return;
 	num_bullet--;
+
+	bullet_image->update_num_bullet(num_bullet);//残弾数反映
 
 	//描画
 	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);

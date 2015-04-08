@@ -1,5 +1,6 @@
 ﻿#include "utility.h"
 
+#define MAX_BULLET_NUM 10 //最大残弾数
 
 //ゲームの制限時間。適当に調整
 int timer=3359;
@@ -74,25 +75,28 @@ void CEnemy::attacked(int score_){
 bool CBullet_image :: draw(){
 	int i;
 	for(i=0;i<num_bullet;i++){
-		DrawGraph(10,375-25*i,figure_id["F_BULLETNOKORI"],true);	
+		DrawGraph(5,375-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
-	for(i=0;i<10-num_bullet;i++){
-		DrawGraph(10,150+25*i,figure_id["F_BULLETUSED"],true);
+	for(i=0;i<MAX_BULLET_NUM - num_bullet;i++){
+		DrawGraph(5,150+25*i,figure_id["F_BULLETUSED"],true);
 	}
 	return true;
 }
 
-CBullet_image :: CBullet_image(int x_, int y_, int num_bullet_){
+CBullet_image :: CBullet_image(int x_, int y_){
 	x=x_;
 	y=y_;
-	num_bullet=num_bullet_;
+	num_bullet = MAX_BULLET_NUM; //残弾補充数は一定
 }
 
-void CBullet_image :: bullet_count(int bullet_change){
-	if (num_bullet + bullet_change < 0)return;
-	num_bullet += bullet_change;
+//num_bulletを更新する関数
+void CBullet_image :: update_num_bullet(int num_bullet_){
 
-	if(num_bullet > 10) num_bullet=10;
+	if(num_bullet_ >= 0 && num_bullet_ <= MAX_BULLET_NUM ){
+
+		num_bullet = num_bullet_;
+
+	}else num_bullet = 0;
 }
 
 

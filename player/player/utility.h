@@ -38,10 +38,11 @@ public:
 class CBullet_image : public CObject {
 
 public:
-	int num_bullet;
-	CBullet_image(int x_,int y_,int num_bullet_);
+	int num_bullet;//残弾数
+
+	CBullet_image(int x_,int y_);
     bool draw();
-	void bullet_count(int bullet_change);
+	void update_num_bullet(int num_bullet_);
 };
 
 

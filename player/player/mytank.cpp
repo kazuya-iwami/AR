@@ -2,28 +2,29 @@
 #include <sstream>
 #include "debug.h"
 #include "item.h"
+#include<stdio.h>
+#include<stdlib.h>
 
-#define MARGIN1 150
-#define MARGIN2 50
+#define ENEMY_MARGIN 100
 
 bool CMytank::draw() {
 
 	//スコア表示
-	DrawGraph(200, 650, number[score / 10], true);
-	DrawGraph(260, 650, number[score % 10], true);
+	SetFontSize(80);
+	DrawFormatString(50,600,GetColor(255,122,0),"Score:%d",score);
 
 	//アイテム枠表示
 	DrawGraph(0, 0, figure_id["F_FRAME"], true);
 
 	//カーソル表示
-	DrawGraph(focus_x, focus_y, figure_id["F_CURSUR"], true);
+	DrawGraph(focus_x-64,focus_y-64,figure_id["F_CURSUR"],true);
 
 	return true;
 };
 
 CMytank::CMytank() {
 	//初期化
-	score = 0;
+	score = 20;
 	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
 	ope_timer = 0;
@@ -33,31 +34,33 @@ CMytank::CMytank() {
 	focus_y = 200;
 	game_status = GAME_STATUS::GAME_PLAY;
 	item_kind = ITEM_KIND::STAR; //スターを持たせる
+	shaketimer=10;
+	shakeflag=false;
 
 	send_msg("HELLO");
 
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
-		enemy0->init(80, 180, 100, 200, 100, 200);
-		CObject::register_object(enemy1);
+		enemy0->init(137,180,100,255,56,184);//スマホの赤
+		CObject::register_object(enemy0);
 	}
 	if (id != 1) {
 		auto enemy1_ = make_shared<CEnemy>(1);
 		enemy1 = enemy1_;
-		enemy1->init(80, 180, 100, 200, 100, 200);
+		enemy1->init(70,93,65,255,56,184);//サボテンだー
 		CObject::register_object(enemy1);
 	}
 	if (id != 2) {
 		auto enemy2_ = make_shared<CEnemy>(2);
 		enemy2 = enemy2_;
-		enemy2->init(0, 30, 100, 200, 100, 200);
+		enemy2->init(0,0,100,200,100,200);
 		CObject::register_object(enemy2);
 	}
 	if (id != 3) {
 		auto enemy3_ = make_shared<CEnemy>(3);
 		enemy3 = enemy3_;
-		enemy3->init(30, 80, 100, 200, 100, 200);
+		enemy3->init(30,30,100,200,100,200);
 		CObject::register_object(enemy3);
 	}
 };
@@ -86,7 +89,7 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	num_bullet--;
 
 	//描画
-	auto bullet = make_shared<CBullet>(focus_x - 50 , focus_y - 50, 0, BULLET_KIND::BULLET_NOMAL);
+	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);
 	CObject::register_object(bullet);
 
 
@@ -97,32 +100,32 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 
 }
 
-void CMytank::check_focus() {
-
-	if (id != 0) {
-		if (enemy0->get_x() - MARGIN1 < focus_x && enemy0->get_x() + MARGIN2 > focus_x && enemy0->get_y() - MARGIN1 < focus_y && enemy0->get_y() + MARGIN2 > focus_y) {
-			if (enemy0->exist) { //切断したプレーヤーへの攻撃禁止
+void CMytank::check_focus(){
+	
+	if(id != 0){
+		if(enemy0->get_x() - ENEMY_MARGIN < focus_x && enemy0->get_x() + ENEMY_MARGIN > focus_x && enemy0->get_y() -ENEMY_MARGIN < focus_y && enemy0->get_y() + ENEMY_MARGIN > focus_y){
+			if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 				enemy0->lockon = true;
 			}
 		} else enemy0->lockon = false;
 	}
-	if (id != 1) {
-		if (enemy1->get_x() - MARGIN1 < focus_x && enemy1->get_x() + MARGIN2 > focus_x && enemy1->get_y() - MARGIN1 < focus_y && enemy1->get_y() + MARGIN2 > focus_y) {
-			if (enemy1->exist) { //切断したプレーヤーへの攻撃禁止
+	if(id != 1){
+		if(enemy1->get_x() - ENEMY_MARGIN < focus_x && enemy1->get_x() + ENEMY_MARGIN > focus_x && enemy1->get_y() -ENEMY_MARGIN < focus_y && enemy1->get_y() + ENEMY_MARGIN > focus_y){
+			if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 				enemy1->lockon = true;
 			}
 		} else enemy1->lockon = false;
 	}
-	if (id != 2) {
-		if (enemy2->get_x() - MARGIN1 < focus_x && enemy2->get_x() + MARGIN2 > focus_x && enemy2->get_y() - MARGIN1 < focus_y && enemy2->get_y() + MARGIN2 > focus_y) {
-			if (enemy2->exist) { //切断したプレーヤーへの攻撃禁止
+	if(id != 2){
+		if(enemy2->get_x() - ENEMY_MARGIN < focus_x && enemy2->get_x() + ENEMY_MARGIN > focus_x && enemy2->get_y() -ENEMY_MARGIN < focus_y && enemy2->get_y() + ENEMY_MARGIN > focus_y){
+			if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 				enemy2->lockon = true;
 			}
 		} else enemy2->lockon = false;
 	}
-	if (id != 3) {
-		if (enemy3->get_x() - MARGIN1 < focus_x && enemy3->get_x() + MARGIN2 > focus_x && enemy3->get_y() - MARGIN1 < focus_y && enemy3->get_y() + MARGIN2 > focus_y) {
-			if (enemy3->exist) { //切断したプレーヤーへの攻撃禁止
+	if(id != 3){
+		if(enemy3->get_x() - ENEMY_MARGIN < focus_x && enemy3->get_x() + ENEMY_MARGIN > focus_x && enemy3->get_y() -ENEMY_MARGIN < focus_y && enemy3->get_y() + ENEMY_MARGIN > focus_y){
+			if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 				enemy3->lockon = true;
 			}
 		} else enemy3->lockon = false;
@@ -133,31 +136,104 @@ void CMytank::check_focus() {
 void CMytank::use_item() {
 	if (item_kind != ITEM_KIND::ITEM_NONE) {
 		send_msg(encode(COMMAND_NAME::USE_ITEM, id, 4, (int)item_kind));
-		auto item = make_shared<CItem>(530 , 50, item_kind);
-		CObject::register_object(item);
+		
+		auto item = make_shared<CItem>(200 , 200, item_kind);
+    	CObject::register_object(item);
+		
+		item_kind = ITEM_KIND::ITEM_NONE;
 	}
 }
 
-void CMytank::get_msg() {
+//君だけのオリジナル画面振動を実装しよう！
+int CMytank::shake(int n){
+	shakeflag=true;
+	shake_x=(rand()%40-20)*n;
+	shake_y=(rand()%40-20)*n;
+	if(n==0){
+		shaketimer=11;
+		shakeflag=false;
+	}
+	/*
+	switch(n){
+	case 10:
+		shakeflag=true;
+		PlaySoundMem( sound_id["S_BOMB"] , DX_PLAYTYPE_BACK ) ;
+		shake_x=100;
+		shake_y=50;
+		break;
+	case 9:
+		shake_x=-100;
+		shake_y=-50;
+		break;
+	case 8:
+		shake_x=80;
+		shake_y=40;
+		break;
+	case 7:
+		shake_x=-80;
+		shake_y=-40;
+		break;
+	case 6:
+		shake_x=60;
+		shake_y=30;
+		break;
+	case 5:
+		shake_x=-60;
+		shake_y=-30;
+		break;
+	case 4:
+		shake_x=40;
+		shake_y=20;
+		break;
+	case 3:
+		shake_x=-40;
+		shake_y=-20;
+		break;
+	case 2:
+		shake_x=20;
+		shake_y=10;
+		break;
+	case 1:
+		shake_x=-20;
+		shake_y=-10;
+		break;
+	case 0:
+		shake_x=shake_y=0;
+		shaketimer=11;
+		shakeflag=false;
+		break;
+	default:
+		break;
+	}*/
+	shaketimer--;
+	return 1;
+}
+
+void CMytank::get_msg(){
 	string msg = check_msg();
 
-	int bullet_score = 0; //bulletによっていくつスコアが上昇するかをscoreに格納
+	int bullet_score=0; //bulletによっていくつスコアが上昇するかをscoreに格納
 
-	/* メッセージが送られてきた際の処理 */
-	std::string str[10];
+    /* メッセージが送られてきた際の処理 */
 	int data[10];
-	decode(msg.c_str(), str);
+    std::string str[4];
+    decode(msg.c_str(), str);
 	/* commandによる処理分岐 */
-	// メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
-	if ("" != str[3]) {
-		int command_name = std::stoi(str[0]);
+    // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
+    if ("" != str[3]) {
+        int command_name = std::stoi(str[0]);
+        int player_from = std::stoi(str[1]);
+        int player_to = std::stoi(str[2]);
+        int kind = std::stoi(str[3]);
+
 		for (int i = 0; i < 10; ++i) {
 			data[i] = std::stoi(str[i]);
 		}
-		std::ostringstream stream;
-		switch (command_name) {
-		case COMMAND_NAME::CHANGE_STATUS:
-			switch (data[1]) {
+        std::ostringstream stream;
+        switch (command_name) {
+        case COMMAND_NAME::CHANGE_STATUS:
+			
+			switch (player_from) {
 			case GAME_STATUS::GAME_PLAY:
 				game_status = GAME_STATUS::GAME_PLAY;
 				break;
@@ -167,235 +243,247 @@ void CMytank::get_msg() {
 			default:
 				break;
 			}
-			break;
-		//game_status:data[1]に変更
+			//game_status:player_fromに変更
+            break;
 		case COMMAND_NAME::RETURN_BULLET:
-			if (data[3] == BULLET_KIND::BULLET_NOMAL) bullet_score = 1;
+			{
+			//player:player_fromがplayer:player_toにbullet:kindを攻撃
+			//auto popup = make_shared<CPopup>(300,300,"RETURN"+msg);
+			//CObject::register_object(popup);
+			
+			if(kind == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
 
-			switch (data[1]) {
+            switch (player_from){
 			case 0:
-				if (id != 0) { //他人の攻撃
-				enemy0->score += bullet_score;
-				switch (data[2]) {
+				if(id != 0){ //他人の攻撃
+					enemy0->score += bullet_score;
+					switch(player_to){
 					case 1:
-						if (id != 1) {//攻撃先が他人
-							enemy1->score -= bullet_score;
-						} else {//攻撃先が自分
-							score -= bullet_score;
+						if(id != 1){//攻撃先が他人
+							enemy1->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
 						}
 						break;
 					case 2:
-						if (id != 2) {//攻撃先が他人
-							enemy2->score -= bullet_score;
-						} else {//攻撃先が自分
-							score -= bullet_score;
+						if(id != 2){//攻撃先が他人
+							enemy2->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
 						}
 						break;
 					case 3:
-						if (id != 3) { //攻撃先が他人
-							enemy3->score -= bullet_score;
-						} else { //攻撃先が自分
-							score -= bullet_score;
+						if(id != 3){//攻撃先が他人
+							enemy3->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
 						}
 						break;
 					}
-				} else { //自分が攻撃 攻撃先はすべて敵
+				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
-					switch (data[2]) {
+					switch(player_to){
 					case 1:
-						enemy1->score -= bullet_score;
+						enemy1->attacked(bullet_score);
 						break;
 					case 2:
-						enemy2->score -= bullet_score;
+						enemy2->attacked(bullet_score);
 						break;
 					case 3:
-						enemy3->score -= bullet_score;
+						enemy3->attacked(bullet_score);
 						break;
 					}
 				}
 				break;
 
 			case 1:
-					if (id != 1) { //他人の攻撃
+				if(id != 1){ //他人の攻撃
 					enemy1->score += bullet_score;
-					switch (data[2]) {
-						case 0:
-							if (id != 0) {//攻撃先が他人
-								enemy0->score -= bullet_score;
-							} else { //攻撃先が自分
-								score -= bullet_score;
-							}
-							break;
-						case 2:
-							if (id != 2) { //攻撃先が他人
-								enemy2->score -= bullet_score;
-							} else { //攻撃先が自分
-								score -= bullet_score;
-							}
-							break;
-						case 3:
-							if (id != 3) { //攻撃先が他人
-								enemy3->score -= bullet_score;
-							} else { //攻撃先が自分
-								score -= bullet_score;
-							}
-							break;
+					switch(player_to){
+					case 0:
+						if(id != 0){//攻撃先が他人
+							enemy0->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
 						}
-					} else { //自分が攻撃 攻撃先はすべて敵
-						score += bullet_score;
-						switch (data[2]) {
-						case 0:
-							enemy0->score -= bullet_score;
-							break;
-						case 2:
-							enemy2->score -= bullet_score;
-							break;
-						case 3:
-							enemy3->score -= bullet_score;
-							break;
+						break;
+					case 2:
+						if(id != 2){//攻撃先が他人
+							enemy2->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
 						}
+						break;
+					case 3:
+						if(id != 3){//攻撃先が他人
+							enemy3->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
+						}
+						break;
 					}
+				}else{ //自分が攻撃 攻撃先はすべて敵 
+					score += bullet_score;
+					switch(player_to){
+					case 0:
+						enemy0->attacked(bullet_score);
+						break;
+					case 2:
+						enemy2->attacked(bullet_score);
+						break;
+					case 3:
+						enemy3->attacked(bullet_score);
+						break;
+					}
+				}
 				break;
 
 			case 2:
-					if (id != 2) { //他人の攻撃
+				if(id != 2){ //他人の攻撃
 					enemy2->score += bullet_score;
-					switch (data[2]) {
-						case 1:
-							if (id != 1) {//攻撃先が他人
-								enemy1->score -= bullet_score;
-							} else {//攻撃先が自分
-								score -= bullet_score;
-							}
-							break;
-						case 0:
-							if (id != 0) {//攻撃先が他人
-								enemy0->score -= bullet_score;
-							} else {//攻撃先が自分
-								score -= bullet_score;
-							}
-							break;
-						case 3:
-							if (id != 3) { //攻撃先が他人
-								enemy3->score -= bullet_score;
-							} else { //攻撃先が自分
-								score -= bullet_score;
-							}
-							break;
+					switch(player_to){
+					case 1:
+						if(id != 1){//攻撃先が他人
+							enemy1->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
 						}
-					} else { //自分が攻撃 攻撃先はすべて敵
-						score += bullet_score;
-						switch (data[2]) {
-						case 1:
-							enemy1->score -= bullet_score;
-							break;
-						case 0:
-							enemy0->score -= bullet_score;
-							break;
-						case 3:
-							enemy3->score -= bullet_score;
-							break;
+						break;
+					case 0:
+						if(id != 0){//攻撃先が他人
+							enemy0->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
 						}
+						break;
+					case 3:
+						if(id != 3){//攻撃先が他人
+							enemy3->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
+						}
+						break;
 					}
+				}else{ //自分が攻撃 攻撃先はすべて敵 
+					score += bullet_score;
+					switch(player_to){
+					case 1:
+						enemy1->attacked(bullet_score);
+						break;
+					case 0:
+						enemy0->attacked(bullet_score);
+						break;
+					case 3:
+						enemy3->attacked(bullet_score);
+						break;
+					}
+				}
 				break;
 			case 3:
-					if (id != 3) { //他人の攻撃
+				if(id != 3){ //他人の攻撃
 					enemy3->score += bullet_score;
-					switch (data[2]) {
-						case 1:
-							if (id != 1) { //攻撃先が他人
-								enemy1->score -= bullet_score;
-							} else { //攻撃先が自分
-								score -= bullet_score;
-							}
-							break;
-						case 2:
-							if (id != 2) { //攻撃先が他人
-								enemy2->score -= bullet_score;
-							} else { //攻撃先が自分
-								score -= bullet_score;
-							}
-							break;
-						case 0:
-							if (id != 0) { //攻撃先が他人
-								enemy0->score -= bullet_score;
-							} else { //攻撃先が自分
-								score -= bullet_score;
-							}
-							break;
+					switch(player_to){
+					case 1:
+						if(id != 1){//攻撃先が他人
+							enemy1->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
 						}
-					} else { //自分が攻撃 攻撃先はすべて敵
-						score += bullet_score;
-						switch (data[2]) {
-						case 1:
-							enemy1->score -= bullet_score;
-							break;
-						case 2:
-							enemy2->score -= bullet_score;
-							break;
-						case 0:
-							enemy0->score -= bullet_score;
-							break;
+						break;
+					case 2:
+						if(id != 2){//攻撃先が他人
+							enemy2->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
 						}
+						break;
+					case 0:
+						if(id != 0){//攻撃先が他人
+							enemy0->attacked(bullet_score);
+						}else{//攻撃先が自分
+							attacked(bullet_score);
+						}
+						break;
 					}
+				}else{ //自分が攻撃 攻撃先はすべて敵 
+					score += bullet_score;
+					switch(player_to){
+					case 1:
+						enemy1->attacked(bullet_score);
+						break;
+					case 2:
+						enemy2->attacked(bullet_score);
+						break;
+					case 0:
+						enemy0->attacked(bullet_score);
+						break;
+					}
+				}
 				break;
+            }
+            break;
 			}
-			break;
 		case COMMAND_NAME::DISCONNECT://敵が切断した場合
-			switch (data[1]) { //自分のidを受け取ることはない前提
+			switch(player_from){ //自分のidを受け取ることはない前提
 			case 0:
 				enemy0->disconnect();
 				break;
+			
 			case 1:
 				enemy1->disconnect();
 				break;
+			
 			case 2:
 				enemy2->disconnect();
 				break;
+			
 			case 3:
 				enemy3->disconnect();
 				break;
 			}
 			break;
 		case COMMAND_NAME::INFORM_ITEM:
-			{
-			switch (data[3]) { //アイテムの種類で場合分け
-			case ITEM_KIND::ITEM_NONE:
-				break;
+			switch(kind){//アイテムの種類で場合分け
+		    case ITEM_KIND::ITEM_NONE:
+                break;
+
 			case ITEM_KIND::STAR:
-				if (data[1] != id) { //アイテム使用者が自分でなければ
-					switch (data[1]) {//アイテム被使用者にPopUP表示
+				if(player_from != id){ //アイテム使用者が自分でなければ
+					switch(player_from){//アイテム被使用者にPopUP表示
 					case 0:
 						{
-						auto popup = make_shared<CPopup>(enemy0->get_x(), enemy0->get_y(), "スター使った☆");
+						auto popup = make_shared<CPopup>(enemy0->get_x(),enemy0->get_y(),"スター使った☆");
 						CObject::register_object(popup);
 						break;
 						}
 					case 1:
 						{
-						auto popup = make_shared<CPopup>(enemy1->get_x(), enemy1->get_y(), "スター使った☆");
+						auto popup = make_shared<CPopup>(enemy1->get_x(),enemy1->get_y(),"スター使った☆");
 						CObject::register_object(popup);
 						break;
 						}
 					case 2:
 						{
-						auto popup = make_shared<CPopup>(enemy2->get_x(), enemy2->get_y(), "スター使った☆");
+						auto popup = make_shared<CPopup>(enemy2->get_x(),enemy2->get_y(),"スター使った☆");
 						CObject::register_object(popup);
 						break;
 						}
 					case 3:
 						{
-						auto popup = make_shared<CPopup>(enemy3->get_x(), enemy3->get_y(), "スター使った☆");
+						auto popup = make_shared<CPopup>(enemy3->get_x(),enemy3->get_y(),"スター使った☆");
 						CObject::register_object(popup);
 						break;
 						}
+
 					}
 				}
 				break;
 			case ITEM_KIND::THUNDER:
 				break;
+
 			}
-			break;
+            break;
+
 		case COMMAND_NAME::UPDATE_LOCATIONS:
 			enemy0->map_x = data[1];
 			enemy0->map_y = data[2];
@@ -406,14 +494,15 @@ void CMytank::get_msg() {
 			enemy3->map_x = data[7];
 			enemy3->map_y = data[8];
 			break;
+
 		default:
-			break;
-		}
-		}	
-	}
+            break;
+
+        }//command_nameのswitch終わり
+    }
+    /* commandによる処理分岐ここまで */
+    /* メッセージの処理ここまで */
 }
-/* commandによる処理分岐ここまで */
-/* メッセージの処理ここまで */
 
 
 
@@ -425,3 +514,7 @@ void CMytank::detect_enemy(Mat image) {
 	if (id != 3)enemy3->detect(image);
 
 }
+
+void CMytank::attacked(int score_){
+	score += score_;
+};

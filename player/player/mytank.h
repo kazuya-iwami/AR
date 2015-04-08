@@ -32,7 +32,12 @@ class CMytank : public CObject, public CNetwork {
 	GAME_STATUS game_status;
 
 public:
-	int focus_x, focus_y; //照準の位置
+
+	int shaketimer;
+	bool shakeflag;
+	int focus_x,focus_y;//照準の位置
+	int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
+
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;
@@ -48,4 +53,6 @@ public:
 	void use_item(); // item生成関数
 	void detect_enemy(Mat image);
 	void check_focus();
+	void attacked(int score_);
+	int shake(int n);
 };

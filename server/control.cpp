@@ -3,7 +3,6 @@
 //
 
 #include "control.h"
-#include <sstream>
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
@@ -64,21 +63,20 @@ void recv_message(string msg, int id) {
     int player_from = atoi(str[1].c_str());
     int player_to = atoi(str[2].c_str());
     int kind = atoi(str[3].c_str());
-        std::ostringstream stream;
         switch (command_name) {
             case COMMAND_NAME::USE_ITEM:
                 switch (kind) {
                     case ITEM_KIND::STAR:
                         // スターの処理
-                        stream << "[USE_ITEM]:player" << player_from << " used STAR" << std::endl;
-                        player_param[player_from].using_item = (ITEM_KIND) kind;
+                        cout << "[USE_ITEM]:player" << player_from << " used STAR" << std::endl;
+                        player_param[player_from].using_item = ITEM_KIND::STAR;
                         item_start_time[player_from] = time(NULL);
                         send_message(encode(COMMAND_NAME::INFORM_ITEM,player_from,player_to,kind),4);
                         break;
                     case ITEM_KIND::THUNDER:
                         // サンダーの処理
-                        stream << "[USE_ITEM]:player" << player_from << " used THUNDER" << std::endl;
-                        player_param[player_from].using_item = (ITEM_KIND) kind;
+                        cout << "[USE_ITEM]:player" << player_from << " used THUNDER" << std::endl;
+                        player_param[player_from].using_item = ITEM_KIND::THUNDER;
                         item_start_time[player_from] = time(NULL);
                         send_message(encode(COMMAND_NAME::INFORM_ITEM,player_from,player_to,kind),4);
                         break;
@@ -92,7 +90,7 @@ void recv_message(string msg, int id) {
                 std::endl;
 
                 if(kind == BULLET_KIND::BULLET_NOMAL
-                   && player_param[player_from].using_item != ITEM_KIND::STAR) {
+                   && player_param[player_to].using_item != ITEM_KIND::STAR) {
                     send_message(encode(COMMAND_NAME::RETURN_BULLET,player_from,player_to,kind),4);
                 }
 

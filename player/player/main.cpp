@@ -255,13 +255,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//テスト用　とりあえずX押したら画面が振動するよ
 		if(mytank->shakeflag==true || (key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0)){
 			mytank->shake(mytank->shaketimer);
-			mytank->focus_x+=mytank->shake_x;
-			mytank->focus_y+=mytank->shake_y;
-			redback->shaketiemr=mytank->shaketimer;
-			if(mytank->shaketimer==0){				
-				mytank->shake_x=0;
-				mytank->shake_y=0;
-			}
 		}
 
 		fps.Update();//1サイクルごとの速度を測定

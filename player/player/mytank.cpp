@@ -17,7 +17,7 @@ bool CMytank::draw() {
 	DrawGraph(0, 0, figure_id["F_FRAME"], true);
 
 	//カーソル表示
-	DrawGraph(focus_x-64,focus_y-64,figure_id["F_CURSUR"],true);
+	DrawGraph(focus_x-64+shake_x,focus_y-64+shake_y,figure_id["F_CURSUR"],true);
 
 	return true;
 };
@@ -147,13 +147,22 @@ void CMytank::use_item() {
 //君だけのオリジナル画面振動を実装しよう！
 int CMytank::shake(int n){
 	shakeflag=true;
-	shake_x=(rand()%40-20)*n;
-	shake_y=(rand()%40-20)*n;
-	if(n==0){
+	shake_x=(rand()%40-20)*shaketimer;
+	shake_y=(rand()%40-20)*shaketimer;
+	if(shaketimer==10){
+		PlaySoundMem( sound_id["S_BOMB"] , DX_PLAYTYPE_BACK ) ;
+	}
+	if(shaketimer==0){
 		shaketimer=11;
 		shakeflag=false;
+		shake_x=0;
+		shake_y=0;
 	}
-	/*
+	shaketimer--;
+	return 1;
+}
+
+	/*以下shake()の残骸
 	switch(n){
 	case 10:
 		shakeflag=true;
@@ -205,9 +214,6 @@ int CMytank::shake(int n){
 	default:
 		break;
 	}*/
-	shaketimer--;
-	return 1;
-}
 
 void CMytank::get_msg(){
 	string msg = check_msg();

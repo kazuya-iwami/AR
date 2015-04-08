@@ -16,17 +16,25 @@
 #include "utility.h"
 #include "tstring.h"
 #include "debug.h"
+#include <mutex>
+#include <thread>
 
 using namespace std;
 
 #define FOCUS_SPEED 8
+
+int camera_image_handle;//スレッド処理用
+std::mutex draw_mtx;
+bool thread_flag;
+int camera_image_size;
+
+void image_get_process();//別スレッドで映像の受信、処理を行う
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ){
 
 
 
 	cv::VideoCapture vcap;
-	cv::Mat image;
 
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
@@ -77,7 +85,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	SetFontSize( 60 ) ;                             //サイズを20に変更
     SetFontThickness( 8 ) ;                         //太さを8に変更
     ChangeFont("07ロゴたいぷゴシック7");              //種類をMS明朝に変更
-    ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE );//アンチエイリアス＆エッジ付きフォントに変更
+    //ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE );//アンチエイリアス＆エッジ付きフォントに変更
 
 	// ＤＸライブラリ初期化処理
 	if( DxLib_Init() == -1 ){
@@ -105,29 +113,21 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CObject::register_object(system_timer);
 
 	float bullet_z = 0.0;
+
+	camera_image_size= FileRead_size("out.jpeg");
+	thread_flag = true;
+	std::thread th(image_get_process); //映像取得、処理用スレッド開始
+
 	// メインループ
 	while(1){
 		// 画面に描かれているものを一回全部消す
 		ClearDrawScreen() ;
 
-		//静止画をopenCVで取得
-		image = imread("out.jpeg");
-		//if(!vcap.read(image)) {
-		//	std::cout << "No frame" << std::endl;
-		//	cv::waitKey();
-		//	return -1;
-		//}
-
-		mytank->detect_enemy(image);
-
-		cv::imwrite("out.jpeg",image);
-
-		// DXライブラリで静止画取得 
-		int GHandle = LoadGraph( "out.jpeg" ) ;
-
+	
 		// 読みこんだグラフィックを拡大描画
-		DrawExtendGraph( mytank->shake_x , mytank->shake_y, 1000+mytank->shake_x  , 750+mytank->shake_y , GHandle , TRUE ) ;
-
+		draw_mtx.lock(); //排他的処理
+		DrawExtendGraph( mytank->shake_x , mytank->shake_y, 1000+mytank->shake_x  , 750+mytank->shake_y , camera_image_handle, false ) ;
+		draw_mtx.unlock();
 
 		//描画
 		/*	
@@ -135,6 +135,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			drawlistに登録されてるオブジェクトのdraw()をすべて実行
 			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
 		*/
+
+		draw_mtx.lock();
 		std::list<std::shared_ptr<CObject>>::iterator it;
 		for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // 最後の「it++」を消す
 			if( !(*it)->draw() ){ //アニメーション終了時
@@ -144,6 +146,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 			it++;   // インクリメント
 		}
+		draw_mtx.unlock();
 		
 		//サーバーからmsgの受信
 		/* 1サイクル1回呼ぶ */
@@ -249,18 +252,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//テスト用　とりあえずX押したら画面が振動するよ
 		if(mytank->shakeflag==true || (key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0)){
 			mytank->shake(mytank->shaketimer);
-			mytank->focus_x+=mytank->shake_x;
-			mytank->focus_y+=mytank->shake_y;
-			redback->shaketiemr=mytank->shaketimer;
-			if(mytank->shaketimer==0){				
-				mytank->shake_x=0;
-				mytank->shake_y=0;
-			}
 		}
 
 		fps.Update();//1サイクルごとの速度を測定
 		if(  key_buf[ KEY_INPUT_F ] == 1 ){
+			draw_mtx.lock();
 			fps.Draw();
+			draw_mtx.unlock();
 		}
 		fps.Wait();//早すぎたらちょっと待つ
 
@@ -268,10 +266,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		DxLib::ScreenFlip() ;
 
 		// Windows システムからくる情報を処理する
-		if( ProcessMessage() == -1 ) break ;
+		if( ProcessMessage() == -1 ){
+			thread_flag = false; //スレッド終了連絡
+			th.join();//スレッドが終了するのを待つ
+			break ;
+		}
 
 		// ＥＳＣキーが押されたらループから抜ける
-		if( key_buf[ KEY_INPUT_ESCAPE ] == 1 ) break ;
+		if( key_buf[ KEY_INPUT_ESCAPE ] == 1 ){
+			thread_flag = false; //スレッド終了連絡
+			th.join();//スレッドが終了するのを待つ
+			break ;
+		}
 	}
 	// ＤＸライブラリ使用の終了処理
 	DxLib_End() ;
@@ -280,3 +286,32 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	return 0 ;
 }
 
+void image_get_process(){
+
+	while(thread_flag){
+	
+		//静止画をopenCVで取得
+		Mat image;
+		image = imread("out.jpeg");
+		//if(!vcap.read(image)) {
+		//	std::cout << "No frame" << std::endl;
+		//	cv::waitKey();
+		//	return -1;
+		//}
+
+		//mytank->detect_enemy(image);
+
+		cv::imwrite("out.jpeg",image);
+
+		// DXライブラリで静止画取得 
+		vector<char> buf(camera_image_size,0);
+		int FileHandle = FileRead_open("out.jpeg");
+		FileRead_read(&buf[0],buf.size(),FileHandle );
+		FileRead_close(FileHandle);
+
+		draw_mtx.lock();//排他的処理
+		camera_image_handle = CreateGraphFromMem(&buf[0] , buf.size());
+		draw_mtx.unlock();
+
+	}
+}

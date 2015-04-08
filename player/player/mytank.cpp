@@ -10,7 +10,7 @@
 bool CMytank::draw() {
 
 	//スコア表示
-	SetFontSize(80);
+	
 	DrawFormatString(50,600,GetColor(255,122,0),"Score:%d",score);
 
 	//アイテム枠表示

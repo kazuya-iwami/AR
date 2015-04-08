@@ -22,6 +22,9 @@
 using namespace std;
 
 #define FOCUS_SPEED 8
+#define USE_CAMERA_FLAG 1//0:画像 1:カメラ 3:ラズパイ
+
+cv::VideoCapture vcap;
 
 int camera_image_handle;//スレッド処理用
 std::mutex draw_mtx;
@@ -31,10 +34,6 @@ int camera_image_size;
 void image_get_process();//別スレッドで映像の受信、処理を行う
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ){
-
-
-
-	cv::VideoCapture vcap;
 
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
@@ -60,20 +59,34 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	CPopup::debug_flag = true; // デバッグフラグがtrueならポップアップを表示
 
-	//ラズパイからの映像取得用
-	const std::string videoStreamAddress ="http://192.168.10.137:8080/?action=stream.mjpeg";
 	
-	//ラズパイが現在10fpsで画像配信してるので別スレッド（非同期）で画像取得することにする予定
-	//CG描画は30fpsの予定
+	
+	
 
-	//if(!vcap.open(0)){//デフォルトのカメラを取得はこちら
-	//if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
-	//	std::cout << "Error opening video stream or file" << std::endl;
-	//	return -1;
-	//}
-	//vcap.set(CV_CAP_PROP_FPS,10);
-	//vcap.set(CV_CAP_PROP_FRAME_WIDTH,320);
-	//vcap.set(CV_CAP_PROP_FRAME_HEIGHT,240);
+	if(USE_CAMERA_FLAG == 1){ //カメラ使用
+
+		/*ラズパイが現在10fpsで画像配信してるので別スレッド（非同期）で画像取得することにする予定
+		CG描画は30fpsの予定*/
+		
+		if(!vcap.open(0)){//デフォルトのカメラを取得はこちら
+			std::cout << "Error opening video stream or file" << std::endl;
+			MessageBox(NULL,"カメラ取得失敗(´・ω・`)","error",MB_OK | MB_APPLMODAL);
+			return -1;
+		}
+		vcap.set(CV_CAP_PROP_FPS,10);
+		vcap.set(CV_CAP_PROP_FRAME_WIDTH,320);
+		vcap.set(CV_CAP_PROP_FRAME_HEIGHT,240);
+
+	}else if(USE_CAMERA_FLAG == 2){
+		//ラズパイからの映像取得用
+		const std::string videoStreamAddress ="http://192.168.10.137:8080/?action=stream.mjpeg";
+
+		if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
+			std::cout << "Error opening video stream or file" << std::endl;
+			MessageBox(NULL,"カメラ取得失敗(´・ω・`)","error",MB_OK | MB_APPLMODAL);
+			return -1;
+		}
+	}
 
 
 	// ウインドウモードで起動
@@ -296,12 +309,17 @@ void image_get_process(){
 	
 		//静止画をopenCVで取得
 		Mat image;
-		image = imread("out.jpeg");
-		//if(!vcap.read(image)) {
-		//	std::cout << "No frame" << std::endl;
-		//	cv::waitKey();
-		//	return -1;
-		//}
+
+		if(USE_CAMERA_FLAG == 0){
+			image = imread("out.jpeg");
+		}else if(USE_CAMERA_FLAG == 1 || USE_CAMERA_FLAG == 2){
+			if(!vcap.read(image)) {
+				std::cout << "No frame" << std::endl;
+				MessageBox(NULL,"画像フレーム取得失敗(´・ω・`)","error",MB_OK | MB_APPLMODAL);
+				cv::waitKey();
+				return;
+			}
+		}
 
 		//mytank->detect_enemy(image);
 

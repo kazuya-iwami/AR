@@ -211,9 +211,7 @@ int CMytank::shake(int n){
 
 void CMytank::get_msg(){
 	string msg = check_msg();
-
 	int bullet_score=0; //bulletによっていくつスコアが上昇するかをscoreに格納
-
     /* メッセージが送られてきた際の処理 */
 	int data[10];
     std::string str[4];
@@ -229,7 +227,6 @@ void CMytank::get_msg(){
 		for (int i = 0; i < 10; ++i) {
 			data[i] = std::stoi(str[i]);
 		}
-        std::ostringstream stream;
         switch (command_name) {
         case COMMAND_NAME::CHANGE_STATUS:
 			

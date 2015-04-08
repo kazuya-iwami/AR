@@ -75,7 +75,7 @@ void CEnemy::attacked(int score_){
 bool CBullet_image :: draw(){
 	int i;
 	for(i=0;i<num_bullet;i++){
-		DrawGraph(5,375-25*i,figure_id["F_BULLETNOKORI"],true);	
+		DrawGraph(5,150+(MAX_BULLET_NUM-1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
 	for(i=0;i<MAX_BULLET_NUM - num_bullet;i++){
 		DrawGraph(5,150+25*i,figure_id["F_BULLETUSED"],true);

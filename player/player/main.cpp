@@ -102,7 +102,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CFps fps; 
 
 	//使用する画像の読み込み
-	CObject::load();//すべての画像はこの中で読み込む　
+	draw_mtx.lock();
+	CObject::load();//すべての画像はこの中で読み込む
+	draw_mtx.unlock();
 
 
 	//色々描画リストに登録
@@ -263,7 +265,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		fps.Wait();//早すぎたらちょっと待つ
 
 		// 裏画面の内容を表画面に反映させる
-		DxLib::ScreenFlip() ;
+		draw_mtx.lock();
+		DxLib::ScreenFlip();
+		draw_mtx.unlock();
 
 		// Windows システムからくる情報を処理する
 		if( ProcessMessage() == -1 ){

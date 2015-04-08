@@ -7,9 +7,7 @@ int timer=3359;
 
 bool CSystem_timer::draw(){
 	//残り時間表示
-	SetFontSize( 80 ) ;                             //サイズを20に変更
-    SetFontThickness( 8 ) ;                         //太さを8に変更
-    ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE );//アンチエイリアス＆エッジ付きフォントに変更
+	
 	DrawFormatString(650,20,GetColor(255,122,0),"Time:%d",timer/10);
 
 	timer--;

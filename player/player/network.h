@@ -12,6 +12,7 @@
 #include <sstream>
 
 enum COMMAND_NAME {
+	FINISH,
 	USE_ITEM,
 	INFORM_ITEM,
 	SHOOT_BULLET,

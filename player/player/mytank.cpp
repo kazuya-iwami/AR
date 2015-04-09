@@ -264,7 +264,11 @@ void CMytank::get_msg(){
 			
 			switch (player_from) {
 			case GAME_STATUS::GAME_PLAY:
-				game_status = GAME_STATUS::GAME_PLAY;
+				if(game_status == GAME_STATUS::GAME_WAIT){
+					game_status = GAME_STATUS::GAME_PLAY;
+				}else if( game_status == GAME_STATUS::GAME_PAUSE ) {
+					game_status = GAME_STATUS::GAME_PLAY;
+				}
 				break;
 			case GAME_STATUS::GAME_PAUSE:
 				game_status = GAME_STATUS::GAME_PAUSE;
@@ -547,3 +551,10 @@ void CMytank::detect_enemy(Mat image) {
 void CMytank::attacked(int score_){
 	score += score_;
 };
+
+void CMytank::set_game_status(GAME_STATUS game_status_){
+	game_status = game_status_;
+	if(game_status == GAME_STATUS::GAME_WAIT){ //FINIHSからWAITに移行する際サーバーにメッセージ送る
+		send_msg(encode(COMMAND_NAME::FINISH,0,0,0));
+	}
+}

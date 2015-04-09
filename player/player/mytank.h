@@ -15,6 +15,7 @@ enum OPERATION_STATUS {
 };
 
 enum GAME_STATUS {
+	GAME_UNCONNECTED,
 	GAME_WAIT,
 	GAME_PLAY,
 	GAME_PAUSE,
@@ -66,6 +67,6 @@ public:
 	void shake_start(SHAKE_STATUS shake_status);
 	void shake();
 	GAME_STATUS get_game_status(){return game_status;}
-	void set_game_status(GAME_STATUS game_status_){game_status = game_status_;}
+	void set_game_status(GAME_STATUS game_status_);
 
 };

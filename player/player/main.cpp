@@ -22,7 +22,8 @@
 using namespace std;
 
 #define FOCUS_SPEED 8
-#define GAME_TIME 20 //20秒
+#define GAME_TIME 20 //プレー時間　20秒
+#define FINISH_TIME 5 //結果発表の時間 5秒
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 
@@ -63,6 +64,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	
 	//auto redback=make_shared<CEffect>();
 
+	int finish_timer=0; //結果発表画面用タイマー
 
 	//キーボード用
 	char key_buf [ 256 ] ;
@@ -144,7 +146,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	while(1){
 		// 画面に描かれているものを一回全部消す
 		draw_mtx.lock();
-		ClearDrawScreen();
+		if(!(mytank->get_game_status() == GAME_STATUS::GAME_PAUSE)) ClearDrawScreen();
 		draw_mtx.unlock();
 
 		//キー状態取得
@@ -301,25 +303,38 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
-				mytank->set_game_status(GAME_STATUS::GAME_FINISH);
+				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
+				finish_timer = FINISH_TIME*30;
 			}
 
 			//時間切れるとGAME_STATUS変更
 			if(system_timer->get_finish_flag()){
 				mytank->set_game_status(GAME_STATUS::GAME_FINISH);
+				finish_timer = FINISH_TIME*30;
 				//時間切れの処理
+			}
+
+		}else if(mytank->get_game_status() == GAME_STATUS::GAME_PAUSE){
+
+			draw_mtx.lock();
+			DrawFormatString(50, 300, GetColor(255,255,255), "PAUSE... ENTERで戻る");
+			draw_mtx.unlock();
+
+			//ENTERでGAME_STAUTS変更
+			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
+				mytank->set_game_status(GAME_STATUS::GAME_PLAY);
 			}
 
 		}else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
 
 			draw_mtx.lock();
-			DrawFormatString(50, 300, GetColor(255,255,255), "FINISH!!!　ENTERで初期画面へ");
+			DrawFormatString(50, 300, GetColor(255,255,255), "FINISH!!!　5秒");
 			draw_mtx.unlock();
 
-			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
+			if(finish_timer == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
 				init();
-			}
+			}else finish_timer--;
 
 
 		}

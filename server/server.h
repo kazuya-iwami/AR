@@ -8,36 +8,36 @@
 
 
 enum BULLET_KIND{
-    BULLET_NOMAL,
-    BULLET_3D
+	BULLET_NOMAL,
+	BULLET_3D
 };
 
 enum ITEM_KIND{
-    ITEM_NONE,
-    STAR,
-    THUNDER
+	ITEM_NONE,
+	STAR,
+	THUNDER
 };
 
 enum GAME_STATUS{
-    GAME_PLAY,
-    GAME_PAUSE
+	GAME_PLAY,
+	GAME_PAUSE
 };
 
 enum COMMAND_NAME{
-    USE_ITEM,
-    INFORM_ITEM,
-    SHOOT_BULLET,
-    RETURN_BULLET,
-    CHANGE_STATUS,
-    DISCONNECT
+	USE_ITEM,
+	INFORM_ITEM,
+	SHOOT_BULLET,
+	RETURN_BULLET,
+	CHANGE_STATUS,
+	DISCONNECT
 };
 
 class CPlayer_param{
 public:
-    CPlayer_param();
-    int score;//スコア
-    ITEM_KIND using_item;//使用していなかったら-1
-    bool exist;//接続が切れたらfalse
+	CPlayer_param();
+	int score;//スコア
+	ITEM_KIND using_item;//使用していなかったら-1
+	bool exist;//接続が切れたらfalse
 };
 
 void send_message(std::string msg, int id);

@@ -247,23 +247,23 @@ int CMytank::shake(int n){
 void CMytank::get_msg(){
 	string msg = check_msg();
 	int bullet_score=0; //bulletによっていくつスコアが上昇するかをscoreに格納
-    /* メッセージが送られてきた際の処理 */
+	/* メッセージが送られてきた際の処理 */
 	int data[10];
-    std::string str[4];
-    decode(msg.c_str(), str);
+	std::string str[4];
+	decode(msg.c_str(), str);
 	/* commandによる処理分岐 */
-    // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
-    if ("" != str[3]) {
-        int command_name = std::stoi(str[0]);
-        int player_from = std::stoi(str[1]);
-        int player_to = std::stoi(str[2]);
-        int kind = std::stoi(str[3]);
+	// メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
+	if ("" != str[3]) {
+		int command_name = std::stoi(str[0]);
+		int player_from = std::stoi(str[1]);
+		int player_to = std::stoi(str[2]);
+		int kind = std::stoi(str[3]);
 
 		for (int i = 0; i < 10; ++i) {
 			data[i] = std::stoi(str[i]);
 		}
-        switch (command_name) {
-        case COMMAND_NAME::CHANGE_STATUS:
+		switch (command_name) {
+		case COMMAND_NAME::CHANGE_STATUS:
 			
 			switch (player_from) {
 			case GAME_STATUS::GAME_PLAY:
@@ -276,7 +276,7 @@ void CMytank::get_msg(){
 				break;
 			}
 			//game_status:player_fromに変更
-            break;
+			break;
 		case COMMAND_NAME::RETURN_BULLET:
 			{
 			//player:player_fromがplayer:player_toにbullet:kindを攻撃
@@ -285,7 +285,7 @@ void CMytank::get_msg(){
 			
 			if(kind == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
 
-            switch (player_from){
+			switch (player_from){
 			case 0:
 				if(id != 0){ //他人の攻撃
 					enemy0->score += bullet_score;
@@ -452,8 +452,8 @@ void CMytank::get_msg(){
 					}
 				}
 				break;
-            }
-            break;
+			}
+			break;
 			}
 		case COMMAND_NAME::DISCONNECT://敵が切断した場合
 			switch(player_from){ //自分のidを受け取ることはない前提
@@ -476,8 +476,8 @@ void CMytank::get_msg(){
 			break;
 		case COMMAND_NAME::INFORM_ITEM:
 			switch(kind){//アイテムの種類で場合分け
-		    case ITEM_KIND::ITEM_NONE:
-                break;
+			case ITEM_KIND::ITEM_NONE:
+				break;
 
 			case ITEM_KIND::STAR:
 				if(player_from != id){ //アイテム使用者が自分でなければ
@@ -514,7 +514,7 @@ void CMytank::get_msg(){
 				break;
 
 			}
-            break;
+			break;
 
 		case COMMAND_NAME::UPDATE_LOCATIONS:
 			enemy0->map_x = data[1];
@@ -528,12 +528,12 @@ void CMytank::get_msg(){
 			break;
 
 		default:
-            break;
+			break;
 
-        }//command_nameのswitch終わり
-    }
-    /* commandによる処理分岐ここまで */
-    /* メッセージの処理ここまで */
+		}//command_nameのswitch終わり
+	}
+	/* commandによる処理分岐ここまで */
+	/* メッセージの処理ここまで */
 }
 
 

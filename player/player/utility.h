@@ -42,7 +42,7 @@ public:
 	const int max_bullet_num;//最大弾数
 
 	CBullet_image(int x_,int y_,int max_bullet_num_);
-    bool draw();
+	bool draw();
 	void update_num_bullet(int num_bullet_);
 };
 

@@ -37,147 +37,147 @@ clock_t item_start_time[4], item_end_time;
 
 int main() {
 
-    bool loop = true;
+	bool loop = true;
 
-    tm.tv_sec = 0;
-    tm.tv_usec = 1;
+	tm.tv_sec = 0;
+	tm.tv_usec = 1;
 
-    if (gethostname(shostn, sizeof(shostn)) < 0) Err("gethostname");
+	if (gethostname(shostn, sizeof(shostn)) < 0) Err("gethostname");
 
-    printf("hostname is %s", shostn);
-    printf("\n");
+	printf("hostname is %s", shostn);
+	printf("\n");
 
 
-    shost = gethostbyname(shostn);
-    if (shost == NULL) Err("gethostbyname");
+	shost = gethostbyname(shostn);
+	if (shost == NULL) Err("gethostbyname");
 
-    maxfd = 0;
-    for (int i = 0; i < PORT_NUM; i++) {
-        nsockfd[i] = set_tcp_socket(BASE_PORT + i, shost);
-        if (maxfd < nsockfd[i] + 1)maxfd = nsockfd[i] + 1;
-        std::cout << "プレイヤー:" << i << "が接続しました" << std::endl;
-    }
+	maxfd = 0;
+	for (int i = 0; i < PORT_NUM; i++) {
+		nsockfd[i] = set_tcp_socket(BASE_PORT + i, shost);
+		if (maxfd < nsockfd[i] + 1)maxfd = nsockfd[i] + 1;
+		std::cout << "プレイヤー:" << i << "が接続しました" << std::endl;
+	}
 
-    std::cout << "接続完了"<<std::endl;
+	std::cout << "接続完了"<<std::endl;
 
-    init();
+	init();
 
-    while (loop) {
+	while (loop) {
 
-        check_item_valid();
+		check_item_valid();
 
-        FD_ZERO(&mask);
-        for (int i = 0; i < PORT_NUM; i++) {
-            FD_SET(nsockfd[i], &mask);
-        }
-        retval = select(maxfd, &mask, NULL, NULL, &tm);
-        if (retval < 0) Err("select");
-        for (int i = 0; i < PORT_NUM; i++) {
-            if(!player_param[i].exist)continue;
-            if (FD_ISSET(nsockfd[i], &mask)) {
+		FD_ZERO(&mask);
+		for (int i = 0; i < PORT_NUM; i++) {
+			FD_SET(nsockfd[i], &mask);
+		}
+		retval = select(maxfd, &mask, NULL, NULL, &tm);
+		if (retval < 0) Err("select");
+		for (int i = 0; i < PORT_NUM; i++) {
+			if(!player_param[i].exist)continue;
+			if (FD_ISSET(nsockfd[i], &mask)) {
 
-                n = read(nsockfd[i], buf, BUFMAX);
-                if (n <= 0) {
-                    std::cout << "プレイヤー:"<< i <<"が切断しました" <<std::endl;
-                    //loop = false;
-                    player_param[i].exist = false;
-                    send_message(encode(COMMAND_NAME::DISCONNECT,i,0,0),4);
-                    break;
-                };
+				n = read(nsockfd[i], buf, BUFMAX);
+				if (n <= 0) {
+					std::cout << "プレイヤー:"<< i <<"が切断しました" <<std::endl;
+					//loop = false;
+					player_param[i].exist = false;
+					send_message(encode(COMMAND_NAME::DISCONNECT,i,0,0),4);
+					break;
+				};
 
-                recv_message(buf, i);
-                bzero(buf, BUFMAX);
-            }
-        }
-    }
-    //現在無限ループだね
+				recv_message(buf, i);
+				bzero(buf, BUFMAX);
+			}
+		}
+	}
+	//現在無限ループだね
 
-    for (int i = 0; i < PORT_NUM; i++) {
-        close(nsockfd[i]);
-    }
+	for (int i = 0; i < PORT_NUM; i++) {
+		close(nsockfd[i]);
+	}
 }
 
 
 int set_tcp_socket(int portnum, struct hostent *shost) {
-    int sockfd, nsockfd;
-    struct sockaddr_in server;
-    int yes = 1;
+	int sockfd, nsockfd;
+	struct sockaddr_in server;
+	int yes = 1;
 
-    /* create socket */
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) {
-        perror("socket error");
-        return -1;
-    }
+	/* create socket */
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (sockfd < 0) {
+		perror("socket error");
+		return -1;
+	}
 
-    /* set socket address information */
-    memset(&server, 0, sizeof(struct sockaddr_in));
-    server.sin_family = AF_INET;
-    bcopy((char *) shost->h_addr, (char *) &server.sin_addr, shost->h_length);
-    server.sin_port = htons(portnum);
-
-
-    if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
-        perror("setsockopt");
-        exit(1);
-    }
-
-    /* bind socket */
-    if (bind(sockfd, (struct sockaddr *) &server, sizeof(server)) < 0) {
-        perror("bind error");
-        close(sockfd);
-        return -1;
-    }
-
-    listen(sockfd, 1);
+	/* set socket address information */
+	memset(&server, 0, sizeof(struct sockaddr_in));
+	server.sin_family = AF_INET;
+	bcopy((char *) shost->h_addr, (char *) &server.sin_addr, shost->h_length);
+	server.sin_port = htons(portnum);
 
 
-    nsockfd = accept(sockfd, NULL, NULL);
-    if (nsockfd < 0) Err("accept");
-    close(sockfd);
-    return nsockfd;
+	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
+		perror("setsockopt");
+		exit(1);
+	}
+
+	/* bind socket */
+	if (bind(sockfd, (struct sockaddr *) &server, sizeof(server)) < 0) {
+		perror("bind error");
+		close(sockfd);
+		return -1;
+	}
+
+	listen(sockfd, 1);
+
+
+	nsockfd = accept(sockfd, NULL, NULL);
+	if (nsockfd < 0) Err("accept");
+	close(sockfd);
+	return nsockfd;
 }
 
 //メッセージを送るときはこれを用いる　n=4で全体
 void send_message(std::string msg, int id=4) {
-    if (id == 4) {
-        for (int i = 0; i < PORT_NUM; i++) {
-            if(!player_param[i].exist) {
-                std::cout << "切断したプレイヤーへメッセージを送ろうとしています" << std::endl;
-                continue;
-            }
-            write(nsockfd[i], msg.c_str(), msg.length());
-            if (n < 0) Err("socket disconnected");
-            bzero(buf, BUFMAX);
-        }
-        return;
-    }
-    if(!player_param[id].exist) {
-        std::cout << "抜けたプレイヤーへメッセージを送ろうとしています" << std::endl;
-    }
-    write(nsockfd[id], msg.c_str(), msg.length());
-    if (n < 0) Err("socket disconnected");
-    bzero(buf, BUFMAX);
+	if (id == 4) {
+		for (int i = 0; i < PORT_NUM; i++) {
+			if(!player_param[i].exist) {
+				std::cout << "切断したプレイヤーへメッセージを送ろうとしています" << std::endl;
+				continue;
+			}
+			write(nsockfd[i], msg.c_str(), msg.length());
+			if (n < 0) Err("socket disconnected");
+			bzero(buf, BUFMAX);
+		}
+		return;
+	}
+	if(!player_param[id].exist) {
+		std::cout << "抜けたプレイヤーへメッセージを送ろうとしています" << std::endl;
+	}
+	write(nsockfd[id], msg.c_str(), msg.length());
+	if (n < 0) Err("socket disconnected");
+	bzero(buf, BUFMAX);
 }
 
 void init(){
-    game_status=GAME_STATUS::GAME_PLAY;
-    left_time=300;
-    item_end_time = 0;
-    for(int i=0;i<4;i++){
-        item_start_time[i] = 0;
-    }
+	game_status=GAME_STATUS::GAME_PLAY;
+	left_time=300;
+	item_end_time = 0;
+	for(int i=0;i<4;i++){
+		item_start_time[i] = 0;
+	}
 }
 
 std::string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind){
 
-    std::ostringstream stream;
-    stream << (int)command_name << ","  << player_from << "," << player_to << "," << kind;
-    return stream.str();
+	std::ostringstream stream;
+	stream << (int)command_name << ","  << player_from << "," << player_to << "," << kind;
+	return stream.str();
 }
 
 CPlayer_param::CPlayer_param() {
-    exist = true;
-    score = 0;
-    using_item = ITEM_KIND::ITEM_NONE ;
+	exist = true;
+	score = 0;
+	using_item = ITEM_KIND::ITEM_NONE ;
 }

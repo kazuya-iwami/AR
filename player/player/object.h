@@ -33,7 +33,7 @@ protected:
 	int draw_timer; //アニメーション用
 	
 	static map<string,int> figure_id;//ここにloadしたイメージに対応したidを連想配列として保存   F_から書き始める
-	static map<string,int> sound_id;//ここにloadしたイメージに対応したidを連想配列として保存    S_から書き始める
+	static map<string,int> sound_id;//ここにloadしたイメージに対応したidを連想配列として保存	S_から書き始める
 
 	void set_layer_id(DRAW_LAYER layer_id_);
 	

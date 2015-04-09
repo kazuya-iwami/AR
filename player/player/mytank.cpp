@@ -41,7 +41,7 @@ CMytank::CMytank() {
 
 	send_msg("HELLO");
 
-	auto bullet_image_ = make_shared<CBullet_image>(10,10);
+	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
 	bullet_image = bullet_image_;
 	CObject::register_object(bullet_image);
 

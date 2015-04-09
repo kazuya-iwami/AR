@@ -10,6 +10,11 @@
 #include <stdlib.h>
 #include <sstream>
 #include "server.h"
+#include "server.h"
+#include "control.h"
+#include <termios.h>
+#include <fcntl.h>
+
 //control.hをincludeしない！
 
 #define BUFMAX 40
@@ -19,7 +24,6 @@
 
 static int n, retval, nsockfd[PORT_NUM], maxfd;
 static struct hostent *shost;
-static struct sockaddr_in svaddr;
 static char buf[BUFMAX], shostn[BUFMAX];
 static fd_set mask;
 static struct timeval tm;
@@ -33,6 +37,7 @@ int set_tcp_socket(int portnum, struct hostent *shost);
 void recv_message(std::string msg, int n);
 void check_item_valid();
 void init();
+int kbhit(void);
 clock_t item_start_time[4], item_end_time;
 
 int main() {
@@ -41,6 +46,8 @@ int main() {
 
 	tm.tv_sec = 0;
 	tm.tv_usec = 1;
+
+	game_status = GAME_STATUS::GAME_UNCONNECTED;
 
 	if (gethostname(shostn, sizeof(shostn)) < 0) Err("gethostname");
 
@@ -89,6 +96,47 @@ int main() {
 				bzero(buf, BUFMAX);
 			}
 		}
+
+		//キー入力受け付け
+		if(kbhit()) {/*キーが押されていたら、変数cにキー取得*/
+			char c = getchar();
+
+			if(game_status == GAME_STATUS::GAME_WAIT) {
+				//ゲーム開始命令
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_PLAY,0,0),4);
+				game_status = GAME_STATUS::GAME_PLAY;
+				std::cout << "ゲームスタート" << std::endl;
+			}else if(game_status == GAME_STATUS::GAME_PLAY){
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_PAUSE,0,0),4);
+				game_status = GAME_STATUS::GAME_PAUSE;
+				std::cout << "一時停止" << std::endl;
+			}else if(game_status == GAME_STATUS::GAME_PAUSE) {
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS, GAME_PLAY, 0, 0), 4);
+				game_status = GAME_STATUS::GAME_PLAY;
+				std::cout << "プレー再開" << std::endl;
+			}
+
+		}
+
+		//finish状態か確認
+		if(game_status == GAME_STATUS::GAME_PLAY){
+			bool all_finish_flag=true;
+			bool disconnect_flag=false;
+			for (int i = 0;i < PORT_NUM;i++){
+				if(!player_param[i].exist)disconnect_flag =true;
+				if(!player_param[i].finish_flag)all_finish_flag=false;
+			}
+
+			if(all_finish_flag){ //生きている人がみなfinish状態ならゲーム終了
+				game_status = GAME_STATUS::GAME_WAIT;
+				if(disconnect_flag){ //ゲーム終了時誰かが切断していたらサーバー落とす
+					std::cout << "切断したプレイヤーが存在するためゲームを終了します" << std::endl;
+					exit(1);
+				}
+			}
+
+		}
+
 	}
 	//現在無限ループだね
 
@@ -161,8 +209,7 @@ void send_message(std::string msg, int id=4) {
 }
 
 void init(){
-	game_status=GAME_STATUS::GAME_PLAY;
-	left_time=300;
+	game_status=GAME_STATUS::GAME_WAIT;
 	item_end_time = 0;
 	for(int i=0;i<4;i++){
 		item_start_time[i] = 0;
@@ -180,4 +227,39 @@ CPlayer_param::CPlayer_param() {
 	exist = true;
 	score = 0;
 	using_item = ITEM_KIND::ITEM_NONE ;
+	finish_flag = false;
+}
+void CPlayer_param::init() {
+	exist = true;
+	score = 0;
+	using_item = ITEM_KIND::ITEM_NONE ;
+	finish_flag = false;
+}
+
+//キー操作用
+//http://tricky-code.net/mine/c/mc06linuxkbhit.php
+int kbhit(void)
+{
+	struct termios oldt, newt;
+	int ch;
+	int oldf;
+
+	tcgetattr(STDIN_FILENO, &oldt);
+	newt = oldt;
+	newt.c_lflag &= ~(ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+	oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+	fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+
+	ch = getchar();
+
+	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+	fcntl(STDIN_FILENO, F_SETFL, oldf);
+
+	if (ch != EOF) {
+		ungetc(ch, stdin);
+		return 1;
+	}
+
+	return 0;
 }

@@ -95,6 +95,10 @@ void recv_message(string msg, int id) {
 				}
 
 				break;
+			case COMMAND_NAME::FINISH:
+				player_param[id].finish_flag = true;
+				cout << "プレイヤー:" << id <<"からFINISHを受け取りました" << endl;
+				break;
 			default:
 				std::cout << "COMMAND_NAME ERROR" << std::endl;
 				break;

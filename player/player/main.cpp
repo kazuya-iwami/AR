@@ -23,7 +23,7 @@ using namespace std;
 
 #define FOCUS_SPEED 8
 
-#define USE_CAMERA_FLAG 0   //0:画像 1:カメラ 3:ラズパイ
+#define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 
 cv::VideoCapture vcap;
 

@@ -22,7 +22,8 @@
 using namespace std;
 
 #define FOCUS_SPEED 8
-#define USE_CAMERA_FLAG 1//0:画像 1:カメラ 3:ラズパイ
+
+#define USE_CAMERA_FLAG 0   //0:画像 1:カメラ 3:ラズパイ
 
 cv::VideoCapture vcap;
 
@@ -129,7 +130,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	float bullet_z = 0.0;
 
-	camera_image_size= FileRead_size("out.jpeg");
+	
 	thread_flag = true;
 	std::thread th(image_get_process); //映像取得、処理用スレッド開始
 
@@ -311,7 +312,19 @@ void image_get_process(){
 		Mat image;
 
 		if(USE_CAMERA_FLAG == 0){
-			image = imread("out.jpeg");
+
+			// DXライブラリで静止画取得 
+			camera_image_size= FileRead_size("out_.jpeg");
+			vector<char> buf(camera_image_size,0);
+			int FileHandle = FileRead_open("out_.jpeg");
+
+			FileRead_read(&buf[0],buf.size(),FileHandle );
+			FileRead_close(FileHandle);
+
+			draw_mtx.lock();//排他的処理
+			camera_image_handle = CreateGraphFromMem(&buf[0] , buf.size());
+			draw_mtx.unlock();
+
 		}else if(USE_CAMERA_FLAG == 1 || USE_CAMERA_FLAG == 2){
 			if(!vcap.read(image)) {
 				std::cout << "No frame" << std::endl;
@@ -319,21 +332,25 @@ void image_get_process(){
 				cv::waitKey();
 				return;
 			}
+
+			//mytank->detect_enemy(image);
+
+			cv::imwrite("out.jpeg",image);
+
+			// DXライブラリで静止画取得 
+			camera_image_size= FileRead_size("out.jpeg");
+			vector<char> buf(camera_image_size,0);
+			int FileHandle = FileRead_open("out.jpeg");
+
+			FileRead_read(&buf[0],buf.size(),FileHandle );
+			FileRead_close(FileHandle);
+
+			draw_mtx.lock();//排他的処理
+			camera_image_handle = CreateGraphFromMem(&buf[0] , buf.size());
+			draw_mtx.unlock();
+
 		}
 
-		//mytank->detect_enemy(image);
-
-		cv::imwrite("out.jpeg",image);
-
-		// DXライブラリで静止画取得 
-		vector<char> buf(camera_image_size,0);
-		int FileHandle = FileRead_open("out.jpeg");
-		FileRead_read(&buf[0],buf.size(),FileHandle );
-		FileRead_close(FileHandle);
-
-		draw_mtx.lock();//排他的処理
-		camera_image_handle = CreateGraphFromMem(&buf[0] , buf.size());
-		draw_mtx.unlock();
 
 	}
 }

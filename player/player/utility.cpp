@@ -39,7 +39,7 @@ bool CEnemy::draw(){
 	if(visible){//視界に入っているなら
 		if(!lockon){
 			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
-		}else
+		}
 		DrawGraph(x - 100 + LEFT_WINDOW_WIDTH,y - 130,figure_id["F_DETECT"],true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y , GetColor(255,255,255), "%dP", enemy_id);

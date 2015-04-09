@@ -10,14 +10,14 @@
 bool CMytank::draw() {
 
 	//カーソル表示
-	DrawGraph(focus_x-75+shake_x,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
+	DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
 
 	//スコア表示
 	
-	DrawFormatString(50,600,GetColor(200,200,200),"Score:%d",score);
+	DrawFormatString(50 + LEFT_WINDOW_WIDTH,600,GetColor(200,200,200),"Score:%d",score);
 
 	//アイテム枠表示
-	DrawGraph(0, 0, figure_id["F_FRAME"], true);
+	DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
 
 	
 

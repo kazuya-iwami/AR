@@ -103,7 +103,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	// ウインドウモードで起動
 	SetMainWindowText( "Real Tank Battle -４機の戦車が集いし時、現実と仮想空間が交差する-" ) ;
 	ChangeWindowMode( TRUE ) ;//falseならフルスクリーン
-	SetGraphMode(1000,750,32);//画面サイズ1000×750に設定
+	SetGraphMode(1350,730,32);//画面サイズ1000×750に設定
+	SetWindowInitPosition(0,0);
 
 	//文字サイズ
 	SetFontSize( 60 ) ;							 //サイズを20に変更
@@ -160,7 +161,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 
 			draw_mtx.lock();
-			DrawFormatString(50, 300, GetColor(255,255,255), "Waiting... ENTERでスタート");
+			DrawFormatString(50 + LEFT_WINDOW_WIDTH, 300, GetColor(255,255,255), "Waiting... ENTERでスタート");
 			draw_mtx.unlock();
 
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
@@ -174,7 +175,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			// 読みこんだグラフィックを拡大描画
 			draw_mtx.lock(); //排他的処理
-			DrawExtendGraph( mytank->shake_x , mytank->shake_y, 1000+mytank->shake_x  , 750+mytank->shake_y , camera_image_handle, false ) ;
+			DrawExtendGraph( mytank->shake_x + LEFT_WINDOW_WIDTH , mytank->shake_y,
+				1000+mytank->shake_x + LEFT_WINDOW_WIDTH  , 750+mytank->shake_y , camera_image_handle, false ) ;
 			draw_mtx.unlock();
 
 			//描画
@@ -317,7 +319,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		}else if(mytank->get_game_status() == GAME_STATUS::GAME_PAUSE){
 
 			draw_mtx.lock();
-			DrawFormatString(50, 300, GetColor(255,255,255), "PAUSE... ENTERで戻る");
+			DrawFormatString(50 + LEFT_WINDOW_WIDTH, 300, GetColor(255,255,255), "PAUSE... ENTERで戻る");
 			draw_mtx.unlock();
 
 			//ENTERでGAME_STAUTS変更
@@ -328,7 +330,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		}else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
 
 			draw_mtx.lock();
-			DrawFormatString(50, 300, GetColor(255,255,255), "FINISH!!!　5秒");
+			DrawFormatString(50 + LEFT_WINDOW_WIDTH, 300, GetColor(255,255,255), "FINISH!!!　5秒");
 			draw_mtx.unlock();
 
 			if(finish_timer == 0){

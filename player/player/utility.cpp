@@ -4,7 +4,7 @@
 bool CSystem_timer::draw(){
 	//残り時間表示
 	
-	DrawFormatString(650,20,GetColor(200,200,200),"Time:%d",system_timer/30 + 1);
+	DrawFormatString(650 + LEFT_WINDOW_WIDTH,20,GetColor(200,200,200),"Time:%d",system_timer/30 + 1);
 	if(system_timer > 0){
 		system_timer--;
 	}else finish_flag = true;
@@ -14,9 +14,9 @@ bool CSystem_timer::draw(){
 }
 
 bool CEffect::draw(){
-	DrawString(100,100,"red",0);
+	DrawString(100 + LEFT_WINDOW_WIDTH,100,"red",0);
 	SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,shaketiemr*10);
-	DrawGraph(0,0,figure_id["T_REDBACK"],1);
+	DrawGraph(0 + LEFT_WINDOW_WIDTH,0,figure_id["T_REDBACK"],1);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	if(shaketiemr==0){
 		return false;
@@ -40,9 +40,9 @@ bool CEnemy::draw(){
 		if(!lockon){
 			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
 		}else
-		DrawGraph(x - 100,y - 130,figure_id["F_DETECT"],true);
+		DrawGraph(x - 100 + LEFT_WINDOW_WIDTH,y - 130,figure_id["F_DETECT"],true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-		DrawFormatString(x - 50 ,y , GetColor(255,255,255), "%dP", enemy_id);
+		DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y , GetColor(255,255,255), "%dP", enemy_id);
 	}
 
 
@@ -73,10 +73,10 @@ void CEnemy::attacked(int score_){
 bool CBullet_image :: draw(){
 	int i;
 	for(i=0;i<num_bullet;i++){
-		DrawGraph(5,150+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
+		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
 	for(i=0;i<max_bullet_num - num_bullet;i++){
-		DrawGraph(5,150+25*i,figure_id["F_BULLETUSED"],true);
+		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+25*i,figure_id["F_BULLETUSED"],true);
 	}
 	return true;
 }

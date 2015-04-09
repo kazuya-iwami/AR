@@ -25,6 +25,10 @@ using namespace std;
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 
+
+bool list_cmp(std::shared_ptr<CObject>& v1,std::shared_ptr<CObject>& v2 );
+
+
 cv::VideoCapture vcap;
 
 int camera_image_handle;//スレッド処理用
@@ -125,8 +129,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//ここ大事。object.h見て
 	//後ここ参考　http://marupeke296.com/DXCLS_WhoIsDrawer.html
 
-	CObject::register_object(mytank);
-	CObject::register_object(system_timer);
+	CObject::register_object(mytank,DRAW_LAYER::MYTANK_LAYER);
+	CObject::register_object(system_timer,DRAW_LAYER::IMFOMATION_LAYER);
 
 	float bullet_z = 0.0;
 
@@ -152,8 +156,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
 		*/
 
-		draw_mtx.lock();
 		std::list<std::shared_ptr<CObject>>::iterator it;
+		CObject::drawlist.sort(list_cmp);//レイヤーの順にソート
+
+		draw_mtx.lock();
 		for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // 最後の「it++」を消す
 			if( !(*it)->draw() ){ //アニメーション終了時
 				// オブジェクトをリストからはずす
@@ -225,19 +231,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//テスト用　3を押したタイミングで3D球(Bullet)生成
 		if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
 			auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
-			CObject::register_object(bullet);
+			CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
 		}
 
 
 		//テスト用　Eを押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
-			CObject::register_object(explosion);
+			CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
 		}
 		//テスト用　1を押したタイミングでExplosion生成
 		if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
 			auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
-			CObject::register_object(explosion);
+			CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
 		}
 		//テスト用　Iを押したタイミングでItem生成
 		if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
@@ -314,7 +320,7 @@ void image_get_process(){
 		if(USE_CAMERA_FLAG == 0){
 
 			// DXライブラリで静止画取得 
-			camera_image_size= FileRead_size("out_.jpeg");
+			camera_image_size = (int)FileRead_size("out_.jpeg");
 			vector<char> buf(camera_image_size,0);
 			int FileHandle = FileRead_open("out_.jpeg");
 
@@ -353,4 +359,12 @@ void image_get_process(){
 
 
 	}
+}
+
+//draw_listのソートに使用
+bool list_cmp(std::shared_ptr<CObject>& v1,std::shared_ptr<CObject>& v2 ){
+	if(v1->layer_id < v2->layer_id){
+		return true;
+	}else return false;
+
 }

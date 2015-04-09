@@ -16,16 +16,30 @@ extern int bullet[30];
 //数字用
 extern int number[10];
 
+enum DRAW_LAYER{ //描画レイヤー
+	EXPLOSION_LAYER,
+	BULLET_LAYER,
+	ITEM_LAYER,
+	ENEMY_LAYER,
+	MESSAGE_LAYER,
+	MYTANK_LAYER,
+	IMFOMATION_LAYER
+};
+
 //描画、音声を取りまとめるクラス
 class CObject {
 protected:
 	int x,y; //描画位置
 	int draw_timer; //アニメーション用
+	
 	static map<string,int> figure_id;//ここにloadしたイメージに対応したidを連想配列として保存   F_から書き始める
 	static map<string,int> sound_id;//ここにloadしたイメージに対応したidを連想配列として保存    S_から書き始める
+
+	void set_layer_id(DRAW_LAYER layer_id_);
 	
 public:
 	static std::list<std::shared_ptr<CObject>> drawlist;
+	int layer_id; //描画する際に重なる順番　０が一番後ろの面に描画される
 	/*
 		画像の描画を行う関数
 		falseが返ってきたら描画対象から外す
@@ -39,7 +53,7 @@ public:
 		任意の描画画像はここに登録させる必要がある
 	*/
 	static void load();//ロード
-	static void register_object(std::shared_ptr<CObject> obj);//drawlistに登録
+	static void register_object(std::shared_ptr<CObject> obj,DRAW_LAYER layer_id);//drawlistに登録
 };
 
 /* 描画方法

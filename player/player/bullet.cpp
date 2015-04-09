@@ -14,7 +14,8 @@ bool CBullet::draw(){
 	//DrawFormatString(0, 20, GetColor(255,255,255), "bullet:%d", draw_timer);
 
 	//描画開始と同時に音声発生
-	if(draw_timer==0) PlaySoundMem( sound_id["S_TEST"] , DX_PLAYTYPE_BACK ) ;
+	if(draw_timer==0) PlaySoundMem( sound_id["S_BOMB"] , DX_PLAYTYPE_BACK ) ;
+
 
 	switch(kind){
 	case BULLET_KIND::BULLET_NOMAL :

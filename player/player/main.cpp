@@ -120,20 +120,28 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CFps fps; 
 
 	//使用する画像の読み込み
-	draw_mtx.lock();
+	SetUseASyncLoadFlag(TRUE);
 	CObject::load();//すべての画像はこの中で読み込む
-	draw_mtx.unlock();
-
+	SetUseASyncLoadFlag(FALSE);
 
 	init(&mytank,&system_timer); //ゲームの初期化
+	
+
+	while(GetASyncLoadNum() > 0){ //全て読み込むまでスレッド立ち上げない
+		WaitTimer(10);
+	}
 
 	thread_flag = true;
 	std::thread th(image_get_process); //映像取得、処理用スレッド開始
 
+	
+
 	// メインループ
 	while(1){
 		// 画面に描かれているものを一回全部消す
+		draw_mtx.lock();
 		ClearDrawScreen();
+		draw_mtx.unlock();
 
 		//キー状態取得
 		//書き方は以下の通り
@@ -191,6 +199,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//照準と敵が重なっているかチェック
 			mytank->check_focus();
 
+			//振動処理
+			mytank->shake();
+
 			//移動処理　この中に書く
 			//キー状態取得の後に移動します(2015/3/31 大杉追記)
 			//mytank->move();
@@ -232,11 +243,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					mytank->move(_T("stop"), speed);
 			}
 
-			if(mytank->shakeflag==2){
-				mytank->shake(1);
-			}
 			if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
-				mytank->shake(1);
 				mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 			}
 			//テスト用　3を押したタイミングで3D球(Bullet)生成
@@ -283,9 +290,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 
 			//テスト用　とりあえずX押したら画面が振動するよ
-			if(mytank->shakeflag==1 || (key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0)){
+			if(key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0){
 
-				mytank->shake(0);
+				mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
 			}
 
 			//ENTERでGAME_STAUTS変更

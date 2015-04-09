@@ -92,6 +92,9 @@ void CMytank::set_vel(int vr, int vl) {
 
 void CMytank::gen_bullet(BULLET_KIND item_data) {
 
+	//画面振動
+	shake_start(SHAKE_STATUS::SMALL_SHAKE);
+
 	//残弾処理
 	if (num_bullet == 0)return;
 	num_bullet--;
@@ -155,41 +158,32 @@ void CMytank::use_item() {
 }
 
 //君だけのオリジナル画面振動を実装しよう！
-int CMytank::shake(int n){
-	switch(n){
-	case 0://被弾時
-	shakeflag=1;
-	shake_x=(rand()%40-20)*shaketimer;
-	shake_y=(rand()%40-20)*shaketimer;
-	if(shaketimer==10){
-		PlaySoundMem( sound_id["S_BOMB"] , DX_PLAYTYPE_BACK ) ;
+
+void CMytank::shake(){
+	if(shakeflag == SHAKE_STATUS::BIG_SHAKE){
+		shake_x=(rand()%40-20)*shaketimer;
+		shake_y=(rand()%40-20)*shaketimer;
+	}else if(shakeflag == SHAKE_STATUS::SMALL_SHAKE){
+		shake_y=(rand()%6-3)*shaketimer;
 	}
+
 	if(shaketimer==0){
 		shaketimer=11;
 		shakeflag=0;
 		shake_x=0;
 		shake_y=0;
 	}
-	break;
-	case 1://自分で撃ったときの反動
-		shakeflag=2;
-		shake_y=(rand()%10-5)*shaketimer;
-		if(shaketimer==10){
-			PlaySoundMem( sound_id["S_BOMB"] , DX_PLAYTYPE_BACK ) ;
-		}
-		if(shaketimer==0){
-			shaketimer=11;
-			shakeflag=0;
-			shake_x=0;
-			shake_y=0;
-		}
-		break;
-	default:
-		break;
-	}
+
 	shaketimer--;
-	return 1;
 }
+
+void CMytank::shake_start(SHAKE_STATUS shake_status){
+	
+	shakeflag = shake_status;
+
+	shaketimer=11;
+	shake_x=0;
+	shake_y=0;
 
 	/*以下shake()の残骸
 	switch(n){
@@ -243,6 +237,8 @@ int CMytank::shake(int n){
 	default:
 		break;
 	}*/
+
+}
 
 void CMytank::get_msg(){
 	string msg = check_msg();

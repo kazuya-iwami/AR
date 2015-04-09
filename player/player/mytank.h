@@ -34,9 +34,9 @@ class CMytank : public CObject, public CNetwork {
 public:
 
 	int shaketimer;
-	bool shakeflag;
+	int shakeflag;
 	int focus_x,focus_y;//照準の位置
-	int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
+	//int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
 
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;

@@ -219,7 +219,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		}
 
 		//Bullet生成
+		if(mytank->shakeflag==2){
+			mytank->shake(1);
+		}
 		if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
+			mytank->shake(1);
 			mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 		}
 		//テスト用　3を押したタイミングで3D球(Bullet)生成
@@ -266,8 +270,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		}
 
 		//テスト用　とりあえずX押したら画面が振動するよ
-		if(mytank->shakeflag==true || (key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0)){
-			mytank->shake(mytank->shaketimer);
+		if(mytank->shakeflag==1 || (key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0)){
+			mytank->shake(0);
 		}
 
 		fps.Update();//1サイクルごとの速度を測定

@@ -3,6 +3,8 @@
 map<string,int> CObject::figure_id;
 map<string,int> CObject::sound_id;
 std::list<std::shared_ptr<CObject>> CObject::drawlist;
+int CObject::shake_x;
+int CObject::shake_y;
 
 //爆発エフェクト用配列
 int explosion[45];

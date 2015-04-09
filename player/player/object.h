@@ -26,6 +26,8 @@ protected:
 	
 public:
 	static std::list<std::shared_ptr<CObject>> drawlist;
+	static int shake_x;
+	static int shake_y;
 	/*
 		画像の描画を行う関数
 		falseが返ってきたら描画対象から外す

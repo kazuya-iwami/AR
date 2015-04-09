@@ -22,7 +22,7 @@
 using namespace std;
 
 #define FOCUS_SPEED 8
-#define GAME_TIME 30 //20秒
+#define GAME_TIME 20 //20秒
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 
@@ -154,7 +154,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 
 			draw_mtx.lock();
-			DrawFormatString(20, 300, GetColor(255,255,255), "Waiting... ENTERでスタート");
+			DrawFormatString(50, 300, GetColor(255,255,255), "Waiting... ENTERでスタート");
 			draw_mtx.unlock();
 
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
@@ -309,7 +309,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		}else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
 
 			draw_mtx.lock();
-			DrawFormatString(20, 300, GetColor(255,255,255), "FINISH!!!　ENTERで初期画面へ");
+			DrawFormatString(50, 300, GetColor(255,255,255), "FINISH!!!　ENTERで初期画面へ");
 			draw_mtx.unlock();
 
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){

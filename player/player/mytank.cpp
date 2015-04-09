@@ -92,14 +92,16 @@ void CMytank::set_vel(int vr, int vl) {
 
 void CMytank::gen_bullet(BULLET_KIND item_data) {
 
-	//画面振動
-	shake_start(SHAKE_STATUS::SMALL_SHAKE);
 
 	//残弾処理
 	if (num_bullet == 0)return;
 	num_bullet--;
 
 	bullet_image->update_num_bullet(num_bullet);//残弾数反映
+
+	//画面振動
+	shake_start(SHAKE_STATUS::SMALL_SHAKE);
+	
 
 	//描画
 	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);

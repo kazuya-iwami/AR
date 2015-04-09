@@ -34,11 +34,16 @@ cv::VideoCapture vcap;
 
 int camera_image_handle;//スレッド処理用
 std::mutex draw_mtx;
+std::mutex mytank_mtx;
 bool thread_flag;
 int camera_image_size;
 
+shared_ptr<CMytank> mytank;
+shared_ptr<CSystem_timer> system_timer;
+
 void image_get_process();//別スレッドで映像の受信、処理を行う
-void init(shared_ptr<CMytank>* mytank,shared_ptr<CSystem_timer>* system_timer);
+void init();
+
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ){
 
@@ -55,8 +60,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//グローバル変数はmain.hに書いてる
 	//他のファイルで用いる時はexternして（externでググるべし）
 
-	shared_ptr<CMytank> mytank;
-	shared_ptr<CSystem_timer> system_timer;
+	
 	//auto redback=make_shared<CEffect>();
 
 
@@ -124,7 +128,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CObject::load();//すべての画像はこの中で読み込む
 	SetUseASyncLoadFlag(FALSE);
 
-	init(&mytank,&system_timer); //ゲームの初期化
+	init(); //ゲームの初期化
 	
 
 	while(GetASyncLoadNum() > 0){ //全て読み込むまでスレッド立ち上げない
@@ -314,7 +318,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
-				init(&mytank,&system_timer);
+				init();
 			}
 
 
@@ -383,7 +387,9 @@ void image_get_process(){
 				return;
 			}
 
-			//mytank->detect_enemy(image);
+			mytank_mtx.lock();
+			mytank->detect_enemy(image);
+			mytank_mtx.unlock();
 
 			cv::imwrite("out.jpeg",image);
 
@@ -406,23 +412,25 @@ void image_get_process(){
 }
 
 //ゲームの初期化
-void init(shared_ptr<CMytank>* mytank,shared_ptr<CSystem_timer>* system_timer){
+void init(){
 
 	//描画リストの要素をすべて削除
 	CObject::drawlist.clear();
 
 	//スマートポインタ生成
 	auto mytank_ = make_shared<CMytank>();
-	*mytank = mytank_;
+	mytank_mtx.lock();
+	mytank = mytank_;
+	mytank_mtx.unlock();
 	auto system_timer_ = make_shared<CSystem_timer>(10,10,GAME_TIME);
-	*system_timer = system_timer_;
+	system_timer = system_timer_;
 
 	//色々描画リストに登録
 	//ここ大事。object.h見て
 	//後ここ参考　http://marupeke296.com/DXCLS_WhoIsDrawer.html
 
-	CObject::register_object(*mytank,DRAW_LAYER::MYTANK_LAYER);
-	CObject::register_object(*system_timer,DRAW_LAYER::IMFOMATION_LAYER);
+	CObject::register_object(mytank,DRAW_LAYER::MYTANK_LAYER);
+	CObject::register_object(system_timer,DRAW_LAYER::IMFOMATION_LAYER);
 
 }
 

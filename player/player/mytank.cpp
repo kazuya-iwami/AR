@@ -92,7 +92,6 @@ void CMytank::set_vel(int vr, int vl) {
 
 void CMytank::gen_bullet(BULLET_KIND item_data) {
 
-
 	//残弾処理
 	if (num_bullet == 0)return;
 	num_bullet--;

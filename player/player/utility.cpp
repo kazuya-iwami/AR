@@ -1,15 +1,14 @@
 ﻿#include "utility.h"
 
 
-//ゲームの制限時間。適当に調整
-int timer=3359;
-
 bool CSystem_timer::draw(){
 	//残り時間表示
 	
-	DrawFormatString(650,20,GetColor(255,122,0),"Time:%d",timer/10);
+	DrawFormatString(650,20,GetColor(200,200,200),"Time:%d",system_timer/30 + 1);
+	if(system_timer > 0){
+		system_timer--;
+	}else finish_flag = true;
 
-	timer--;
 
 	return true;//常に描画
 }
@@ -25,10 +24,12 @@ bool CEffect::draw(){
 	return true;
 }
 
-CSystem_timer::CSystem_timer(int x_,int y_){
+CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	//ChangeFont("07ロゴたいぷゴシック7");
 	x=x_;
 	y=y_;
+	system_timer = game_time * 30;
+	finish_flag = false;
 }
 
 bool CEnemy::draw(){

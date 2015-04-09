@@ -14,7 +14,7 @@ bool CMytank::draw() {
 
 	//スコア表示
 	
-	DrawFormatString(50,600,GetColor(255,122,0),"Score:%d",score);
+	DrawFormatString(50,600,GetColor(200,200,200),"Score:%d",score);
 
 	//アイテム枠表示
 	DrawGraph(0, 0, figure_id["F_FRAME"], true);
@@ -34,7 +34,7 @@ CMytank::CMytank() {
 	vel_L = 0;
 	focus_x = 200;
 	focus_y = 200;
-	game_status = GAME_STATUS::GAME_PLAY;
+	game_status = GAME_STATUS::GAME_WAIT;
 	item_kind = ITEM_KIND::STAR; //スターを持たせる
 	shaketimer=10;
 	shakeflag=false;

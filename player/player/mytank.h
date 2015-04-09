@@ -15,8 +15,10 @@ enum OPERATION_STATUS {
 };
 
 enum GAME_STATUS {
+	GAME_WAIT,
 	GAME_PLAY,
-	GAME_PAUSE
+	GAME_PAUSE,
+	GAME_FINISH
 };
 
 
@@ -42,7 +44,7 @@ public:
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;
 	shared_ptr<CEnemy> enemy3;
-
+	\
 	shared_ptr<CBullet_image> bullet_image;//残弾描画
 
 	CMytank();
@@ -57,4 +59,7 @@ public:
 	void check_focus();
 	void attacked(int score_);
 	int shake(int n);
+	GAME_STATUS get_game_status(){return game_status;}
+	void set_game_status(GAME_STATUS game_status_){game_status = game_status_;}
+
 };

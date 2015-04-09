@@ -16,7 +16,7 @@ extern int bullet[30];
 //数字用
 extern int number[10];
 
-enum DRAW_LAYER{ //描画レイヤー
+enum DRAW_LAYER{ //描画レイヤー 下に行くほど前面
 	EXPLOSION_LAYER,
 	BULLET_LAYER,
 	ITEM_LAYER,

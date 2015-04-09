@@ -65,7 +65,7 @@ void CEnemy::attacked(int score_){
     score += score_;
     if(visible){
         auto explosion = make_shared<CExplosion>(x , y, EXPLOSION_KIND::EXPLOSION_NOMAL);
-        CObject::register_object(explosion);
+        CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
     }
 }
 

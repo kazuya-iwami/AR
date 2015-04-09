@@ -53,8 +53,14 @@ bool CObject::draw(){
 
 }
 
-void CObject::register_object(std::shared_ptr<CObject> obj){
+void CObject::register_object(std::shared_ptr<CObject> obj,DRAW_LAYER layer_id_){
 
+	obj->set_layer_id(layer_id_);
 	drawlist.push_back(obj);
 
+}
+
+void CObject::set_layer_id(DRAW_LAYER layer_id_){
+
+	layer_id = layer_id_;
 }

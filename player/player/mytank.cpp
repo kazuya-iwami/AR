@@ -9,6 +9,9 @@
 
 bool CMytank::draw() {
 
+	//カーソル表示
+	DrawGraph(focus_x-75+shake_x,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
+
 	//スコア表示
 	
 	DrawFormatString(50,600,GetColor(255,122,0),"Score:%d",score);
@@ -16,8 +19,7 @@ bool CMytank::draw() {
 	//アイテム枠表示
 	DrawGraph(0, 0, figure_id["F_FRAME"], true);
 
-	//カーソル表示
-	DrawGraph(focus_x-64+shake_x,focus_y-64+shake_y,figure_id["F_CURSUR"],true);
+	
 
 	return true;
 };
@@ -43,31 +45,31 @@ CMytank::CMytank() {
 
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
 	bullet_image = bullet_image_;
-	CObject::register_object(bullet_image);
+	CObject::register_object(bullet_image,DRAW_LAYER::IMFOMATION_LAYER);
 
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
 		enemy0->init(137,180,100,255,56,184);//スマホの赤
-		CObject::register_object(enemy0);
+		CObject::register_object(enemy0,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 1) {
 		auto enemy1_ = make_shared<CEnemy>(1);
 		enemy1 = enemy1_;
 		enemy1->init(70,93,65,255,56,184);//サボテンだー
-		CObject::register_object(enemy1);
+		CObject::register_object(enemy1,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 2) {
 		auto enemy2_ = make_shared<CEnemy>(2);
 		enemy2 = enemy2_;
 		enemy2->init(0,0,100,200,100,200);
-		CObject::register_object(enemy2);
+		CObject::register_object(enemy2,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 3) {
 		auto enemy3_ = make_shared<CEnemy>(3);
 		enemy3 = enemy3_;
 		enemy3->init(30,30,100,200,100,200);
-		CObject::register_object(enemy3);
+		CObject::register_object(enemy3,DRAW_LAYER::ENEMY_LAYER);
 	}
 };
 
@@ -98,7 +100,7 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 
 	//描画
 	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);
-	CObject::register_object(bullet);
+	CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
 
 
 	if (id != 0 && enemy0->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 0, (int)BULLET_KIND::BULLET_NOMAL));
@@ -146,7 +148,7 @@ void CMytank::use_item() {
 		send_msg(encode(COMMAND_NAME::USE_ITEM, id, 4, (int)item_kind));
 		
 		auto item = make_shared<CItem>(200 , 200, item_kind);
-    	CObject::register_object(item);
+		CObject::register_object(item,DRAW_LAYER::ITEM_LAYER);
 		
 		item_kind = ITEM_KIND::ITEM_NONE;
 	}
@@ -483,25 +485,25 @@ void CMytank::get_msg(){
 					case 0:
 						{
 						auto popup = make_shared<CPopup>(enemy0->get_x(),enemy0->get_y(),"スター使った☆");
-						CObject::register_object(popup);
+						CObject::register_object(popup,DRAW_LAYER::MESSAGE_LAYER);
 						break;
 						}
 					case 1:
 						{
 						auto popup = make_shared<CPopup>(enemy1->get_x(),enemy1->get_y(),"スター使った☆");
-						CObject::register_object(popup);
+						CObject::register_object(popup,DRAW_LAYER::MESSAGE_LAYER);
 						break;
 						}
 					case 2:
 						{
 						auto popup = make_shared<CPopup>(enemy2->get_x(),enemy2->get_y(),"スター使った☆");
-						CObject::register_object(popup);
+						CObject::register_object(popup,DRAW_LAYER::MESSAGE_LAYER);
 						break;
 						}
 					case 3:
 						{
 						auto popup = make_shared<CPopup>(enemy3->get_x(),enemy3->get_y(),"スター使った☆");
-						CObject::register_object(popup);
+						CObject::register_object(popup,DRAW_LAYER::MESSAGE_LAYER);
 						break;
 						}
 

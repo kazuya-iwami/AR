@@ -322,10 +322,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			if(system_timer->get_finish_flag()){
 				mytank->set_game_status(GAME_STATUS::GAME_FINISH);
 				finish_timer = FINISH_TIME*30;
-				if(mytank->get_id() != 0)exist_flag[0] = mytank->enemy0->exist;
-				if(mytank->get_id() != 1)exist_flag[1] = mytank->enemy1->exist;
-				if(mytank->get_id() != 2)exist_flag[2] = mytank->enemy2->exist;
-				if(mytank->get_id() != 3)exist_flag[3] = mytank->enemy3->exist;
 				//時間切れの処理
 			}
 
@@ -348,6 +344,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			if(finish_timer == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
+
+				if(mytank->get_id() != 0)exist_flag[0] = mytank->enemy0->exist;
+				if(mytank->get_id() != 1)exist_flag[1] = mytank->enemy1->exist;
+				if(mytank->get_id() != 2)exist_flag[2] = mytank->enemy2->exist;
+				if(mytank->get_id() != 3)exist_flag[3] = mytank->enemy3->exist;
+
 				init();
 			}else finish_timer--;
 

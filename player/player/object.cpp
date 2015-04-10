@@ -17,6 +17,9 @@ int bullet_start[45];
 //数字用配列
 int number[10];
 
+//文字用
+int word[160];
+
 //燃える
 int fire[5];
 //up_effect
@@ -63,6 +66,9 @@ void CObject::load(){
 	LoadDivGraph("image/up_effect.png",10,10,1,120,120,up_effect);
 	//rain
 	//LoadDivGraph("image/rain.png",6,1,6,640,480,rain);
+
+	//文字読み込み
+	LoadDivGraph("image/font.png",128,16,8,47,54,word);
 }
 
 bool CObject::draw(){
@@ -82,4 +88,11 @@ void CObject::register_object(std::shared_ptr<CObject> obj,DRAW_LAYER layer_id_)
 void CObject::set_layer_id(DRAW_LAYER layer_id_){
 
 	layer_id = layer_id_;
+}
+
+//size:文字サイズ0~1のfloat space:文字間の間隔 int ,str:文字列 string
+void CObject::DrawOriginalString(int x,int y,float size,int space,string str){
+	for(int i = 0; i < str.length(); i++){
+		DrawExtendGraph(x+space*i,y,x+space*i+49*size,y+51*size,word[(int)str[i]],true);
+	}
 }

@@ -13,7 +13,9 @@ bool CMytank::draw() {
 	DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
 
 	//スコア表示
-	DrawFormatString(50 + LEFT_WINDOW_WIDTH,600,GetColor(200,200,200),"Score:%d",score);
+	DrawOriginalString(50+LEFT_WINDOW_WIDTH,200,1.0,22,"SCORE:"+to_string(score));
+
+	
 
 	//アイテム枠表示
 	DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);

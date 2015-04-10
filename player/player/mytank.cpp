@@ -551,7 +551,7 @@ void CMytank::detect_enemy(Mat image) {
 }
 
 void CMytank::attacked(int score_){
-	score += score_;
+	score -= score_;
 };
 
 void CMytank::set_game_status(GAME_STATUS game_status_){

@@ -10,7 +10,16 @@
 bool CMytank::draw() {
 
 	//カーソル表示
-	DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
+	bool flag =false;
+	if(id != 0 && enemy0->lockon ==true) flag = true;
+	if(id != 1 && enemy1->lockon ==true) flag = true;
+	if(id != 2 && enemy2->lockon ==true) flag = true;
+	if(id != 3 && enemy3->lockon ==true) flag = true;
+	if(flag == true){
+		DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR_ON"],true);
+	}else{
+		DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
+	}
 
 	//スコア表示
 	DrawOriginalString(50+LEFT_WINDOW_WIDTH,200,1.0,22,"SCORE:"+to_string(score));
@@ -589,4 +598,11 @@ void CMytank::finish(){
 	StopSoundMem(sound_id["S_GAME_BGM"]);
 	//ゲーム終了
 	set_game_status(GAME_STATUS::GAME_FINISH);
+
+	//描画リストの要素をすべて削除
+	CObject::drawlist.clear();
+
+	auto finish = make_shared<CFinish>();
+	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);	
+
 }

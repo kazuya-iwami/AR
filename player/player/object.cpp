@@ -32,6 +32,7 @@ void CObject::load(){
 	figure_id["F_DETECT"] =  LoadGraph("image/detect.png");
 	figure_id["F_FRAME"]=LoadGraph("image/frame.png");
 	figure_id["F_CURSUR"]=LoadGraph("image/cursur.png");
+	figure_id["F_CURSUR_ON"]=LoadGraph("image/cursur_on.png");
 	figure_id["F_BULLETNOKORI"]=LoadGraph("image/bullet_nokori.png");
 	figure_id["F_BULLETUSED"]=LoadGraph("image/bullet_used.png");
 	figure_id["F_REDBACK"]=LoadGraph("image/redback.png");

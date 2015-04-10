@@ -22,7 +22,7 @@
 using namespace std;
 
 #define FOCUS_SPEED 8
-#define GAME_TIME 120 //プレー時間　20秒
+#define GAME_TIME 5 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
@@ -195,27 +195,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				1000+mytank->shake_x + LEFT_WINDOW_WIDTH  , 750+mytank->shake_y , camera_image_handle, false ) ;
 			draw_mtx.unlock();
 
-			//描画
-			/*	
-			すべての描画をここで受け持つ。
-			drawlistに登録されてるオブジェクトのdraw()をすべて実行
-			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
-			*/
-
-			std::list<std::shared_ptr<CObject>>::iterator it;
-			CObject::drawlist.sort(list_cmp);//レイヤーの順にソート
-
-			draw_mtx.lock();
-			for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // 最後の「it++」を消す
-				if( !(*it)->draw() ){ //アニメーション終了時
-					// オブジェクトをリストからはずす
-					it = CObject::drawlist.erase( it );
-					continue;
-				}
-				it++;   // インクリメント
-			}
-
-			draw_mtx.unlock();
 
 
 			//照準と敵が重なっているかチェック
@@ -341,6 +320,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			if(system_timer->get_finish_flag()){
 
 				mytank->finish();
+				
 				finish_timer = FINISH_TIME*30;
 				//時間切れの処理
 			}
@@ -374,6 +354,30 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}else finish_timer--;
 
 
+		}
+
+		if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY || mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
+		    //描画
+			/*	
+			すべての描画をここで受け持つ。
+			drawlistに登録されてるオブジェクトのdraw()をすべて実行
+			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
+			*/
+
+			std::list<std::shared_ptr<CObject>>::iterator it;
+			CObject::drawlist.sort(list_cmp);//レイヤーの順にソート
+
+			draw_mtx.lock();
+			for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // 最後の「it++」を消す
+				if( !(*it)->draw() ){ //アニメーション終了時
+					// オブジェクトをリストからはずす
+					it = CObject::drawlist.erase( it );
+					continue;
+				}
+				it++;   // インクリメント
+			}
+
+			draw_mtx.unlock();
 		}
 
 		//サーバーからmsgの受信

@@ -177,8 +177,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			draw_mtx.unlock();
 
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
-				mytank->set_game_status(GAME_STATUS::GAME_PLAY);
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
+				mytank->start();
 			}
 
 			
@@ -335,7 +335,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			//時間切れるとGAME_STATUS変更
 			if(system_timer->get_finish_flag()){
-				mytank->set_game_status(GAME_STATUS::GAME_FINISH);
+
+				mytank->finish();
 				finish_timer = FINISH_TIME*30;
 				//時間切れの処理
 			}

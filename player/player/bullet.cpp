@@ -19,7 +19,8 @@ bool CBullet::draw(){
 
 	switch(kind){
 	case BULLET_KIND::BULLET_NOMAL :
-		DrawGraph(x-128+shake_x + LEFT_WINDOW_WIDTH,y-128+shake_y, bullet[draw_timer], true);
+		//DrawGraph(x-128+shake_x + LEFT_WINDOW_WIDTH,y-128+shake_y, bullet[draw_timer], true);
+		DrawGraph(x-128+shake_x + LEFT_WINDOW_WIDTH,y-128+shake_y, bullet_start[draw_timer], true);
 		break;
 	case BULLET_KIND::BULLET_3D :
 		DrawSphere3D(VGet(x + LEFT_WINDOW_WIDTH, y, z), 80.0f, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), true);

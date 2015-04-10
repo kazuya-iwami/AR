@@ -16,6 +16,13 @@ int bullet[30];
 //数字用配列
 int number[10];
 
+//燃える
+int fire[5];
+//up_effect
+int up_effect[10];
+//rain
+//int rain[6];
+
 void CObject::load(){
 	//このように書けばtest.jpgをメモリに読み込む。
 	//今後はdraw()内でfigure_id["F_TEST"]を用いるとこの画像に対応したidを取得できる。
@@ -44,6 +51,13 @@ void CObject::load(){
 	//number
 	//爆発と同じく分割して読み込み。
 	LoadDivGraph("image/number.png",10,5,2,55,100,number);
+
+	//fire
+	LoadDivGraph("image/gamenfire.png",5,1,5,640,480,fire);
+	//up_effect
+	LoadDivGraph("image/up_effect.png",10,10,1,120,120,up_effect);
+	//rain
+	//LoadDivGraph("image/rain.png",6,1,6,640,480,rain);
 }
 
 bool CObject::draw(){

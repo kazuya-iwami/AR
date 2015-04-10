@@ -1,0 +1,21 @@
+diff a/player/player/utility.cpp b/player/player/utility.cpp	(rejected hunks)
+@@ -37,11 +37,15 @@
+ 	y=ip_y*750/240;
+ 
+ 	if(visible){//è¦–ç•Œã«å…¥ã£ã¦ã„ã‚‹ãªã‚‰
+-		if(!lockon){
+-			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
++		if(exist){
++			if(!lockon){
++				SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
++			}
++			DrawGraph(x - 100 + LEFT_WINDOW_WIDTH,y - 130,figure_id["F_DETECT"],true);
++			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
++		}else{ //åˆ‡æ–­ã•ã‚Œã¦ã„ãŸã‚‰
++			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "ã“ã„ã¤æ­»ã‚“ã§ã‚‹ã‚ˆ(Â´ãƒ»Ï‰ãƒ»`)");
+ 		}
+-		DrawGraph(x - 100 + LEFT_WINDOW_WIDTH,y - 130,figure_id["F_DETECT"],true);
+-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+ 		DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y , GetColor(255,255,255), "%dP", enemy_id);
+ 	}
+ 

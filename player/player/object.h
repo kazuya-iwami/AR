@@ -16,6 +16,13 @@ extern int bullet[30];
 //数字用
 extern int number[10];
 
+//燃える
+extern int fire[5];
+//up_effect
+extern int up_effect[10];
+//rain
+//extern int rain[6];
+
 #define LEFT_WINDOW_WIDTH 150
 
 enum DRAW_LAYER{ //描画レイヤー 下に行くほど前面

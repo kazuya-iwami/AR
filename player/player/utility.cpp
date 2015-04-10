@@ -102,4 +102,46 @@ void CBullet_image :: update_num_bullet(int num_bullet_){
 }
 
 
+CFire ::CFire(){
+	draw_timer = 0;
+}
 
+bool CFire::draw(){
+	
+	DrawExtendGraph( LEFT_WINDOW_WIDTH , 0,
+				1000 + LEFT_WINDOW_WIDTH  , 750 , fire[draw_timer % 5], true ) ;
+
+	draw_timer++;
+
+	if(draw_timer <120) return true;
+	else return false;
+}
+
+CUp_effect :: CUp_effect(){
+	draw_timer = 0;
+}
+
+bool CUp_effect::draw(){
+
+	DrawGraph(80 + LEFT_WINDOW_WIDTH,200,up_effect[draw_timer],true);
+	draw_timer++;
+
+	if(draw_timer < 10) return true;
+	else return false;
+}
+
+/*
+CRain :: CRain(){
+	draw_timer = 0;
+}
+
+bool CRain :: draw(){
+	DrawExtendGraph( LEFT_WINDOW_WIDTH , 0,
+				1000 + LEFT_WINDOW_WIDTH  , 750 , rain[draw_timer % 24], true ) ;
+
+	draw_timer++;
+
+	if(draw_timer <180) return true;
+	else return false;
+}
+*/

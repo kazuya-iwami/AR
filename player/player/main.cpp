@@ -202,6 +202,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				}
 				it++;   // インクリメント
 			}
+
 			draw_mtx.unlock();
 
 
@@ -278,6 +279,20 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				mytank->use_item();
 			}
 
+			//my test
+			if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
+				auto fire = make_shared<CFire>();
+				CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
+			}
+			if(  key_buf[ KEY_INPUT_2 ] == 1 && key_prev_buf[ KEY_INPUT_2] == 0){
+				mytank->bullet_charge(2);
+			}
+			/*
+			if(  key_buf[ KEY_INPUT_R ] == 1 && key_prev_buf[ KEY_INPUT_R] == 0){
+				auto rain =make_shared<CRain>();
+				CObject::register_object(rain,DRAW_LAYER::EXPLOSION_LAYER);
+			}
+			*/
 
 			//テスト用　Dを押すとカーソルが右に
 			if(  key_buf[ KEY_INPUT_D ] == 1){

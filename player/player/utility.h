@@ -56,3 +56,27 @@ public:
 	int shaketiemr;
 	bool draw();
 };
+
+
+//燃やすクラス
+class CFire:public CObject{
+public:
+	CFire();
+	bool draw();
+};
+
+
+//up_effect
+class CUp_effect:public CObject{
+public:
+	CUp_effect();
+	bool draw();
+};
+
+/*rain
+class CRain:public CObject{
+public:
+	CRain();
+	bool draw();
+};
+*/

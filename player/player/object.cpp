@@ -33,6 +33,11 @@ void CObject::load(){
 	//F_TESTの部分は他と被らないように自由に決めてください。ただしF_から初めて。
 	figure_id["F_TEST"] =  LoadGraph("image/test.jpg");
 	figure_id["F_DETECT"] =  LoadGraph("image/detect.png");
+	figure_id["F_ICON1"] =  LoadGraph("image/icon1.png");
+	figure_id["F_ICON2"] =  LoadGraph("image/icon2.png");
+	figure_id["F_ICON3"] =  LoadGraph("image/icon3.png");
+	figure_id["F_ICON4"] =  LoadGraph("image/icon4.png");
+	
 	figure_id["F_FRAME"]=LoadGraph("image/frame.png");
 	figure_id["F_CURSUR"]=LoadGraph("image/cursur.png");
 	figure_id["F_CURSUR_ON"]=LoadGraph("image/cursur_on.png");

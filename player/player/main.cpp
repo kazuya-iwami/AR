@@ -27,7 +27,7 @@ using namespace std;
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 
-#define PLAYER_NM 0	//自分のプレイヤー番号
+#define PLAYER_NM 3	//自分のプレイヤー番号
 #define IP_ADDRESS "172.16.100.41"	//IPアドレス
 
 

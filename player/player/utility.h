@@ -40,6 +40,8 @@ public:
 };
 
 
+
+
 class CBullet_image : public CObject {
 
 public:

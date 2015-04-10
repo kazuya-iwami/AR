@@ -22,7 +22,9 @@ bool CMytank::draw() {
 	}
 
 	//スコア表示
-	DrawFormatString(50 + LEFT_WINDOW_WIDTH,600,GetColor(200,200,200),"Score:%d",score);
+	DrawOriginalString(50+LEFT_WINDOW_WIDTH,200,1.0,22,"SCORE:"+to_string(score));
+
+	
 
 	//アイテム枠表示
 	DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);

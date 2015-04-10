@@ -13,20 +13,18 @@ bool CMytank::draw() {
 	DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
 
 	//スコア表示
-	
 	DrawFormatString(50 + LEFT_WINDOW_WIDTH,600,GetColor(200,200,200),"Score:%d",score);
 
 	//アイテム枠表示
 	DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
 
 	
-
 	return true;
 };
 
 CMytank::CMytank() {
 	//初期化
-	score = 20;
+	score = 0;
 	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
 	ope_timer = 0;
@@ -162,6 +160,9 @@ void CMytank::use_item() {
 
 void CMytank::shake(){
 	if(shakeflag == SHAKE_STATUS::BIG_SHAKE){
+		//SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,shaketimer*10);
+		DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["T_REDBACK"],1);
+		//uSetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		shake_x=(rand()%40-20)*shaketimer;
 		shake_y=(rand()%40-20)*shaketimer;
 	}else if(shakeflag == SHAKE_STATUS::SMALL_SHAKE){
@@ -559,4 +560,19 @@ void CMytank::set_game_status(GAME_STATUS game_status_){
 	if(game_status == GAME_STATUS::GAME_WAIT){ //FINIHSからWAITに移行する際サーバーにメッセージ送る
 		send_msg(encode(COMMAND_NAME::FINISH,0,0,0));
 	}
+}
+
+
+//my test　引数分だけ弾をチャージ
+void CMytank::bullet_charge(int charge){
+
+	if(num_bullet < bullet_image->max_bullet_num){
+		PlaySoundMem( sound_id["S_GET"] , DX_PLAYTYPE_BACK ) ;
+		auto up_effect = make_shared<CUp_effect>();
+		CObject::register_object(up_effect,DRAW_LAYER::IMFOMATION_LAYER);
+	}
+
+num_bullet += charge;
+if(num_bullet > bullet_image->max_bullet_num) num_bullet = bullet_image->max_bullet_num;
+bullet_image->update_num_bullet(num_bullet);//残弾数反映
 }

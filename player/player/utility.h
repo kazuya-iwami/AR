@@ -45,7 +45,6 @@ class CBullet_image : public CObject {
 public:
 	int num_bullet;//残弾数
 	const int max_bullet_num;//最大弾数
-
 	CBullet_image(int x_,int y_,int max_bullet_num_);
 	bool draw();
 	void update_num_bullet(int num_bullet_);
@@ -58,3 +57,27 @@ public:
 	int shaketiemr;
 	bool draw();
 };
+
+
+//燃やすクラス
+class CFire:public CObject{
+public:
+	CFire();
+	bool draw();
+};
+
+
+//up_effect
+class CUp_effect:public CObject{
+public:
+	CUp_effect();
+	bool draw();
+};
+
+/*rain
+class CRain:public CObject{
+public:
+	CRain();
+	bool draw();
+};
+*/

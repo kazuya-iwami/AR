@@ -8,15 +8,15 @@ bool CSystem_timer::draw(){
 		system_timer--;
 	}else finish_flag = true;
 
-	if(system_timer<=10*30){//残り8秒になったら警告
+	if(system_timer<=1000*30){//残り8秒になったら警告
 		if(system_timer==240){
-		//	PlaySoundMem( sound_id["S_KEIKOKU"] , DX_PLAYTYPE_BACK ) ;
+			//PlaySoundMem( sound_id["S_KEIKOKU"] , DX_PLAYTYPE_BACK ) ;
 		}
-		if(timer%60>30){
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,180-3*(timer%60));
+		if(timer%30<15){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(timer%30));
 		}
 		else{
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(timer%60));
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(timer%30));
 		}
 	DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
@@ -88,12 +88,15 @@ void CEnemy::attacked(int score_){
 
 bool CBullet_image :: draw(){
 	int i;
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 180 );
 	for(i=0;i<num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 80 );
 	for(i=0;i<max_bullet_num - num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+25*i,figure_id["F_BULLETUSED"],true);
 	}
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 255 );
 	return true;
 }
 
@@ -114,4 +117,46 @@ void CBullet_image :: update_num_bullet(int num_bullet_){
 }
 
 
+CFire ::CFire(){
+	draw_timer = 0;
+}
 
+bool CFire::draw(){
+	
+	DrawExtendGraph( LEFT_WINDOW_WIDTH , 0,
+				1000 + LEFT_WINDOW_WIDTH  , 750 , fire[draw_timer % 5], true ) ;
+
+	draw_timer++;
+
+	if(draw_timer <120) return true;
+	else return false;
+}
+
+CUp_effect :: CUp_effect(){
+	draw_timer = 0;
+}
+
+bool CUp_effect::draw(){
+
+	DrawGraph(80 + LEFT_WINDOW_WIDTH,200,up_effect[draw_timer],true);
+	draw_timer++;
+
+	if(draw_timer < 10) return true;
+	else return false;
+}
+
+/*
+CRain :: CRain(){
+	draw_timer = 0;
+}
+
+bool CRain :: draw(){
+	DrawExtendGraph( LEFT_WINDOW_WIDTH , 0,
+				1000 + LEFT_WINDOW_WIDTH  , 750 , rain[draw_timer % 24], true ) ;
+
+	draw_timer++;
+
+	if(draw_timer <180) return true;
+	else return false;
+}
+*/

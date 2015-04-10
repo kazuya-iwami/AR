@@ -12,12 +12,20 @@ int explosion1[140];
 
 //弾エフェクト用配列
 int bullet[30];
+int bullet_start[45];
 
 //数字用配列
 int number[10];
 
 //煙用配列
 int fog[10];
+
+//燃える
+int fire[5];
+//up_effect
+int up_effect[10];
+//rain
+//int rain[6];
 
 void CObject::load(){
 	//このように書けばtest.jpgをメモリに読み込む。
@@ -35,6 +43,7 @@ void CObject::load(){
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");
 	sound_id["S_BOMB"]=LoadSoundMem("sound/bomb1.mp3");
 	sound_id["S_KEIKOKU"]=LoadSoundMem("sound/keikoku.mp3");
+	sound_id["S_GET"]=LoadSoundMem("sound/get.mp3");
 
 	// explosion
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
@@ -44,16 +53,18 @@ void CObject::load(){
 	// bullet
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
 	LoadDivGraph("image/bullet.png", 30, 10, 3, 256, 256, bullet);
+	LoadDivGraph("image/bullet_start.png", 45, 9, 5, 256, 256, bullet_start);
 
 	//number
 	//爆発と同じく分割して読み込み。
 	LoadDivGraph("image/number.png",10,5,2,55,100,number);
 
-	//fog
-	//同上
-	fog[0]=LoadGraph("image/fogtest.png");
-	fog[1]=LoadGraph("image/pipo-fog013+.png");
-
+	//fire
+	LoadDivGraph("image/gamenfire.png",5,1,5,640,480,fire);
+	//up_effect
+	LoadDivGraph("image/up_effect.png",10,10,1,120,120,up_effect);
+	//rain
+	//LoadDivGraph("image/rain.png",6,1,6,640,480,rain);
 }
 
 bool CObject::draw(){

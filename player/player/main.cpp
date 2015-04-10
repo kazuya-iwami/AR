@@ -22,10 +22,13 @@
 using namespace std;
 
 #define FOCUS_SPEED 8
-#define GAME_TIME 10 //プレー時間　20秒
+
+#define GAME_TIME 20 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
+#define PLAYER_NM 0	//自分のプレイヤー番号
+#define IP_ADDRESS "172.16.100.41"	//IPアドレス
 
 
 bool list_cmp(std::shared_ptr<CObject>& v1,std::shared_ptr<CObject>& v2 );
@@ -53,7 +56,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
 	//network初期化
-	CNetwork::network_init(0,"172.16.100.21"); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
+	CNetwork::network_init(PLAYER_NM, IP_ADDRESS); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 
 	//クラスのインスタンスはスマートポインタ(std::shared_ptr)で生成します。
 	//スマートポインタの詳細はググって
@@ -166,9 +169,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		GetHitKeyStateAll( key_buf ) ;
 
-		//サーバーからmsgの受信
-		/* 1サイクル1回呼ぶ */
-		mytank->get_msg();
+
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 
@@ -210,6 +211,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				}
 				it++;   // インクリメント
 			}
+
 			draw_mtx.unlock();
 
 
@@ -260,6 +262,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					mytank->move(_T("stop"), speed);
 			}
 
+			//bullet生成
 			if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 				mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 			}
@@ -270,7 +273,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 
 
-			//テスト用　Eを押したタイミングでExplosion生成
+			//テスト用　Eを押したタイミングでExprosion生成
 			if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
 				auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
 				CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
@@ -285,6 +288,20 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				mytank->use_item();
 			}
 
+			//my test
+			if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
+				auto fire = make_shared<CFire>();
+				CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
+			}
+			if(  key_buf[ KEY_INPUT_2 ] == 1 && key_prev_buf[ KEY_INPUT_2] == 0){
+				mytank->bullet_charge(2);
+			}
+			/*
+			if(  key_buf[ KEY_INPUT_R ] == 1 && key_prev_buf[ KEY_INPUT_R] == 0){
+				auto rain =make_shared<CRain>();
+				CObject::register_object(rain,DRAW_LAYER::EXPLOSION_LAYER);
+			}
+			*/
 
 			//テスト用　Dを押すとカーソルが右に
 			if(  key_buf[ KEY_INPUT_D ] == 1){
@@ -315,12 +332,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
-				finish_timer = FINISH_TIME*30;
 			}
 
 			//時間切れるとGAME_STATUS変更
 			if(system_timer->get_finish_flag()){
 				mytank->set_game_status(GAME_STATUS::GAME_FINISH);
+
 				finish_timer = FINISH_TIME*30;
 				//時間切れの処理
 			}
@@ -355,6 +372,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 
 		}
+
+		//サーバーからmsgの受信
+		/* 1サイクル1回呼ぶ */
+		mytank->get_msg();
 
 		fps.Update();//1サイクルごとの速度を測定
 		if(  key_buf[ KEY_INPUT_F ] == 1 ){

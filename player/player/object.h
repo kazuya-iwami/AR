@@ -12,10 +12,18 @@ using namespace std;
 extern int explosion[45];
 extern int explosion1[140];
 extern int bullet[30];
+extern int bullet_start[45];
 
 //数字用
 extern int number[10];
 extern int fog[10];
+
+//燃える
+extern int fire[5];
+//up_effect
+extern int up_effect[10];
+//rain
+//extern int rain[6];
 
 #define LEFT_WINDOW_WIDTH 150
 

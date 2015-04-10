@@ -40,9 +40,13 @@ void CObject::load(){
 	figure_id["F_BULLETUSED"]=LoadGraph("image/bullet_used.png");
 	figure_id["F_REDBACK"]=LoadGraph("image/redback.png");
 	figure_id["F_FINISH"]=LoadGraph("image/finish.png");
+<<<<<<< HEAD
 	figure_id["F_TIMER_BASE"] = LoadGraph("image/timer_base.png");
 	figure_id["F_TIMER_BASE2"] = LoadGraph("image/timer_base_square.png");
 	figure_id["F_MAPFRAME"] = LoadGraph("image/map_frame.png");
+=======
+	figure_id["F_TIMER_FRAME"] = LoadGraph("image/timer_frame.png");
+>>>>>>> e266337249822fa0e459e1fd88092860e32ffb02
 
 	//上の効果音版
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");

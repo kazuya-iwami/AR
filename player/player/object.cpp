@@ -17,6 +17,9 @@ int bullet_start[45];
 //数字用配列
 int number[10];
 
+//煙用配列
+int fog[10];
+
 //文字用
 int word[160];
 
@@ -50,9 +53,15 @@ void CObject::load(){
 
 	figure_id["F_TIMER_FRAME"] = LoadGraph("image/timer_frame.png");
 
+	figure_id["F_COUNTBASE"]=LoadGraph("image/countbase.png");
+	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
+
+
+
 	//上の効果音版
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");
 	sound_id["S_BOMB"]=LoadSoundMem("sound/bomb1.mp3");
+	sound_id["S_KEIKOKU"]=LoadSoundMem("sound/keikoku.mp3");
 	sound_id["S_GET"]=LoadSoundMem("sound/get.mp3");
 	sound_id["S_LOCK"]=LoadSoundMem("sound/lock.mp3");
 	//BGM

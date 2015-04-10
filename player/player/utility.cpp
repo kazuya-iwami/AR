@@ -22,6 +22,29 @@ bool CSystem_timer::draw(){
 		system_timer--;
 	}else finish_flag = true;
 
+	//残り10秒になったら警告
+	if(system_timer<=10*30){
+		if(system_timer%30<15){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(system_timer%30));
+		}else{
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(system_timer%30));
+		}
+	DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	}
+
+	//最初5秒カウントダウン
+	if(countdown_timer > 0){
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA,200);
+		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA,140);
+		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,-3.14/15*countdown_timer,figure_id["F_COUNTSIDE"],true);
+
+		DrawOriginalString(LEFT_WINDOW_WIDTH+500-30,325,2.0,0,to_string(countdown_timer/30 + 1));
+		countdown_timer--;
+
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	}else countdown_finish_flag = true;
 
 	return true;//常に描画
 }
@@ -43,6 +66,8 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	y=y_;
 	system_timer = game_time * 30;
 	finish_flag = false;
+	countdown_timer= 5 * 30;
+	countdown_finish_flag = false;
 }
 
 bool CEnemy::draw(){
@@ -172,8 +197,10 @@ bool CRain :: draw(){
 }
 */
 
+
 bool CMap::draw(){
 
 	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
 	return true;
 }
+

@@ -8,15 +8,16 @@
 
 //残り時間描画クラス
 class CSystem_timer : public CObject {
-
+	int countdown_timer;
 	int system_timer;
 	bool finish_flag;
-
+	bool countdown_finish_flag;
 public:
 	int handle;
 	CSystem_timer(int x_,int y_,int game_time);
 	bool draw();
 	bool get_finish_flag(){return finish_flag;}
+	bool get_countdown_finish_flag(){return countdown_finish_flag;}
 };
 
 //敵の位置情報管理クラス

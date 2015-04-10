@@ -10,25 +10,27 @@
 bool CMytank::draw() {
 
 	//カーソル表示
-	bool flag =false;
-	if(id != 0 && enemy0->lockon ==true) flag = true;
-	if(id != 1 && enemy1->lockon ==true) flag = true;
-	if(id != 2 && enemy2->lockon ==true) flag = true;
-	if(id != 3 && enemy3->lockon ==true) flag = true;
-	if(flag == true){//lockon状態
-		if(preflag==false){
-			preflag=true;
-			PlaySoundMem( sound_id["S_LOCK"] , DX_PLAYTYPE_BACK ) ;		
+
+	if(focus_flag){
+		bool flag =false;
+		if(id != 0 && enemy0->lockon ==true) flag = true;
+		if(id != 1 && enemy1->lockon ==true) flag = true;
+		if(id != 2 && enemy2->lockon ==true) flag = true;
+		if(id != 3 && enemy3->lockon ==true) flag = true;
+		if(flag == true){//lockon状態
+			if(preflag==false){
+				preflag=true;
+				PlaySoundMem( sound_id["S_LOCK"] , DX_PLAYTYPE_BACK ) ;		
+			}
+			SetDrawBlendMode(DX_BLENDMODE_ADD,255);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
+		}else{//lockが外れている状態
+			preflag=false;
+			SetDrawBlendMode(DX_BLENDMODE_ADD,255);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
+			draw_timer++;
 		}
-		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
-		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
-	}else{//lockが外れている状態
-		preflag=false;
-		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
-		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
-		draw_timer++;
 	}
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 
 	//スコア表示
@@ -51,8 +53,8 @@ CMytank::CMytank() {
 	ope_timer = 0;
 	vel_R = 0;
 	vel_L = 0;
-	focus_x = 200;
-	focus_y = 200;
+	focus_x = 500;
+	focus_y = 373;
 	game_status = GAME_STATUS::GAME_WAIT;
 	item_kind = ITEM_KIND::STAR; //スターを持たせる
 	shaketimer=10;
@@ -60,7 +62,12 @@ CMytank::CMytank() {
 	shake_x=0;
 	shake_y=0;
 	draw_timer=0;
+<<<<<<< HEAD
 	preflag=false;
+=======
+	focus_flag = false;
+
+>>>>>>> masafumi
 	send_msg("HELLO");
 
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
@@ -139,36 +146,38 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 }
 
 void CMytank::check_focus(){
-	
-	if(id != 0){
-		if(enemy0->get_x() - ENEMY_MARGIN < focus_x && enemy0->get_x() + ENEMY_MARGIN > focus_x && enemy0->get_y() -ENEMY_MARGIN < focus_y && enemy0->get_y() + ENEMY_MARGIN > focus_y){
-			if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
-				enemy0->lockon = true;
-			}
-		} else enemy0->lockon = false;
-	}
-	if(id != 1){
-		if(enemy1->get_x() - ENEMY_MARGIN < focus_x && enemy1->get_x() + ENEMY_MARGIN > focus_x && enemy1->get_y() -ENEMY_MARGIN < focus_y && enemy1->get_y() + ENEMY_MARGIN > focus_y){
-			if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
-				enemy1->lockon = true;
-			}
-		} else enemy1->lockon = false;
-	}
-	if(id != 2){
-		if(enemy2->get_x() - ENEMY_MARGIN < focus_x && enemy2->get_x() + ENEMY_MARGIN > focus_x && enemy2->get_y() -ENEMY_MARGIN < focus_y && enemy2->get_y() + ENEMY_MARGIN > focus_y){
-			if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
-				enemy2->lockon = true;
-			}
-		} else enemy2->lockon = false;
-	}
-	if(id != 3){
-		if(enemy3->get_x() - ENEMY_MARGIN < focus_x && enemy3->get_x() + ENEMY_MARGIN > focus_x && enemy3->get_y() -ENEMY_MARGIN < focus_y && enemy3->get_y() + ENEMY_MARGIN > focus_y){
-			if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
-				enemy3->lockon = true;
-			}
-		} else enemy3->lockon = false;
-	}
 
+	if(focus_flag){
+
+		if(id != 0){
+			if(enemy0->get_x() - ENEMY_MARGIN < focus_x && enemy0->get_x() + ENEMY_MARGIN > focus_x && enemy0->get_y() -ENEMY_MARGIN < focus_y && enemy0->get_y() + ENEMY_MARGIN > focus_y){
+				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
+					enemy0->lockon = true;
+				}
+			} else enemy0->lockon = false;
+		}
+		if(id != 1){
+			if(enemy1->get_x() - ENEMY_MARGIN < focus_x && enemy1->get_x() + ENEMY_MARGIN > focus_x && enemy1->get_y() -ENEMY_MARGIN < focus_y && enemy1->get_y() + ENEMY_MARGIN > focus_y){
+				if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
+					enemy1->lockon = true;
+				}
+			} else enemy1->lockon = false;
+		}
+		if(id != 2){
+			if(enemy2->get_x() - ENEMY_MARGIN < focus_x && enemy2->get_x() + ENEMY_MARGIN > focus_x && enemy2->get_y() -ENEMY_MARGIN < focus_y && enemy2->get_y() + ENEMY_MARGIN > focus_y){
+				if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
+					enemy2->lockon = true;
+				}
+			} else enemy2->lockon = false;
+		}
+		if(id != 3){
+			if(enemy3->get_x() - ENEMY_MARGIN < focus_x && enemy3->get_x() + ENEMY_MARGIN > focus_x && enemy3->get_y() -ENEMY_MARGIN < focus_y && enemy3->get_y() + ENEMY_MARGIN > focus_y){
+				if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
+					enemy3->lockon = true;
+				}
+			} else enemy3->lockon = false;
+		}
+	}
 }
 
 void CMytank::use_item() {
@@ -186,6 +195,9 @@ void CMytank::use_item() {
 
 void CMytank::shake(){
 	if(shakeflag == SHAKE_STATUS::BIG_SHAKE){
+		//SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,shaketimer*10);
+		DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["T_REDBACK"],1);
+		//uSetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		shake_x=(rand()%40-20)*shaketimer;
 		shake_y=(rand()%40-20)*shaketimer;
 	}else if(shakeflag == SHAKE_STATUS::SMALL_SHAKE){
@@ -619,5 +631,5 @@ void CMytank::finish(){
 
 	auto finish = make_shared<CFinish>();
 	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);	
-
 }
+

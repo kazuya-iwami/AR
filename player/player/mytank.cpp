@@ -564,6 +564,7 @@ void CMytank::set_game_status(GAME_STATUS game_status_){
 void CMytank::bullet_charge(int charge){
 
 	if(num_bullet < bullet_image->max_bullet_num){
+		PlaySoundMem( sound_id["S_GET"] , DX_PLAYTYPE_BACK ) ;
 		auto up_effect = make_shared<CUp_effect>();
 		CObject::register_object(up_effect,DRAW_LAYER::IMFOMATION_LAYER);
 	}

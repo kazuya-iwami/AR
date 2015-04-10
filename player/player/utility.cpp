@@ -9,15 +9,15 @@ bool CSystem_timer::draw(){
 
 		//残り時間表示
 		//背景出力
-		//SetDrawBlendMode(DX_BLENDMODE_ADD,90);
 		DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
-		//SetDrawBlendMode(DX_BLENDMODE_ADD, 0);
-		//文字出力
 
-		std::ostringstream sout;
-		sout << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
-		std::string s = sout.str();
-		DrawOriginalString(438+LEFT_WINDOW_WIDTH, 30, 1.0, 24, to_string((system_timer/30 + 1)/60)+":"+s);
+		//文字出力
+		std::ostringstream sout1, sout2;
+		sout1 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
+		std::string sec = sout1.str();
+		sout2 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)/60;
+		std::string min = sout2.str();
+		DrawOriginalString(438+LEFT_WINDOW_WIDTH, 30, 1.0, 24, min+":"+sec);
 		//timerカウント
 		system_timer--;
 	}else finish_flag = true;

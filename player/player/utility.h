@@ -88,3 +88,8 @@ public:
 	bool draw();
 };
 */
+
+class CMap:public CObject {
+public:
+	bool draw();
+};

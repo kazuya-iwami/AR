@@ -26,7 +26,7 @@ bool CMytank::draw() {
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 	//スコア表示
-	DrawOriginalString(50+LEFT_WINDOW_WIDTH,200,1.0,22,"SCORE:"+to_string(score));
+	DrawOriginalString(800+LEFT_WINDOW_WIDTH,100,1.0,22,"SCORE:"+to_string(score));
 
 	
 
@@ -60,6 +60,10 @@ CMytank::CMytank() {
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
 	bullet_image = bullet_image_;
 	CObject::register_object(bullet_image,DRAW_LAYER::IMFOMATION_LAYER);
+
+	auto map_ = make_shared<CMap>();
+	map = map_;
+	CObject::register_object(map,DRAW_LAYER::IMFOMATION_LAYER);
 
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため

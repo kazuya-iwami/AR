@@ -42,6 +42,7 @@ void CObject::load(){
 	figure_id["F_FINISH"]=LoadGraph("image/finish.png");
 	figure_id["F_TIMER_BASE"] = LoadGraph("image/timer_base.png");
 	figure_id["F_TIMER_BASE2"] = LoadGraph("image/timer_base_square.png");
+	figure_id["F_MAPFRAME"] = LoadGraph("image/map_frame.png");
 
 	//上の効果音版
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");

@@ -16,10 +16,10 @@ bool CMytank::draw() {
 	if(id != 2 && enemy2->lockon ==true) flag = true;
 	if(id != 3 && enemy3->lockon ==true) flag = true;
 	if(flag == true){//lockon状態
-		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
 	}else{//lockが外れている状態
-		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 		draw_timer++;
 	}
@@ -27,7 +27,7 @@ bool CMytank::draw() {
 
 
 	//スコア表示
-	DrawOriginalString(50+LEFT_WINDOW_WIDTH,200,1.0,22,"SCORE:"+to_string(score));
+	DrawOriginalString(800+LEFT_WINDOW_WIDTH,100,1.0,22,"SCORE:"+to_string(score));
 
 	
 
@@ -61,6 +61,10 @@ CMytank::CMytank() {
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
 	bullet_image = bullet_image_;
 	CObject::register_object(bullet_image,DRAW_LAYER::IMFOMATION_LAYER);
+
+	auto map_ = make_shared<CMap>();
+	map = map_;
+	CObject::register_object(map,DRAW_LAYER::IMFOMATION_LAYER);
 
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため

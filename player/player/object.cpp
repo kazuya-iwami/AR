@@ -40,6 +40,9 @@ void CObject::load(){
 	figure_id["F_BULLETUSED"]=LoadGraph("image/bullet_used.png");
 	figure_id["F_REDBACK"]=LoadGraph("image/redback.png");
 	figure_id["F_FINISH"]=LoadGraph("image/finish.png");
+
+	figure_id["F_MAPFRAME"] = LoadGraph("image/map_frame.png");
+
 	figure_id["F_TIMER_FRAME"] = LoadGraph("image/timer_frame.png");
 
 	//上の効果音版

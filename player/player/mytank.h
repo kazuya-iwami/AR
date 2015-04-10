@@ -52,6 +52,7 @@ public:
 	shared_ptr<CEnemy> enemy3;
 	
 	shared_ptr<CBullet_image> bullet_image;//残弾描画
+	shared_ptr<CMap> map;
 
 	CMytank();
 	void move(tstring direction, tstring speed);//移動

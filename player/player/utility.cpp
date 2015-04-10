@@ -6,12 +6,14 @@
 
 bool CSystem_timer::draw(){
 	if(system_timer > 0){
+
 		//残り時間表示
 		//背景出力
 		//SetDrawBlendMode(DX_BLENDMODE_ADD,90);
 		DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
 		//SetDrawBlendMode(DX_BLENDMODE_ADD, 0);
 		//文字出力
+
 		std::ostringstream sout;
 		sout << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
 		std::string s = sout.str();
@@ -95,7 +97,7 @@ bool CBullet_image :: draw(){
 	for(i=0;i<max_bullet_num - num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+25*i,figure_id["F_BULLETUSED"],true);
 	}
-	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 255 );
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	return true;
 }
 
@@ -167,3 +169,9 @@ bool CRain :: draw(){
 	else return false;
 }
 */
+
+bool CMap::draw(){
+
+	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
+	return true;
+}

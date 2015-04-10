@@ -16,9 +16,14 @@ bool CMytank::draw() {
 	if(id != 2 && enemy2->lockon ==true) flag = true;
 	if(id != 3 && enemy3->lockon ==true) flag = true;
 	if(flag == true){//lockon状態
+		if(preflag==false){
+			preflag=true;
+			PlaySoundMem( sound_id["S_LOCK"] , DX_PLAYTYPE_BACK ) ;		
+		}
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
 	}else{//lockが外れている状態
+		preflag=false;
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 		draw_timer++;
@@ -55,7 +60,7 @@ CMytank::CMytank() {
 	shake_x=0;
 	shake_y=0;
 	draw_timer=0;
-
+	preflag=false;
 	send_msg("HELLO");
 
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);

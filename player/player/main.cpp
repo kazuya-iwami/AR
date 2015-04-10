@@ -320,7 +320,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//時間切れるとGAME_STATUS変更
 			if(system_timer->get_finish_flag() || key_buf[ KEY_INPUT_Q ] == 1){
 				mytank->finish();
-				finish_timer = FINISH_TIME*30;
+				//finish_timer = FINISH_TIME*30;
 				//時間切れの処理
 			}
 
@@ -336,12 +336,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
-
+			/*
 			draw_mtx.lock();
 			DrawFormatString(50 + LEFT_WINDOW_WIDTH, 300, GetColor(255,255,255), "FINISH!!!　5秒");
 			draw_mtx.unlock();
-
-			if(finish_timer == 0){
+			*/
+			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
 
 				if(mytank->get_id() != 0)exist_flag[0] = mytank->enemy0->exist;
@@ -350,7 +350,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				if(mytank->get_id() != 3)exist_flag[3] = mytank->enemy3->exist;
 
 				init();
-			} else finish_timer--;
+			}
 
 
 		}

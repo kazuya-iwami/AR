@@ -1,10 +1,16 @@
 ﻿#include "utility.h"
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 
 bool CSystem_timer::draw(){
 	//残り時間表示
-	
-	DrawFormatString(650 + LEFT_WINDOW_WIDTH,20,GetColor(200,200,200),"Time:%d",system_timer/30 + 1);
+	std::ostringstream sout;
+    sout << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
+    std::string s = sout.str();
+ 
+	DrawOriginalString(650 + LEFT_WINDOW_WIDTH,20,1.0,24,to_string((system_timer/30 + 1)/60)+":"+s);
 	if(system_timer > 0){
 		system_timer--;
 	}else finish_flag = true;

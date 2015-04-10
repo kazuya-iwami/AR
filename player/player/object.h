@@ -12,6 +12,7 @@ using namespace std;
 extern int explosion[45];
 extern int explosion1[140];
 extern int bullet[30];
+extern int bullet_start[45];
 
 //数字用
 extern int number[10];

@@ -99,7 +99,7 @@ int main() {
 
 		//キー入力受け付け
 		if(kbhit()) {/*キーが押されていたら、変数cにキー取得*/
-			char c = getchar();
+//			char c = getchar();
 
 			if(game_status == GAME_STATUS::GAME_WAIT) {
 				//ゲーム開始命令
@@ -190,7 +190,6 @@ int set_tcp_socket(int portnum, struct hostent *shost) {
 void send_message(std::string msg, int id=4) {
 	if (id == 4) {
 		for (int i = 0; i < PORT_NUM; i++) {
-			std::cout << "player_param[" << i << "].exist = " << player_param[i].exist << std::endl;
 			if(!player_param[i].exist) {
 				std::cout << "切断したプレイヤーへメッセージを送ろうとしています" << std::endl;
 				continue;
@@ -232,7 +231,6 @@ CPlayer_param::CPlayer_param() {
 	finish_flag = false;
 }
 void CPlayer_param::init() {
-	exist = true;
 	score = 0;
 	using_item = ITEM_KIND::ITEM_NONE ;
 	finish_flag = false;

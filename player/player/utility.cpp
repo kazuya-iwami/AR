@@ -6,19 +6,14 @@
 
 bool CSystem_timer::draw(){
 	if(system_timer > 0){
-<<<<<<< HEAD
-		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,230);
 
-		DrawGraph(LEFT_WINDOW_WIDTH+500-87, 20, figure_id["F_TIMER_BASE2"], true); //背景出力
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-=======
 		//残り時間表示
 		//背景出力
 		//SetDrawBlendMode(DX_BLENDMODE_ADD,90);
 		DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
 		//SetDrawBlendMode(DX_BLENDMODE_ADD, 0);
 		//文字出力
->>>>>>> e266337249822fa0e459e1fd88092860e32ffb02
+
 		std::ostringstream sout;
 		sout << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
 		std::string s = sout.str();

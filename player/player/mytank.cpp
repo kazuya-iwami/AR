@@ -249,8 +249,7 @@ void CMytank::get_msg(){
 	int bullet_score=0; //bulletによっていくつスコアが上昇するかをscoreに格納
 	/* メッセージが送られてきた際の処理 */
 	int data[10];
-	std::string str[4];
-	decode(msg.c_str(), str);
+	auto str = decode(msg);
 	/* commandによる処理分岐 */
 	// メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
 	if ("" != str[3]) {

@@ -28,8 +28,8 @@ using namespace std;
 
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
-string decode(char const *str, string *target);
-string explode(int n, char const *y, char const *str, string *target = NULL);
+vector<string> decode(string msg);
+vector<string> split(string s, string delim);
 string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind);
 
 //ネットワーク通信用クラス

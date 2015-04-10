@@ -81,46 +81,30 @@ void CNetwork::release(){
 	closesocket(sofd);
 	WSACleanup();
 }
-string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind){
 
+string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind){
 	std::ostringstream stream;
 	stream << (int)command_name << ","  << player_from << "," << player_to << "," << kind;
 	return stream.str();
 }
 
-string decode(char const *msg, string *target) {
-	return explode(1, ",", msg, target);
+vector<string> decode(string msg) {
+	return split(msg, ",");
 }
 
-string explode(int n,char const *y,char const *str,string *target){
-	bool option;
-	if(target==NULL) option=false;
-	else option=true;
-	n--;
-	string r_str[1000];
-	int d=0,g=0,t=strlen(y),a=0;
-	for(int i=0;i<strlen(str);i++){
-		if(y[a]==str[i]){
-			a++;
-			if(a==t){
-				for(int q=d;q<i-t+1;q++) r_str[g]+=str[q];
-				d=i+1;
-				i++;
-				g++;
-				a=0;
-			}
-		}else{
-			i-=a;
-			a=0;
-		}
+vector<string> split(string s, string delim) {
+	vector<string> v;
+	for (;;) {
+	size_t found = s.find(delim);
+	if (found == string::npos) {
+		v.push_back(s);
+		break;
+	} else {
+		v.push_back(s.substr(0, found));
+		s = s.substr(found + 1);
 	}
-	for(int i=d;i<strlen(str);i++) r_str[g]+=str[i];
-	if(option){
-		for(int i=0;i<=g;i++){
-			*target=r_str[i];
-			target++;
-		}
-	}
-	return r_str[n];
+}
+
+	return v;
 }
 

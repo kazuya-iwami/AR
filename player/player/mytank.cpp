@@ -16,10 +16,14 @@ bool CMytank::draw() {
 	if(id != 2 && enemy2->lockon ==true) flag = true;
 	if(id != 3 && enemy3->lockon ==true) flag = true;
 	if(flag == true){
-		DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR_ON"],true);
+		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
 	}else{
-		DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
+		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
+		draw_timer++;
 	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 	//スコア表示
 	DrawFormatString(50 + LEFT_WINDOW_WIDTH,600,GetColor(200,200,200),"Score:%d",score);
@@ -47,6 +51,7 @@ CMytank::CMytank() {
 	shakeflag=false;
 	shake_x=0;
 	shake_y=0;
+	draw_timer=0;
 
 	send_msg("HELLO");
 

@@ -15,6 +15,7 @@ extern int bullet[30];
 
 //数字用
 extern int number[10];
+extern int fog[10];
 
 #define LEFT_WINDOW_WIDTH 150
 

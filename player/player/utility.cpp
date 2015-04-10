@@ -1,5 +1,5 @@
 ﻿#include "utility.h"
-
+int timer=0;
 
 bool CSystem_timer::draw(){
 	//残り時間表示
@@ -8,6 +8,20 @@ bool CSystem_timer::draw(){
 		system_timer--;
 	}else finish_flag = true;
 
+	if(system_timer<=10*30){//残り8秒になったら警告
+		if(system_timer==240){
+		//	PlaySoundMem( sound_id["S_KEIKOKU"] , DX_PLAYTYPE_BACK ) ;
+		}
+		if(timer%60>30){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,180-3*(timer%60));
+		}
+		else{
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(timer%60));
+		}
+	DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	timer++;
+	}
 	return true;//常に描画
 }
 

@@ -134,6 +134,13 @@ bool CUp_effect::draw(){
 	else return false;
 }
 
+
+bool CFinish::draw(){
+DrawGraph(0,0,figure_id["F_FINISH"],false);
+
+return true;
+}
+
 /*
 CRain :: CRain(){
 	draw_timer = 0;

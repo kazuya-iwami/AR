@@ -587,4 +587,10 @@ void CMytank::finish(){
 	StopSoundMem(sound_id["S_GAME_BGM"]);
 	//ゲーム終了
 	set_game_status(GAME_STATUS::GAME_FINISH);
+
+	//描画リストの要素をすべて削除
+	CObject::drawlist.clear();
+
+	auto finish = make_shared<CFinish>();
+	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);	
 }

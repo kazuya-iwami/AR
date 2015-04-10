@@ -38,6 +38,7 @@ class CMytank : public CObject, public CNetwork {
 	int ope_timer; //操作用タイマー
 	int vel_R, vel_L; //左右のタイヤの速度
 	GAME_STATUS game_status;
+	bool focus_flag;//カウントダウンタイマー終了後trueになりカーソル表示
 
 public:
 
@@ -69,6 +70,7 @@ public:
 	GAME_STATUS get_game_status(){return game_status;}
 	void set_game_status(GAME_STATUS game_status_);
 	int get_id(){return id;}
+	void show_focus(){focus_flag = true;};
 
 	void bullet_charge(int charge);
 	void start();

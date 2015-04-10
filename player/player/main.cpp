@@ -208,115 +208,116 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//キー状態取得の後に移動します(2015/3/31 大杉追記)
 			//mytank->move();
 
-			
 
-			tstring speed;
-			//速度設定の分岐条件に関しては大杉は知らないです...
-			if(true){
-				//通常
-				speed = _T("full");
-			}else {
-				//サーバから減速命令が送られてきた場合
-				speed = _T("half");
-			}
+			//カウントダウン終了後キーボード操作許す
+			if(system_timer->get_countdown_finish_flag()){
 
-			/*
-			//各キーを押し続けるとその動作をする。
-			if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
+				mytank->show_focus();//一度だけ呼べばいいのだけども…
+
+				tstring speed;
+				//速度設定の分岐条件に関しては大杉は知らないです...
+				if(true){
+					//通常
+					speed = _T("full");
+				}else {
+					//サーバから減速命令が送られてきた場合
+					speed = _T("half");
+				}
+
+				/*
+				//各キーを押し続けるとその動作をする。
+				if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
 				//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
 				mytank->move(_T("forward"), speed);
-			}
-			if(  key_buf[ KEY_INPUT_DOWN ] == 1 && key_prev_buf[ KEY_INPUT_DOWN] == 0 ){
+				}
+				if(  key_buf[ KEY_INPUT_DOWN ] == 1 && key_prev_buf[ KEY_INPUT_DOWN] == 0 ){
 				//mytank->set_vel(-1,-1);
 				mytank->move(_T("backward"), speed);
-			}
-			if(  key_buf[ KEY_INPUT_LEFT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
+				}
+				if(  key_buf[ KEY_INPUT_LEFT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
 				//mytank->set_vel(-1,1);
 				mytank->move(_T("left"), speed);
-			}
-			if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
+				}
+				if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
 				//mytank->set_vel(1,-1);
 				mytank->move(_T("right"), speed);
-			}
-			//各キーを離したらstop
-			if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 
+				}
+				//各キーを離したらstop
+				if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 
 				(key_buf[ KEY_INPUT_DOWN ] == 0 && key_prev_buf[ KEY_INPUT_DOWN] == 1) ||
 				(key_buf[ KEY_INPUT_LEFT ] == 0 && key_prev_buf[ KEY_INPUT_LEFT] == 1) ||
 				(key_buf[ KEY_INPUT_RIGHT ] == 0 && key_prev_buf[ KEY_INPUT_RIGHT] == 1) ){
-					mytank->move(_T("stop"), speed);
-			}
-			*/
-			//bullet生成
-			if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
-				mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
-			}
-			//テスト用　3を押したタイミングで3D球(Bullet)生成
-			if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
-				auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
-				CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
-			}
+				mytank->move(_T("stop"), speed);
+				}
+				*/
+				//bullet生成
+				if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
+					mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
+				}
+				//テスト用　3を押したタイミングで3D球(Bullet)生成
+				if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
+					auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
+					CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
+				}
 
 
-			//テスト用　Eを押したタイミングでExprosion生成
-			if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
-				auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
-				CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
-			}
-			//テスト用　1を押したタイミングでExplosion生成
-			if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
-				auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
-				CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
-			}
-			//テスト用　Iを押したタイミングでItem生成
-			if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
-				mytank->use_item();
-			}
+				//テスト用　Eを押したタイミングでExprosion生成
+				if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
+					auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
+					CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
+				}
+				//テスト用　1を押したタイミングでExplosion生成
+				if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
+					auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
+					CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
+				}
+				//テスト用　Iを押したタイミングでItem生成
+				if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
+					mytank->use_item();
+				}
 
-			//my test
-			if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
-				auto fire = make_shared<CFire>();
-				CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
-			}
-			if(  key_buf[ KEY_INPUT_2 ] == 1 && key_prev_buf[ KEY_INPUT_2] == 0){
-				mytank->bullet_charge(2);
-			}
-			/*
-			if(  key_buf[ KEY_INPUT_R ] == 1 && key_prev_buf[ KEY_INPUT_R] == 0){
+				//my test
+				if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
+					auto fire = make_shared<CFire>();
+					CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
+				}
+				if(  key_buf[ KEY_INPUT_2 ] == 1 && key_prev_buf[ KEY_INPUT_2] == 0){
+					mytank->bullet_charge(2);
+				}
+				/*
+				if(  key_buf[ KEY_INPUT_R ] == 1 && key_prev_buf[ KEY_INPUT_R] == 0){
 				auto rain =make_shared<CRain>();
 				CObject::register_object(rain,DRAW_LAYER::EXPLOSION_LAYER);
+				}
+				*/
+
+				//テスト用　Dを押すとカーソルが右に
+				if(  key_buf[ KEY_INPUT_D ] == 1){
+					mytank->focus_x += FOCUS_SPEED;
+				}
+
+				//テスト用　Wを押すとカーソルが上に
+				if(  key_buf[ KEY_INPUT_W ] == 1 ){
+					mytank->focus_y -=  FOCUS_SPEED;
+				}
+
+				//テスト用　Aを押すとカーソルが左に
+				if(  key_buf[ KEY_INPUT_A ] == 1){
+					mytank->focus_x -=  FOCUS_SPEED;
+				}
+
+				//テスト用　Sを押すとカーソルが下に
+				if(  key_buf[ KEY_INPUT_S ] == 1){ 
+					mytank->focus_y +=  FOCUS_SPEED;
+				}
+
+				//テスト用　とりあえずX押したら画面が振動するよ
+				if(key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0){
+
+					mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
+				}
 			}
-			*/
 
-			//テスト用　Dを押すとカーソルが右に
-			if(  key_buf[ KEY_INPUT_D ] == 1){
-				mytank->focus_x += FOCUS_SPEED;
-			}
-
-			//テスト用　Wを押すとカーソルが上に
-			if(  key_buf[ KEY_INPUT_W ] == 1 ){
-				mytank->focus_y -=  FOCUS_SPEED;
-			}
-
-			//テスト用　Aを押すとカーソルが左に
-			if(  key_buf[ KEY_INPUT_A ] == 1){
-				mytank->focus_x -=  FOCUS_SPEED;
-			}
-
-			//テスト用　Sを押すとカーソルが下に
-			if(  key_buf[ KEY_INPUT_S ] == 1){ 
-				mytank->focus_y +=  FOCUS_SPEED;
-			}
-
-			//テスト用　とりあえずX押したら画面が振動するよ
-			if(key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0){
-
-				mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
-			}
-
-			//テスト。カウントダウン
-		if(key_buf[KEY_INPUT_V]==1){
-			//countdown->draw();
-		}
 
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){

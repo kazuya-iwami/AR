@@ -166,9 +166,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		GetHitKeyStateAll( key_buf ) ;
 
-		//サーバーからmsgの受信
-		/* 1サイクル1回呼ぶ */
-		mytank->get_msg();
+
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 
@@ -315,7 +313,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
-				finish_timer = FINISH_TIME*30;
 			}
 
 			//時間切れるとGAME_STATUS変更
@@ -355,6 +352,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 
 		}
+
+		//サーバーからmsgの受信
+		/* 1サイクル1回呼ぶ */
+		mytank->get_msg();
 
 		fps.Update();//1サイクルごとの速度を測定
 		if(  key_buf[ KEY_INPUT_F ] == 1 ){

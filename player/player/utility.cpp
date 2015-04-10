@@ -116,6 +116,7 @@ bool CFire::draw(){
 
 	draw_timer++;
 
+
 	if(draw_timer <120) return true;
 	else return false;
 }

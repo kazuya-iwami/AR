@@ -12,7 +12,7 @@ void CImage_processer::init(int minH_, int maxH_, int minS_, int maxS_, int minV
 	ip_x = 0;
 	ip_y = 0;
 	visible = false;
-}
+}  
 
 Mat CImage_processer::detect(Mat image) {
 

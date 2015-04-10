@@ -128,6 +128,7 @@ bool CFire::draw(){
 
 	draw_timer++;
 
+
 	if(draw_timer <120) return true;
 	else return false;
 }
@@ -143,6 +144,13 @@ bool CUp_effect::draw(){
 
 	if(draw_timer < 10) return true;
 	else return false;
+}
+
+
+bool CFinish::draw(){
+DrawGraph(0,0,figure_id["F_FINISH"],false);
+
+return true;
 }
 
 /*

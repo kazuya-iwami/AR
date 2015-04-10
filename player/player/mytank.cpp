@@ -268,7 +268,7 @@ void CMytank::get_msg(){
 			switch (player_from) {
 			case GAME_STATUS::GAME_PLAY:
 				if(game_status == GAME_STATUS::GAME_WAIT){
-					game_status = GAME_STATUS::GAME_PLAY;
+					start();
 				}else if( game_status == GAME_STATUS::GAME_PAUSE ) {
 					game_status = GAME_STATUS::GAME_PLAY;
 				}
@@ -575,4 +575,25 @@ void CMytank::bullet_charge(int charge){
 num_bullet += charge;
 if(num_bullet > bullet_image->max_bullet_num) num_bullet = bullet_image->max_bullet_num;
 bullet_image->update_num_bullet(num_bullet);//残弾数反映
+}
+
+
+void CMytank::start(){
+	//GameBGMの再生
+	PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
+	//Game スタート
+	set_game_status(GAME_STATUS::GAME_PLAY);
+}
+
+void CMytank::finish(){
+	//GameBGMの停止
+	StopSoundMem(sound_id["S_GAME_BGM"]);
+	//ゲーム終了
+	set_game_status(GAME_STATUS::GAME_FINISH);
+
+	//描画リストの要素をすべて削除
+	CObject::drawlist.clear();
+
+	auto finish = make_shared<CFinish>();
+	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);	
 }

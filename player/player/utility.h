@@ -74,6 +74,11 @@ public:
 	bool draw();
 };
 
+class CFinish:public CObject{
+public:
+	bool draw();
+};
+
 /*rain
 class CRain:public CObject{
 public:

@@ -71,4 +71,6 @@ public:
 	int get_id(){return id;}
 
 	void bullet_charge(int charge);
+	void start();
+	void finish();
 };

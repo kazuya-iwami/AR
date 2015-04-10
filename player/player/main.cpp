@@ -22,13 +22,14 @@
 using namespace std;
 
 #define FOCUS_SPEED 8
-
-#define GAME_TIME 20 //プレー時間　20秒
+#define GAME_TIME 5 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
+
 #define PLAYER_NM 0	//自分のプレイヤー番号
 #define IP_ADDRESS "172.16.100.41"	//IPアドレス
+
 
 
 bool list_cmp(std::shared_ptr<CObject>& v1,std::shared_ptr<CObject>& v2 );
@@ -56,7 +57,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
 	//network初期化
+
 	CNetwork::network_init(PLAYER_NM, IP_ADDRESS); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
+
 
 	//クラスのインスタンスはスマートポインタ(std::shared_ptr)で生成します。
 	//スマートポインタの詳細はググって
@@ -178,12 +181,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			draw_mtx.unlock();
 
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
-				mytank->set_game_status(GAME_STATUS::GAME_PLAY);
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
+				mytank->start();
 			}
 
 			
-		}else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
+		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
 
 
 			// 読みこんだグラフィックを拡大描画
@@ -192,27 +195,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				1000+mytank->shake_x + LEFT_WINDOW_WIDTH  , 750+mytank->shake_y , camera_image_handle, false ) ;
 			draw_mtx.unlock();
 
-			//描画
-			/*	
-			すべての描画をここで受け持つ。
-			drawlistに登録されてるオブジェクトのdraw()をすべて実行
-			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
-			*/
-
-			std::list<std::shared_ptr<CObject>>::iterator it;
-			CObject::drawlist.sort(list_cmp);//レイヤーの順にソート
-
-			draw_mtx.lock();
-			for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // 最後の「it++」を消す
-				if( !(*it)->draw() ){ //アニメーション終了時
-					// オブジェクトをリストからはずす
-					it = CObject::drawlist.erase( it );
-					continue;
-				}
-				it++;   // インクリメント
-			}
-
-			draw_mtx.unlock();
 
 
 			//照準と敵が重なっているかチェック
@@ -334,15 +316,15 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
 			}
 
+			//Qを押すとゲーム中だったのが終了画面へと遷移
 			//時間切れるとGAME_STATUS変更
-			if(system_timer->get_finish_flag()){
-				mytank->set_game_status(GAME_STATUS::GAME_FINISH);
-
+			if(system_timer->get_finish_flag() || key_buf[ KEY_INPUT_Q ] == 1){
+				mytank->finish();
 				finish_timer = FINISH_TIME*30;
 				//時間切れの処理
 			}
 
-		}else if(mytank->get_game_status() == GAME_STATUS::GAME_PAUSE){
+		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PAUSE){
 
 			draw_mtx.lock();
 			DrawFormatString(50 + LEFT_WINDOW_WIDTH, 300, GetColor(255,255,255), "PAUSE... ENTERで戻る");
@@ -353,13 +335,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				mytank->set_game_status(GAME_STATUS::GAME_PLAY);
 			}
 
-		}else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
-
+		} else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
+			/*
 			draw_mtx.lock();
 			DrawFormatString(50 + LEFT_WINDOW_WIDTH, 300, GetColor(255,255,255), "FINISH!!!　5秒");
 			draw_mtx.unlock();
-
-			if(finish_timer == 0){
+			*/
+			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
 
 				if(mytank->get_id() != 0)exist_flag[0] = mytank->enemy0->exist;
@@ -368,9 +350,33 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				if(mytank->get_id() != 3)exist_flag[3] = mytank->enemy3->exist;
 
 				init();
-			}else finish_timer--;
+			}
 
 
+		}
+
+		if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY || mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
+		    //描画
+			/*	
+			すべての描画をここで受け持つ。
+			drawlistに登録されてるオブジェクトのdraw()をすべて実行
+			drawの戻り値がfalseだとリストから除く(アニメーション描画終了後falseを返す)
+			*/
+
+			std::list<std::shared_ptr<CObject>>::iterator it;
+			CObject::drawlist.sort(list_cmp);//レイヤーの順にソート
+
+			draw_mtx.lock();
+			for(it=CObject::drawlist.begin(); it!=CObject::drawlist.end();){  // 最後の「it++」を消す
+				if( !(*it)->draw() ){ //アニメーション終了時
+					// オブジェクトをリストからはずす
+					it = CObject::drawlist.erase( it );
+					continue;
+				}
+				it++;   // インクリメント
+			}
+
+			draw_mtx.unlock();
 		}
 
 		//サーバーからmsgの受信

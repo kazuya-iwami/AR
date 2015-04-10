@@ -22,12 +22,12 @@
 using namespace std;
 
 #define FOCUS_SPEED 8
-#define GAME_TIME 1000 //プレー時間　20秒
+#define GAME_TIME 30 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 
-#define PLAYER_NM 0	//自分のプレイヤー番号
+#define PLAYER_NM 3	//自分のプレイヤー番号
 #define IP_ADDRESS "172.16.100.41"	//IPアドレス
 
 
@@ -463,7 +463,7 @@ void image_get_process(){
 			cv::imwrite("out.jpeg",image);
 
 			// DXライブラリで静止画取得 
-			camera_image_size= FileRead_size("out.jpeg");
+			camera_image_size = (int)FileRead_size("out.jpeg");
 			vector<char> buf(camera_image_size,0);
 			int FileHandle = FileRead_open("out.jpeg");
 

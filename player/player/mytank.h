@@ -46,6 +46,7 @@ public:
 	int shakeflag;
 	int focus_x,focus_y;//照準の位置
 	//int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
+	bool preflag;
 
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;
@@ -53,6 +54,7 @@ public:
 	shared_ptr<CEnemy> enemy3;
 	
 	shared_ptr<CBullet_image> bullet_image;//残弾描画
+	shared_ptr<CMap> map;
 
 	CMytank();
 	void move(tstring direction, tstring speed);//移動
@@ -70,7 +72,7 @@ public:
 	GAME_STATUS get_game_status(){return game_status;}
 	void set_game_status(GAME_STATUS game_status_);
 	int get_id(){return id;}
-	void show_focus(){focus_flag = true;};
+	void show_focus();
 
 	void bullet_charge(int charge);
 	void start();

@@ -5,14 +5,22 @@
 
 
 bool CSystem_timer::draw(){
-	//残り時間表示
 	if(system_timer > 0){
-		DrawGraph(LEFT_WINDOW_WIDTH+500-87, 20, figure_id["F_TIMER_BASE2"], true); //背景出力
-		std::ostringstream sout;
-		sout << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
-		std::string s = sout.str();
-		DrawOriginalString(440+LEFT_WINDOW_WIDTH, 35, 1.0, 24, to_string((system_timer/30 + 1)/60)+":"+s); //文字出力
-		system_timer--;
+		if(countdown_finish_flag){
+			//残り時間表示
+			//背景出力
+			DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
+
+			//文字出力
+			std::ostringstream sout1, sout2;
+			sout1 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
+			std::string sec = sout1.str();
+			sout2 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)/60;
+			std::string min = sout2.str();
+			DrawOriginalString(438+LEFT_WINDOW_WIDTH, 30, 1.0, 24, min+":"+sec);
+			//timerカウント
+			system_timer--;
+		}
 	}else finish_flag = true;
 
 	//残り10秒になったら警告
@@ -43,6 +51,7 @@ bool CSystem_timer::draw(){
 }
 
 bool CEffect::draw(){
+	
 	DrawString(100 + LEFT_WINDOW_WIDTH,100,"red",0);
 	SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,shaketiemr*10);
 	DrawGraph(0 + LEFT_WINDOW_WIDTH,0,figure_id["T_REDBACK"],1);
@@ -67,17 +76,19 @@ bool CEnemy::draw(){
 	x=ip_x*1000/320;//画面引き延ばしてる分の補正
 	y=ip_y*750/240;
 
-	if(visible){//視界に入っているなら
+	if(countdown_finish_flag && visible){//視界に入っているなら
 		if(exist){
+			/*
 			if(!lockon){
 				SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
 			}
-			DrawGraph(x - 100 + LEFT_WINDOW_WIDTH,y - 130,figure_id["F_DETECT"],true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			*/
+			DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_ICON"+to_string(enemy_id+1)],true);
+			//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		}else{ //切断されていたら
 			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
 		}
-		DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y , GetColor(255,255,255), "%dP", enemy_id);
+		//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y , GetColor(255,255,255), "%dP", enemy_id);
 	}
 
 
@@ -90,6 +101,7 @@ CEnemy::CEnemy(int enemy_id_){
 	exist=true;
 	enemy_id = enemy_id_;
 	lockon = false;
+	countdown_finish_flag = false;
 }
 
 
@@ -115,7 +127,7 @@ bool CBullet_image :: draw(){
 	for(i=0;i<max_bullet_num - num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+25*i,figure_id["F_BULLETUSED"],true);
 	}
-	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 255 );
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	return true;
 }
 
@@ -165,6 +177,10 @@ bool CUp_effect::draw(){
 	else return false;
 }
 
+CFinish :: CFinish(int result_[4]){
+	int i;
+	for(i=0; i<4; i++) result[i]=result_[i];
+}
 
 bool CFinish::draw(){
 DrawGraph(0,0,figure_id["F_FINISH"],false);
@@ -187,4 +203,11 @@ bool CRain :: draw(){
 	else return false;
 }
 */
+
+
+bool CMap::draw(){
+
+	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
+	return true;
+}
 

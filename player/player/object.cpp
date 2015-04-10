@@ -36,6 +36,11 @@ void CObject::load(){
 	//F_TESTの部分は他と被らないように自由に決めてください。ただしF_から初めて。
 	figure_id["F_TEST"] =  LoadGraph("image/test.jpg");
 	figure_id["F_DETECT"] =  LoadGraph("image/detect.png");
+	figure_id["F_ICON1"] =  LoadGraph("image/icon1.png");
+	figure_id["F_ICON2"] =  LoadGraph("image/icon2.png");
+	figure_id["F_ICON3"] =  LoadGraph("image/icon3.png");
+	figure_id["F_ICON4"] =  LoadGraph("image/icon4.png");
+	
 	figure_id["F_FRAME"]=LoadGraph("image/frame.png");
 	figure_id["F_CURSUR"]=LoadGraph("image/cursur.png");
 	figure_id["F_CURSUR_ON"]=LoadGraph("image/cursur_on.png");
@@ -43,10 +48,14 @@ void CObject::load(){
 	figure_id["F_BULLETUSED"]=LoadGraph("image/bullet_used.png");
 	figure_id["F_REDBACK"]=LoadGraph("image/redback.png");
 	figure_id["F_FINISH"]=LoadGraph("image/finish.png");
+
+	figure_id["F_MAPFRAME"] = LoadGraph("image/map_frame.png");
+
+	figure_id["F_TIMER_FRAME"] = LoadGraph("image/timer_frame.png");
+
 	figure_id["F_COUNTBASE"]=LoadGraph("image/countbase.png");
 	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
-	figure_id["F_TIMER_BASE"] = LoadGraph("image/timer_base.png");
-	figure_id["F_TIMER_BASE2"] = LoadGraph("image/timer_base_square.png");
+
 
 
 	//上の効果音版
@@ -54,6 +63,7 @@ void CObject::load(){
 	sound_id["S_BOMB"]=LoadSoundMem("sound/bomb1.mp3");
 	sound_id["S_KEIKOKU"]=LoadSoundMem("sound/keikoku.mp3");
 	sound_id["S_GET"]=LoadSoundMem("sound/get.mp3");
+	sound_id["S_LOCK"]=LoadSoundMem("sound/lock.mp3");
 	//BGM
 	sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
 

@@ -28,12 +28,14 @@ public:
 	int score;
 	bool exist;
 	bool lockon;
+	bool countdown_finish_flag;
 	int map_x;
 	int map_y;
 
 	CEnemy(int enemy_id_);
 	int get_x(){return x;}
 	int get_y(){return y;}
+	void countdown_finish(){countdown_finish_flag = true;}
 	
 	bool draw();
 	void disconnect();
@@ -79,6 +81,8 @@ public:
 
 class CFinish:public CObject{
 public:
+	int result[4];
+	CFinish(int result_[4]);
 	bool draw();
 };
 
@@ -90,4 +94,7 @@ public:
 };
 */
 
-
+class CMap:public CObject {
+public:
+	bool draw();
+};

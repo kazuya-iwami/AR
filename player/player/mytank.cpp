@@ -10,6 +10,7 @@
 bool CMytank::draw() {
 
 	//カーソル表示
+
 	if(focus_flag){
 		bool flag =false;
 		if(id != 0 && enemy0->lockon ==true) flag = true;
@@ -17,19 +18,23 @@ bool CMytank::draw() {
 		if(id != 2 && enemy2->lockon ==true) flag = true;
 		if(id != 3 && enemy3->lockon ==true) flag = true;
 		if(flag == true){//lockon状態
-			SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+			if(preflag==false){
+				preflag=true;
+				PlaySoundMem( sound_id["S_LOCK"] , DX_PLAYTYPE_BACK ) ;		
+			}
+			SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
 		}else{//lockが外れている状態
-			SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+			preflag=false;
+			SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 			draw_timer++;
 		}
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
 
 
 	//スコア表示
-	DrawOriginalString(50+LEFT_WINDOW_WIDTH,200,1.0,22,"SCORE:"+to_string(score));
+	DrawOriginalString(800+LEFT_WINDOW_WIDTH,100,1.0,22,"SCORE:"+to_string(score));
 
 	
 
@@ -57,6 +62,9 @@ CMytank::CMytank() {
 	shake_x=0;
 	shake_y=0;
 	draw_timer=0;
+
+	preflag=false;
+
 	focus_flag = false;
 
 	send_msg("HELLO");
@@ -64,6 +72,10 @@ CMytank::CMytank() {
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
 	bullet_image = bullet_image_;
 	CObject::register_object(bullet_image,DRAW_LAYER::IMFOMATION_LAYER);
+
+	auto map_ = make_shared<CMap>();
+	map = map_;
+	CObject::register_object(map,DRAW_LAYER::IMFOMATION_LAYER);
 
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
@@ -616,7 +628,37 @@ void CMytank::finish(){
 	//描画リストの要素をすべて削除
 	CObject::drawlist.clear();
 
-	auto finish = make_shared<CFinish>();
-	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);	
+		
+	int result[4];
+	switch(id){
+	case 0:{
+		result[0]=score; result[1]=enemy1->score; result[2]=enemy2->score; result[3]=enemy3->score;
+		break;
+		   }
+	case 1:{
+		result[0]=enemy0->score; result[1]=score; result[2]=enemy2->score; result[3]=enemy3->score;
+		break;
+		}
+	case 2:{
+		result[0]=enemy0->score; result[1]=enemy1->score; result[2]=score; result[3]=enemy3->score;
+		break;
+	}
+	case 3:{
+		result[0]=enemy0->score; result[1]=enemy1->score; result[2]=enemy2->score; result[3]=score;
+		break;
+		   }
+	}
+	auto finish = make_shared<CFinish>(result);
+	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);
+	
+
+
 }
 
+void CMytank::show_focus(){
+	focus_flag = true;
+	if(id!=0)enemy0->countdown_finish();
+	if(id!=1)enemy1->countdown_finish();
+	if(id!=2)enemy2->countdown_finish();
+	if(id!=3)enemy3->countdown_finish();
+};

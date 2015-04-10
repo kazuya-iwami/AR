@@ -45,6 +45,7 @@ public:
 	int shakeflag;
 	int focus_x,focus_y;//照準の位置
 	//int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
+	bool preflag;
 
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;

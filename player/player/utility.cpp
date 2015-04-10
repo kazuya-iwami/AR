@@ -5,13 +5,18 @@
 
 
 bool CSystem_timer::draw(){
-	//残り時間表示
 	if(system_timer > 0){
-		DrawGraph(LEFT_WINDOW_WIDTH+500-87, 20, figure_id["F_TIMER_BASE2"], true); //背景出力
+		//残り時間表示
+		//背景出力
+		//SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+		DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
+		//SetDrawBlendMode(DX_BLENDMODE_ADD, 0);
+		//文字出力
 		std::ostringstream sout;
 		sout << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
 		std::string s = sout.str();
-		DrawOriginalString(440+LEFT_WINDOW_WIDTH, 35, 1.0, 24, to_string((system_timer/30 + 1)/60)+":"+s); //文字出力
+		DrawOriginalString(438+LEFT_WINDOW_WIDTH, 30, 1.0, 24, to_string((system_timer/30 + 1)/60)+":"+s);
+		//timerカウント
 		system_timer--;
 	}else finish_flag = true;
 

@@ -71,8 +71,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	
 	//auto redback=make_shared<CEffect>();
-	auto countdown=make_shared<CCountdown>();
-	CObject::register_object(countdown,DRAW_LAYER::IMFOMATION_LAYER);
+	
+	
 	int finish_timer=0; //結果発表画面用タイマー
 
 	//キーボード用
@@ -315,7 +315,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			//テスト。カウントダウン
 		if(key_buf[KEY_INPUT_V]==1){
-			countdown->draw();
+			//countdown->draw();
 		}
 
 			//ENTERでGAME_STAUTS変更

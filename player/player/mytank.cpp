@@ -597,6 +597,10 @@ bullet_image->update_num_bullet(num_bullet);//残弾数反映
 void CMytank::start(){
 	//GameBGMの再生
 	PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
+	//カウントダウン開始
+	auto countdown=make_shared<CCountdown>();
+	CObject::register_object(countdown,DRAW_LAYER::IMFOMATION_LAYER);
+	countdown->draw();
 	//Game スタート
 	set_game_status(GAME_STATUS::GAME_PLAY);
 }

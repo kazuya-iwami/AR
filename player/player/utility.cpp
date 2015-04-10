@@ -184,7 +184,7 @@ bool CCountdown::draw(){
 	SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,220);
 	DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
 	DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,3.14/15*draw_timer,figure_id["F_COUNTSIDE"],true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	draw_timer++;
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	return true;
 }

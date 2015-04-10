@@ -37,11 +37,15 @@ bool CEnemy::draw(){
 	y=ip_y*750/240;
 
 	if(visible){//視界に入っているなら
-		if(!lockon){
-			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
+		if(exist){
+			if(!lockon){
+				SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
+			}
+			DrawGraph(x - 100 + LEFT_WINDOW_WIDTH,y - 130,figure_id["F_DETECT"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}else{ //切断されていたら
+			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
 		}
-		DrawGraph(x - 100 + LEFT_WINDOW_WIDTH,y - 130,figure_id["F_DETECT"],true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y , GetColor(255,255,255), "%dP", enemy_id);
 	}
 

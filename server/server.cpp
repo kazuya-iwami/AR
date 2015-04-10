@@ -11,7 +11,7 @@
 #include <sstream>
 #include "server.h"
 #include "server.h"
-#include "control.h"
+//#include "control.h"
 #include <termios.h>
 #include <fcntl.h>
 
@@ -22,7 +22,7 @@
 #define PORT_NUM 2
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
-static int n, retval, nsockfd[PORT_NUM], maxfd;
+static int retval, nsockfd[PORT_NUM], maxfd;
 static struct hostent *shost;
 static char buf[BUFMAX], shostn[BUFMAX];
 static fd_set mask;
@@ -83,7 +83,7 @@ int main() {
 			if(!player_param[i].exist)continue;
 			if (FD_ISSET(nsockfd[i], &mask)) {
 
-				n = read(nsockfd[i], buf, BUFMAX);
+				int n = (int)read(nsockfd[i], buf, BUFMAX);
 				if (n <= 0) {
 					std::cout << "プレイヤー:"<< i <<"が切断しました" <<std::endl;
 					//loop = false;
@@ -103,15 +103,15 @@ int main() {
 
 			if(game_status == GAME_STATUS::GAME_WAIT) {
 				//ゲーム開始命令
-				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_PLAY,0,0),4);
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PLAY,0,0),4);
 				game_status = GAME_STATUS::GAME_PLAY;
 				std::cout << "ゲームスタート" << std::endl;
 			}else if(game_status == GAME_STATUS::GAME_PLAY){
-				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_PAUSE,0,0),4);
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PAUSE,0,0),4);
 				game_status = GAME_STATUS::GAME_PAUSE;
 				std::cout << "一時停止" << std::endl;
 			}else if(game_status == GAME_STATUS::GAME_PAUSE) {
-				send_message(encode(COMMAND_NAME::CHANGE_STATUS, GAME_PLAY, 0, 0), 4);
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PLAY, 0, 0), 4);
 				game_status = GAME_STATUS::GAME_PLAY;
 				std::cout << "プレー再開" << std::endl;
 			}
@@ -128,11 +128,11 @@ int main() {
 			}
 
 			if(all_finish_flag){ //生きている人がみなfinish状態ならゲーム終了
-				game_status = GAME_STATUS::GAME_WAIT;
-				if(disconnect_flag){ //ゲーム終了時誰かが切断していたらサーバー落とす
-					std::cout << "切断したプレイヤーが存在するためゲームを終了します" << std::endl;
-					exit(1);
-				}
+//				if(disconnect_flag){ //ゲーム終了時誰かが切断していたらサーバー落とす
+//					std::cout << "切断したプレイヤーが存在するためゲームを終了します" << std::endl;
+//					exit(1);
+//				}
+				init();
 			}
 
 		}
@@ -190,12 +190,13 @@ int set_tcp_socket(int portnum, struct hostent *shost) {
 void send_message(std::string msg, int id=4) {
 	if (id == 4) {
 		for (int i = 0; i < PORT_NUM; i++) {
+			std::cout << "player_param[" << i << "].exist = " << player_param[i].exist << std::endl;
 			if(!player_param[i].exist) {
 				std::cout << "切断したプレイヤーへメッセージを送ろうとしています" << std::endl;
 				continue;
 			}
-			write(nsockfd[i], msg.c_str(), msg.length());
-			if (n < 0) Err("socket disconnected");
+			int n = (int)write(nsockfd[i], msg.c_str(), msg.length());
+			if (n < 0) Err("socket disconnected1");
 			bzero(buf, BUFMAX);
 		}
 		return;
@@ -203,8 +204,8 @@ void send_message(std::string msg, int id=4) {
 	if(!player_param[id].exist) {
 		std::cout << "抜けたプレイヤーへメッセージを送ろうとしています" << std::endl;
 	}
-	write(nsockfd[id], msg.c_str(), msg.length());
-	if (n < 0) Err("socket disconnected");
+	int n = (int)write(nsockfd[id], msg.c_str(), msg.length());
+	if (n < 0) Err("socket disconnected2");
 	bzero(buf, BUFMAX);
 }
 
@@ -213,6 +214,7 @@ void init(){
 	item_end_time = 0;
 	for(int i=0;i<4;i++){
 		item_start_time[i] = 0;
+		player_param[i].init();
 	}
 }
 

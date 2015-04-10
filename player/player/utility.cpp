@@ -82,7 +82,7 @@ void CEnemy::attacked(int score_){
 
 bool CBullet_image :: draw(){
 	int i;
-	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 180 );
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 );
 	for(i=0;i<num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}

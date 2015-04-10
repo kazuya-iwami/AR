@@ -628,8 +628,31 @@ void CMytank::finish(){
 	//描画リストの要素をすべて削除
 	CObject::drawlist.clear();
 
-	auto finish = make_shared<CFinish>();
-	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);	
+		
+	int result[4];
+	switch(id){
+	case 0:{
+		result[0]=score; result[1]=enemy1->score; result[2]=enemy2->score; result[3]=enemy3->score;
+		break;
+		   }
+	case 1:{
+		result[0]=enemy0->score; result[1]=score; result[2]=enemy2->score; result[3]=enemy3->score;
+		break;
+		}
+	case 2:{
+		result[0]=enemy0->score; result[1]=enemy1->score; result[2]=score; result[3]=enemy3->score;
+		break;
+	}
+	case 3:{
+		result[0]=enemy0->score; result[1]=enemy1->score; result[2]=enemy2->score; result[3]=score;
+		break;
+		   }
+	}
+	auto finish = make_shared<CFinish>(result);
+	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);
+	
+
+
 }
 
 void CMytank::show_focus(){

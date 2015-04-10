@@ -33,6 +33,7 @@ public:
 	CEnemy(int enemy_id_);
 	int get_x(){return x;}
 	int get_y(){return y;}
+	
 	bool draw();
 	void disconnect();
 	void attacked(int score_);

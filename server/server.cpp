@@ -99,7 +99,7 @@ int main() {
 
 		//キー入力受け付け
 		if(kbhit()) {/*キーが押されていたら、変数cにキー取得*/
-//			char c = getchar();
+			char c = getchar();
 
 			if(game_status == GAME_STATUS::GAME_WAIT) {
 				//ゲーム開始命令

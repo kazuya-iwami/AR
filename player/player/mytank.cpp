@@ -62,12 +62,11 @@ CMytank::CMytank() {
 	shake_x=0;
 	shake_y=0;
 	draw_timer=0;
-<<<<<<< HEAD
+
 	preflag=false;
-=======
+
 	focus_flag = false;
 
->>>>>>> masafumi
 	send_msg("HELLO");
 
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);

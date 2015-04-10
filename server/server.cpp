@@ -11,7 +11,7 @@
 #include <sstream>
 #include "server.h"
 #include "server.h"
-#include "control.h"
+//#include "control.h"
 #include <termios.h>
 #include <fcntl.h>
 
@@ -103,15 +103,15 @@ int main() {
 
 			if(game_status == GAME_STATUS::GAME_WAIT) {
 				//ゲーム開始命令
-				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_PLAY,0,0),4);
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PLAY,0,0),4);
 				game_status = GAME_STATUS::GAME_PLAY;
 				std::cout << "ゲームスタート" << std::endl;
 			}else if(game_status == GAME_STATUS::GAME_PLAY){
-				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_PAUSE,0,0),4);
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PAUSE,0,0),4);
 				game_status = GAME_STATUS::GAME_PAUSE;
 				std::cout << "一時停止" << std::endl;
 			}else if(game_status == GAME_STATUS::GAME_PAUSE) {
-				send_message(encode(COMMAND_NAME::CHANGE_STATUS, GAME_PLAY, 0, 0), 4);
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PLAY, 0, 0), 4);
 				game_status = GAME_STATUS::GAME_PLAY;
 				std::cout << "プレー再開" << std::endl;
 			}

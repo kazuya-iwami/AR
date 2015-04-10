@@ -16,10 +16,10 @@ bool CMytank::draw() {
 	if(id != 2 && enemy2->lockon ==true) flag = true;
 	if(id != 3 && enemy3->lockon ==true) flag = true;
 	if(flag == true){//lockon状態
-		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
 	}else{//lockが外れている状態
-		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 		draw_timer++;
 	}

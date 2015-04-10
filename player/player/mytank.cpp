@@ -15,15 +15,16 @@ bool CMytank::draw() {
 	if(id != 1 && enemy1->lockon ==true) flag = true;
 	if(id != 2 && enemy2->lockon ==true) flag = true;
 	if(id != 3 && enemy3->lockon ==true) flag = true;
-	if(flag == true){
+	if(flag == true){//lockon状態
 		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
 		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
-	}else{
+	}else{//lockが外れている状態
 		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
 		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 		draw_timer++;
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
 
 	//スコア表示
 	DrawOriginalString(50+LEFT_WINDOW_WIDTH,200,1.0,22,"SCORE:"+to_string(score));

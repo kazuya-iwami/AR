@@ -1,11 +1,4 @@
 ﻿#include "utility.h"
-<<<<<<< HEAD
-int timer=0;
-
-bool CSystem_timer::draw(){
-	//残り時間表示
-	DrawFormatString(650 + LEFT_WINDOW_WIDTH,20,GetColor(200,200,200),"Time:%d",system_timer/30 + 1);
-=======
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -18,7 +11,6 @@ bool CSystem_timer::draw(){
     std::string s = sout.str();
  
 	DrawOriginalString(650 + LEFT_WINDOW_WIDTH,20,1.0,24,to_string((system_timer/30 + 1)/60)+":"+s);
->>>>>>> origin/develop
 	if(system_timer > 0){
 		system_timer--;
 	}else finish_flag = true;
@@ -27,15 +19,14 @@ bool CSystem_timer::draw(){
 		if(system_timer==240){
 			//PlaySoundMem( sound_id["S_KEIKOKU"] , DX_PLAYTYPE_BACK ) ;
 		}
-		if(timer%30<15){
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(timer%30));
+		if(system_timer%30<15){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(system_timer%30));
 		}
 		else{
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(timer%30));
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(system_timer%30));
 		}
 	DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-	timer++;
 	}
 	return true;//常に描画
 }
@@ -183,7 +174,6 @@ bool CRain :: draw(){
 	else return false;
 }
 */
-<<<<<<< HEAD
 
 //カウントダウン用のクラス
 CCountdown::CCountdown(){
@@ -198,5 +188,3 @@ bool CCountdown::draw(){
 	draw_timer++;
 	return true;
 }
-=======
->>>>>>> origin/develop

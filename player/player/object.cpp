@@ -17,13 +17,11 @@ int bullet_start[45];
 //数字用配列
 int number[10];
 
-<<<<<<< HEAD
 //煙用配列
 int fog[10];
-=======
+
 //文字用
 int word[160];
->>>>>>> origin/develop
 
 //燃える
 int fire[5];

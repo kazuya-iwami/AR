@@ -72,7 +72,7 @@ public:
 	GAME_STATUS get_game_status(){return game_status;}
 	void set_game_status(GAME_STATUS game_status_);
 	int get_id(){return id;}
-	void show_focus(){focus_flag = true;};
+	void show_focus();
 
 	void bullet_charge(int charge);
 	void start();

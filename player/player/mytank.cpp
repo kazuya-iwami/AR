@@ -632,3 +632,10 @@ void CMytank::finish(){
 	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);	
 }
 
+void CMytank::show_focus(){
+	focus_flag = true;
+	if(id!=0)enemy0->countdown_finish();
+	if(id!=1)enemy1->countdown_finish();
+	if(id!=2)enemy2->countdown_finish();
+	if(id!=3)enemy3->countdown_finish();
+};

@@ -219,6 +219,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				speed = _T("half");
 			}
 
+			/*
 			//各キーを押し続けるとその動作をする。
 			if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
 				//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
@@ -243,7 +244,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				(key_buf[ KEY_INPUT_RIGHT ] == 0 && key_prev_buf[ KEY_INPUT_RIGHT] == 1) ){
 					mytank->move(_T("stop"), speed);
 			}
-
+			*/
 			//bullet生成
 			if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 				mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);

@@ -4,8 +4,10 @@
 bool CSystem_timer::draw(){
 	//残り時間表示
 	
-	DrawFormatString(650 + LEFT_WINDOW_WIDTH,20,GetColor(200,200,200),"Time:%d",system_timer/30 + 1);
+	DrawFormatString(500+LEFT_WINDOW_WIDTH-100, 0 ,GetColor(200,200,200),"Time:%d",system_timer/30 + 1);
+	
 	if(system_timer > 0){
+		DrawGraph(LEFT_WINDOW_WIDTH+500-87, 20, figure_id["F_TIMER_BASE2"], true);
 		system_timer--;
 	}else finish_flag = true;
 

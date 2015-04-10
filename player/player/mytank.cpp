@@ -257,8 +257,9 @@ void CMytank::get_msg(){
 		int kind = std::stoi(str[3]);
 
 		for (int i = 0; i < 10; ++i) {
-			if(str[i] == "")
-			data[i] = std::stoi(str[i]);
+			if(str[i] == ""){
+				data[i]=0;
+			}else data[i] = std::stoi(str[i]);
 		}
 		switch (command_name) {
 		case COMMAND_NAME::CHANGE_STATUS:

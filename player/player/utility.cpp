@@ -6,8 +6,9 @@ int timer=3359;
 
 bool CSystem_timer::draw(){
 	//残り時間表示
-	
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA,rand()%255);
 	DrawFormatString(650,20,GetColor(255,122,0),"Time:%d",timer/10);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 	timer--;
 

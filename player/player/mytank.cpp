@@ -24,7 +24,7 @@ bool CMytank::draw() {
 
 CMytank::CMytank() {
 	//初期化
-	score = 20;
+	score = 0;
 	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
 	ope_timer = 0;
@@ -549,7 +549,7 @@ void CMytank::detect_enemy(Mat image) {
 }
 
 void CMytank::attacked(int score_){
-	score += score_;
+	score -= score_;
 };
 
 void CMytank::set_game_status(GAME_STATUS game_status_){

@@ -68,6 +68,7 @@ public:
 	void shake();
 	GAME_STATUS get_game_status(){return game_status;}
 	void set_game_status(GAME_STATUS game_status_);
+	int get_id(){return id;}
 
 	void bullet_charge(int charge);
 };

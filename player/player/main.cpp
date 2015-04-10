@@ -39,6 +39,8 @@ std::mutex mytank_mtx;
 bool thread_flag;
 int camera_image_size;
 
+bool exist_flag[4];
+
 shared_ptr<CMytank> mytank;
 shared_ptr<CSystem_timer> system_timer;
 
@@ -131,6 +133,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CObject::load();//すべての画像はこの中で読み込む
 	SetUseASyncLoadFlag(FALSE);
 
+	//exist_flag初期化 init()の前に行う
+	for(int i=0;i<4;i++){
+		exist_flag[i] = true;
+	}
+
+
 	init(); //ゲームの初期化
 	
 
@@ -158,9 +166,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		GetHitKeyStateAll( key_buf ) ;
 
-		//サーバーからmsgの受信
-		/* 1サイクル1回呼ぶ */
-		mytank->get_msg();
+
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 
@@ -323,7 +329,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
-				finish_timer = FINISH_TIME*30;
 			}
 
 			//時間切れるとGAME_STATUS変更
@@ -352,11 +357,21 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			if(finish_timer == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
+
+				if(mytank->get_id() != 0)exist_flag[0] = mytank->enemy0->exist;
+				if(mytank->get_id() != 1)exist_flag[1] = mytank->enemy1->exist;
+				if(mytank->get_id() != 2)exist_flag[2] = mytank->enemy2->exist;
+				if(mytank->get_id() != 3)exist_flag[3] = mytank->enemy3->exist;
+
 				init();
 			}else finish_timer--;
 
 
 		}
+
+		//サーバーからmsgの受信
+		/* 1サイクル1回呼ぶ */
+		mytank->get_msg();
 
 		fps.Update();//1サイクルごとの速度を測定
 		if(  key_buf[ KEY_INPUT_F ] == 1 ){
@@ -448,6 +463,8 @@ void image_get_process(){
 //ゲームの初期化
 void init(){
 
+	
+
 	//描画リストの要素をすべて削除
 	CObject::drawlist.clear();
 
@@ -459,12 +476,19 @@ void init(){
 	auto system_timer_ = make_shared<CSystem_timer>(10,10,GAME_TIME);
 	system_timer = system_timer_;
 
+	if(mytank->get_id() != 0)mytank->enemy0->exist = exist_flag[0];
+	if(mytank->get_id() != 1)mytank->enemy1->exist = exist_flag[1];
+	if(mytank->get_id() != 2)mytank->enemy2->exist = exist_flag[2];
+	if(mytank->get_id() != 3)mytank->enemy3->exist = exist_flag[3];
+
 	//色々描画リストに登録
 	//ここ大事。object.h見て
 	//後ここ参考　http://marupeke296.com/DXCLS_WhoIsDrawer.html
 
 	CObject::register_object(mytank,DRAW_LAYER::MYTANK_LAYER);
 	CObject::register_object(system_timer,DRAW_LAYER::IMFOMATION_LAYER);
+
+	
 
 }
 

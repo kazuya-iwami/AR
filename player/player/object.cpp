@@ -12,6 +12,7 @@ int explosion1[140];
 
 //弾エフェクト用配列
 int bullet[30];
+int bullet_start[45];
 
 //数字用配列
 int number[10];
@@ -38,6 +39,9 @@ void CObject::load(){
 	//上の効果音版
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");
 	sound_id["S_BOMB"]=LoadSoundMem("sound/bomb1.mp3");
+	sound_id["S_GET"]=LoadSoundMem("sound/get.mp3");
+	//BGM
+	sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
 
 	// explosion
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
@@ -47,6 +51,7 @@ void CObject::load(){
 	// bullet
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
 	LoadDivGraph("image/bullet.png", 30, 10, 3, 256, 256, bullet);
+	LoadDivGraph("image/bullet_start.png", 45, 9, 5, 256, 256, bullet_start);
 
 	//number
 	//爆発と同じく分割して読み込み。

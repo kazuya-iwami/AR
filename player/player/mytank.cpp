@@ -265,7 +265,7 @@ void CMytank::get_msg(){
 			switch (player_from) {
 			case GAME_STATUS::GAME_PLAY:
 				if(game_status == GAME_STATUS::GAME_WAIT){
-					game_status = GAME_STATUS::GAME_PLAY;
+					start();
 				}else if( game_status == GAME_STATUS::GAME_PAUSE ) {
 					game_status = GAME_STATUS::GAME_PLAY;
 				}
@@ -564,6 +564,7 @@ void CMytank::set_game_status(GAME_STATUS game_status_){
 void CMytank::bullet_charge(int charge){
 
 	if(num_bullet < bullet_image->max_bullet_num){
+		PlaySoundMem( sound_id["S_GET"] , DX_PLAYTYPE_BACK ) ;
 		auto up_effect = make_shared<CUp_effect>();
 		CObject::register_object(up_effect,DRAW_LAYER::IMFOMATION_LAYER);
 	}
@@ -571,4 +572,19 @@ void CMytank::bullet_charge(int charge){
 num_bullet += charge;
 if(num_bullet > bullet_image->max_bullet_num) num_bullet = bullet_image->max_bullet_num;
 bullet_image->update_num_bullet(num_bullet);//残弾数反映
+}
+
+
+void CMytank::start(){
+	//GameBGMの再生
+	PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
+	//Game スタート
+	set_game_status(GAME_STATUS::GAME_PLAY);
+}
+
+void CMytank::finish(){
+	//GameBGMの停止
+	StopSoundMem(sound_id["S_GAME_BGM"]);
+	//ゲーム終了
+	set_game_status(GAME_STATUS::GAME_FINISH);
 }

@@ -76,12 +76,15 @@ void CEnemy::attacked(int score_){
 
 bool CBullet_image :: draw(){
 	int i;
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 180 );
 	for(i=0;i<num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 80 );
 	for(i=0;i<max_bullet_num - num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+25*i,figure_id["F_BULLETUSED"],true);
 	}
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 255 );
 	return true;
 }
 

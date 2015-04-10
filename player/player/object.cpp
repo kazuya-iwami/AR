@@ -3,6 +3,8 @@
 map<string,int> CObject::figure_id;
 map<string,int> CObject::sound_id;
 std::list<std::shared_ptr<CObject>> CObject::drawlist;
+int CObject::shake_x;
+int CObject::shake_y;
 
 //爆発エフェクト用配列
 int explosion[45];
@@ -51,8 +53,14 @@ bool CObject::draw(){
 
 }
 
-void CObject::register_object(std::shared_ptr<CObject> obj){
+void CObject::register_object(std::shared_ptr<CObject> obj,DRAW_LAYER layer_id_){
 
+	obj->set_layer_id(layer_id_);
 	drawlist.push_back(obj);
 
+}
+
+void CObject::set_layer_id(DRAW_LAYER layer_id_){
+
+	layer_id = layer_id_;
 }

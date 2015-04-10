@@ -16,7 +16,7 @@ bool CExplosion::draw(){
 	case EXPLOSION_KIND::EXPLOSION_NOMAL :
 		if(draw_timer != 44){
 			// 爆発エフェクトの描画
-			DrawGraph(x-300, y-300, explosion[draw_timer], true);
+			DrawGraph(x-300 + LEFT_WINDOW_WIDTH, y-300, explosion[draw_timer], true);
 			draw_timer++;
 			return true;
 		} else {
@@ -25,7 +25,7 @@ bool CExplosion::draw(){
 	case EXPLOSION_KIND::EXPLOSION_1 :
 		if(draw_timer != 140){
 			// 爆発エフェクトの描画
-			DrawGraph(x-300, y-300, explosion1[draw_timer], true);
+			DrawGraph(x-300 + LEFT_WINDOW_WIDTH, y-300, explosion1[draw_timer], true);
 			draw_timer++;
 			return true;
 		} else {

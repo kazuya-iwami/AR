@@ -8,9 +8,9 @@
 #pragma comment(lib, "winmm.lib")
 
 class CFps{
-	int mStartTime;         //測定開始時刻
-	int mCount;             //カウンタ
-	float mFps;             //fps
+	int mStartTime;		 //測定開始時刻
+	int mCount;			 //カウンタ
+	float mFps;			 //fps
 	static const int N = 30;//平均を取るサンプル数
 	static const int FPS = 30;	//設定したFPS
 

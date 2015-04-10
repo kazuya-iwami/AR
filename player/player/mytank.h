@@ -15,10 +15,18 @@ enum OPERATION_STATUS {
 };
 
 enum GAME_STATUS {
+	GAME_UNCONNECTED,
+	GAME_WAIT,
 	GAME_PLAY,
-	GAME_PAUSE
+	GAME_PAUSE,
+	GAME_FINISH
 };
 
+enum SHAKE_STATUS{
+	NO_SHAKE,
+	BIG_SHAKE,
+	SMALL_SHAKE
+};
 
 //自機クラス
 
@@ -34,15 +42,15 @@ class CMytank : public CObject, public CNetwork {
 public:
 
 	int shaketimer;
-	bool shakeflag;
+	int shakeflag;
 	int focus_x,focus_y;//照準の位置
-	int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
+	//int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
 
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;
 	shared_ptr<CEnemy> enemy3;
-
+	
 	shared_ptr<CBullet_image> bullet_image;//残弾描画
 
 	CMytank();
@@ -56,5 +64,9 @@ public:
 	void detect_enemy(Mat image);
 	void check_focus();
 	void attacked(int score_);
-	int shake(int n);
+	void shake_start(SHAKE_STATUS shake_status);
+	void shake();
+	GAME_STATUS get_game_status(){return game_status;}
+	void set_game_status(GAME_STATUS game_status_);
+
 };

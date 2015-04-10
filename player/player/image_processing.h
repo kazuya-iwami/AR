@@ -16,15 +16,15 @@ using namespace cv;
 class CImage_processer {
 
 public:
-    int ip_x, ip_y;//ip : image_prosesser
+	int ip_x, ip_y;//ip : image_prosesser
 
-    int minH, maxH;
-    int minS, maxS;
-    int minV, maxV;
+	int minH, maxH;
+	int minS, maxS;
+	int minV, maxV;
 
-    bool visible; //視界に入っているかのフラグ
+	bool visible; //視界に入っているかのフラグ
 
-    void init(int minH_, int maxH_, int minS_, int maxS_, int minV_, int maxV_);
+	void init(int minH_, int maxH_, int minS_, int maxS_, int minV_, int maxV_);
 
 	Mat detect(Mat image);
 };

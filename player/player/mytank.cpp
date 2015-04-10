@@ -9,16 +9,16 @@
 
 bool CMytank::draw() {
 
-	//スコア表示
+	//カーソル表示
+	DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
 
-	DrawFormatString(50,600,GetColor(255,122,0),"Score:%d",score);
+	//スコア表示
+	DrawFormatString(50 + LEFT_WINDOW_WIDTH,600,GetColor(200,200,200),"Score:%d",score);
 
 	//アイテム枠表示
-	DrawGraph(0, 0, figure_id["F_FRAME"], true);
+	DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
 
-	//カーソル表示
-	DrawGraph(focus_x-64+shake_x,focus_y-64+shake_y,figure_id["F_CURSUR"],true);
-
+	
 	return true;
 };
 
@@ -32,7 +32,7 @@ CMytank::CMytank() {
 	vel_L = 0;
 	focus_x = 200;
 	focus_y = 200;
-	game_status = GAME_STATUS::GAME_PLAY;
+	game_status = GAME_STATUS::GAME_WAIT;
 	item_kind = ITEM_KIND::STAR; //スターを持たせる
 	shaketimer=10;
 	shakeflag=false;
@@ -43,31 +43,31 @@ CMytank::CMytank() {
 
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
 	bullet_image = bullet_image_;
-	CObject::register_object(bullet_image);
+	CObject::register_object(bullet_image,DRAW_LAYER::IMFOMATION_LAYER);
 
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
 		enemy0->init(137,180,100,255,56,184);//スマホの赤
-		CObject::register_object(enemy0);
+		CObject::register_object(enemy0,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 1) {
 		auto enemy1_ = make_shared<CEnemy>(1);
 		enemy1 = enemy1_;
 		enemy1->init(70,93,65,255,56,184);//サボテンだー
-		CObject::register_object(enemy1);
+		CObject::register_object(enemy1,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 2) {
 		auto enemy2_ = make_shared<CEnemy>(2);
 		enemy2 = enemy2_;
 		enemy2->init(0,0,100,200,100,200);
-		CObject::register_object(enemy2);
+		CObject::register_object(enemy2,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 3) {
 		auto enemy3_ = make_shared<CEnemy>(3);
 		enemy3 = enemy3_;
 		enemy3->init(30,30,100,200,100,200);
-		CObject::register_object(enemy3);
+		CObject::register_object(enemy3,DRAW_LAYER::ENEMY_LAYER);
 	}
 };
 
@@ -96,9 +96,13 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 
 	bullet_image->update_num_bullet(num_bullet);//残弾数反映
 
+	//画面振動
+	shake_start(SHAKE_STATUS::SMALL_SHAKE);
+	
+
 	//描画
 	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);
-	CObject::register_object(bullet);
+	CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
 
 
 	if (id != 0 && enemy0->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 0, (int)BULLET_KIND::BULLET_NOMAL));
@@ -146,29 +150,39 @@ void CMytank::use_item() {
 		send_msg(encode(COMMAND_NAME::USE_ITEM, id, 4, (int)item_kind));
 		
 		auto item = make_shared<CItem>(200 , 200, item_kind);
-    	CObject::register_object(item);
+		CObject::register_object(item,DRAW_LAYER::ITEM_LAYER);
 		
 		item_kind = ITEM_KIND::ITEM_NONE;
 	}
 }
 
 //君だけのオリジナル画面振動を実装しよう！
-int CMytank::shake(int n){
-	shakeflag=true;
-	shake_x=(rand()%40-20)*shaketimer;
-	shake_y=(rand()%40-20)*shaketimer;
-	if(shaketimer==10){
-		PlaySoundMem( sound_id["S_BOMB"] , DX_PLAYTYPE_BACK ) ;
+
+void CMytank::shake(){
+	if(shakeflag == SHAKE_STATUS::BIG_SHAKE){
+		shake_x=(rand()%40-20)*shaketimer;
+		shake_y=(rand()%40-20)*shaketimer;
+	}else if(shakeflag == SHAKE_STATUS::SMALL_SHAKE){
+		shake_y=(rand()%6-3)*shaketimer;
 	}
+
 	if(shaketimer==0){
 		shaketimer=11;
-		shakeflag=false;
+		shakeflag=0;
 		shake_x=0;
 		shake_y=0;
 	}
+
 	shaketimer--;
-	return 1;
 }
+
+void CMytank::shake_start(SHAKE_STATUS shake_status){
+	
+	shakeflag = shake_status;
+
+	shaketimer=11;
+	shake_x=0;
+	shake_y=0;
 
 	/*以下shake()の残骸
 	switch(n){
@@ -223,30 +237,36 @@ int CMytank::shake(int n){
 		break;
 	}*/
 
+}
+
 void CMytank::get_msg(){
 	string msg = check_msg();
 	int bullet_score=0; //bulletによっていくつスコアが上昇するかをscoreに格納
-    /* メッセージが送られてきた際の処理 */
+	/* メッセージが送られてきた際の処理 */
 	int data[10];
-    std::string str[4];
-    decode(msg.c_str(), str);
+	std::string str[4];
+	decode(msg.c_str(), str);
 	/* commandによる処理分岐 */
-    // メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
-    if ("" != str[3]) {
-        int command_name = std::stoi(str[0]);
-        int player_from = std::stoi(str[1]);
-        int player_to = std::stoi(str[2]);
-        int kind = std::stoi(str[3]);
+	// メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
+	if ("" != str[3]) {
+		int command_name = std::stoi(str[0]);
+		int player_from = std::stoi(str[1]);
+		int player_to = std::stoi(str[2]);
+		int kind = std::stoi(str[3]);
 
 		for (int i = 0; i < 10; ++i) {
 			data[i] = std::stoi(str[i]);
 		}
-        switch (command_name) {
-        case COMMAND_NAME::CHANGE_STATUS:
+		switch (command_name) {
+		case COMMAND_NAME::CHANGE_STATUS:
 			
 			switch (player_from) {
 			case GAME_STATUS::GAME_PLAY:
-				game_status = GAME_STATUS::GAME_PLAY;
+				if(game_status == GAME_STATUS::GAME_WAIT){
+					game_status = GAME_STATUS::GAME_PLAY;
+				}else if( game_status == GAME_STATUS::GAME_PAUSE ) {
+					game_status = GAME_STATUS::GAME_PLAY;
+				}
 				break;
 			case GAME_STATUS::GAME_PAUSE:
 				game_status = GAME_STATUS::GAME_PAUSE;
@@ -255,7 +275,7 @@ void CMytank::get_msg(){
 				break;
 			}
 			//game_status:player_fromに変更
-            break;
+			break;
 		case COMMAND_NAME::RETURN_BULLET:
 			{
 			//player:player_fromがplayer:player_toにbullet:kindを攻撃
@@ -264,7 +284,7 @@ void CMytank::get_msg(){
 			
 			if(kind == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
 
-            switch (player_from){
+			switch (player_from){
 			case 0:
 				if(id != 0){ //他人の攻撃
 					enemy0->score += bullet_score;
@@ -431,8 +451,8 @@ void CMytank::get_msg(){
 					}
 				}
 				break;
-            }
-            break;
+			}
+			break;
 			}
 		case COMMAND_NAME::DISCONNECT://敵が切断した場合
 			switch(player_from){ //自分のidを受け取ることはない前提
@@ -455,8 +475,8 @@ void CMytank::get_msg(){
 			break;
 		case COMMAND_NAME::INFORM_ITEM:
 			switch(kind){//アイテムの種類で場合分け
-		    case ITEM_KIND::ITEM_NONE:
-                break;
+			case ITEM_KIND::ITEM_NONE:
+				break;
 
 			case ITEM_KIND::STAR:
 				if(player_from != id){ //アイテム使用者が自分でなければ
@@ -464,25 +484,25 @@ void CMytank::get_msg(){
 					case 0:
 						{
 						auto popup = make_shared<CPopup>(enemy0->get_x(),enemy0->get_y(),"スター使った☆");
-						CObject::register_object(popup);
+						CObject::register_object(popup,DRAW_LAYER::MESSAGE_LAYER);
 						break;
 						}
 					case 1:
 						{
 						auto popup = make_shared<CPopup>(enemy1->get_x(),enemy1->get_y(),"スター使った☆");
-						CObject::register_object(popup);
+						CObject::register_object(popup,DRAW_LAYER::MESSAGE_LAYER);
 						break;
 						}
 					case 2:
 						{
 						auto popup = make_shared<CPopup>(enemy2->get_x(),enemy2->get_y(),"スター使った☆");
-						CObject::register_object(popup);
+						CObject::register_object(popup,DRAW_LAYER::MESSAGE_LAYER);
 						break;
 						}
 					case 3:
 						{
 						auto popup = make_shared<CPopup>(enemy3->get_x(),enemy3->get_y(),"スター使った☆");
-						CObject::register_object(popup);
+						CObject::register_object(popup,DRAW_LAYER::MESSAGE_LAYER);
 						break;
 						}
 
@@ -493,7 +513,7 @@ void CMytank::get_msg(){
 				break;
 
 			}
-            break;
+			break;
 
 		case COMMAND_NAME::UPDATE_LOCATIONS:
 			enemy0->map_x = data[1];
@@ -507,12 +527,12 @@ void CMytank::get_msg(){
 			break;
 
 		default:
-            break;
+			break;
 
-        }//command_nameのswitch終わり
-    }
-    /* commandによる処理分岐ここまで */
-    /* メッセージの処理ここまで */
+		}//command_nameのswitch終わり
+	}
+	/* commandによる処理分岐ここまで */
+	/* メッセージの処理ここまで */
 }
 
 
@@ -529,3 +549,10 @@ void CMytank::detect_enemy(Mat image) {
 void CMytank::attacked(int score_){
 	score += score_;
 };
+
+void CMytank::set_game_status(GAME_STATUS game_status_){
+	game_status = game_status_;
+	if(game_status == GAME_STATUS::GAME_WAIT){ //FINIHSからWAITに移行する際サーバーにメッセージ送る
+		send_msg(encode(COMMAND_NAME::FINISH,0,0,0));
+	}
+}

@@ -15,6 +15,7 @@ extern int bullet[30];
 extern int bullet_start[45];
 
 //数字用
+
 extern int number[10];
 extern int fog[10];
 

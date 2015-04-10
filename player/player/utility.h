@@ -86,3 +86,11 @@ public:
 	bool draw();
 };
 */
+
+
+//カウントダウンクラス
+class CCountdown:public CObject{
+public:
+	CCountdown();
+	bool draw();
+};

@@ -71,7 +71,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	
 	//auto redback=make_shared<CEffect>();
-
+	auto countdown=make_shared<CCountdown>();
+	CObject::register_object(countdown,DRAW_LAYER::IMFOMATION_LAYER);
 	int finish_timer=0; //結果発表画面用タイマー
 
 	//キーボード用
@@ -311,6 +312,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
 			}
 
+			//テスト。カウントダウン
+		if(key_buf[KEY_INPUT_V]==1){
+			countdown->draw();
+		}
+
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
@@ -402,6 +408,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			th.join();//スレッドが終了するのを待つ
 			break ;
 		}
+
+		
 
 		// ＥＳＣキーが押されたらループから抜ける
 		if( key_buf[ KEY_INPUT_ESCAPE ] == 1 ){

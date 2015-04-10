@@ -246,7 +246,7 @@ void CMytank::get_msg(){
 	int bullet_score=0; //bulletによっていくつスコアが上昇するかをscoreに格納
 	/* メッセージが送られてきた際の処理 */
 	int data[10];
-	std::string str[4];
+	std::string str[10];
 	decode(msg.c_str(), str);
 	/* commandによる処理分岐 */
 	// メッセージがカンマ区切りで第四引数までもっていれば、commandとみなす
@@ -257,7 +257,9 @@ void CMytank::get_msg(){
 		int kind = std::stoi(str[3]);
 
 		for (int i = 0; i < 10; ++i) {
-			data[i] = std::stoi(str[i]);
+			if(str[i] == ""){
+				data[i]=0;
+			}else data[i] = std::stoi(str[i]);
 		}
 		switch (command_name) {
 		case COMMAND_NAME::CHANGE_STATUS:

@@ -22,7 +22,7 @@
 using namespace std;
 
 #define FOCUS_SPEED 8
-#define GAME_TIME 5 //プレー時間　20秒
+#define GAME_TIME 1000 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ

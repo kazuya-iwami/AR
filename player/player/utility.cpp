@@ -1,9 +1,24 @@
 ﻿#include "utility.h"
+<<<<<<< HEAD
 int timer=0;
 
 bool CSystem_timer::draw(){
 	//残り時間表示
 	DrawFormatString(650 + LEFT_WINDOW_WIDTH,20,GetColor(200,200,200),"Time:%d",system_timer/30 + 1);
+=======
+#include <string>
+#include <sstream>
+#include <iomanip>
+
+
+bool CSystem_timer::draw(){
+	//残り時間表示
+	std::ostringstream sout;
+    sout << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
+    std::string s = sout.str();
+ 
+	DrawOriginalString(650 + LEFT_WINDOW_WIDTH,20,1.0,24,to_string((system_timer/30 + 1)/60)+":"+s);
+>>>>>>> origin/develop
 	if(system_timer > 0){
 		system_timer--;
 	}else finish_flag = true;
@@ -88,7 +103,7 @@ void CEnemy::attacked(int score_){
 
 bool CBullet_image :: draw(){
 	int i;
-	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 180 );
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 );
 	for(i=0;i<num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
@@ -168,6 +183,7 @@ bool CRain :: draw(){
 	else return false;
 }
 */
+<<<<<<< HEAD
 
 //カウントダウン用のクラス
 CCountdown::CCountdown(){
@@ -182,3 +198,5 @@ bool CCountdown::draw(){
 	draw_timer++;
 	return true;
 }
+=======
+>>>>>>> origin/develop

@@ -10,10 +10,25 @@
 bool CMytank::draw() {
 
 	//カーソル表示
-	DrawGraph(focus_x-75+shake_x + LEFT_WINDOW_WIDTH,focus_y-75+shake_y,figure_id["F_CURSUR"],true);
+	bool flag =false;
+	if(id != 0 && enemy0->lockon ==true) flag = true;
+	if(id != 1 && enemy1->lockon ==true) flag = true;
+	if(id != 2 && enemy2->lockon ==true) flag = true;
+	if(id != 3 && enemy3->lockon ==true) flag = true;
+	if(flag == true){
+		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
+	}else{
+		SetDrawBlendMode(DX_BLENDMODE_ADD,90);
+		DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
+		draw_timer++;
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 	//スコア表示
-	DrawFormatString(50 + LEFT_WINDOW_WIDTH,600,GetColor(200,200,200),"Score:%d",score);
+	DrawOriginalString(50+LEFT_WINDOW_WIDTH,200,1.0,22,"SCORE:"+to_string(score));
+
+	
 
 	//アイテム枠表示
 	DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
@@ -38,6 +53,7 @@ CMytank::CMytank() {
 	shakeflag=false;
 	shake_x=0;
 	shake_y=0;
+	draw_timer=0;
 
 	send_msg("HELLO");
 
@@ -597,3 +613,4 @@ void CMytank::finish(){
 	auto finish = make_shared<CFinish>();
 	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);	
 }
+

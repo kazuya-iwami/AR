@@ -79,6 +79,8 @@ public:
 
 class CFinish:public CObject{
 public:
+	int result[4];
+	CFinish(int result_[4]);
 	bool draw();
 };
 

@@ -9,10 +9,14 @@
 //残り時間描画クラス
 class CSystem_timer : public CObject {
 
+	int system_timer;
+	bool finish_flag;
+
 public:
 	int handle;
-	CSystem_timer(int x_,int y_);
+	CSystem_timer(int x_,int y_,int game_time);
 	bool draw();
+	bool get_finish_flag(){return finish_flag;}
 };
 
 //敵の位置情報管理クラス
@@ -29,6 +33,7 @@ public:
 	CEnemy(int enemy_id_);
 	int get_x(){return x;}
 	int get_y(){return y;}
+	
 	bool draw();
 	void disconnect();
 	void attacked(int score_);
@@ -42,7 +47,7 @@ public:
 	const int max_bullet_num;//最大弾数
 
 	CBullet_image(int x_,int y_,int max_bullet_num_);
-    bool draw();
+	bool draw();
 	void update_num_bullet(int num_bullet_);
 };
 

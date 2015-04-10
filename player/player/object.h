@@ -16,6 +16,8 @@ extern int bullet[30];
 //数字用
 extern int number[10];
 
+#define LEFT_WINDOW_WIDTH 150
+
 enum DRAW_LAYER{ //描画レイヤー 下に行くほど前面
 	EXPLOSION_LAYER,
 	BULLET_LAYER,
@@ -33,7 +35,7 @@ protected:
 	int draw_timer; //アニメーション用
 	
 	static map<string,int> figure_id;//ここにloadしたイメージに対応したidを連想配列として保存   F_から書き始める
-	static map<string,int> sound_id;//ここにloadしたイメージに対応したidを連想配列として保存    S_から書き始める
+	static map<string,int> sound_id;//ここにloadしたイメージに対応したidを連想配列として保存	S_から書き始める
 
 	void set_layer_id(DRAW_LAYER layer_id_);
 	

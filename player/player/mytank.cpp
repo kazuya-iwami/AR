@@ -557,14 +557,34 @@ void CMytank::get_msg(){
 			break;
 
 		case COMMAND_NAME::UPDATE_LOCATIONS:
-			enemy0->map_x = data[1];
-			enemy0->map_y = data[2];
-			enemy1->map_x = data[3];
-			enemy1->map_y = data[4];
-			enemy2->map_x = data[5];
-			enemy2->map_y = data[6];
-			enemy3->map_x = data[7];
-			enemy3->map_y = data[8];
+			if(id != 0){
+				enemy0->map_x = data[1];
+				enemy0->map_y = data[2];
+			}else{
+				map_x = data[1];
+				map_y = data[2];
+			}
+			if(id != 1){
+				enemy1->map_x = data[3];
+				enemy1->map_y = data[4];
+			}else{
+				map_x = data[3];
+				map_y = data[4];
+			}
+			if(id != 2){
+				enemy2->map_x = data[5];
+				enemy2->map_y = data[6];
+			}else{
+				map_x = data[5];
+				map_y = data[6];
+			}
+			if(id != 3){
+				enemy3->map_x = data[7];
+				enemy3->map_y = data[8];
+			}else{
+				map_x = data[7];
+				map_y = data[8];
+			}
 			break;
 
 		default:

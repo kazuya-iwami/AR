@@ -578,10 +578,10 @@ void CMytank::get_msg(){
 
 void CMytank::detect_enemy(Mat image) {
 
-	if (id != 0)enemy0->detect(image);
-	if (id != 1)enemy1->detect(image);
-	if (id != 2)enemy2->detect(image);
-	if (id != 3)enemy3->detect(image);
+	if (id != 0)enemy0->detect(image,0);
+	if (id != 1)enemy1->detect(image,1);
+	if (id != 2)enemy2->detect(image,2);
+	if (id != 3)enemy3->detect(image,3);
 
 }
 
@@ -650,8 +650,8 @@ void CMytank::finish(){
 	}
 	auto finish = make_shared<CFinish>(result);
 	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);
-	
-
+	auto kamifubuki=make_shared<CKamifubuki>();
+	CObject::register_object(kamifubuki,DRAW_LAYER::IMFOMATION_LAYER);
 
 }
 

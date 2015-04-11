@@ -17,6 +17,7 @@ class CImage_processer {
 
 public:
 	int ip_x, ip_y;//ip : image_prosesser
+	int ip[4][2][10];//敵の位置の履歴を格納ip[敵番号][x=0,y=1][tコマ前]=座標
 
 	int minH, maxH;
 	int minS, maxS;
@@ -26,7 +27,7 @@ public:
 
 	void init(int minH_, int maxH_, int minS_, int maxS_, int minV_, int maxV_);
 
-	Mat detect(Mat image);
+	Mat detect(Mat image,int id);
 };
 
 //ここ見なくていい

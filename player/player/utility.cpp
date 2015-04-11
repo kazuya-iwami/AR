@@ -223,3 +223,12 @@ bool CMap::draw(){
 	return true;
 }
 
+bool CKamifubuki::draw(){
+	DrawExtendGraph(0,0,1500,750,kamifubuki[(kamitimer%120)/5],true);
+	kamitimer++;
+	return  true;
+}
+
+CKamifubuki::CKamifubuki(){
+	kamitimer=0;
+}

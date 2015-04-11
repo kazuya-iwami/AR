@@ -79,7 +79,7 @@ public:
 
 class CFinish:public CObject{
 public:
-	int result[4];
+	std::vector<pair<int,int> > result;
 	CFinish(int result_[4]);
 	bool draw();
 };

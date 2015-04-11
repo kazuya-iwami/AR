@@ -1,9 +1,12 @@
 ﻿
 #pragma once
+#include <iostream>
 #include <map>
 #include <list>
 #include <string>
 #include <memory>
+#include <vector>
+#include <functional>
 #include "DxLib.h"
 
 using namespace std;

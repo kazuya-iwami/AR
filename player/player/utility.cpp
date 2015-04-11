@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 
 bool CSystem_timer::draw(){
@@ -176,11 +177,22 @@ bool CUp_effect::draw(){
 
 CFinish :: CFinish(int result_[4]){
 	int i;
-	for(i=0; i<4; i++) result[i]=result_[i];
+	for(i=0;i<4;i++){
+	result.push_back(pair<int, int>(result_[i],i+1));//点数、プレイヤーの順
+	}
+	sort(result.begin(), result.end(), greater<pair<int, int> >() );
 }
 
 bool CFinish::draw(){
 DrawGraph(0,0,figure_id["F_FINISH"],false);
+int i;
+
+SetDrawBlendMode(DX_BLENDMODE_SUB,200);
+DrawOriginalString(300,85,2.0,48,"player "+to_string(result[0].second)+"\t\t"+to_string(result[0].first));
+for(i=1;i<4;i++){
+		DrawOriginalString(560,170+100*i,1.0,24,"player "+to_string(result[i].second)+"\t\t"+to_string(result[i].first));
+	}
+SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 return true;
 }

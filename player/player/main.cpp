@@ -45,6 +45,8 @@ int camera_image_size;
 
 bool exist_flag[4];
 
+bool init_flag;//初期化関数init()用のフラグ
+
 shared_ptr<CMytank> mytank;
 shared_ptr<CSystem_timer> system_timer;
 
@@ -140,18 +142,24 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CObject::load();//すべての画像はこの中で読み込む
 	SetUseASyncLoadFlag(FALSE);
 
+	while(GetASyncLoadNum() > 0){ //全て読み込むまで次の動作行わない
+		WaitTimer(10);
+	}
+
 	//exist_flag初期化 init()の前に行う
 	for(int i=0;i<4;i++){
 		exist_flag[i] = true;
 	}
 
-
 	init(); //ゲームの初期化
-	
 
-	while(GetASyncLoadNum() > 0){ //全て読み込むまでスレッド立ち上げない
-		WaitTimer(10);
-	}
+	mytank->set_game_status(GAME_STATUS::GAME_WAIT);//初回のみWAITから始める
+	
+	//描画リストの要素をすべて削除 waitでは描画しない
+	CObject::drawlist.clear();
+
+	auto wait = make_shared<CWait>();
+	CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
 
 	thread_flag = true;
 	std::thread th(image_get_process); //映像取得、処理用スレッド開始
@@ -174,9 +182,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		GetHitKeyStateAll( key_buf ) ;
 
 		//初期化用のinit()を呼ぶ
-		if(mytank->get_init_flag()){
+		if(init_flag){
+
 			init();
-			mytank->set_init_flag(false);
+			init_flag=false;
 		}
 
 
@@ -359,6 +368,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				if(mytank->get_id() != 2)exist_flag[2] = mytank->enemy2->exist;
 				if(mytank->get_id() != 3)exist_flag[3] = mytank->enemy3->exist;
 
+				
+				//描画リストの要素をすべて削除
+				CObject::drawlist.clear();
+
+				
 				auto wait = make_shared<CWait>();
 				CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
 				
@@ -498,6 +512,7 @@ void init(){
 	mytank_mtx.lock();
 	mytank = mytank_;
 	mytank_mtx.unlock();
+
 	auto system_timer_ = make_shared<CSystem_timer>(10,10,GAME_TIME);
 	system_timer = system_timer_;
 

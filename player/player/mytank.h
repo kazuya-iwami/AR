@@ -39,7 +39,6 @@ class CMytank : public CObject, public CNetwork {
 	int vel_R, vel_L; //左右のタイヤの速度
 	GAME_STATUS game_status;
 	bool focus_flag;//カウントダウンタイマー終了後trueになりカーソル表示
-	bool init_flag;//initを行うための小細工
 
 public:
 
@@ -74,8 +73,6 @@ public:
 	void set_game_status(GAME_STATUS game_status_);
 	int get_id(){return id;}
 	void show_focus();
-	bool get_init_flag(){return init_flag;};
-	void set_init_flag(bool flag){init_flag = flag;};
 
 	void bullet_charge(int charge);
 	void start();

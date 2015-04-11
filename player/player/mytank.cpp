@@ -2,6 +2,7 @@
 #include <sstream>
 #include "debug.h"
 #include "item.h"
+#include "main.h"
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -55,7 +56,7 @@ CMytank::CMytank() {
 	vel_L = 0;
 	focus_x = 500;
 	focus_y = 373;
-	game_status = GAME_STATUS::GAME_WAIT;
+	game_status = GAME_STATUS::GAME_PLAY;//PLAY直前に呼ばれることにした
 	item_kind = ITEM_KIND::STAR; //スターを持たせる
 	shaketimer=10;
 	shakeflag=false;
@@ -67,7 +68,6 @@ CMytank::CMytank() {
 
 	focus_flag = false;
 
-	init_flag=false;
 
 	send_msg("HELLO");
 
@@ -620,7 +620,7 @@ void CMytank::start(){
 	//GameBGMの再生
 	PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
 	//Game スタート
-	set_game_status(GAME_STATUS::GAME_PLAY);
+	//set_game_status(GAME_STATUS::GAME_PLAY);//init()で無効化されるのでその後行う
 	init_flag = true;
 
 }

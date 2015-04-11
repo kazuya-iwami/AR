@@ -56,7 +56,7 @@ void CObject::load(){
 	figure_id["F_COUNTBASE"]=LoadGraph("image/countbase.png");
 	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
 
-
+	figure_id["F_WAIT_SAMPLE"]=LoadGraph("image/waiting_sample_image.png");
 
 	//上の効果音版
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");

@@ -67,6 +67,8 @@ CMytank::CMytank() {
 
 	focus_flag = false;
 
+	init_flag=false;
+
 	send_msg("HELLO");
 
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
@@ -594,6 +596,8 @@ void CMytank::set_game_status(GAME_STATUS game_status_){
 	if(game_status == GAME_STATUS::GAME_WAIT){ //FINIHSからWAITに移行する際サーバーにメッセージ送る
 		send_msg(encode(COMMAND_NAME::FINISH,0,0,0));
 	}
+
+
 }
 
 
@@ -617,6 +621,8 @@ void CMytank::start(){
 	PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
 	//Game スタート
 	set_game_status(GAME_STATUS::GAME_PLAY);
+	init_flag = true;
+
 }
 
 void CMytank::finish(){

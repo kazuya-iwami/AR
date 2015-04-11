@@ -177,10 +177,6 @@ bool CUp_effect::draw(){
 	else return false;
 }
 
-CFinish :: CFinish(int result_[4]){
-	int i;
-	for(i=0; i<4; i++) result[i]=result_[i];
-}
 
 bool CFinish::draw(){
 DrawGraph(0,0,figure_id["F_FINISH"],false);
@@ -211,3 +207,7 @@ bool CMap::draw(){
 	return true;
 }
 
+bool CWait::draw(){
+	DrawGraph(0,0,figure_id["F_WAIT_SAMPLE"],false);
+	return true;
+}

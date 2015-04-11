@@ -173,13 +173,15 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		GetHitKeyStateAll( key_buf ) ;
 
+		//初期化用のinit()を呼ぶ
+		if(mytank->get_init_flag()){
+			init();
+			mytank->set_init_flag(false);
+		}
 
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 
-			draw_mtx.lock();
-			DrawFormatString(50 + LEFT_WINDOW_WIDTH, 300, GetColor(255,255,255), "Waiting... ENTERでスタート");
-			draw_mtx.unlock();
 
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
@@ -205,7 +207,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			mytank->shake();
 
 			//移動処理　この中に書く
-			//キー状態取得の後に移動します(2015/3/31 大杉追記)
+			//キー状態取得の後に移動します(2015/3/_31 大杉追記)
 			//mytank->move();
 
 
@@ -357,13 +359,16 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				if(mytank->get_id() != 2)exist_flag[2] = mytank->enemy2->exist;
 				if(mytank->get_id() != 3)exist_flag[3] = mytank->enemy3->exist;
 
-				init();
+				auto wait = make_shared<CWait>();
+				CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
+				
 			}
 
 
 		}
 
-		if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY || mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
+		if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY || mytank->get_game_status() == GAME_STATUS::GAME_FINISH
+			||mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 		    //描画
 			/*	
 			すべての描画をここで受け持つ。

@@ -98,3 +98,8 @@ class CMap:public CObject {
 public:
 	bool draw();
 };
+
+class CWait:public CObject{
+public:
+	bool draw();
+};

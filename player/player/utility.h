@@ -81,7 +81,7 @@ public:
 
 class CFinish:public CObject{
 public:
-	int result[4];
+	std::vector<pair<int,int> > result;
 	CFinish(int result_[4]);
 	bool draw();
 };
@@ -99,7 +99,17 @@ public:
 	bool draw();
 };
 
+
 class CWait:public CObject{
 public:
 	bool draw();
 };
+
+//結果発表で紙ふぶき飛ばしたいよね
+class CKamifubuki:public CObject{
+public:
+	int kamitimer;
+	 CKamifubuki();
+	 bool draw();
+};
+

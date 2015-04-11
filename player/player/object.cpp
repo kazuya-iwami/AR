@@ -27,6 +27,10 @@ int word[160];
 int fire[5];
 //up_effect
 int up_effect[10];
+
+//紙ふぶき
+int kamifubuki[24];
+
 //rain
 //int rain[6];
 
@@ -57,6 +61,7 @@ void CObject::load(){
 	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
 
 	figure_id["F_WAIT_SAMPLE"]=LoadGraph("image/waiting_sample_image.png");
+
 
 	//上の効果音版
 	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");
@@ -90,6 +95,9 @@ void CObject::load(){
 
 	//文字読み込み
 	LoadDivGraph("image/font.png",128,16,8,47,54,word);
+
+	//紙ふぶき
+	LoadDivGraph("image/kamifubuki.png",24,2,12,960,480,kamifubuki);
 }
 
 bool CObject::draw(){

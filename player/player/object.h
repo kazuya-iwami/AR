@@ -1,9 +1,12 @@
 ﻿
 #pragma once
+#include <iostream>
 #include <map>
 #include <list>
 #include <string>
 #include <memory>
+#include <vector>
+#include <functional>
 #include "DxLib.h"
 
 using namespace std;
@@ -28,6 +31,9 @@ extern int fire[5];
 extern int up_effect[10];
 //rain
 //extern int rain[6];
+
+//紙ふぶき
+extern int kamifubuki[24];
 
 #define LEFT_WINDOW_WIDTH 150
 

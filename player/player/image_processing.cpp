@@ -66,7 +66,8 @@ Mat CImage_processer::detect(Mat image, int id) {
 		Moments moments = cv::moments(contours[contour_index], true);
 		ip_y = (int)(moments.m01 / moments.m00);
 		ip_x = (int)(moments.m10 / moments.m00);
-		if((xx-ip_x)*(xx-ip_x)+(yy-ip_y)*(yy-ip_y)>1000){//敵の位置がこれまでの平均よりも極端に離れていたら履歴を削除して作り直し.適当に閾値は調整すること
+		if((xx-ip_x)*(xx-ip_x)+(yy-ip_y)*(yy-ip_y)>1000){
+			//敵の位置がこれまでの平均よりも極端に離れていたら履歴を削除して作り直し.適当に閾値は調整すること
 			for(int j=0;j<10;j++){
 				ip[id][0][j]=ip_x;
 				ip[id][1][j]=ip_y;

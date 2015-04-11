@@ -29,6 +29,9 @@ extern int up_effect[10];
 //rain
 //extern int rain[6];
 
+//紙ふぶき
+extern int kamifubuki[24];
+
 #define LEFT_WINDOW_WIDTH 150
 
 enum DRAW_LAYER{ //描画レイヤー 下に行くほど前面

@@ -650,8 +650,8 @@ void CMytank::finish(){
 	}
 	auto finish = make_shared<CFinish>(result);
 	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);
-	
-
+	auto kamifubuki=make_shared<CKamifubuki>();
+	CObject::register_object(kamifubuki,DRAW_LAYER::IMFOMATION_LAYER);
 
 }
 

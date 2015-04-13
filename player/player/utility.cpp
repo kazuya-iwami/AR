@@ -191,16 +191,16 @@ DrawGraph(0,0,figure_id["F_FINISH"],false);
 int i;
 
 SetDrawBlendMode(DX_BLENDMODE_SUB,200);
-DrawOriginalString(300,85,2.0,48,"player "+to_string(result[0].second)+"\t\t"+to_string(result[0].first));
+DrawOriginalString(300,85,2.0,48," player "+to_string(result[0].second)+"\t\t\t\t\t"+to_string(result[0].first));
 for(i=1;i<4;i++){
-		DrawOriginalString(560,170+100*i,1.0,24,"player "+to_string(result[i].second)+"\t\t"+to_string(result[i].first));
+		DrawOriginalString(560,170+100*i,1.0,24," player "+to_string(result[i].second)+"\t\t\t\t\t\t\t"+to_string(result[i].first));
 	}
 SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 return true;
 }
 
-/*
+
 CRain :: CRain(){
 	draw_timer = 0;
 }
@@ -214,7 +214,7 @@ bool CRain :: draw(){
 	if(draw_timer <180) return true;
 	else return false;
 }
-*/
+
 
 
 bool CMap::draw(){

@@ -32,7 +32,7 @@ int up_effect[10];
 int kamifubuki[24];
 
 //rain
-//int rain[6];
+int rain[24];
 
 void CObject::load(){
 	//このように書けばtest.jpgをメモリに読み込む。
@@ -89,7 +89,7 @@ void CObject::load(){
 	//up_effect
 	LoadDivGraph("image/up_effect.png",10,10,1,120,120,up_effect);
 	//rain
-	//LoadDivGraph("image/rain.png",6,1,6,640,480,rain);
+	LoadDivGraph("image/rain.png",24,2,12,320,240,rain);
 
 	//文字読み込み
 	LoadDivGraph("image/font.png",128,16,8,47,54,word);

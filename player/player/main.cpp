@@ -27,7 +27,7 @@ using namespace std;
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 
-#define PLAYER_NM 3	//自分のプレイヤー番号
+#define PLAYER_NM 0	//自分のプレイヤー番号
 #define IP_ADDRESS "172.16.100.41"	//IPアドレス
 
 
@@ -284,12 +284,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				if(  key_buf[ KEY_INPUT_2 ] == 1 && key_prev_buf[ KEY_INPUT_2] == 0){
 					mytank->bullet_charge(2);
 				}
-				/*
+				
 				if(  key_buf[ KEY_INPUT_R ] == 1 && key_prev_buf[ KEY_INPUT_R] == 0){
 				auto rain =make_shared<CRain>();
 				CObject::register_object(rain,DRAW_LAYER::EXPLOSION_LAYER);
 				}
-				*/
+				
 
 				//テスト用　Dを押すとカーソルが右に
 				if(  key_buf[ KEY_INPUT_D ] == 1){

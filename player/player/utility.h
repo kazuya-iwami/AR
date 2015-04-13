@@ -86,13 +86,13 @@ public:
 	bool draw();
 };
 
-/*rain
+//rain
 class CRain:public CObject{
 public:
 	CRain();
 	bool draw();
 };
-*/
+
 
 class CMap:public CObject {
 public:

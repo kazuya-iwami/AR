@@ -178,6 +178,7 @@ bool CUp_effect::draw(){
 	else return false;
 }
 
+
 CFinish :: CFinish(int result_[4]){
 	int i;
 	for(i=0;i<4;i++){
@@ -185,6 +186,7 @@ CFinish :: CFinish(int result_[4]){
 	}
 	sort(result.begin(), result.end(), greater<pair<int, int> >() );
 }
+
 
 bool CFinish::draw(){
 DrawGraph(0,0,figure_id["F_FINISH"],false);
@@ -220,6 +222,12 @@ bool CRain :: draw(){
 bool CMap::draw(){
 
 	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
+	return true;
+}
+
+
+bool CWait::draw(){
+	DrawGraph(0,0,figure_id["F_WAIT_SAMPLE"],false);
 	return true;
 }
 

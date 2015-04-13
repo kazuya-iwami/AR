@@ -45,6 +45,8 @@ int camera_image_size;
 
 bool exist_flag[4];
 
+bool init_flag;//初期化関数init()用のフラグ
+
 shared_ptr<CMytank> mytank;
 shared_ptr<CSystem_timer> system_timer;
 
@@ -140,18 +142,24 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CObject::load();//すべての画像はこの中で読み込む
 	SetUseASyncLoadFlag(FALSE);
 
+	while(GetASyncLoadNum() > 0){ //全て読み込むまで次の動作行わない
+		WaitTimer(10);
+	}
+
 	//exist_flag初期化 init()の前に行う
 	for(int i=0;i<4;i++){
 		exist_flag[i] = true;
 	}
 
-
 	init(); //ゲームの初期化
-	
 
-	while(GetASyncLoadNum() > 0){ //全て読み込むまでスレッド立ち上げない
-		WaitTimer(10);
-	}
+	mytank->set_game_status(GAME_STATUS::GAME_WAIT);//初回のみWAITから始める
+	
+	//描画リストの要素をすべて削除 waitでは描画しない
+	CObject::drawlist.clear();
+
+	auto wait = make_shared<CWait>();
+	CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
 
 	thread_flag = true;
 	std::thread th(image_get_process); //映像取得、処理用スレッド開始
@@ -173,13 +181,16 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		GetHitKeyStateAll( key_buf ) ;
 
+		//初期化用のinit()を呼ぶ
+		if(init_flag){
+
+			init();
+			init_flag=false;
+		}
 
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 
-			draw_mtx.lock();
-			DrawFormatString(50 + LEFT_WINDOW_WIDTH, 300, GetColor(255,255,255), "Waiting... ENTERでスタート");
-			draw_mtx.unlock();
 
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
@@ -205,7 +216,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			mytank->shake();
 
 			//移動処理　この中に書く
-			//キー状態取得の後に移動します(2015/3/31 大杉追記)
+			//キー状態取得の後に移動します(2015/3/_31 大杉追記)
 			//mytank->move();
 
 
@@ -357,13 +368,21 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				if(mytank->get_id() != 2)exist_flag[2] = mytank->enemy2->exist;
 				if(mytank->get_id() != 3)exist_flag[3] = mytank->enemy3->exist;
 
-				init();
+				
+				//描画リストの要素をすべて削除
+				CObject::drawlist.clear();
+
+				
+				auto wait = make_shared<CWait>();
+				CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
+				
 			}
 
 
 		}
 
-		if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY || mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
+		if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY || mytank->get_game_status() == GAME_STATUS::GAME_FINISH
+			||mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 		    //描画
 			/*	
 			すべての描画をここで受け持つ。
@@ -493,6 +512,7 @@ void init(){
 	mytank_mtx.lock();
 	mytank = mytank_;
 	mytank_mtx.unlock();
+
 	auto system_timer_ = make_shared<CSystem_timer>(10,10,GAME_TIME);
 	system_timer = system_timer_;
 

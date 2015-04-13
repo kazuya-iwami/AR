@@ -99,6 +99,12 @@ public:
 	bool draw();
 };
 
+
+class CWait:public CObject{
+public:
+	bool draw();
+};
+
 //結果発表で紙ふぶき飛ばしたいよね
 class CKamifubuki:public CObject{
 public:
@@ -106,3 +112,4 @@ public:
 	 CKamifubuki();
 	 bool draw();
 };
+

@@ -2,6 +2,7 @@
 #include <sstream>
 #include "debug.h"
 #include "item.h"
+#include "main.h"
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -55,7 +56,7 @@ CMytank::CMytank() {
 	vel_L = 0;
 	focus_x = 500;
 	focus_y = 373;
-	game_status = GAME_STATUS::GAME_WAIT;
+	game_status = GAME_STATUS::GAME_PLAY;//PLAY直前に呼ばれることにした
 	item_kind = ITEM_KIND::STAR; //スターを持たせる
 	shaketimer=10;
 	shakeflag=false;
@@ -66,6 +67,7 @@ CMytank::CMytank() {
 	preflag=false;
 
 	focus_flag = false;
+
 
 	send_msg("HELLO");
 
@@ -555,14 +557,34 @@ void CMytank::get_msg(){
 			break;
 
 		case COMMAND_NAME::UPDATE_LOCATIONS:
-			enemy0->map_x = data[1];
-			enemy0->map_y = data[2];
-			enemy1->map_x = data[3];
-			enemy1->map_y = data[4];
-			enemy2->map_x = data[5];
-			enemy2->map_y = data[6];
-			enemy3->map_x = data[7];
-			enemy3->map_y = data[8];
+			if(id != 0){
+				enemy0->map_x = data[1];
+				enemy0->map_y = data[2];
+			}else{
+				map_x = data[1];
+				map_y = data[2];
+			}
+			if(id != 1){
+				enemy1->map_x = data[3];
+				enemy1->map_y = data[4];
+			}else{
+				map_x = data[3];
+				map_y = data[4];
+			}
+			if(id != 2){
+				enemy2->map_x = data[5];
+				enemy2->map_y = data[6];
+			}else{
+				map_x = data[5];
+				map_y = data[6];
+			}
+			if(id != 3){
+				enemy3->map_x = data[7];
+				enemy3->map_y = data[8];
+			}else{
+				map_x = data[7];
+				map_y = data[8];
+			}
 			break;
 
 		default:
@@ -594,6 +616,8 @@ void CMytank::set_game_status(GAME_STATUS game_status_){
 	if(game_status == GAME_STATUS::GAME_WAIT){ //FINIHSからWAITに移行する際サーバーにメッセージ送る
 		send_msg(encode(COMMAND_NAME::FINISH,0,0,0));
 	}
+
+
 }
 
 
@@ -616,7 +640,9 @@ void CMytank::start(){
 	//GameBGMの再生
 	PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
 	//Game スタート
-	set_game_status(GAME_STATUS::GAME_PLAY);
+	//set_game_status(GAME_STATUS::GAME_PLAY);//init()で無効化されるのでその後行う
+	init_flag = true;
+
 }
 
 void CMytank::finish(){

@@ -39,6 +39,8 @@ class CMytank : public CObject, public CNetwork {
 	int vel_R, vel_L; //左右のタイヤの速度
 	GAME_STATUS game_status;
 	bool focus_flag;//カウントダウンタイマー終了後trueになりカーソル表示
+	int map_x;
+	int map_y;
 
 public:
 

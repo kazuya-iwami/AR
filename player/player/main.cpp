@@ -26,6 +26,7 @@ using namespace std;
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
+#define USE_MAP_CAMERA_FLAG 0 //0:マップカメラ
 
 #define PLAYER_NM 3	//自分のプレイヤー番号
 #define IP_ADDRESS "172.16.100.41"	//IPアドレス
@@ -207,7 +208,28 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				1000+mytank->shake_x + LEFT_WINDOW_WIDTH  , 750+mytank->shake_y , camera_image_handle, false ) ;
 			draw_mtx.unlock();
 
+			if(USE_MAP_CAMERA_FLAG == 0){
 
+				//cv::VideoCapture mapcap;
+				//mapcap.open(1);もうひとつのカメラをとってきたら
+	
+				CImage_processer new1;
+				new1.init(22, 45, 50, 255, 50, 255);
+
+				cv::Mat frame;
+				vcap >> frame;
+				new1.detect(frame, 1);
+
+				int map_data = MakeScreen(400, 400, TRUE);
+
+				SetDrawScreen( map_data ) ;//描画をmap_dataにする
+	
+				DrawCircle( new1.ip_x , new1.ip_y , 20, 0xffff , 1, 2) ;	// 点を打つ
+
+				SetDrawScreen( DX_SCREEN_BACK ) ;//描画を表に戻す
+
+				DrawExtendGraph(160, 520, 360, 720, map_data, TRUE);//ある範囲でびょうがする。
+			}
 
 			//照準と敵が重なっているかチェック
 			mytank->check_focus();

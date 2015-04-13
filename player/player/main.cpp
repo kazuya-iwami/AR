@@ -21,7 +21,6 @@
 
 using namespace std;
 
-#define FOCUS_SPEED 8
 #define GAME_TIME 30 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
@@ -301,25 +300,29 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				CObject::register_object(thunder,DRAW_LAYER::EXPLOSION_LAYER);
 				}
 				
-
+				/*************
+				上下に照準固定
+				**************
 				//テスト用　Dを押すとカーソルが右に
 				if(  key_buf[ KEY_INPUT_D ] == 1){
 					mytank->focus_x += FOCUS_SPEED;
-				}
-
-				//テスト用　Wを押すとカーソルが上に
-				if(  key_buf[ KEY_INPUT_W ] == 1 ){
-					mytank->focus_y -=  FOCUS_SPEED;
 				}
 
 				//テスト用　Aを押すとカーソルが左に
 				if(  key_buf[ KEY_INPUT_A ] == 1){
 					mytank->focus_x -=  FOCUS_SPEED;
 				}
+				*/
+				//テスト用　Wを押すとカーソルが上に
+				if(  key_buf[ KEY_INPUT_W ] == 1 ){
+					mytank->focus_to_up();
+					DrawFormatString(0, 0, GetColor(255,255,255), "%d", mytank->focus_y);
+				}
 
 				//テスト用　Sを押すとカーソルが下に
 				if(  key_buf[ KEY_INPUT_S ] == 1){ 
-					mytank->focus_y +=  FOCUS_SPEED;
+					mytank->focus_to_down();
+					DrawFormatString(0, 0, GetColor(255,255,255), "%d", mytank->focus_y);
 				}
 
 				//テスト用　とりあえずX押したら画面が振動するよ

@@ -7,6 +7,7 @@
 #include<stdlib.h>
 
 #define ENEMY_MARGIN 100
+#define FOCUS_SPEED 15
 
 bool CMytank::draw() {
 
@@ -687,4 +688,15 @@ void CMytank::show_focus(){
 	if(id!=1)enemy1->countdown_finish();
 	if(id!=2)enemy2->countdown_finish();
 	if(id!=3)enemy3->countdown_finish();
+};
+
+
+void CMytank::focus_to_up(){
+	if(focus_y < 10) return;
+	focus_y -= FOCUS_SPEED;
+};
+
+void CMytank::focus_to_down(){
+	if(focus_y > 720) return;
+	focus_y += FOCUS_SPEED;
 };

@@ -75,6 +75,8 @@ public:
 	void set_game_status(GAME_STATUS game_status_);
 	int get_id(){return id;}
 	void show_focus();
+	void focus_to_up();
+	void focus_to_down();
 
 	void bullet_charge(int charge);
 	void start();

@@ -316,13 +316,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				//テスト用　Wを押すとカーソルが上に
 				if(  key_buf[ KEY_INPUT_W ] == 1 ){
 					mytank->focus_to_up();
-					DrawFormatString(0, 0, GetColor(255,255,255), "%d", mytank->focus_y);
 				}
 
 				//テスト用　Sを押すとカーソルが下に
 				if(  key_buf[ KEY_INPUT_S ] == 1){ 
 					mytank->focus_to_down();
-					DrawFormatString(0, 0, GetColor(255,255,255), "%d", mytank->focus_y);
 				}
 
 				//テスト用　とりあえずX押したら画面が振動するよ

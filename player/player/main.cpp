@@ -292,7 +292,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
 				}
 				if(  key_buf[ KEY_INPUT_2 ] == 1 && key_prev_buf[ KEY_INPUT_2] == 0){
-					mytank->bullet_charge(2);
+					mytank->bullet_charge(10);
 				}
 				
 				if(  key_buf[ KEY_INPUT_T ] == 1 && key_prev_buf[ KEY_INPUT_T] == 0){

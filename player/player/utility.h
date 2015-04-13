@@ -86,10 +86,10 @@ public:
 	bool draw();
 };
 
-//rain
-class CRain:public CObject{
+//thunder
+class CThunder:public CObject{
 public:
-	CRain();
+	CThunder();
 	bool draw();
 };
 

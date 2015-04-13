@@ -29,8 +29,8 @@ extern int word[160];
 extern int fire[5];
 //up_effect
 extern int up_effect[10];
-//rain
-extern int rain[24];
+//THUNDER
+extern int thunder[10];
 
 //紙ふぶき
 extern int kamifubuki[24];

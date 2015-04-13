@@ -31,8 +31,8 @@ int up_effect[10];
 //紙ふぶき
 int kamifubuki[24];
 
-//rain
-int rain[24];
+//thunder
+int thunder[10];
 
 void CObject::load(){
 	//このように書けばtest.jpgをメモリに読み込む。
@@ -90,8 +90,8 @@ void CObject::load(){
 	LoadDivGraph("image/gamenfire.png",5,1,5,640,480,fire);
 	//up_effect
 	LoadDivGraph("image/up_effect.png",10,10,1,120,120,up_effect);
-	//rain
-	LoadDivGraph("image/rain.png",24,2,12,320,240,rain);
+	//THUNDER
+	LoadDivGraph("image/thunder.png",10,2,5,320,240,thunder);
 
 	//文字読み込み
 	LoadDivGraph("image/font.png",128,16,8,47,54,word);

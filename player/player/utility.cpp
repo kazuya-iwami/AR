@@ -203,17 +203,17 @@ return true;
 }
 
 
-CRain :: CRain(){
+CThunder :: CThunder(){
 	draw_timer = 0;
 }
 
-bool CRain :: draw(){
+bool CThunder :: draw(){
 	DrawExtendGraph( LEFT_WINDOW_WIDTH , 0,
-				1000 + LEFT_WINDOW_WIDTH  , 750 , rain[draw_timer % 24], true ) ;
+				1000 + LEFT_WINDOW_WIDTH  , 750 , thunder[draw_timer % 10], true ) ;
 
 	draw_timer++;
 
-	if(draw_timer <180) return true;
+	if(draw_timer <90) return true;
 	else return false;
 }
 

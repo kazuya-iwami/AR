@@ -25,7 +25,7 @@ using namespace std;
 #define GAME_TIME 30 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
-#define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
+#define USE_CAMERA_FLAG 0   //0:画像 1:カメラ 2:ラズパイ
 
 #define PLAYER_NM 0	//自分のプレイヤー番号
 #define IP_ADDRESS "172.16.100.41"	//IPアドレス
@@ -296,9 +296,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					mytank->bullet_charge(2);
 				}
 				
-				if(  key_buf[ KEY_INPUT_R ] == 1 && key_prev_buf[ KEY_INPUT_R] == 0){
-				auto rain =make_shared<CRain>();
-				CObject::register_object(rain,DRAW_LAYER::EXPLOSION_LAYER);
+				if(  key_buf[ KEY_INPUT_T ] == 1 && key_prev_buf[ KEY_INPUT_T] == 0){
+					auto thunder =make_shared<CThunder>();
+				CObject::register_object(thunder,DRAW_LAYER::EXPLOSION_LAYER);
 				}
 				
 

@@ -21,13 +21,12 @@
 
 using namespace std;
 
-#define FOCUS_SPEED 8
 #define GAME_TIME 30 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
 #define USE_CAMERA_FLAG 0   //0:画像 1:カメラ 2:ラズパイ
 
-#define PLAYER_NM 0	//自分のプレイヤー番号
+#define PLAYER_NM 0	//自分のプレイヤー番号 0～3
 #define IP_ADDRESS "172.16.100.41"	//IPアドレス
 
 
@@ -235,7 +234,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					speed = _T("half");
 				}
 
-				/*
+				
 				//各キーを押し続けるとその動作をする。
 				if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
 				//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
@@ -260,7 +259,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				(key_buf[ KEY_INPUT_RIGHT ] == 0 && key_prev_buf[ KEY_INPUT_RIGHT] == 1) ){
 				mytank->move(_T("stop"), speed);
 				}
-				*/
+				
 				//bullet生成
 				if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 					mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
@@ -293,7 +292,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
 				}
 				if(  key_buf[ KEY_INPUT_2 ] == 1 && key_prev_buf[ KEY_INPUT_2] == 0){
-					mytank->bullet_charge(2);
+					mytank->bullet_charge(10);
 				}
 				
 				if(  key_buf[ KEY_INPUT_T ] == 1 && key_prev_buf[ KEY_INPUT_T] == 0){
@@ -301,25 +300,27 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				CObject::register_object(thunder,DRAW_LAYER::EXPLOSION_LAYER);
 				}
 				
-
+				/*************
+				上下に照準固定
+				**************
 				//テスト用　Dを押すとカーソルが右に
 				if(  key_buf[ KEY_INPUT_D ] == 1){
 					mytank->focus_x += FOCUS_SPEED;
-				}
-
-				//テスト用　Wを押すとカーソルが上に
-				if(  key_buf[ KEY_INPUT_W ] == 1 ){
-					mytank->focus_y -=  FOCUS_SPEED;
 				}
 
 				//テスト用　Aを押すとカーソルが左に
 				if(  key_buf[ KEY_INPUT_A ] == 1){
 					mytank->focus_x -=  FOCUS_SPEED;
 				}
+				*/
+				//テスト用　Wを押すとカーソルが上に
+				if(  key_buf[ KEY_INPUT_W ] == 1 ){
+					mytank->focus_to_up();
+				}
 
 				//テスト用　Sを押すとカーソルが下に
 				if(  key_buf[ KEY_INPUT_S ] == 1){ 
-					mytank->focus_y +=  FOCUS_SPEED;
+					mytank->focus_to_down();
 				}
 
 				//テスト用　とりあえずX押したら画面が振動するよ

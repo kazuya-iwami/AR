@@ -28,6 +28,7 @@ public:
 	int score;
 	bool exist;
 	bool lockon;
+	static int just_before_shooted; // 直前にプレイヤーが撃ったenemyのidが入る
 	bool countdown_finish_flag;
 	int map_x;
 	int map_y;

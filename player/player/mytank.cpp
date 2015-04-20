@@ -156,12 +156,18 @@ void CMytank::check_focus(){
 				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy0->lockon = true;
 				}
+				if(0 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
+				}
 			} else enemy0->lockon = false;
 		}
 		if(id != 1){
 			if(enemy1->get_x() - ENEMY_MARGIN < focus_x && enemy1->get_x() + ENEMY_MARGIN > focus_x && enemy1->get_y() -ENEMY_MARGIN < focus_y && enemy1->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy1->lockon = true;
+				}
+				if(1 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
 				}
 			} else enemy1->lockon = false;
 		}
@@ -170,12 +176,18 @@ void CMytank::check_focus(){
 				if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy2->lockon = true;
 				}
+				if(2 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
+				}
 			} else enemy2->lockon = false;
 		}
 		if(id != 3){
 			if(enemy3->get_x() - ENEMY_MARGIN < focus_x && enemy3->get_x() + ENEMY_MARGIN > focus_x && enemy3->get_y() -ENEMY_MARGIN < focus_y && enemy3->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy3->lockon = true;
+				}
+				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
 				}
 			} else enemy3->lockon = false;
 		}
@@ -355,6 +367,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -397,6 +410,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 0:
 						enemy0->attacked(bullet_score);
@@ -439,6 +453,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -480,6 +495,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);

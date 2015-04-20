@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <algorithm>
 
+int CEnemy::just_before_shooted;
 
 bool CSystem_timer::draw(){
 	if(system_timer > 0){
@@ -86,6 +87,9 @@ bool CEnemy::draw(){
 			*/
 			DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_ICON"+to_string(enemy_id+1)],true);
 			//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			if (enemy_id == CEnemy::just_before_shooted){
+				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
+			}
 		}else{ //切断されていたら
 			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
 		}
@@ -102,6 +106,7 @@ CEnemy::CEnemy(int enemy_id_){
 	exist=true;
 	enemy_id = enemy_id_;
 	lockon = false;
+	just_before_shooted = -1; // 直前には誰も撃たれていない
 	countdown_finish_flag = false;
 }
 

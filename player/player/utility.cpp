@@ -221,7 +221,8 @@ bool CRain :: draw(){
 
 bool CMap::draw(){
 
-	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
+	//DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
+
 	return true;
 }
 

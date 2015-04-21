@@ -38,6 +38,8 @@ public:
 
 void Object::detect(Mat image) {
 
+	Object obj;
+
     // HSVに変換
     Mat hsv;
     cvtColor(image, hsv, COLOR_BGR2HSV);
@@ -58,39 +60,51 @@ void Object::detect(Mat image) {
     findContours(binalized.clone(), contours, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
 
     // 一番大きい輪郭を抽出
+
+	Mat output(image.size(),image.type(), Scalar::all(0));
+
     int contour_index = -1;
     double max_area = 0.0;
+	std::vector<double> area;
     for (int i = 0; i < (int)contours.size(); i++) {
-        double area = fabs(contourArea(contours[i]));
-        if (area > max_area) {
-            contour_index = i;
-            max_area = area;
-        }
-    }
-
-    Rect rect;
-
-    // マーカが見つかった
-    if (contour_index >= 0 && max_area > 150) {
+        area[i] = fabs(contourArea(contours[i]));
+	}
+	for(int s = 0; s < i; s++){
+		for(int j = 0; j < i; j++){
+			int smallarea;
+			smallarea = area[i];
+			if(area[j] < area[j+1]){
+				area[j+1] = area[j];
+				area[j] = smallarea;
+			}
+		}
+	}
+	i = 0;
+		// マーカが見つかった
+		while (i < 4) {
         // 重心
-        Moments moments = cv::moments(contours[contour_index], true);
-        y = (int)(moments.m01 / moments.m00);
-        x = (int)(moments.m10 / moments.m00);
+			Rect rect;
+			Moments moments = cv::moments(contours[i], true);
+			y = (int)(moments.m01 / moments.m00);
+			x = (int)(moments.m10 / moments.m00);
 
         // 表示
-        rect = boundingRect(contours[contour_index]);
+			rect = boundingRect(contours[i]);
 
         //drawContours(image, contours, contour_index, Scalar(0,255,0));
-
-        visible = true;
-    } else {
-        visible = false;
+			image.copyTo(output ,binalized);
+			rectangle(output, rect, Scalar(0, 255, 0));
+			visible = true;
+		} else {
+			visible = false;
+		}
+        //if (area > max_area) {
+        //    contour_index = i;
+        //    max_area = area;
+        //}
     }
 
-    Mat output(image.size(),image.type(), Scalar::all(0));
-    image.copyTo(output ,binalized);
-    rectangle(output, rect, Scalar(0, 255, 0));
-
+    
     // 表示
     imshow("Captured Image", output);
 }
@@ -125,9 +139,11 @@ int main(int argc, char *argv[]) {
 
     Mat image;
 
-    VideoCapture cap(0); // デフォルトカメラをオープン
-    if(!cap.isOpened())  // 成功したかどうかをチェック
-        return -1;
+    //VideoCapture cap(0); // デフォルトカメラをオープン
+    //if(!cap.isOpened())  // 成功したかどうかをチェック
+    //   return -1;
+
+	image = imread("1428928245212.jpg", 1);
 
     int lowerH = 0;
     int upperH = 180;
@@ -145,15 +161,12 @@ int main(int argc, char *argv[]) {
     createTrackbar("Lower Val", "Captured Image", &lowerV, 255, callbackForLowerV);
     createTrackbar("Upper Val", "Captured Image", &upperV, 255, callbackForUpperV);
 
-    for (;;) {
-        cap >> image; // カメラから新しいフレームを取得
+	for(;;){
+		obj.detect(image);
 
-        obj.detect(image);
+		if( waitKey(1) == 'q') break;
 
-        int k = waitKey(30);
-        if (k == 'q' || k == 'Q') break;
-    }
-
+	}
     return 0;
 }
 

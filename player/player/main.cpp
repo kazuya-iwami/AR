@@ -220,7 +220,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				vcap >> frame;
 				new1.detect(frame, 1);
 
-				int map_data = MakeScreen(400, 400, TRUE);
+				int map_data = MakeScreen(400, 400, FALSE);
 
 				SetDrawScreen( map_data ) ;//描画をmap_dataにする
 	

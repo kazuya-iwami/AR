@@ -63,6 +63,12 @@ void CObject::load(){
 
 	figure_id["F_MAN"]=LoadGraph("image/man.png");
 
+	//マップで使うアイコン
+	figure_id["F_ICONRED"]=LoadGraph("image/iconred.png");
+	figure_id["F_ICONBLUE"]=LoadGraph("image/iconblue.png");
+	figure_id["F_ICONGREEN"]=LoadGraph("image/icongreen.png");
+	figure_id["F_ICONYELLOW"]=LoadGraph("image/iconyellow.png");
+	figure_id["F_ICONDEAD"]=LoadGraph("image/icondead.png");
 
 	//上の効果音版
 	sound_id["S_BOMB"]=LoadSoundMem("sound/bomb1.mp3");

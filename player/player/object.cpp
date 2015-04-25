@@ -46,6 +46,9 @@ void CObject::load(){
 	
 	figure_id["F_CURSUR"]=LoadGraph("image/cursur.png");
 	figure_id["F_CURSUR_ON"]=LoadGraph("image/cursur_on.png");
+
+	figure_id["F_RELOADING"]=LoadGraph("image/reloading.png");
+	figure_id["F_RELOADING_GAUGE"]=LoadGraph("image/reloading_gauge.png");
 	figure_id["F_BULLETNOKORI"]=LoadGraph("image/bullet_nokori.png");
 	figure_id["F_BULLETUSED"]=LoadGraph("image/bullet_used.png");
 	figure_id["F_REDBACK"]=LoadGraph("image/redback.png");

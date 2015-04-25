@@ -16,7 +16,7 @@ void requestHttp_thread(tstring direction, tstring speed);
 bool CMytank::draw() {
 
 	//カーソル表示
-	if(focus_flag){
+	if(!is_reloading && focus_flag){
 		attackable = false;
 		if(id != 0 && enemy0->lockon ==true) attackable = true;
 		if(id != 1 && enemy1->lockon ==true) attackable = true;
@@ -36,8 +36,14 @@ bool CMytank::draw() {
 			draw_timer++;
 		}
 	}
-
-	if(1){
+	
+	//リロード画面表示
+	if(is_reloading){
+		DrawGraph(458, 370, figure_id["F_RELOADING"], true);
+		for(int i = 0; i < draw_timer; i++){
+			DrawGraph(464+i*7, 451, figure_id["F_RELOADING_GAUGE"], true);
+		}
+		draw_timer++;
 	}
 
 	//スコア表示
@@ -76,7 +82,7 @@ CMytank::CMytank() {
 	vel_R = 0;
 	vel_L = 0;
 	focus_x = 500;
-	focus_y = 373;
+	focus_y = 365;
 	game_status = GAME_STATUS::GAME_PLAY;//PLAY直前に呼ばれることにした
 	item_kind = ITEM_KIND::STAR; //スターを持たせる
 	shaketimer=10;
@@ -809,15 +815,17 @@ int CMytank::get_num_bullet(){
 };
 
 void CMytank::reloading(){
-	double charging_time; // 弾丸補充開始からの経過時間
+	int charging_time; // 弾丸補充開始からの経過時間
 
 	if (!is_reloading && get_num_bullet() < bullet_image->max_bullet_num) { // 弾丸補充まだ開始していなければ
-		charge_start_time = (clock_t)time(NULL);
+		charge_start_time = 0;
+		charge_end_time = 0;
 		is_reloading = true;
+		draw_timer = 0;
 	} else {
-		charge_end_time = (clock_t)time(NULL);
-		charging_time = difftime(charge_end_time, charge_start_time);
-		if (2 <= charging_time) { // 補充開始から2秒以上"2"を押し続けていれば
+		charge_end_time++;
+		charging_time = charge_end_time - charge_start_time;
+		if (2*30 < charging_time) { // 補充開始から2秒以上"2"を押し続けていれば
 			bullet_charge(bullet_image->max_bullet_num);
 			is_reloading = false;
 		}

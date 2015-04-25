@@ -52,7 +52,7 @@ class CMytank : public CObject, public CNetwork {
 	int map_y;
 	bool attackable;
 	int enemy_x, enemy_y;
-	clock_t charge_start_time, charge_end_time; // 弾丸補充開始,終了時間
+	int charge_start_time, charge_end_time; // 弾丸補充開始,終了時間
 
 public:
 

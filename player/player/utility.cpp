@@ -68,7 +68,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	//ChangeFont("07ロゴたいぷゴシック7");
 	x=x_;
 	y=y_;
-	system_timer = game_time * 30;
+	system_timer = game_time * 30-1;
 	finish_flag = false;
 	countdown_timer= 5 * 30;
 	countdown_finish_flag = false;

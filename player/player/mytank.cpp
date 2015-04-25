@@ -720,3 +720,7 @@ void CMytank::focus_to_down(){
 	if(focus_y > 720) return;
 	focus_y += FOCUS_SPEED;
 };
+
+int CMytank::get_num_bullet(){
+	return num_bullet;
+};

@@ -81,4 +81,5 @@ public:
 	void bullet_charge(int charge);
 	void start();
 	void finish();
+	int get_num_bullet();
 };

@@ -191,7 +191,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
-			draw_mtx.lock();
+			
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
 				mytank->start();
@@ -202,9 +202,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			else if(  key_buf[ KEY_INPUT_M ] == 1 && key_prev_buf[ KEY_INPUT_M] == 0){
 				auto iwami=make_shared<CMovie>("M_IWAMI");
 				CObject::register_object(iwami,DRAW_LAYER::MOVIE_LAYER);
-				iwami->init();
+				draw_mtx.lock();
+				//iwami->init();
+				draw_mtx.unlock();
 			}
-			draw_mtx.unlock();
+			
 			
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
 

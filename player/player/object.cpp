@@ -38,14 +38,11 @@ void CObject::load(){
 	//このように書けばtest.jpgをメモリに読み込む。
 	//今後はdraw()内でfigure_id["F_TEST"]を用いるとこの画像に対応したidを取得できる。
 	//F_TESTの部分は他と被らないように自由に決めてください。ただしF_から初めて。
-	figure_id["F_TEST"] =  LoadGraph("image/test.jpg");
-	figure_id["F_DETECT"] =  LoadGraph("image/detect.png");
 	figure_id["F_ICON1"] =  LoadGraph("image/icon1.png");
 	figure_id["F_ICON2"] =  LoadGraph("image/icon2.png");
 	figure_id["F_ICON3"] =  LoadGraph("image/icon3.png");
 	figure_id["F_ICON4"] =  LoadGraph("image/icon4.png");
 	
-	figure_id["F_FRAME"]=LoadGraph("image/frame.png");
 	figure_id["F_CURSUR"]=LoadGraph("image/cursur.png");
 	figure_id["F_CURSUR_ON"]=LoadGraph("image/cursur_on.png");
 	figure_id["F_BULLETNOKORI"]=LoadGraph("image/bullet_nokori.png");
@@ -65,7 +62,6 @@ void CObject::load(){
 
 
 	//上の効果音版
-	sound_id["S_TEST"] = LoadSoundMem("sound/test.mp3");
 	sound_id["S_BOMB"]=LoadSoundMem("sound/bomb1.mp3");
 	sound_id["S_KEIKOKU"]=LoadSoundMem("sound/keikoku.mp3");
 	sound_id["S_GET"]=LoadSoundMem("sound/get.mp3");
@@ -80,11 +76,10 @@ void CObject::load(){
 
 	// bullet
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
-	LoadDivGraph("image/bullet.png", 30, 10, 3, 256, 256, bullet);
 	LoadDivGraph("image/bullet_start.png", 45, 9, 5, 256, 256, bullet_start);
 
 	//number
-	//爆発と同じく分割して読み込み。
+	//分割して読み込み
 	LoadDivGraph("image/number.png",10,5,2,55,100,number);
 
 	//fire

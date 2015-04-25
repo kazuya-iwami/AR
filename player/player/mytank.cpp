@@ -56,7 +56,7 @@ bool CMytank::draw() {
 
 CMytank::CMytank() {
 	//初期化
-	score = 10;
+	score = 0;
 	HP = 3;//最初のHPは3
 	viability_status = VIABILITY_STATUS::ALIVE;//最初の状態は生存
 	num_bullet = 10; //残弾10こ

@@ -348,10 +348,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				/* 弾丸補充処理ここから */
 				if(  key_buf[ KEY_INPUT_2 ] == 1){
 					if (!bullet_charging_flag && mytank->get_num_bullet() < mytank->bullet_image->max_bullet_num) { // 弾丸補充まだ開始していなければ
-						charge_start_time = time(NULL);
+						charge_start_time = (clock_t)time(NULL);
 						bullet_charging_flag = true;
 					} else {
-						charge_end_time = time(NULL);
+						charge_end_time = (clock_t)time(NULL);
 						charging_time = difftime(charge_end_time, charge_start_time);
 						if (2 <= charging_time) { // 補充開始から2秒以上"2"を押し続けていれば
 							mytank->bullet_charge(mytank->bullet_image->max_bullet_num);

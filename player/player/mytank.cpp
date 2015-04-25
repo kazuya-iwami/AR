@@ -38,12 +38,13 @@ bool CMytank::draw() {
 	//スコア表示
 	DrawOriginalString(800+LEFT_WINDOW_WIDTH,100,1.0,22,"SCORE:"+to_string(score));
 
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
 	//HP表示
 	//DrawOriginalString(800+LEFT_WINDOW_WIDTH,200,1.0,22,"HP:"+to_string(HP));
 	int i;
 	for(i=0;i<HP;i++){
-		//DrawGraph(700+60*i+LEFT_WINDOW_WIDTH,670,figure_id["F_HP"],true);
-		DrawGraph(10+60*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
+		DrawGraph(10+93*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
 	}
 	
 

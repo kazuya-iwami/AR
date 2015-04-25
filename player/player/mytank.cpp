@@ -5,21 +5,25 @@
 #include "main.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include <mutex>
+#include <thread>
 
 #define ENEMY_MARGIN 100
 #define FOCUS_SPEED 15
+
+void requestHttp_thread(tstring direction, tstring speed);
 
 bool CMytank::draw() {
 
 	//カーソル表示
 
 	if(focus_flag){
-		bool flag =false;
-		if(id != 0 && enemy0->lockon ==true) flag = true;
-		if(id != 1 && enemy1->lockon ==true) flag = true;
-		if(id != 2 && enemy2->lockon ==true) flag = true;
-		if(id != 3 && enemy3->lockon ==true) flag = true;
-		if(flag == true){//lockon状態
+		attackable = false;
+		if(id != 0 && enemy0->lockon ==true) attackable = true;
+		if(id != 1 && enemy1->lockon ==true) attackable = true;
+		if(id != 2 && enemy2->lockon ==true) attackable = true;
+		if(id != 3 && enemy3->lockon ==true) attackable = true;
+		if(attackable == true){//lockon状態
 			if(preflag==false){
 				preflag=true;
 				PlaySoundMem( sound_id["S_LOCK"] , DX_PLAYTYPE_BACK ) ;		
@@ -122,14 +126,10 @@ CMytank::CMytank() {
 };
 
 void CMytank::move(tstring direction, tstring speed) {
-	tstring ip_address = _T("192.168.0.7");
-	//2015/3/31時点では正常運転のみ実装
-	//通信失敗の時の処理は考慮していない。
-	//2015/4/4において、方向によってURLを作成したため追記。
-	tstring strUrl = _T("http://") + ip_address + _T("/move/") + direction + _T("/") ;
-	bool isMethodGet = true;
-	tstring strResult;
-	HttpRequest(strUrl, isMethodGet, speed, strResult);
+
+	std::thread th(requestHttp_thread,direction,speed); //httprequestスレッド開始
+	th.detach();
+
 }
 
 
@@ -150,9 +150,15 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	shake_start(SHAKE_STATUS::SMALL_SHAKE);
 	
 
-	//描画
+	//弾の描画
 	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);
 	CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
+
+	//攻撃成功時、相手は爆発
+	if(attackable){
+		auto explosion = make_shared<CExplosion>(focus_x, focus_y, EXPLOSION_KIND::EXPLOSION_NOMAL);
+		CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
+	}
 
 
 	if (id != 0 && enemy0->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 0, (int)BULLET_KIND::BULLET_NOMAL));
@@ -788,3 +794,16 @@ void CMytank::focus_to_down(){
 int CMytank::get_num_bullet(){
 	return num_bullet;
 };
+
+
+void requestHttp_thread(tstring direction, tstring speed) {
+	tstring ip_address = _T(RASPI_IP_ADDRESS);
+	//2015/3/31時点では正常運転のみ実装
+	//通信失敗の時の処理は考慮していない。
+	//2015/4/4において、方向によってURLを作成したため追記。
+	tstring strUrl = _T("http://") + ip_address + _T("/move/") + direction + _T("/") ;
+	bool isMethodGet = true;
+	tstring strResult;
+	HttpRequest(strUrl, isMethodGet, speed, strResult);
+
+}

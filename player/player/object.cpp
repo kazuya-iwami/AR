@@ -42,6 +42,7 @@ void CObject::load(){
 	figure_id["F_ICON2"] =  LoadGraph("image/icon2.png");
 	figure_id["F_ICON3"] =  LoadGraph("image/icon3.png");
 	figure_id["F_ICON4"] =  LoadGraph("image/icon4.png");
+	figure_id["F_X"]=LoadGraph("image/x.png");
 	
 	figure_id["F_CURSUR"]=LoadGraph("image/cursur.png");
 	figure_id["F_CURSUR_ON"]=LoadGraph("image/cursur_on.png");
@@ -59,6 +60,8 @@ void CObject::load(){
 	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
 
 	figure_id["F_WAIT_SAMPLE"]=LoadGraph("image/waiting_sample_image.png");
+
+	figure_id["F_MAN"]=LoadGraph("image/man.png");
 
 
 	//上の効果音版
@@ -94,6 +97,7 @@ void CObject::load(){
 
 	//紙ふぶき
 	LoadDivGraph("image/kamifubuki.png",24,2,12,960,480,kamifubuki);
+	
 }
 
 bool CObject::draw(){

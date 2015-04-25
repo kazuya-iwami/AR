@@ -50,6 +50,8 @@ bool CMytank::draw() {
 	//アイテム枠表示
 	//DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
 
+	//man
+	DrawRotaGraph(80,600,1.0,0,figure_id["F_MAN"],true);
 	
 	return true;
 };

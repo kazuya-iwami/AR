@@ -5,21 +5,25 @@
 #include "main.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include <mutex>
+#include <thread>
 
 #define ENEMY_MARGIN 100
 #define FOCUS_SPEED 15
+
+void requestHttp_thread(tstring direction, tstring speed);
 
 bool CMytank::draw() {
 
 	//カーソル表示
 
 	if(focus_flag){
-		bool flag =false;
-		if(id != 0 && enemy0->lockon ==true) flag = true;
-		if(id != 1 && enemy1->lockon ==true) flag = true;
-		if(id != 2 && enemy2->lockon ==true) flag = true;
-		if(id != 3 && enemy3->lockon ==true) flag = true;
-		if(flag == true){//lockon状態
+		attackable = false;
+		if(id != 0 && enemy0->lockon ==true) attackable = true;
+		if(id != 1 && enemy1->lockon ==true) attackable = true;
+		if(id != 2 && enemy2->lockon ==true) attackable = true;
+		if(id != 3 && enemy3->lockon ==true) attackable = true;
+		if(attackable == true){//lockon状態
 			if(preflag==false){
 				preflag=true;
 				PlaySoundMem( sound_id["S_LOCK"] , DX_PLAYTYPE_BACK ) ;		
@@ -38,25 +42,31 @@ bool CMytank::draw() {
 	//スコア表示
 	DrawOriginalString(800+LEFT_WINDOW_WIDTH,100,1.0,22,"SCORE:"+to_string(score));
 
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
 	//HP表示
 	//DrawOriginalString(800+LEFT_WINDOW_WIDTH,200,1.0,22,"HP:"+to_string(HP));
 	int i;
 	for(i=0;i<HP;i++){
-		//DrawGraph(700+60*i+LEFT_WINDOW_WIDTH,670,figure_id["F_HP"],true);
-		DrawGraph(10+60*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
+		DrawGraph(10+93*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
 	}
 	
 
 	//アイテム枠表示
 	//DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
 
+	//man
+	double kakudo;
+	if(draw_timer%40 < 20) kakudo = -0.5+(draw_timer%40)/20.0;
+	else kakudo = 0.5-(draw_timer%40-20)/20.0;
+	DrawRotaGraph(80,600,1.0,kakudo,figure_id["F_MAN"],true);
 	
 	return true;
 };
 
 CMytank::CMytank() {
 	//初期化
-	score = 10;
+	score = 0;
 	HP = 3;//最初のHPは3
 	viability_status = VIABILITY_STATUS::ALIVE;//最初の状態は生存
 	num_bullet = 10; //残弾10こ
@@ -73,9 +83,11 @@ CMytank::CMytank() {
 	shake_x=0;
 	shake_y=0;
 	draw_timer=0;
+	attackable = false;
+	enemy_x = -1;
+	enemy_y = -1;
 
 	preflag=false;
-
 	focus_flag = false;
 
 
@@ -116,14 +128,10 @@ CMytank::CMytank() {
 };
 
 void CMytank::move(tstring direction, tstring speed) {
-	tstring ip_address = _T("192.168.0.7");
-	//2015/3/31時点では正常運転のみ実装
-	//通信失敗の時の処理は考慮していない。
-	//2015/4/4において、方向によってURLを作成したため追記。
-	tstring strUrl = _T("http://") + ip_address + _T("/move/") + direction + _T("/") ;
-	bool isMethodGet = true;
-	tstring strResult;
-	HttpRequest(strUrl, isMethodGet, speed, strResult);
+
+	std::thread th(requestHttp_thread,direction,speed); //httprequestスレッド開始
+	th.detach();
+
 }
 
 
@@ -144,9 +152,15 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	shake_start(SHAKE_STATUS::SMALL_SHAKE);
 	
 
-	//描画
+	//弾の描画
 	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);
 	CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
+
+	//攻撃成功時、相手は爆発
+	if(attackable){
+		auto explosion = make_shared<CExplosion>(enemy_x, enemy_y, EXPLOSION_KIND::EXPLOSION_NOMAL);
+		CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
+	}
 
 
 	if (id != 0 && enemy0->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 0, (int)BULLET_KIND::BULLET_NOMAL));
@@ -157,16 +171,19 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 }
 
 void CMytank::check_focus(){
+	enemy_x = -1;
+	enemy_y = -1;
 
 	if(focus_flag){
-
 		if(id != 0){
 			if(enemy0->get_x() - ENEMY_MARGIN < focus_x && enemy0->get_x() + ENEMY_MARGIN > focus_x && enemy0->get_y() -ENEMY_MARGIN < focus_y && enemy0->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy0->lockon = true;
+					enemy_x = enemy0->get_x();
+					enemy_y = enemy0->get_y();
 				}
 				if(0 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
-					enemy1->lockon = false;
+					enemy0->lockon = false;
 				}
 				if(enemy0->HP==0) {
 					enemy0->lockon = false;//死んだ相手への攻撃禁止
@@ -177,6 +194,8 @@ void CMytank::check_focus(){
 			if(enemy1->get_x() - ENEMY_MARGIN < focus_x && enemy1->get_x() + ENEMY_MARGIN > focus_x && enemy1->get_y() -ENEMY_MARGIN < focus_y && enemy1->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy1->lockon = true;
+					enemy_x = enemy1->get_x();
+					enemy_y = enemy1->get_y();
 				}
 				if(1 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy1->lockon = false;
@@ -190,6 +209,8 @@ void CMytank::check_focus(){
 			if(enemy2->get_x() - ENEMY_MARGIN < focus_x && enemy2->get_x() + ENEMY_MARGIN > focus_x && enemy2->get_y() -ENEMY_MARGIN < focus_y && enemy2->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy2->lockon = true;
+					enemy_x = enemy2->get_x();
+					enemy_y = enemy2->get_y();
 				}
 				if(2 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy2->lockon = false;
@@ -203,6 +224,8 @@ void CMytank::check_focus(){
 			if(enemy3->get_x() - ENEMY_MARGIN < focus_x && enemy3->get_x() + ENEMY_MARGIN > focus_x && enemy3->get_y() -ENEMY_MARGIN < focus_y && enemy3->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy3->lockon = true;
+					enemy_x = enemy3->get_x();
+					enemy_y = enemy3->get_y();
 				}
 				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy3->lockon = false;
@@ -782,3 +805,16 @@ void CMytank::focus_to_down(){
 int CMytank::get_num_bullet(){
 	return num_bullet;
 };
+
+
+void requestHttp_thread(tstring direction, tstring speed) {
+	tstring ip_address = _T(RASPI_IP_ADDRESS);
+	//2015/3/31時点では正常運転のみ実装
+	//通信失敗の時の処理は考慮していない。
+	//2015/4/4において、方向によってURLを作成したため追記。
+	tstring strUrl = _T("http://") + ip_address + _T("/move/") + direction + _T("/") ;
+	bool isMethodGet = true;
+	tstring strResult;
+	HttpRequest(strUrl, isMethodGet, speed, strResult);
+
+}

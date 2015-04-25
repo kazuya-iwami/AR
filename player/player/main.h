@@ -10,4 +10,7 @@ using namespace std;
 
 extern bool init_flag;
 
+#define SERVER_IP_ADDRESS "192.168.0.7"	//サーバーのIPアドレス
+#define RASPI_IP_ADDRESS "pi@rpi04.local"
+
 string encode(COMMAND_NAME, int, int, int);

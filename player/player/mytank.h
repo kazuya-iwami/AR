@@ -7,6 +7,7 @@
 #include "network.h"
 #include "bullet.h"
 #include "utility.h"
+#include "explosion.h"
 #include <memory>
 
 enum OPERATION_STATUS {
@@ -38,7 +39,6 @@ enum VIABILITY_STATUS { //生存状態
 class CMytank : public CObject, public CNetwork {
 	ITEM_KIND item_kind;
 	int score;//撃墜数-被撃墜数
-	//int HP;//ヒットポイント-なくなるといったん死ぬ
 	//VIABILITY_STATUS viability_status;//生存状態
 
 	int num_bullet; //残弾
@@ -49,6 +49,9 @@ class CMytank : public CObject, public CNetwork {
 	bool focus_flag;//カウントダウンタイマー終了後trueになりカーソル表示
 	int map_x;
 	int map_y;
+	bool attackable;
+	int enemy_x;
+	int enemy_y;
 
 public:
 

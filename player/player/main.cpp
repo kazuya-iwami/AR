@@ -419,7 +419,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				CObject::drawlist.clear();
 
 				
-				auto wait = make_shared<CWait>();
+				auto wait_ = make_shared<CWait>();
+				wait = wait_;
 				CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
 				
 			}

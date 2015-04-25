@@ -104,6 +104,7 @@ public:
 
 class CWait:public CObject{
 public:
+	int waitcount;
 	bool draw();
 };
 

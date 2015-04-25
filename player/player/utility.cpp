@@ -239,6 +239,76 @@ bool CMap::draw(){
 
 bool CWait::draw(){
 	DrawGraph(0,0,figure_id["F_WAIT_SAMPLE"],false);
+	//以下でライトの点滅パターンを制御しましょう
+	waitcount++;
+	switch ((waitcount/70)%10){
+	case 0:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 1:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 2:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 3:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 4:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_CLIGHT1"],true);
+		break;
+	case 5:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 6:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_CLIGHT1"],true);
+		break;
+	case 7:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 8:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_CLIGHT1"],true);
+		break;
+	case 9:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	default:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	}
 	return true;
 }
 

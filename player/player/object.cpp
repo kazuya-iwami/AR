@@ -99,6 +99,12 @@ void CObject::load(){
 
 	//紙ふぶき
 	LoadDivGraph("image/kamifubuki.png",24,2,12,960,480,kamifubuki);
+
+	//EEICの電球
+	figure_id["F_LIGHT0"]=LoadGraph("image/light0.png");
+	figure_id["F_ELIGHT1"]=LoadGraph("image/Elight1.png");
+	figure_id["F_ILIGHT1"]=LoadGraph("image/Ilight1.png");
+	figure_id["F_CLIGHT1"]=LoadGraph("image/Clight1.png");
 }
 
 bool CObject::draw(){

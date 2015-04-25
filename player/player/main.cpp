@@ -139,6 +139,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	SetUseASyncLoadFlag(TRUE);
 	CObject::load();//すべての画像はこの中で読み込む
+	int back=LoadGraph("image/back.png");
 	SetUseASyncLoadFlag(FALSE);
 
 	while(GetASyncLoadNum() > 0){ //全て読み込むまで次の動作行わない
@@ -168,6 +169,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	double charging_time; // 弾丸補充開始からの経過時間
 	bool bullet_charging_flag = false; // 弾丸補充開始フラグ
 
+	
 
 	// メインループ
 	while(1){
@@ -203,6 +205,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
 
+			draw_mtx.lock(); //排他的処理
+			DrawGraph(0,0,back,false);
+			draw_mtx.unlock();
 
 			// 読みこんだグラフィックを拡大描画
 			draw_mtx.lock(); //排他的処理
@@ -279,13 +284,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 						auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
 						CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
 					}
-
-
-					//テスト用　Eを押したタイミングでExprosion生成
-					if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
-						auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
-						CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
-					}
 					//テスト用　1を押したタイミングでExplosion生成
 					if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
 						auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
@@ -342,10 +340,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				/* 弾丸補充処理ここから */
 				if(  key_buf[ KEY_INPUT_2 ] == 1){
 					if (!bullet_charging_flag && mytank->get_num_bullet() < mytank->bullet_image->max_bullet_num) { // 弾丸補充まだ開始していなければ
-						charge_start_time = time(NULL);
+						charge_start_time = (clock_t)time(NULL);
 						bullet_charging_flag = true;
 					} else {
-						charge_end_time = time(NULL);
+						charge_end_time = (clock_t)time(NULL);
 						charging_time = difftime(charge_end_time, charge_start_time);
 						if (2 <= charging_time) { // 補充開始から2秒以上"2"を押し続けていれば
 							mytank->bullet_charge(mytank->bullet_image->max_bullet_num);

@@ -24,12 +24,11 @@ using namespace std;
 #define GAME_TIME 30 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
-#define USE_CAMERA_FLAG 2
+#define USE_CAMERA_FLAG 1
 
 //0:画像 1:カメラ 2:ラズパイ
 
 
-#define PLAYER_NM 0	//自分のプレイヤー番号
 
 
 
@@ -366,6 +365,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				//テスト用　Ｌを押すと自分のＨＰが減るよ
 				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
 					mytank->lose_HP();
+				}
+
+				//テスト用　H自分のポイント＋１
+				if (key_buf[KEY_INPUT_H]==1 && key_prev_buf[KEY_INPUT_H]==0) {
+					mytank->score++;
+				}
+				//テスト用　J自分のポイント＋１
+				if (key_buf[KEY_INPUT_J]==1 && key_prev_buf[KEY_INPUT_J]==0) {
+					mytank->enemy1->score++;
+				}
+				//テスト用　L自分のポイント＋１
+				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
+					mytank->enemy2->score++;
 				}
 			}
 

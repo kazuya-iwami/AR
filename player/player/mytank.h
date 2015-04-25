@@ -38,7 +38,6 @@ enum VIABILITY_STATUS { //生存状態
 
 class CMytank : public CObject, public CNetwork {
 	ITEM_KIND item_kind;
-	int score;//撃墜数-被撃墜数
 	//VIABILITY_STATUS viability_status;//生存状態
 
 	int num_bullet; //残弾
@@ -54,6 +53,7 @@ class CMytank : public CObject, public CNetwork {
 	int enemy_y;
 
 public:
+	int score;//撃墜数-被撃墜数
 
 	int shaketimer;
 	int shakeflag;
@@ -71,6 +71,7 @@ public:
 	
 	shared_ptr<CBullet_image> bullet_image;//残弾描画
 	shared_ptr<CMap> map;
+	shared_ptr<CScore_Info> score_info;
 
 	CMytank();
 	void move(tstring direction, tstring speed);//移動

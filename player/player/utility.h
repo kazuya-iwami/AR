@@ -115,3 +115,25 @@ public:
 	 bool draw();
 };
 
+
+class CScore_info_enemy {
+public:
+	CScore_info_enemy();
+	int score;
+	int info_y;
+	int rank;
+
+};
+
+class CScore_Info:public CObject {
+private:
+	
+	CScore_info_enemy score_info_enemy[4];
+	int mytank_id;
+
+public:
+	CScore_Info(int mytank_id);
+	void update_score(int score0,int score1, int score2,int score3);
+	bool draw();// 描画とともに動かす
+
+};

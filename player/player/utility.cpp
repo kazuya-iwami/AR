@@ -232,6 +232,11 @@ bool CThunder :: draw(){
 bool CMap::draw(){
 
 	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
+	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_ICONRED"],true);
+	DrawGraph(10+LEFT_WINDOW_WIDTH,720-15,figure_id["F_ICONGREEN"],true);
+	DrawGraph(210-15+LEFT_WINDOW_WIDTH,520,figure_id["F_ICONBLUE"],true);
+	DrawGraph(210-15+LEFT_WINDOW_WIDTH,720-15,figure_id["F_ICONYELLOW"],true);
+	DrawGraph(110-15+LEFT_WINDOW_WIDTH,620-15,figure_id["F_ICONDEAD"],true);
 	return true;
 }
 

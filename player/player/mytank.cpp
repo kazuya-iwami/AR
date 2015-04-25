@@ -67,6 +67,12 @@ bool CMytank::draw() {
 	if(draw_timer%40 < 20) kakudo = -0.5+(draw_timer%40)/20.0;
 	else kakudo = 0.5-(draw_timer%40-20)/20.0;
 	DrawRotaGraph(80,600,1.0,kakudo,figure_id["F_MAN"],true);
+
+	//upadte score_info
+	if(id == 0)	score_info->update_score(score,enemy1->score,enemy2->score,enemy3->score);
+	if(id == 1)	score_info->update_score(enemy0->score,score,enemy2->score,enemy3->score);
+	if(id == 2)	score_info->update_score(enemy0->score,enemy1->score,score,enemy3->score);
+	if(id == 3)	score_info->update_score(enemy0->score,enemy1->score,enemy2->score,score);
 	
 	return true;
 };
@@ -100,6 +106,10 @@ CMytank::CMytank() {
 
 
 	send_msg("HELLO");
+
+	auto score_info_ = make_shared<CScore_Info>(id);
+	score_info =  score_info_;
+	CObject::register_object( score_info,DRAW_LAYER::IMFOMATION_LAYER);
 
 	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
 	bullet_image = bullet_image_;

@@ -29,7 +29,6 @@ using namespace std;
 //0:画像 1:カメラ 2:ラズパイ
 
 
-#define PLAYER_NM 0	//自分のプレイヤー番号
 
 
 
@@ -192,18 +191,20 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
+			draw_mtx.lock();
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
 				mytank->start();
 			}
-			if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
+			else if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 				if(wait->mode <5) wait->mode += 1;
 			}
-			if(  key_buf[ KEY_INPUT_M ] == 1 && key_prev_buf[ KEY_INPUT_M] == 0){
+			else if(  key_buf[ KEY_INPUT_M ] == 1 && key_prev_buf[ KEY_INPUT_M] == 0){
 				auto iwami=make_shared<CMovie>("M_IWAMI");
 				CObject::register_object(iwami,DRAW_LAYER::MOVIE_LAYER);
+				iwami->init();
 			}
-
+			draw_mtx.unlock();
 			
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
 
@@ -356,6 +357,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				//テスト用　Ｌを押すと自分のＨＰが減るよ
 				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
 					mytank->lose_HP();
+				}
+
+				//テスト用　H自分のポイント＋１
+				if (key_buf[KEY_INPUT_H]==1 && key_prev_buf[KEY_INPUT_H]==0) {
+					mytank->score++;
+				}
+				//テスト用　J自分のポイント＋１
+				if (key_buf[KEY_INPUT_J]==1 && key_prev_buf[KEY_INPUT_J]==0) {
+					mytank->enemy1->score++;
+				}
+				//テスト用　L自分のポイント＋１
+				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
+					mytank->enemy2->score++;
 				}
 			}
 

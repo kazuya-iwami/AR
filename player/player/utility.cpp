@@ -5,6 +5,8 @@
 #include <algorithm>
 
 int CEnemy::just_before_shooted;
+#define SORT_SPEED 5
+#define RANK_HEIGHT 70
 
 bool CSystem_timer::draw(){
 	if(system_timer > 0){
@@ -352,12 +354,72 @@ CKamifubuki::CKamifubuki(){
 
 bool CMovie::draw(){
 	DrawExtendGraph(0,0,1349,729,figure_id[name],false);
-	return GetMovieStateToGraph(figure_id[name]);
+	if( GetMovieStateToGraph(figure_id[name]) ==1 ) return true;
+	else return false;
 }
 
 CMovie::CMovie(std::string name_){
 	name=name_;
+}
+
+void CMovie::init(){
 	SeekMovieToGraph( figure_id[name], 0 ) ;
 	PlayMovieToGraph(figure_id[name]);
-	
 }
+
+CScore_info_enemy::CScore_info_enemy(){
+	score = 0;
+
+
+}
+
+CScore_Info::CScore_Info(int mytank_id_){
+	mytank_id = mytank_id_;
+	for(int i=0;i<4;i++){
+		score_info_enemy[i].rank = i;
+		score_info_enemy[i].info_y = i*RANK_HEIGHT;
+	}
+}
+
+void CScore_Info::update_score(int score0,int score1, int score2,int score3){
+
+	score_info_enemy[0].score = score0;
+	score_info_enemy[1].score = score1;
+	score_info_enemy[2].score = score2;
+	score_info_enemy[3].score = score3;
+
+}
+bool CScore_Info::draw(){
+	//点数ソートしてrankに反映
+	vector<pair<int,int>> tmp_rank;
+	for(int i=0;i<4;i++){
+		tmp_rank.push_back(pair<int,int>(score_info_enemy[i].score,i));
+	}
+	sort(tmp_rank.begin(), tmp_rank.end(), greater<pair<int, int> >() );
+	for(int i=0;i<4;i++){
+		score_info_enemy[tmp_rank[i].second].rank = i;
+	}
+
+	//毎回rankとinfo_yがずれていると動かす
+	for(int i=0;i<4;i++){
+		if(abs(score_info_enemy[i].info_y - score_info_enemy[i].rank*RANK_HEIGHT) > SORT_SPEED+1){
+			int flag = (score_info_enemy[i].info_y - score_info_enemy[i].rank*RANK_HEIGHT < 0)? 1:-1;
+			score_info_enemy[i].info_y += SORT_SPEED * flag;
+		}else{
+			score_info_enemy[i].info_y = score_info_enemy[i].rank*RANK_HEIGHT;
+		}
+	}
+
+	SetDrawBlendMode(DX_BLENDMODE_ADD,255);
+	//描画
+	for(int i=0;i<4;i++){
+		DrawOriginalString(900,score_info_enemy[i].info_y + 100,1.0,24,to_string(score_info_enemy[i].score)+"  "+to_string(i)+"P");
+
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+	return true;
+
+
+}
+

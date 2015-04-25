@@ -26,6 +26,7 @@ class CEnemy : public CImage_processer,public CObject {
 public:
 	int enemy_id;
 	int score;
+	int HP;
 	bool exist;
 	bool lockon;
 	static int just_before_shooted; // 直前にプレイヤーが撃ったenemyのidが入る

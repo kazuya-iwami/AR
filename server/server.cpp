@@ -19,7 +19,7 @@
 
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
-#define PORT_NUM 2
+#define PORT_NUM 1
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
 static int retval, nsockfd[PORT_NUM], maxfd;
@@ -36,9 +36,11 @@ int set_tcp_socket(int portnum, struct hostent *shost);
 
 void recv_message(std::string msg, int n);
 void check_item_valid();
+void check_dead_valid();
 void init();
 int kbhit(void);
 clock_t item_start_time[4], item_end_time;
+clock_t dead_start_time[4], dead_end_time;
 
 int main() {
 
@@ -72,6 +74,7 @@ int main() {
 	while (loop) {
 
 		check_item_valid();
+		check_dead_valid();
 
 		FD_ZERO(&mask);
 		for (int i = 0; i < PORT_NUM; i++) {
@@ -229,11 +232,13 @@ CPlayer_param::CPlayer_param() {
 	score = 0;
 	using_item = ITEM_KIND::ITEM_NONE ;
 	finish_flag = false;
+	viability = VIABILITY_STATUS::ALIVE;
 }
 void CPlayer_param::init() {
 	score = 0;
 	using_item = ITEM_KIND::ITEM_NONE ;
 	finish_flag = false;
+	viability = VIABILITY_STATUS::ALIVE;
 }
 
 //キー操作用

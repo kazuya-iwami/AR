@@ -38,6 +38,9 @@ bool CMytank::draw() {
 	//スコア表示
 	DrawOriginalString(800+LEFT_WINDOW_WIDTH,100,1.0,22,"SCORE:"+to_string(score));
 
+	//HP表示
+	DrawOriginalString(800+LEFT_WINDOW_WIDTH,200,1.0,22,"HP:"+to_string(HP));
+
 	
 
 	//アイテム枠表示
@@ -50,6 +53,8 @@ bool CMytank::draw() {
 CMytank::CMytank() {
 	//初期化
 	score = 0;
+	HP = 3;//最初のHPは3
+	viability_status = VIABILITY_STATUS::ALIVE;//最初の状態は生存
 	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
 	ope_timer = 0;
@@ -107,7 +112,7 @@ CMytank::CMytank() {
 };
 
 void CMytank::move(tstring direction, tstring speed) {
-	tstring ip_address = _T("192.168.10.125");
+	tstring ip_address = _T("192.168.0.7");
 	//2015/3/31時点では正常運転のみ実装
 	//通信失敗の時の処理は考慮していない。
 	//2015/4/4において、方向によってURLを作成したため追記。
@@ -159,6 +164,9 @@ void CMytank::check_focus(){
 				if(0 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy1->lockon = false;
 				}
+				if(enemy0->HP==0) {
+					enemy0->lockon = false;//死んだ相手への攻撃禁止
+				}
 			} else enemy0->lockon = false;
 		}
 		if(id != 1){
@@ -169,6 +177,9 @@ void CMytank::check_focus(){
 				if(1 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy1->lockon = false;
 				}
+				if(enemy1->HP==0) {
+					enemy1->lockon = false;//死んだ相手への攻撃禁止
+				}
 			} else enemy1->lockon = false;
 		}
 		if(id != 2){
@@ -177,7 +188,10 @@ void CMytank::check_focus(){
 					enemy2->lockon = true;
 				}
 				if(2 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
-					enemy1->lockon = false;
+					enemy2->lockon = false;
+				}
+				if(enemy2->HP==0) {
+					enemy2->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy2->lockon = false;
 		}
@@ -187,7 +201,10 @@ void CMytank::check_focus(){
 					enemy3->lockon = true;
 				}
 				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
-					enemy1->lockon = false;
+					enemy3->lockon = false;
+				}
+				if(enemy3->HP==3) {
+					enemy3->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy3->lockon = false;
 		}
@@ -604,6 +621,22 @@ void CMytank::get_msg(){
 			}
 			break;
 
+		case COMMAND_NAME::INFORM_DIE:
+			if (id == 0) {
+				break;
+			} 
+			break;//lockon関係は別のところで処理
+
+		case COMMAND_NAME:: INFORM_REVIVE:
+			if (id == 0) {
+				viability_status = ALIVE;//生存状態の変更
+				HP=3;
+				score=0;
+				//データの初期化
+				break;//lockon関係は別のところで処理
+			} 
+			break;
+
 		default:
 			break;
 
@@ -625,8 +658,11 @@ void CMytank::detect_enemy(Mat image) {
 }
 
 void CMytank::attacked(int score_){
+	if (HP > 0) {
+		HP -= score_;
+	}
 	score -= score_;
-};
+}
 
 void CMytank::set_game_status(GAME_STATUS game_status_){
 	game_status = game_status_;
@@ -708,7 +744,24 @@ void CMytank::show_focus(){
 	if(id!=1)enemy1->countdown_finish();
 	if(id!=2)enemy2->countdown_finish();
 	if(id!=3)enemy3->countdown_finish();
-};
+
+}
+
+void CMytank::lose_HP() {
+	if (HP > 0) {
+		HP--;
+	}
+}
+
+void CMytank::check_dead() {
+	if (HP<= 0 && viability_status==VIABILITY_STATUS::ALIVE) {
+		send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
+		viability_status=DEAD;
+	}	
+}
+
+
+
 
 
 void CMytank::focus_to_up(){
@@ -719,4 +772,9 @@ void CMytank::focus_to_up(){
 void CMytank::focus_to_down(){
 	if(focus_y > 720) return;
 	focus_y += FOCUS_SPEED;
+};
+
+
+int CMytank::get_num_bullet(){
+	return num_bullet;
 };

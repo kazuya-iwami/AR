@@ -14,12 +14,12 @@ bool CMytank::draw() {
 	//カーソル表示
 
 	if(focus_flag){
-		bool flag =false;
-		if(id != 0 && enemy0->lockon ==true) flag = true;
-		if(id != 1 && enemy1->lockon ==true) flag = true;
-		if(id != 2 && enemy2->lockon ==true) flag = true;
-		if(id != 3 && enemy3->lockon ==true) flag = true;
-		if(flag == true){//lockon状態
+		attackable = false;
+		if(id != 0 && enemy0->lockon ==true) attackable = true;
+		if(id != 1 && enemy1->lockon ==true) attackable = true;
+		if(id != 2 && enemy2->lockon ==true) attackable = true;
+		if(id != 3 && enemy3->lockon ==true) attackable = true;
+		if(attackable == true){//lockon状態
 			if(preflag==false){
 				preflag=true;
 				PlaySoundMem( sound_id["S_LOCK"] , DX_PLAYTYPE_BACK ) ;		
@@ -149,9 +149,15 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	shake_start(SHAKE_STATUS::SMALL_SHAKE);
 	
 
-	//描画
+	//弾の描画
 	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);
 	CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
+
+	//攻撃成功時、相手は爆発
+	if(attackable){
+		auto explosion = make_shared<CExplosion>(focus_x, focus_y, EXPLOSION_KIND::EXPLOSION_NOMAL);
+		CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
+	}
 
 
 	if (id != 0 && enemy0->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 0, (int)BULLET_KIND::BULLET_NOMAL));

@@ -287,13 +287,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 						auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
 						CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
 					}
-
-
-					//テスト用　Eを押したタイミングでExprosion生成
-					if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
-						auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
-						CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
-					}
 					//テスト用　1を押したタイミングでExplosion生成
 					if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
 						auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);

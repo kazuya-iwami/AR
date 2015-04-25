@@ -80,16 +80,13 @@ bool CEnemy::draw(){
 
 	if(countdown_finish_flag && visible){//視界に入っているなら
 		if(exist){
-			/*
-			if(!lockon){
-				SetDrawBlendMode( DX_BLENDMODE_ALPHA, 128 );
-			}
-			*/
-			DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_ICON"+to_string(enemy_id+1)],true);
+			// 敵アイコンの表示
+			DrawGraph(x-60 + LEFT_WINDOW_WIDTH, y-40, figure_id["F_ICON"+to_string(enemy_id+1)],true);
+			// 前回打った敵は攻撃できない
 			if(enemy_id == CEnemy::just_before_shooted){
 				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
 			}
-			//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
 			if (enemy_id == CEnemy::just_before_shooted){
 				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
 			}

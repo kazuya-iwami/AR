@@ -28,11 +28,19 @@ enum SHAKE_STATUS{
 	SMALL_SHAKE
 };
 
+enum VIABILITY_STATUS { //生存状態
+	ALIVE,
+	DEAD
+};
+
 //自機クラス
 
 class CMytank : public CObject, public CNetwork {
 	ITEM_KIND item_kind;
 	int score;//撃墜数-被撃墜数
+	//int HP;//ヒットポイント-なくなるといったん死ぬ
+	//VIABILITY_STATUS viability_status;//生存状態
+
 	int num_bullet; //残弾
 	OPERATION_STATUS ope_status; //操作用ステータス
 	int ope_timer; //操作用タイマー
@@ -49,6 +57,9 @@ public:
 	int focus_x,focus_y;//照準の位置
 	//int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
 	bool preflag;
+
+	int HP;//ヒットポイント-なくなるといったん死ぬ
+	VIABILITY_STATUS viability_status;//生存状態
 
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;
@@ -82,4 +93,6 @@ public:
 	void start();
 	void finish();
 	int get_num_bullet();
+	void lose_HP();//テスト用
+	void check_dead();//生死状態の判定
 };

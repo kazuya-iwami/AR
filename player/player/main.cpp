@@ -26,8 +26,11 @@ using namespace std;
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 
-#define PLAYER_NM 0	//自分のプレイヤー番号 0～3
-#define IP_ADDRESS "172.16.100.33"	//IPアドレス
+
+#define PLAYER_NM 0	//自分のプレイヤー番号
+#define IP_ADDRESS "192.168.0.7"	//IPアドレス
+
+
 
 
 
@@ -49,7 +52,7 @@ bool init_flag;//初期化関数init()用のフラグ
 shared_ptr<CMytank> mytank;
 shared_ptr<CSystem_timer> system_timer;
 
-void image_get_process();//別スレッドで映像の受信、処理を行う
+void image_get_process(); //別スレッドで映像の受信、処理を行う
 void init();
 
 
@@ -168,6 +171,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	double charging_time; // 弾丸補充開始からの経過時間
 	bool bullet_charging_flag = false; // 弾丸補充開始フラグ
 
+
 	// メインループ
 	while(1){
 		// 画面に描かれているものを一回全部消す
@@ -237,9 +241,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					speed = _T("half");
 				}
 
+
+				mytank->check_dead();
+
 		
 				/* 弾丸補充中は動作しない処理ここから */
-				if (!bullet_charging_flag) {
+				if (!bullet_charging_flag  && mytank->viability_status==ALIVE) {//死んでる場合も操作を許さない
 
 					//各キーを押し続けるとその動作をする。
 					if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
@@ -354,6 +361,15 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				}
 				/* 弾丸補充処理ここまで */
 
+				//テスト用　とりあえずX押したら画面が振動するよ
+				if(key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0){
+
+					mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
+				}
+				//テスト用　Ｌを押すと自分のＨＰが減るよ
+				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
+					mytank->lose_HP();
+				}
 			}
 
 
@@ -473,7 +489,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	return 0 ;
 }
 
-void image_get_process(){
+void image_get_process() {
 
 	while(thread_flag){
 
@@ -517,13 +533,12 @@ void image_get_process(){
 			FileRead_close(FileHandle);
 
 			draw_mtx.lock();//排他的処理
-			camera_image_handle = CreateGraphFromMem(&buf[0] , buf.size());
+			camera_image_handle = CreateGraphFromMem(&buf[0], buf.size());
 			draw_mtx.unlock();
 
 		}
-
-
 	}
+	
 }
 
 //ゲームの初期化
@@ -553,6 +568,7 @@ void init(){
 	//後ここ参考　http://marupeke296.com/DXCLS_WhoIsDrawer.html
 
 	CObject::register_object(mytank,DRAW_LAYER::MYTANK_LAYER);
+
 	CObject::register_object(system_timer,DRAW_LAYER::IMFOMATION_LAYER);
 
 	

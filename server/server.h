@@ -18,6 +18,11 @@ enum ITEM_KIND{
 	THUNDER
 };
 
+enum VIABILITY_STATUS{//生存状況
+	ALIVE,
+	DEAD
+};
+
 enum GAME_STATUS {
 	GAME_UNCONNECTED,
 	GAME_WAIT,
@@ -34,7 +39,9 @@ enum COMMAND_NAME{
 	RETURN_BULLET,
 	CHANGE_STATUS,
 	UPDATE_LOCATIONS,
-	DISCONNECT
+	DISCONNECT,
+	INFORM_DIE,
+	INFORM_REVIVE
 };
 
 class CPlayer_param{
@@ -46,6 +53,7 @@ public:
 	ITEM_KIND using_item;//使用していなかったら-1
 	bool exist;//接続が切れたらfalse
 	bool finish_flag;
+	VIABILITY_STATUS viability;//生存状況を保持しておく
 };
 
 void send_message(std::string msg, int id);

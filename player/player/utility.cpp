@@ -90,6 +90,9 @@ bool CEnemy::draw(){
 			if (enemy_id == CEnemy::just_before_shooted){
 				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
 			}
+			else if (HP == 0) {//死んでるときはlock-onできない
+				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
+			}
 		}else{ //切断されていたら
 			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
 		}
@@ -116,7 +119,10 @@ void CEnemy::disconnect(){
 }
 
 void CEnemy::attacked(int score_){
-	score += score_;
+	//score -= score_;//撃たれてもsvoreは減らない
+	if (HP > 0) {//念のため
+	HP -= score_; //HPも撃たれたら減ります
+	}
 	if(visible){
 		auto explosion = make_shared<CExplosion>(x , y, EXPLOSION_KIND::EXPLOSION_NOMAL);
 		CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);

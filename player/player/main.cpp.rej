@@ -1,0 +1,9 @@
+diff a/player/player/main.cpp b/player/player/main.cpp	(rejected hunks)
+@@ -327,6 +327,7 @@
+ 
+ 					mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
+ 				}
++
+ 				//テスト用　Ｌを押すと自分のＨＰが減るよ
+ 				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
+ 					mytank->lose_HP();

@@ -106,6 +106,7 @@ class CWait:public CObject{
 public:
 	bool draw();
 	CWait();
+	int mode;
 };
 
 //結果発表で紙ふぶき飛ばしたいよね

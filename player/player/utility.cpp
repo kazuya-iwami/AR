@@ -245,6 +245,14 @@ bool CWait::draw(){
 	DrawGraph(draw_timer%1800-350,470,figure_id["F_WAIT02"],true);
 	DrawRotaGraph(draw_timer%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
 	DrawRotaGraph(draw_timer%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
+	
+	int i;
+	for(i=1;i<mode;i++){
+		DrawGraph((draw_timer-i*339)%1800-350,470,figure_id["F_WAIT02"],true);
+		DrawRotaGraph((draw_timer-i*339)%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
+		DrawRotaGraph((draw_timer-i*339)%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
+	}
+	
 
 	DrawGraph(420,470,figure_id["F_WAIT05"],true);
 	DrawGraph(880,450,figure_id["F_WAIT05"],true);
@@ -324,6 +332,7 @@ bool CWait::draw(){
 
 CWait::CWait(){
 	draw_timer=0;
+	mode=1;
 }
 
 bool CKamifubuki::draw(){

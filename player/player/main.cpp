@@ -197,13 +197,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
-			wait->draw();
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
 				mytank->start();
 			}
 			if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
-				PlayMovie("movie/iwami.mpg",1,DX_MOVIEPLAYTYPE_BCANCEL);
+				if(wait->mode <5) wait->mode += 1;
 			}
 
 			

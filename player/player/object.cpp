@@ -62,7 +62,7 @@ void CObject::load(){
 	figure_id["F_COUNTBASE"]=LoadGraph("image/countbase.png");
 	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
 
-	figure_id["F_WAIT_SAMPLE"]=LoadGraph("image/waiting_sample_image.png");
+	figure_id["F_BACKGROUND_WAIT"]=LoadGraph("image/background_wait.jpg");
 	figure_id["F_WAIT01"]=LoadGraph("image/wait01.png");
 	figure_id["F_WAIT02"]=LoadGraph("image/wait02.png");
 	figure_id["F_WAIT03"]=LoadGraph("image/wait03.png");
@@ -114,10 +114,11 @@ void CObject::load(){
 	LoadDivGraph("image/kamifubuki.png",24,2,12,960,480,kamifubuki);
 
 	//EEICの電球
-	figure_id["F_LIGHT0"]=LoadGraph("image/light0.png");
-	figure_id["F_ELIGHT1"]=LoadGraph("image/Elight1.png");
-	figure_id["F_ILIGHT1"]=LoadGraph("image/Ilight1.png");
-	figure_id["F_CLIGHT1"]=LoadGraph("image/Clight1.png");
+	figure_id["F_LIGHT_TOP"]=LoadGraph("image/top_light.png");
+	figure_id["F_LIGHT_E"]=LoadGraph("image/denkyuE.png");
+	figure_id["F_LIGHT_I"]=LoadGraph("image/denkyuI.png");
+	figure_id["F_LIGHT_C"]=LoadGraph("image/denkyuC.png");
+	figure_id["F_LIGHT_0"]=LoadGraph("image/denkyu0.png");
 
 }
 

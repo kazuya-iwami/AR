@@ -8,6 +8,8 @@ int CEnemy::just_before_shooted;
 #define SORT_SPEED 5
 #define RANK_HEIGHT 70
 
+#define DENKYU_HEIGHT 120
+
 bool CSystem_timer::draw(){
 	if(system_timer > 0){
 		if(countdown_finish_flag){
@@ -244,7 +246,8 @@ bool CMap::draw(){
 
 
 bool CWait::draw(){
-	DrawGraph(0,0,figure_id["F_WAIT06"],false);
+	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
+	//DrawBox(0,0,1350,730,GetColor(70,70,70),TRUE);
 
 	DrawGraph(300,630,figure_id["F_WAIT05"],true);
 	DrawGraph(620,660,figure_id["F_WAIT05"],true);
@@ -267,70 +270,84 @@ bool CWait::draw(){
 	//以下でライトの点滅パターンを制御しましょう
 	switch ((draw_timer/40)%10){
 	case 0:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
 		break;
 	case 1:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
 		break;
 	case 2:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
 		break;
 	case 3:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_I"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
 		break;
 	case 4:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_CLIGHT1"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_I"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_C"],true);
 		break;
 	case 5:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_I"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_C"],true);
+		DrawGraph(300,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
+		DrawGraph(500,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
+		DrawGraph(700,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
+		DrawGraph(900,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
 		break;
 	case 6:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_CLIGHT1"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_I"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_C"],true);
 		break;
 	case 7:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_I"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_C"],true);
+		DrawGraph(300,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
+		DrawGraph(500,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
+		DrawGraph(700,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
+		DrawGraph(900,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
 		break;
 	case 8:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_CLIGHT1"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_I"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_C"],true);
+
 		break;
 	case 9:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_I"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_C"],true);
+		DrawGraph(300,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
+		DrawGraph(500,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
+		DrawGraph(700,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
+		DrawGraph(900,DENKYU_HEIGHT-50,figure_id["F_LIGHT_TOP"],true);
 		break;
 	default:
-		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
-		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(500,DENKYU_HEIGHT,figure_id["F_LIGHT_E"],true);
+		DrawGraph(700,DENKYU_HEIGHT,figure_id["F_LIGHT_I"],true);
+		DrawGraph(900,DENKYU_HEIGHT,figure_id["F_LIGHT_C"],true);
+		
 		break;
 	}
 	draw_timer++;
@@ -398,7 +415,7 @@ bool CScore_Info::draw(){
 	SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 	//描画
 	for(int i=0;i<4;i++){
-		DrawOriginalString(900,score_info_enemy[i].info_y + 100,1.0,24,to_string(score_info_enemy[i].score)+"  "+to_string(i)+"P");
+		DrawOriginalString(900,score_info_enemy[i].info_y + 100,1.0,24,"+"+to_string(score_info_enemy[i].score)+"  "+to_string(i+1)+"P");
 
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);

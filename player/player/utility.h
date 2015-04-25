@@ -104,14 +104,14 @@ public:
 
 class CWait:public CObject{
 public:
-	int waitcount;
 	bool draw();
+	CWait();
+	int mode;
 };
 
 //結果発表で紙ふぶき飛ばしたいよね
 class CKamifubuki:public CObject{
 public:
-	int kamitimer;
 	 CKamifubuki();
 	 bool draw();
 };

@@ -161,7 +161,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	CObject::drawlist.clear();
 
 	auto wait = make_shared<CWait>();
-	wait->waitcount=0;
 	CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
 
 	thread_flag = true;
@@ -193,10 +192,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
-			wait->draw();
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
 				mytank->start();
+			}
+			if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
+				if(wait->mode <5) wait->mode += 1;
 			}
 
 			
@@ -399,7 +400,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 				
 				auto wait = make_shared<CWait>();
-				wait->waitcount=0;
 				CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
 				
 			}

@@ -203,7 +203,7 @@ void CMytank::check_focus(){
 				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy3->lockon = false;
 				}
-				if(enemy3->HP==3) {
+				if(enemy3->HP==0) {
 					enemy3->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy3->lockon = false;

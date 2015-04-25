@@ -7,6 +7,7 @@
 #include<stdlib.h>
 
 #define ENEMY_MARGIN 100
+#define FOCUS_SPEED 15
 
 bool CMytank::draw() {
 
@@ -51,7 +52,7 @@ bool CMytank::draw() {
 
 CMytank::CMytank() {
 	//初期化
-	score = 100;
+	score = 0;
 	HP = 3;//最初のHPは3
 	viability_status = VIABILITY_STATUS::ALIVE;//最初の状態は生存
 	num_bullet = 10; //残弾10こ
@@ -160,12 +161,24 @@ void CMytank::check_focus(){
 				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy0->lockon = true;
 				}
+				if(0 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
+				}
+				if(enemy0->HP==0) {
+					enemy0->lockon = false;//死んだ相手への攻撃禁止
+				}
 			} else enemy0->lockon = false;
 		}
 		if(id != 1){
 			if(enemy1->get_x() - ENEMY_MARGIN < focus_x && enemy1->get_x() + ENEMY_MARGIN > focus_x && enemy1->get_y() -ENEMY_MARGIN < focus_y && enemy1->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy1->lockon = true;
+				}
+				if(1 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
+				}
+				if(enemy1->HP==0) {
+					enemy1->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy1->lockon = false;
 		}
@@ -174,12 +187,24 @@ void CMytank::check_focus(){
 				if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy2->lockon = true;
 				}
+				if(2 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy2->lockon = false;
+				}
+				if(enemy2->HP==0) {
+					enemy2->lockon = false;//死んだ相手への攻撃禁止
+				}
 			} else enemy2->lockon = false;
 		}
 		if(id != 3){
 			if(enemy3->get_x() - ENEMY_MARGIN < focus_x && enemy3->get_x() + ENEMY_MARGIN > focus_x && enemy3->get_y() -ENEMY_MARGIN < focus_y && enemy3->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy3->lockon = true;
+				}
+				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy3->lockon = false;
+				}
+				if(enemy3->HP==3) {
+					enemy3->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy3->lockon = false;
 		}
@@ -359,6 +384,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -401,6 +427,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 0:
 						enemy0->attacked(bullet_score);
@@ -443,6 +470,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -484,6 +512,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -594,25 +623,18 @@ void CMytank::get_msg(){
 
 		case COMMAND_NAME::INFORM_DIE:
 			if (id == 0) {
-				viability_status = DEAD;//生存状態の変更
-				send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
-				//何を押しても動かない		
 				break;
-			} else {
-				//そいつをロックオンできない
-				break;
-			}
-			break;
+			} 
+			break;//lockon関係は別のところで処理
 
 		case COMMAND_NAME:: INFORM_REVIVE:
 			if (id == 0) {
 				viability_status = ALIVE;//生存状態の変更
-			//操作できるようになって、データの初期化
-				break;
-			} else {
-				//再びロックオン可能に
-				break;
-			}
+				HP=3;
+				score=0;
+				//データの初期化
+				break;//lockon関係は別のところで処理
+			} 
 			break;
 
 		default:
@@ -636,7 +658,9 @@ void CMytank::detect_enemy(Mat image) {
 }
 
 void CMytank::attacked(int score_){
-	HP -= score_;
+	if (HP > 0) {
+		HP -= score_;
+	}
 	score -= score_;
 }
 
@@ -652,16 +676,20 @@ void CMytank::set_game_status(GAME_STATUS game_status_){
 
 //my test　引数分だけ弾をチャージ
 void CMytank::bullet_charge(int charge){
-
+	//弾数がMAXまで補充されていない時
 	if(num_bullet < bullet_image->max_bullet_num){
-		PlaySoundMem( sound_id["S_GET"] , DX_PLAYTYPE_BACK ) ;
+		//音声
+		PlaySoundMem( sound_id["S_GET"] , DX_PLAYTYPE_BACK );
+		//エフェクト
 		auto up_effect = make_shared<CUp_effect>();
 		CObject::register_object(up_effect,DRAW_LAYER::IMFOMATION_LAYER);
 	}
-
-num_bullet += charge;
-if(num_bullet > bullet_image->max_bullet_num) num_bullet = bullet_image->max_bullet_num;
-bullet_image->update_num_bullet(num_bullet);//残弾数反映
+	num_bullet += charge;
+	
+	//弾数がMAX以上の時
+	if(num_bullet >= bullet_image->max_bullet_num) num_bullet = bullet_image->max_bullet_num;
+	//残弾数反映
+	bullet_image->update_num_bullet(num_bullet);
 }
 
 
@@ -716,8 +744,33 @@ void CMytank::show_focus(){
 	if(id!=1)enemy1->countdown_finish();
 	if(id!=2)enemy2->countdown_finish();
 	if(id!=3)enemy3->countdown_finish();
+
 }
 
 void CMytank::lose_HP() {
-	HP--;
+	if (HP > 0) {
+		HP--;
+	}
 }
+
+void CMytank::check_dead() {
+	if (HP<= 0 && viability_status==VIABILITY_STATUS::ALIVE) {
+		send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
+		viability_status=DEAD;
+	}	
+}
+
+
+
+
+
+void CMytank::focus_to_up(){
+	if(focus_y < 10) return;
+	focus_y -= FOCUS_SPEED;
+};
+
+void CMytank::focus_to_down(){
+	if(focus_y > 720) return;
+	focus_y += FOCUS_SPEED;
+};
+

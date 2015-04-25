@@ -18,6 +18,7 @@ string decode(char const *msg, string *target) {
 }
 
 double diff;
+double diff_dead;
 
 string explode(int n,char const *y,char const *str,string *target){
 	bool option;
@@ -99,6 +100,16 @@ void recv_message(string msg, int id) {
 				player_param[id].finish_flag = true;
 				cout << "プレイヤー:" << id <<"からFINISHを受け取りました" << endl;
 				break;
+			case COMMAND_NAME:: INFORM_DIE:
+				cout << "プレイヤー:" << id << "がやられました。"<< endl;
+				dead_start_time[id] = time(NULL);
+				send_message(encode(COMMAND_NAME::INFORM_DIE,id,0,0),4);
+				player_param[id].viability = DEAD;
+				break;
+			case COMMAND_NAME:: INFORM_REVIVE:
+				cout << "プレイヤー:"<< id << "が生き返りました。"<<endl;
+				//player_param[id].viability = ALIVE;
+				break;
 			default:
 				std::cout << "COMMAND_NAME ERROR" << std::endl;
 				break;
@@ -108,6 +119,8 @@ void recv_message(string msg, int id) {
 	/* メッセージの処理ここまで */
 	cout << " recv_message from：" << id <<" msg:"<< " " << msg << endl;
 }
+
+
 
 void check_item_valid() {
 	item_end_time = time(NULL);
@@ -133,6 +146,20 @@ void check_item_valid() {
 			default:
 				std::cout << "ITEM_KIND ERROR" << std::endl;
 				break;
+		}
+	}
+}
+
+void check_dead_valid() {
+	dead_end_time = time(NULL);
+	for (int i=0; i<4; i++) {
+		if (player_param[i].viability ==VIABILITY_STATUS::DEAD) {
+			diff_dead = difftime(dead_end_time, dead_start_time[i]);
+			if (diff_dead > 3) {
+				std::cout << "player" << i << "の死亡時間が終了しました。" << std::endl;
+				send_message(encode(COMMAND_NAME::INFORM_REVIVE, i, 0, 0), 4);
+				player_param[i].viability = VIABILITY_STATUS::ALIVE;
+			}
 		}
 	}
 }

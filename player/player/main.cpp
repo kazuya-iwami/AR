@@ -25,10 +25,10 @@ using namespace std;
 #define GAME_TIME 30 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
-#define USE_CAMERA_FLAG 0   //0:画像 1:カメラ 2:ラズパイ
+#define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 
 #define PLAYER_NM 0	//自分のプレイヤー番号
-#define IP_ADDRESS "172.16.100.41"	//IPアドレス
+#define IP_ADDRESS "192.168.0.7"	//IPアドレス
 
 
 
@@ -50,7 +50,7 @@ bool init_flag;//初期化関数init()用のフラグ
 shared_ptr<CMytank> mytank;
 shared_ptr<CSystem_timer> system_timer;
 
-void image_get_process();//別スレッドで映像の受信、処理を行う
+void image_get_process(); //別スレッドで映像の受信、処理を行う
 void init();
 
 
@@ -327,6 +327,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 					mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
 				}
+
+				//テスト用　Ｌを押すと自分のＨＰが減るよ
+				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
+					mytank->lose_HP();
 			}
 
 
@@ -446,7 +450,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	return 0 ;
 }
 
-void image_get_process(){
+void image_get_process() {
 
 	while(thread_flag){
 
@@ -494,9 +498,8 @@ void image_get_process(){
 			draw_mtx.unlock();
 
 		}
-
-
 	}
+	
 }
 
 //ゲームの初期化
@@ -526,6 +529,7 @@ void init(){
 	//後ここ参考　http://marupeke296.com/DXCLS_WhoIsDrawer.html
 
 	CObject::register_object(mytank,DRAW_LAYER::MYTANK_LAYER);
+
 	CObject::register_object(system_timer,DRAW_LAYER::IMFOMATION_LAYER);
 
 	

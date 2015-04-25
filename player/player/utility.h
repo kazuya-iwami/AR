@@ -26,6 +26,7 @@ class CEnemy : public CImage_processer,public CObject {
 public:
 	int enemy_id;
 	int score;
+	int HP;
 	bool exist;
 	bool lockon;
 	bool countdown_finish_flag;

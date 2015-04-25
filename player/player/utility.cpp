@@ -111,7 +111,8 @@ void CEnemy::disconnect(){
 }
 
 void CEnemy::attacked(int score_){
-	score += score_;
+	score -= score_;
+	HP -= score_; //HPも撃たれたら減ります
 	if(visible){
 		auto explosion = make_shared<CExplosion>(x , y, EXPLOSION_KIND::EXPLOSION_NOMAL);
 		CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);

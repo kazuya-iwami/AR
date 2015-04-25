@@ -37,6 +37,9 @@ bool CMytank::draw() {
 	//スコア表示
 	DrawOriginalString(800+LEFT_WINDOW_WIDTH,100,1.0,22,"SCORE:"+to_string(score));
 
+	//HP表示
+	DrawOriginalString(800+LEFT_WINDOW_WIDTH,200,1.0,22,"HP:"+to_string(HP));
+
 	
 
 	//アイテム枠表示
@@ -48,7 +51,9 @@ bool CMytank::draw() {
 
 CMytank::CMytank() {
 	//初期化
-	score = 0;
+	score = 100;
+	HP = 3;//最初のHPは3
+	viability_status = VIABILITY_STATUS::ALIVE;//最初の状態は生存
 	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
 	ope_timer = 0;
@@ -106,7 +111,7 @@ CMytank::CMytank() {
 };
 
 void CMytank::move(tstring direction, tstring speed) {
-	tstring ip_address = _T("192.168.10.125");
+	tstring ip_address = _T("192.168.0.7");
 	//2015/3/31時点では正常運転のみ実装
 	//通信失敗の時の処理は考慮していない。
 	//2015/4/4において、方向によってURLを作成したため追記。
@@ -587,6 +592,29 @@ void CMytank::get_msg(){
 			}
 			break;
 
+		case COMMAND_NAME::INFORM_DIE:
+			if (id == 0) {
+				viability_status = DEAD;//生存状態の変更
+				send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
+				//何を押しても動かない		
+				break;
+			} else {
+				//そいつをロックオンできない
+				break;
+			}
+			break;
+
+		case COMMAND_NAME:: INFORM_REVIVE:
+			if (id == 0) {
+				viability_status = ALIVE;//生存状態の変更
+			//操作できるようになって、データの初期化
+				break;
+			} else {
+				//再びロックオン可能に
+				break;
+			}
+			break;
+
 		default:
 			break;
 
@@ -608,8 +636,9 @@ void CMytank::detect_enemy(Mat image) {
 }
 
 void CMytank::attacked(int score_){
+	HP -= score_;
 	score -= score_;
-};
+}
 
 void CMytank::set_game_status(GAME_STATUS game_status_){
 	game_status = game_status_;
@@ -687,4 +716,8 @@ void CMytank::show_focus(){
 	if(id!=1)enemy1->countdown_finish();
 	if(id!=2)enemy2->countdown_finish();
 	if(id!=3)enemy3->countdown_finish();
-};
+}
+
+void CMytank::lose_HP() {
+	HP--;
+}

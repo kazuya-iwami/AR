@@ -20,7 +20,7 @@
 #include <thread>
 
 using namespace std;
-
+	
 #define GAME_TIME 30 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
@@ -28,9 +28,6 @@ using namespace std;
 
 
 #define PLAYER_NM 0	//自分のプレイヤー番号
-#define IP_ADDRESS "192.168.0.7"	//IPアドレス
-
-
 
 
 
@@ -62,7 +59,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	//network初期化
 
-	CNetwork::network_init(PLAYER_NM, IP_ADDRESS); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
+	CNetwork::network_init(PLAYER_NM, SERVER_IP_ADDRESS); //自分のプレイヤー番号0~3とIPアドレス書くと接続試みる
 
 
 	//クラスのインスタンスはスマートポインタ(std::shared_ptr)で生成します。
@@ -102,7 +99,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	}else if(USE_CAMERA_FLAG == 2){
 		//ラズパイからの映像取得用
-		const std::string videoStreamAddress ="http://192.168.10.137:8080/?action=stream.mjpeg";
+		const std::string videoStreamAddress =std::string("http://pi")+RASPI_IP_ADDRESS+":8080/?action=stream.mjpeg";
 
 		if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
 			std::cout << "Error opening video stream or file" << std::endl;
@@ -486,6 +483,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	// ソフトの終了
 	return 0 ;
 }
+
 
 void image_get_process() {
 

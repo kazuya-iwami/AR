@@ -237,10 +237,20 @@ bool CMap::draw(){
 
 
 bool CWait::draw(){
-	DrawGraph(0,0,figure_id["F_WAIT_SAMPLE"],false);
+	DrawGraph(0,0,figure_id["F_WAIT06"],false);
+
+	DrawGraph(300,630,figure_id["F_WAIT05"],true);
+	DrawGraph(620,660,figure_id["F_WAIT05"],true);
+
+	DrawGraph(draw_timer%1800-350,470,figure_id["F_WAIT02"],true);
+	DrawRotaGraph(draw_timer%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
+	DrawRotaGraph(draw_timer%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
+
+	DrawGraph(420,470,figure_id["F_WAIT05"],true);
+	DrawGraph(880,450,figure_id["F_WAIT05"],true);
+
 	//以下でライトの点滅パターンを制御しましょう
-	waitcount++;
-	switch ((waitcount/70)%10){
+	switch ((draw_timer/40)%10){
 	case 0:
 		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
 		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
@@ -308,15 +318,20 @@ bool CWait::draw(){
 		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
 		break;
 	}
+	draw_timer++;
 	return true;
 }
 
+CWait::CWait(){
+	draw_timer=0;
+}
+
 bool CKamifubuki::draw(){
-	DrawExtendGraph(0,0,1500,750,kamifubuki[(kamitimer%120)/5],true);
-	kamitimer++;
+	DrawExtendGraph(0,0,1500,750,kamifubuki[(draw_timer%120)/5],true);
+	draw_timer++;
 	return  true;
 }
 
 CKamifubuki::CKamifubuki(){
-	kamitimer=0;
+	draw_timer=0;
 }

@@ -60,6 +60,12 @@ void CObject::load(){
 	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
 
 	figure_id["F_WAIT_SAMPLE"]=LoadGraph("image/waiting_sample_image.png");
+	figure_id["F_WAIT01"]=LoadGraph("image/wait01.png");
+	figure_id["F_WAIT02"]=LoadGraph("image/wait02.png");
+	figure_id["F_WAIT03"]=LoadGraph("image/wait03.png");
+	figure_id["F_WAIT04"]=LoadGraph("image/wait04.png");
+	figure_id["F_WAIT05"]=LoadGraph("image/wait05.png");
+	figure_id["F_WAIT06"]=LoadGraph("image/wait06.png");
 
 	figure_id["F_MAN"]=LoadGraph("image/man.png");
 

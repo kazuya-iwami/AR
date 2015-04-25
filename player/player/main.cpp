@@ -142,6 +142,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	SetUseASyncLoadFlag(TRUE);
 	CObject::load();//すべての画像はこの中で読み込む
 	int back=LoadGraph("image/back.png");
+	int iwami=LoadGraph("movie/iwami.avi");
 	SetUseASyncLoadFlag(FALSE);
 
 	while(GetASyncLoadNum() > 0){ //全て読み込むまで次の動作行わない
@@ -198,6 +199,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 			if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 				if(wait->mode <5) wait->mode += 1;
+			}
+			if(  key_buf[ KEY_INPUT_M ] == 1 && key_prev_buf[ KEY_INPUT_M] == 0){
+				SeekMovieToGraph( iwami , 0 ) ;
+				PlayMovieToGraph(iwami);
 			}
 
 			
@@ -428,7 +433,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				}
 				it++;   // インクリメント
 			}
-
+			if(GetMovieStateToGraph( iwami ) == 1) DrawExtendGraph(0,0,1349,729,iwami,false);
 			draw_mtx.unlock();
 		}
 

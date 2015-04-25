@@ -1,0 +1,1 @@
+Žg—p‚·‚é‚Ì‚ÍShareTechMono-Regular.ttf

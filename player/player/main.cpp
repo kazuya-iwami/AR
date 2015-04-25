@@ -203,7 +203,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				auto iwami=make_shared<CMovie>("M_IWAMI");
 				CObject::register_object(iwami,DRAW_LAYER::MOVIE_LAYER);
 				draw_mtx.lock();
-				//iwami->init();
+				iwami->init();
 				draw_mtx.unlock();
 			}
 			

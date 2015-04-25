@@ -350,7 +350,8 @@ bool CWait::draw(){
 		
 		break;
 	}
-	draw_timer++;
+	draw_timer += mode;
+	
 	return true;
 }
 
@@ -380,7 +381,7 @@ CMovie::CMovie(std::string name_){
 }
 
 void CMovie::init(){
-	SeekMovieToGraph( figure_id[name], 0 ) ;
+	SeekMovieToGraph(figure_id[name],0) ;
 	PlayMovieToGraph(figure_id[name]);
 }
 

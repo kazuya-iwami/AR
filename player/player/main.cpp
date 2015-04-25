@@ -168,11 +168,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	std::thread th(image_get_process); //映像取得、処理用スレッド開始
 
 	
-	clock_t charge_start_time, charge_end_time; // 弾丸補充開始,終了時間
-	double charging_time; // 弾丸補充開始からの経過時間
-	bool bullet_charging_flag = false; // 弾丸補充開始フラグ
-
-	
 
 	// メインループ
 	while(1){
@@ -250,7 +245,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		
 				/* 弾丸補充中は動作しない処理ここから */
-				if (!bullet_charging_flag  && mytank->viability_status==ALIVE) {//死んでる場合も操作を許さない
+				if (!mytank->is_reloading && mytank->viability_status==ALIVE) {//死んでる場合も操作を許さない
 
 					//各キーを押し続けるとその動作をする。
 					if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
@@ -341,20 +336,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 				/* 弾丸補充処理ここから */
 				if(  key_buf[ KEY_INPUT_2 ] == 1){
-					if (!bullet_charging_flag && mytank->get_num_bullet() < mytank->bullet_image->max_bullet_num) { // 弾丸補充まだ開始していなければ
-						charge_start_time = (clock_t)time(NULL);
-						bullet_charging_flag = true;
-					} else {
-						charge_end_time = (clock_t)time(NULL);
-						charging_time = difftime(charge_end_time, charge_start_time);
-						if (2 <= charging_time) { // 補充開始から2秒以上"2"を押し続けていれば
-							mytank->bullet_charge(mytank->bullet_image->max_bullet_num);
-							bullet_charging_flag = false;
-						}
-					}
+					mytank->reloading();
 				}
 				if ( key_buf[ KEY_INPUT_2 ] == 0 ) { // 2を離していれば、弾丸補充開始前の状態にする
-					bullet_charging_flag = false;
+					mytank->is_reloading = false;
 				}
 				/* 弾丸補充処理ここまで */
 

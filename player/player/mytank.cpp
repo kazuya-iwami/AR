@@ -16,7 +16,6 @@ void requestHttp_thread(tstring direction, tstring speed);
 bool CMytank::draw() {
 
 	//カーソル表示
-
 	if(focus_flag){
 		attackable = false;
 		if(id != 0 && enemy0->lockon ==true) attackable = true;
@@ -38,6 +37,8 @@ bool CMytank::draw() {
 		}
 	}
 
+	if(1){
+	}
 
 	//スコア表示
 	DrawOriginalString(800+LEFT_WINDOW_WIDTH,100,1.0,22,"SCORE:"+to_string(score));
@@ -86,6 +87,7 @@ CMytank::CMytank() {
 	attackable = false;
 	enemy_x = -1;
 	enemy_y = -1;
+	is_reloading = false;
 
 	preflag=false;
 	focus_flag = false;
@@ -806,6 +808,22 @@ int CMytank::get_num_bullet(){
 	return num_bullet;
 };
 
+void CMytank::reloading(){
+	double charging_time; // 弾丸補充開始からの経過時間
+
+	if (!is_reloading && get_num_bullet() < bullet_image->max_bullet_num) { // 弾丸補充まだ開始していなければ
+		charge_start_time = (clock_t)time(NULL);
+		is_reloading = true;
+	} else {
+		charge_end_time = (clock_t)time(NULL);
+		charging_time = difftime(charge_end_time, charge_start_time);
+		if (2 <= charging_time) { // 補充開始から2秒以上"2"を押し続けていれば
+			bullet_charge(bullet_image->max_bullet_num);
+			is_reloading = false;
+		}
+	}
+	return;
+};
 
 void requestHttp_thread(tstring direction, tstring speed) {
 	tstring ip_address = _T(RASPI_IP_ADDRESS);

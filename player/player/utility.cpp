@@ -41,8 +41,7 @@ bool CSystem_timer::draw(){
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,200);
 		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,140);
-		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,-3.14/15*countdown_timer,figure_id["F_COUNTSIDE"],true);
-
+		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,-3.14/4*((countdown_timer/2)%8),figure_id["F_COUNTSIDE"],true);
 		DrawOriginalString(LEFT_WINDOW_WIDTH+500-30,325,2.0,0,to_string(countdown_timer/30 + 1));
 		countdown_timer--;
 

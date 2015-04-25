@@ -8,6 +8,7 @@
 #include "bullet.h"
 #include "utility.h"
 #include "explosion.h"
+#include <ctime>
 #include <memory>
 
 enum OPERATION_STATUS {
@@ -49,8 +50,8 @@ class CMytank : public CObject, public CNetwork {
 	int map_x;
 	int map_y;
 	bool attackable;
-	int enemy_x;
-	int enemy_y;
+	int enemy_x, enemy_y;
+	int charge_start_time, charge_end_time; // 弾丸補充開始,終了時間
 
 public:
 	int score;//撃墜数-被撃墜数
@@ -60,6 +61,7 @@ public:
 	int focus_x,focus_y;//照準の位置
 	//int shake_x,shake_y;//被弾時の画面振動を司るパラメータ
 	bool preflag;
+	bool is_reloading;
 
 	int HP;//ヒットポイント-なくなるといったん死ぬ
 	VIABILITY_STATUS viability_status;//生存状態
@@ -99,4 +101,5 @@ public:
 	int get_num_bullet();
 	void lose_HP();//テスト用
 	void check_dead();//生死状態の判定
+	void reloading();
 };

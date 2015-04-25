@@ -43,8 +43,7 @@ bool CSystem_timer::draw(){
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,200);
 		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,140);
-		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,-3.14/15*countdown_timer,figure_id["F_COUNTSIDE"],true);
-
+		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,-3.14/4*((countdown_timer/2)%8),figure_id["F_COUNTSIDE"],true);
 		DrawOriginalString(LEFT_WINDOW_WIDTH+500-30,325,2.0,0,to_string(countdown_timer/30 + 1));
 		countdown_timer--;
 
@@ -70,7 +69,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	//ChangeFont("07ロゴたいぷゴシック7");
 	x=x_;
 	y=y_;
-	system_timer = game_time * 30;
+	system_timer = game_time * 30-1;
 	finish_flag = false;
 	countdown_timer= 5 * 30;
 	countdown_finish_flag = false;
@@ -235,23 +234,122 @@ bool CThunder :: draw(){
 bool CMap::draw(){
 
 	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
+	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_ICONRED"],true);
+	DrawGraph(10+LEFT_WINDOW_WIDTH,720-15,figure_id["F_ICONGREEN"],true);
+	DrawGraph(210-15+LEFT_WINDOW_WIDTH,520,figure_id["F_ICONBLUE"],true);
+	DrawGraph(210-15+LEFT_WINDOW_WIDTH,720-15,figure_id["F_ICONYELLOW"],true);
+	DrawGraph(110-15+LEFT_WINDOW_WIDTH,620-15,figure_id["F_ICONDEAD"],true);
 	return true;
 }
 
 
 bool CWait::draw(){
-	DrawGraph(0,0,figure_id["F_WAIT_SAMPLE"],false);
+	DrawGraph(0,0,figure_id["F_WAIT06"],false);
+
+	DrawGraph(300,630,figure_id["F_WAIT05"],true);
+	DrawGraph(620,660,figure_id["F_WAIT05"],true);
+
+	DrawGraph(draw_timer%1800-350,470,figure_id["F_WAIT02"],true);
+	DrawRotaGraph(draw_timer%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
+	DrawRotaGraph(draw_timer%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
+	
+	int i;
+	for(i=1;i<mode;i++){
+		DrawGraph((draw_timer-i*339)%1800-350,470,figure_id["F_WAIT02"],true);
+		DrawRotaGraph((draw_timer-i*339)%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
+		DrawRotaGraph((draw_timer-i*339)%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
+	}
+	
+
+	DrawGraph(420,470,figure_id["F_WAIT05"],true);
+	DrawGraph(880,450,figure_id["F_WAIT05"],true);
+
+	//以下でライトの点滅パターンを制御しましょう
+	switch ((draw_timer/40)%10){
+	case 0:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 1:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 2:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 3:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 4:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_CLIGHT1"],true);
+		break;
+	case 5:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 6:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_CLIGHT1"],true);
+		break;
+	case 7:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	case 8:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_ELIGHT1"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_ILIGHT1"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_CLIGHT1"],true);
+		break;
+	case 9:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	default:
+		DrawRotaGraph(300,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(500,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(700,100,0.3,0,figure_id["F_LIGHT0"],true);
+		DrawRotaGraph(900,100,0.3,0,figure_id["F_LIGHT0"],true);
+		break;
+	}
+	draw_timer++;
 	return true;
 }
 
+CWait::CWait(){
+	draw_timer=0;
+	mode=1;
+}
+
 bool CKamifubuki::draw(){
-	DrawExtendGraph(0,0,1500,750,kamifubuki[(kamitimer%120)/5],true);
-	kamitimer++;
+	DrawExtendGraph(0,0,1500,750,kamifubuki[(draw_timer%120)/5],true);
+	draw_timer++;
 	return  true;
 }
 
 CKamifubuki::CKamifubuki(){
-	kamitimer=0;
+	draw_timer=0;
 }
 
 CScore_info_enemy::CScore_info_enemy(){

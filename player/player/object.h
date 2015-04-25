@@ -35,7 +35,7 @@ extern int thunder[10];
 //紙ふぶき
 extern int kamifubuki[24];
 
-#define LEFT_WINDOW_WIDTH 150
+#define LEFT_WINDOW_WIDTH 175
 
 enum DRAW_LAYER{ //描画レイヤー 下に行くほど前面
 	EXPLOSION_LAYER,

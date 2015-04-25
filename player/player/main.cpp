@@ -171,6 +171,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	double charging_time; // 弾丸補充開始からの経過時間
 	bool bullet_charging_flag = false; // 弾丸補充開始フラグ
 
+	int back=LoadGraph("image/back.png");
 
 	// メインループ
 	while(1){
@@ -205,6 +206,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
+
+			DrawGraph(0,0,back,false);
 
 
 			// 読みこんだグラフィックを拡大描画

@@ -349,3 +349,15 @@ bool CKamifubuki::draw(){
 CKamifubuki::CKamifubuki(){
 	draw_timer=0;
 }
+
+bool CMovie::draw(){
+	DrawExtendGraph(0,0,1349,729,figure_id[name],false);
+	return GetMovieStateToGraph(figure_id[name]);
+}
+
+CMovie::CMovie(std::string name_){
+	name=name_;
+	SeekMovieToGraph( figure_id[name], 0 ) ;
+	PlayMovieToGraph(figure_id[name]);
+	
+}

@@ -3,8 +3,10 @@
 #include "object.h"
 #include "image_processing.h"
 #include "explosion.h"
+#include <string>
 
 //細かいクラスはここにかき集めている
+
 
 //残り時間描画クラス
 class CSystem_timer : public CObject {
@@ -116,3 +118,9 @@ public:
 	 bool draw();
 };
 
+class CMovie:public CObject{
+	std::string name;
+public:
+	CMovie(std::string name_);
+	bool draw();
+};

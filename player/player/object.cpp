@@ -119,7 +119,8 @@ void CObject::load(){
 	figure_id["F_ILIGHT1"]=LoadGraph("image/Ilight1.png");
 	figure_id["F_CLIGHT1"]=LoadGraph("image/Clight1.png");
 
-
+	//movie
+	figure_id["M_IWAMI"]=LoadGraph("movie/iwami.avi");
 }
 
 bool CObject::draw(){

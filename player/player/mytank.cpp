@@ -7,6 +7,7 @@
 #include<stdlib.h>
 
 #define ENEMY_MARGIN 100
+#define FOCUS_SPEED 15
 
 bool CMytank::draw() {
 
@@ -155,12 +156,18 @@ void CMytank::check_focus(){
 				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy0->lockon = true;
 				}
+				if(0 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
+				}
 			} else enemy0->lockon = false;
 		}
 		if(id != 1){
 			if(enemy1->get_x() - ENEMY_MARGIN < focus_x && enemy1->get_x() + ENEMY_MARGIN > focus_x && enemy1->get_y() -ENEMY_MARGIN < focus_y && enemy1->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy1->lockon = true;
+				}
+				if(1 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
 				}
 			} else enemy1->lockon = false;
 		}
@@ -169,12 +176,18 @@ void CMytank::check_focus(){
 				if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy2->lockon = true;
 				}
+				if(2 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
+				}
 			} else enemy2->lockon = false;
 		}
 		if(id != 3){
 			if(enemy3->get_x() - ENEMY_MARGIN < focus_x && enemy3->get_x() + ENEMY_MARGIN > focus_x && enemy3->get_y() -ENEMY_MARGIN < focus_y && enemy3->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy3->lockon = true;
+				}
+				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+					enemy1->lockon = false;
 				}
 			} else enemy3->lockon = false;
 		}
@@ -354,6 +367,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -396,6 +410,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 0:
 						enemy0->attacked(bullet_score);
@@ -438,6 +453,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -479,6 +495,7 @@ void CMytank::get_msg(){
 					}
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
+					CEnemy::just_before_shooted = player_to;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -623,16 +640,20 @@ void CMytank::set_game_status(GAME_STATUS game_status_){
 
 //my test　引数分だけ弾をチャージ
 void CMytank::bullet_charge(int charge){
-
+	//弾数がMAXまで補充されていない時
 	if(num_bullet < bullet_image->max_bullet_num){
-		PlaySoundMem( sound_id["S_GET"] , DX_PLAYTYPE_BACK ) ;
+		//音声
+		PlaySoundMem( sound_id["S_GET"] , DX_PLAYTYPE_BACK );
+		//エフェクト
 		auto up_effect = make_shared<CUp_effect>();
 		CObject::register_object(up_effect,DRAW_LAYER::IMFOMATION_LAYER);
 	}
-
-num_bullet += charge;
-if(num_bullet > bullet_image->max_bullet_num) num_bullet = bullet_image->max_bullet_num;
-bullet_image->update_num_bullet(num_bullet);//残弾数反映
+	num_bullet += charge;
+	
+	//弾数がMAX以上の時
+	if(num_bullet >= bullet_image->max_bullet_num) num_bullet = bullet_image->max_bullet_num;
+	//残弾数反映
+	bullet_image->update_num_bullet(num_bullet);
 }
 
 
@@ -687,4 +708,15 @@ void CMytank::show_focus(){
 	if(id!=1)enemy1->countdown_finish();
 	if(id!=2)enemy2->countdown_finish();
 	if(id!=3)enemy3->countdown_finish();
+};
+
+
+void CMytank::focus_to_up(){
+	if(focus_y < 10) return;
+	focus_y -= FOCUS_SPEED;
+};
+
+void CMytank::focus_to_down(){
+	if(focus_y > 720) return;
+	focus_y += FOCUS_SPEED;
 };

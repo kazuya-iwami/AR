@@ -28,6 +28,7 @@ public:
 	int score;
 	bool exist;
 	bool lockon;
+	static int just_before_shooted; // 直前にプレイヤーが撃ったenemyのidが入る
 	bool countdown_finish_flag;
 	int map_x;
 	int map_y;
@@ -86,13 +87,13 @@ public:
 	bool draw();
 };
 
-/*rain
-class CRain:public CObject{
+//thunder
+class CThunder:public CObject{
 public:
-	CRain();
+	CThunder();
 	bool draw();
 };
-*/
+
 
 class CMap:public CObject {
 public:

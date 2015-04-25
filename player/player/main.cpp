@@ -21,15 +21,14 @@
 
 using namespace std;
 
-#define FOCUS_SPEED 8
 #define GAME_TIME 30 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
 #define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
 #define USE_MAP_CAMERA_FLAG 0 //0:マップカメラ
 
-#define PLAYER_NM 3	//自分のプレイヤー番号
-#define IP_ADDRESS "172.16.100.41"	//IPアドレス
+#define PLAYER_NM 0	//自分のプレイヤー番号 0～3
+#define IP_ADDRESS "172.16.100.33"	//IPアドレス
 
 
 
@@ -166,6 +165,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	std::thread th(image_get_process); //映像取得、処理用スレッド開始
 
 	
+	clock_t charge_start_time, charge_end_time; // 弾丸補充開始,終了時間
+	double charging_time; // 弾丸補充開始からの経過時間
+	bool bullet_charging_flag = false; // 弾丸補充開始フラグ
 
 	// メインループ
 	while(1){
@@ -257,98 +259,122 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					speed = _T("half");
 				}
 
-				/*
-				//各キーを押し続けるとその動作をする。
-				if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
-				//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
-				mytank->move(_T("forward"), speed);
-				}
-				if(  key_buf[ KEY_INPUT_DOWN ] == 1 && key_prev_buf[ KEY_INPUT_DOWN] == 0 ){
-				//mytank->set_vel(-1,-1);
-				mytank->move(_T("backward"), speed);
-				}
-				if(  key_buf[ KEY_INPUT_LEFT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
-				//mytank->set_vel(-1,1);
-				mytank->move(_T("left"), speed);
-				}
-				if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
-				//mytank->set_vel(1,-1);
-				mytank->move(_T("right"), speed);
-				}
-				//各キーを離したらstop
-				if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 
-				(key_buf[ KEY_INPUT_DOWN ] == 0 && key_prev_buf[ KEY_INPUT_DOWN] == 1) ||
-				(key_buf[ KEY_INPUT_LEFT ] == 0 && key_prev_buf[ KEY_INPUT_LEFT] == 1) ||
-				(key_buf[ KEY_INPUT_RIGHT ] == 0 && key_prev_buf[ KEY_INPUT_RIGHT] == 1) ){
-				mytank->move(_T("stop"), speed);
-				}
-				*/
-				//bullet生成
-				if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
-					mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
-				}
-				//テスト用　3を押したタイミングで3D球(Bullet)生成
-				if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
-					auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
-					CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
-				}
+		
+				/* 弾丸補充中は動作しない処理ここから */
+				if (!bullet_charging_flag) {
+
+					//各キーを押し続けるとその動作をする。
+					if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
+					//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
+					mytank->move(_T("forward"), speed);
+					}
+					if(  key_buf[ KEY_INPUT_DOWN ] == 1 && key_prev_buf[ KEY_INPUT_DOWN] == 0 ){
+					//mytank->set_vel(-1,-1);
+					mytank->move(_T("backward"), speed);
+					}
+					if(  key_buf[ KEY_INPUT_LEFT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
+					//mytank->set_vel(-1,1);
+					mytank->move(_T("left"), speed);
+					}
+					if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
+					//mytank->set_vel(1,-1);
+					mytank->move(_T("right"), speed);
+					}
+					//各キーを離したらstop
+					if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 
+					(key_buf[ KEY_INPUT_DOWN ] == 0 && key_prev_buf[ KEY_INPUT_DOWN] == 1) ||
+					(key_buf[ KEY_INPUT_LEFT ] == 0 && key_prev_buf[ KEY_INPUT_LEFT] == 1) ||
+					(key_buf[ KEY_INPUT_RIGHT ] == 0 && key_prev_buf[ KEY_INPUT_RIGHT] == 1) ){
+					mytank->move(_T("stop"), speed);
+					}
+					
+					//bullet生成
+					if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
+						mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
+					}
+					//テスト用　3を押したタイミングで3D球(Bullet)生成
+					if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
+						auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
+						CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
+					}
 
 
-				//テスト用　Eを押したタイミングでExprosion生成
-				if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
-					auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
-					CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
-				}
-				//テスト用　1を押したタイミングでExplosion生成
-				if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
-					auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
-					CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
-				}
-				//テスト用　Iを押したタイミングでItem生成
-				if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
-					mytank->use_item();
-				}
+					//テスト用　Eを押したタイミングでExprosion生成
+					if(  key_buf[ KEY_INPUT_E ] == 1 && key_prev_buf[ KEY_INPUT_E] == 0){
+						auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_NOMAL);
+						CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
+					}
+					//テスト用　1を押したタイミングでExplosion生成
+					if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
+						auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
+						CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
+					}
+					//テスト用　Iを押したタイミングでItem生成
+					if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
+						mytank->use_item();
+					}
+	
+					//my test
+					if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
+						auto fire = make_shared<CFire>();
+						CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
+					}
+	
+				
+					if(  key_buf[ KEY_INPUT_T ] == 1 && key_prev_buf[ KEY_INPUT_T] == 0){
+						auto thunder =make_shared<CThunder>();
+					CObject::register_object(thunder,DRAW_LAYER::EXPLOSION_LAYER);
+					}
+					
+					/*************
+					上下に照準固定
+					**************
+					//テスト用　Dを押すとカーソルが右に
+					if(  key_buf[ KEY_INPUT_D ] == 1){
+						mytank->focus_x += FOCUS_SPEED;
+					}
+	
+					//テスト用　Aを押すとカーソルが左に
+					if(  key_buf[ KEY_INPUT_A ] == 1){
+						mytank->focus_x -=  FOCUS_SPEED;
+					}
+					*/
+					//テスト用　Wを押すとカーソルが上に
+					if(  key_buf[ KEY_INPUT_W ] == 1 ){
+						mytank->focus_to_up();
+					}
+	
+					//テスト用　Sを押すとカーソルが下に
+					if(  key_buf[ KEY_INPUT_S ] == 1){ 
+						mytank->focus_to_down();
+					}
 
-				//my test
-				if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
-					auto fire = make_shared<CFire>();
-					CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
-				}
-				if(  key_buf[ KEY_INPUT_2 ] == 1 && key_prev_buf[ KEY_INPUT_2] == 0){
-					mytank->bullet_charge(2);
-				}
-				/*
-				if(  key_buf[ KEY_INPUT_R ] == 1 && key_prev_buf[ KEY_INPUT_R] == 0){
-				auto rain =make_shared<CRain>();
-				CObject::register_object(rain,DRAW_LAYER::EXPLOSION_LAYER);
-				}
-				*/
+					//テスト用　とりあえずX押したら画面が振動するよ
+					if(key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0){
+						mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
+					}
 
-				//テスト用　Dを押すとカーソルが右に
-				if(  key_buf[ KEY_INPUT_D ] == 1){
-					mytank->focus_x += FOCUS_SPEED;
 				}
+				/* 弾丸補充中動作しない処理ここまで */
 
-				//テスト用　Wを押すとカーソルが上に
-				if(  key_buf[ KEY_INPUT_W ] == 1 ){
-					mytank->focus_y -=  FOCUS_SPEED;
+				/* 弾丸補充処理ここから */
+				if(  key_buf[ KEY_INPUT_2 ] == 1){
+					if (!bullet_charging_flag) { // 弾丸補充まだ開始していなければ
+						charge_start_time = time(NULL);
+						bullet_charging_flag = true;
+					} else {
+						charge_end_time = time(NULL);
+						charging_time = difftime(charge_end_time, charge_start_time);
+						if (2 <= charging_time) { // 補充開始から2秒以上"2"を押し続けていれば
+							mytank->bullet_charge(10);
+						}
+					}
 				}
-
-				//テスト用　Aを押すとカーソルが左に
-				if(  key_buf[ KEY_INPUT_A ] == 1){
-					mytank->focus_x -=  FOCUS_SPEED;
+				if ( key_buf[ KEY_INPUT_2 ] == 0 ) { // 2を離していれば、弾丸補充開始前の状態にする
+					bullet_charging_flag = false;
 				}
+				/* 弾丸補充処理ここまで */
 
-				//テスト用　Sを押すとカーソルが下に
-				if(  key_buf[ KEY_INPUT_S ] == 1){ 
-					mytank->focus_y +=  FOCUS_SPEED;
-				}
-
-				//テスト用　とりあえずX押したら画面が振動するよ
-				if(key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0){
-
-					mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
-				}
 			}
 
 

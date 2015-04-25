@@ -24,7 +24,9 @@ using namespace std;
 #define GAME_TIME 30 //プレー時間　20秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
-#define USE_CAMERA_FLAG 1   //0:画像 1:カメラ 2:ラズパイ
+#define USE_CAMERA_FLAG 2
+
+//0:画像 1:カメラ 2:ラズパイ
 
 
 #define PLAYER_NM 0	//自分のプレイヤー番号
@@ -99,7 +101,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	}else if(USE_CAMERA_FLAG == 2){
 		//ラズパイからの映像取得用
-		const std::string videoStreamAddress =std::string("http://pi")+RASPI_IP_ADDRESS+":8080/?action=stream.mjpeg";
+		const std::string videoStreamAddress =std::string("http://")+RASPI_IP_ADDRESS+":8080/?action=stream.mjpeg";
 
 		if(!vcap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
 			std::cout << "Error opening video stream or file" << std::endl;

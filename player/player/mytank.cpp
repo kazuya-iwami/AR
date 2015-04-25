@@ -39,8 +39,12 @@ bool CMytank::draw() {
 	DrawOriginalString(800+LEFT_WINDOW_WIDTH,100,1.0,22,"SCORE:"+to_string(score));
 
 	//HP表示
-	DrawOriginalString(800+LEFT_WINDOW_WIDTH,200,1.0,22,"HP:"+to_string(HP));
-
+	//DrawOriginalString(800+LEFT_WINDOW_WIDTH,200,1.0,22,"HP:"+to_string(HP));
+	int i;
+	for(i=0;i<HP;i++){
+		//DrawGraph(700+60*i+LEFT_WINDOW_WIDTH,670,figure_id["F_HP"],true);
+		DrawGraph(10+60*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
+	}
 	
 
 	//アイテム枠表示
@@ -52,7 +56,7 @@ bool CMytank::draw() {
 
 CMytank::CMytank() {
 	//初期化
-	score = 0;
+	score = 10;
 	HP = 3;//最初のHPは3
 	viability_status = VIABILITY_STATUS::ALIVE;//最初の状態は生存
 	num_bullet = 10; //残弾10こ

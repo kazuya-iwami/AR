@@ -50,6 +50,8 @@ class CMytank : public CObject, public CNetwork {
 	int map_x;
 	int map_y;
 	bool attackable;
+	int enemy_x;
+	int enemy_y;
 
 public:
 

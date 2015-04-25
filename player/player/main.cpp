@@ -142,6 +142,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	SetUseASyncLoadFlag(TRUE);
 	CObject::load();//すべての画像はこの中で読み込む
+	int back=LoadGraph("image/back.png");
 	SetUseASyncLoadFlag(FALSE);
 
 	while(GetASyncLoadNum() > 0){ //全て読み込むまで次の動作行わない
@@ -171,7 +172,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	double charging_time; // 弾丸補充開始からの経過時間
 	bool bullet_charging_flag = false; // 弾丸補充開始フラグ
 
-	int back=LoadGraph("image/back.png");
+	
 
 	// メインループ
 	while(1){
@@ -207,8 +208,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
 
+			draw_mtx.lock(); //排他的処理
 			DrawGraph(0,0,back,false);
-
+			draw_mtx.unlock();
 
 			// 読みこんだグラフィックを拡大描画
 			draw_mtx.lock(); //排他的処理

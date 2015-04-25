@@ -51,7 +51,10 @@ bool CMytank::draw() {
 	//DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
 
 	//man
-	DrawRotaGraph(80,600,1.0,0,figure_id["F_MAN"],true);
+	double kakudo;
+	if(draw_timer%40 < 20) kakudo = -0.5+(draw_timer%40)/20.0;
+	else kakudo = 0.5-(draw_timer%40-20)/20.0;
+	DrawRotaGraph(80,600,1.0,kakudo,figure_id["F_MAN"],true);
 	
 	return true;
 };

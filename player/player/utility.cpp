@@ -381,8 +381,11 @@ CMovie::CMovie(std::string name_){
 }
 
 void CMovie::init(){
-	SeekMovieToGraph(figure_id[name],0) ;
-	PlayMovieToGraph(figure_id[name]);
+	SeekMovieToGraph(figure_id[name],0);
+
+	if(GetMovieStateToGraph(figure_id[name]) == 0){
+		PlayMovieToGraph(figure_id[name]);
+	}
 }
 
 CScore_info_enemy::CScore_info_enemy(){

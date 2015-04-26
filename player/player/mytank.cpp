@@ -49,7 +49,6 @@ bool CMytank::draw() {
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 	//HP表示
-	//DrawOriginalString(800+LEFT_WINDOW_WIDTH,200,1.0,22,"HP:"+to_string(HP));
 	int i;
 	for(i=0;i<HP;i++){
 		DrawGraph(10+93*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
@@ -753,27 +752,7 @@ void CMytank::finish(){
 	//描画リストの要素をすべて削除
 	CObject::drawlist.clear();
 
-		
-	int result[4];
-	switch(id){
-	case 0:{
-		result[0]=score; result[1]=enemy1->score; result[2]=enemy2->score; result[3]=enemy3->score;
-		break;
-		   }
-	case 1:{
-		result[0]=enemy0->score; result[1]=score; result[2]=enemy2->score; result[3]=enemy3->score;
-		break;
-		}
-	case 2:{
-		result[0]=enemy0->score; result[1]=enemy1->score; result[2]=score; result[3]=enemy3->score;
-		break;
-	}
-	case 3:{
-		result[0]=enemy0->score; result[1]=enemy1->score; result[2]=enemy2->score; result[3]=score;
-		break;
-		   }
-	}
-	auto finish = make_shared<CFinish>(result);
+	auto finish = make_shared<CFinish>(score_info->get_rank_info());
 	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);
 	auto kamifubuki=make_shared<CKamifubuki>();
 	CObject::register_object(kamifubuki,DRAW_LAYER::IMFOMATION_LAYER);

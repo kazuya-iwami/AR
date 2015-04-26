@@ -411,12 +411,20 @@ void CScore_Info::update_score(int score0,int score1, int score2,int score3){
 
 }
 bool CScore_Info::draw(){
-	//点数ソートしてrankに反映
+	//点数をセット
 	vector<pair<int,int>> tmp_rank;
 	for(int i=0;i<4;i++){
 		tmp_rank.push_back(pair<int,int>(score_info_enemy[i].score,i));
 	}
-	sort(tmp_rank.begin(), tmp_rank.end(), greater<pair<int, int> >() );
+	//点数ソート
+	sort(tmp_rank.begin(), tmp_rank.end(), [](const pair<int, int>& left, const pair<int, int>& right){
+		if (left.first != right.first) //同じでないなら点数の高い順に
+			return left.first > right.first;
+		else //同じならid(1P2P3P4P)の若い順に
+			return left.second < right.second;
+	});
+
+	//rankに反映
 	for(int i=0;i<4;i++){
 		score_info_enemy[tmp_rank[i].second].rank = i;
 	}
@@ -443,4 +451,3 @@ bool CScore_Info::draw(){
 
 
 }
-

@@ -146,6 +146,5 @@ public:
 	CScore_Info(int mytank_id);
 	void update_score(int score0,int score1, int score2,int score3);
 	bool draw();// 描画とともに動かす
-	
 };
 

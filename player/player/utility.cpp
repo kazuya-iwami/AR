@@ -193,12 +193,8 @@ bool CUp_effect::draw(){
 }
 
 
-CFinish :: CFinish(int result_[4]){
-	int i;
-	for(i=0;i<4;i++){
-	result.push_back(pair<int, int>(result_[i],i+1));//点数、プレイヤーの順
-	}
-	sort(result.begin(), result.end(), greater<pair<int, int> >() );
+CFinish :: CFinish(vector<pair<int,int> > result_){
+	result = result_;
 }
 
 
@@ -207,9 +203,9 @@ DrawGraph(0,0,figure_id["F_FINISH"],false);
 int i;
 
 SetDrawBlendMode(DX_BLENDMODE_SUB,200);
-DrawOriginalString(300,85,2.0,48," player "+to_string(result[0].second)+"\t\t\t\t\t"+to_string(result[0].first));
+DrawOriginalString(300,85,2.0,48," player "+to_string(result[0].second+1)+"\t\t\t\t\t"+to_string(result[0].first));
 for(i=1;i<4;i++){
-		DrawOriginalString(560,170+100*i,1.0,24," player "+to_string(result[i].second)+"\t\t\t\t\t\t\t"+to_string(result[i].first));
+		DrawOriginalString(560,170+100*i,1.0,24," player "+to_string(result[i].second+1)+"\t\t\t\t\t\t\t"+to_string(result[i].first));
 	}
 SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
@@ -428,6 +424,7 @@ bool CScore_Info::draw(){
 	for(int i=0;i<4;i++){
 		score_info_enemy[tmp_rank[i].second].rank = i;
 	}
+	rank_info = tmp_rank;
 
 	//毎回rankとinfo_yがずれていると動かす
 	for(int i=0;i<4;i++){

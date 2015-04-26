@@ -86,7 +86,7 @@ public:
 class CFinish:public CObject{
 public:
 	std::vector<pair<int,int> > result;
-	CFinish(int result_[4]);
+	CFinish(std::vector<pair<int,int> > result_);
 	bool draw();
 };
 
@@ -140,11 +140,13 @@ class CScore_Info:public CObject {
 private:
 	
 	CScore_info_enemy score_info_enemy[4];
+	vector<pair<int, int> > rank_info;
 	int mytank_id;
 
 public:
 	CScore_Info(int mytank_id);
 	void update_score(int score0,int score1, int score2,int score3);
+	vector<pair<int, int> > get_rank_info(){ return rank_info; };
 	bool draw();// 描画とともに動かす
 };
 

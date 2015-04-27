@@ -51,8 +51,9 @@ bool CMytank::draw() {
 	//HP表示
 	int i;
 	for(i=0;i<HP;i++){
-		DrawGraph(10+93*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
+		DrawGraph(14+96*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
 	}
+	DrawGraph(0+LEFT_WINDOW_WIDTH,9,figure_id["F_HPFRAME"],true);
 	
 
 	//アイテム枠表示

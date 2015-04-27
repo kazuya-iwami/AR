@@ -108,7 +108,12 @@ class CWait:public CObject{
 public:
 	bool draw();
 	CWait();
+	void update(const char key_buf[256]);
+	void play_init();
 	int mode;
+	int speed,hit;
+	bool bullet,enemy;
+	int bullet_x,bullet_y,enemy_x,enemy_y;
 };
 
 //結果発表で紙ふぶき飛ばしたいよね

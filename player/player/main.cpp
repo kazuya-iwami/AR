@@ -198,7 +198,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
 				mytank->start();
 			}
-			else if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
+			else if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0 && wait->mode > 0){
 				if(wait->mode <5) wait->mode += 1;
 			}
 			else if(  key_buf[ KEY_INPUT_M ] == 1 && key_prev_buf[ KEY_INPUT_M] == 0){
@@ -209,7 +209,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				iwami->init();
 				draw_mtx.unlock();
 			}
-			
+			else if(  key_buf[ KEY_INPUT_P ] == 1 && key_prev_buf[ KEY_INPUT_P] == 0 && wait->mode > 0){
+				wait->play_init();
+				wait->mode=0;
+			}
+			if(wait->mode==0) wait->update(key_buf);
 			
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
 

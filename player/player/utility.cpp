@@ -247,19 +247,14 @@ bool CWait::draw(){
 
 	DrawGraph(300,630,figure_id["F_WAIT05"],true);
 	DrawGraph(620,660,figure_id["F_WAIT05"],true);
-
-	DrawGraph(draw_timer%1800-350,470,figure_id["F_WAIT02"],true);
-	DrawRotaGraph(draw_timer%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
-	DrawRotaGraph(draw_timer%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
 	
 	int i;
-	for(i=1;i<mode;i++){
+	for(i=0;i<mode;i++){
 		DrawGraph((draw_timer-i*339)%1800-350,470,figure_id["F_WAIT02"],true);
 		DrawRotaGraph((draw_timer-i*339)%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
 		DrawRotaGraph((draw_timer-i*339)%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
 	}
 	
-
 	DrawGraph(420,470,figure_id["F_WAIT05"],true);
 	DrawGraph(880,450,figure_id["F_WAIT05"],true);
 
@@ -346,6 +341,17 @@ bool CWait::draw(){
 		
 		break;
 	}
+
+	if(mode==0){
+		DrawGraph(x-220,y,figure_id["F_WAIT02"],true);
+		DrawRotaGraph(x-100,y+170,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
+		DrawRotaGraph(x,y+170,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
+		if(bullet) DrawRotaGraph(bullet_x,bullet_y,0.7,draw_timer/6+1,figure_id["F_WAIT03"],true);
+		if(enemy) DrawRotaGraph(enemy_x,enemy_y,0.7,hit/18.0,figure_id["F_MAN"],true,true);
+		if(hit>0) DrawExtendGraph(enemy_x-50,enemy_y-30,enemy_x+40,enemy_y+70,fire[hit%5],true);
+		draw_timer++;
+	}
+
 	draw_timer += mode;
 	
 	return true;
@@ -354,6 +360,51 @@ bool CWait::draw(){
 CWait::CWait(){
 	draw_timer=0;
 	mode=1;
+}
+
+void CWait::play_init(){
+	x=600;y=420;
+	speed=3;
+	bullet=false;
+	enemy=true;
+	enemy_x=1200;enemy_y=250;
+	hit=0;
+}
+
+void CWait::update(const char key_buf[256]){
+	if(key_buf[D_DIK_W]) y -=speed;
+	if(key_buf[D_DIK_S]) y +=speed;
+	if(key_buf[D_DIK_D]) x +=speed;
+	if(key_buf[D_DIK_A]) x -=speed;
+
+	if(key_buf[D_DIK_SPACE] && bullet == false){
+		bullet_x=x+140;
+		bullet_y=y+70;
+		bullet=true;
+	}
+
+	if(bullet){
+		bullet_x +=8;
+		if(bullet_x > 1400) bullet=false;
+		if(enemy && hit==0 && bullet_x < enemy_x +10 && bullet_x > enemy_x -10 &&
+			bullet_y < enemy_y +60 && bullet_y > enemy_y -60){
+				bullet=false;
+				hit=1;
+		}
+	}
+	if(enemy){
+		if(hit>0){
+			hit++;
+			if(hit > 20){
+				enemy=0;
+				hit=0;
+			}
+		}else if(draw_timer%65 == 0){
+			enemy_x = rand()%200 +1050;
+			enemy_y = rand()%600 + 65;
+		}
+	}
+
 }
 
 bool CKamifubuki::draw(){

@@ -94,8 +94,6 @@ CMytank::CMytank() {
 	shake_y=0;
 	draw_timer=0;
 	attackable = false;
-	enemy_x = -1;
-	enemy_y = -1;
 	is_reloading = false;
 	is_stunned = false;
 
@@ -172,13 +170,6 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);
 	CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
 
-	//攻撃成功時、相手は爆発
-	if(attackable){
-		auto explosion = make_shared<CExplosion>(enemy_x, enemy_y, EXPLOSION_KIND::EXPLOSION_NOMAL);
-		CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
-	}
-
-
 	if (id != 0 && enemy0->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 0, (int)BULLET_KIND::BULLET_NOMAL));
 	if (id != 1 && enemy1->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 1, (int)BULLET_KIND::BULLET_NOMAL));
 	if (id != 2 && enemy2->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 2, (int)BULLET_KIND::BULLET_NOMAL));
@@ -187,16 +178,12 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 }
 
 void CMytank::check_focus(){
-	enemy_x = -1;
-	enemy_y = -1;
 
 	if(focus_flag){
 		if(id != 0){
 			if(enemy0->get_x() - ENEMY_MARGIN < focus_x && enemy0->get_x() + ENEMY_MARGIN > focus_x && enemy0->get_y() -ENEMY_MARGIN < focus_y && enemy0->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy0->lockon = true;
-					enemy_x = enemy0->get_x();
-					enemy_y = enemy0->get_y();
 				}
 				if(0 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy0->lockon = false;
@@ -210,8 +197,6 @@ void CMytank::check_focus(){
 			if(enemy1->get_x() - ENEMY_MARGIN < focus_x && enemy1->get_x() + ENEMY_MARGIN > focus_x && enemy1->get_y() -ENEMY_MARGIN < focus_y && enemy1->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy1->lockon = true;
-					enemy_x = enemy1->get_x();
-					enemy_y = enemy1->get_y();
 				}
 				if(1 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy1->lockon = false;
@@ -225,8 +210,6 @@ void CMytank::check_focus(){
 			if(enemy2->get_x() - ENEMY_MARGIN < focus_x && enemy2->get_x() + ENEMY_MARGIN > focus_x && enemy2->get_y() -ENEMY_MARGIN < focus_y && enemy2->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy2->lockon = true;
-					enemy_x = enemy2->get_x();
-					enemy_y = enemy2->get_y();
 				}
 				if(2 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy2->lockon = false;
@@ -240,8 +223,6 @@ void CMytank::check_focus(){
 			if(enemy3->get_x() - ENEMY_MARGIN < focus_x && enemy3->get_x() + ENEMY_MARGIN > focus_x && enemy3->get_y() -ENEMY_MARGIN < focus_y && enemy3->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy3->lockon = true;
-					enemy_x = enemy3->get_x();
-					enemy_y = enemy3->get_y();
 				}
 				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy3->lockon = false;

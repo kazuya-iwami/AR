@@ -48,7 +48,6 @@ class CMytank : public CObject, public CNetwork {
 	int map_x;
 	int map_y;
 	bool attackable;
-	int enemy_x, enemy_y;
 	int charge_start_time, charge_end_time; // 弾丸補充開始,終了時間
 	int stun_start_time, stun_end_time; // 敵の攻撃を受けた後の硬直開始時間,終了時間
 

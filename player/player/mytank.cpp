@@ -96,6 +96,7 @@ CMytank::CMytank() {
 	enemy_x = -1;
 	enemy_y = -1;
 	is_reloading = false;
+	is_stunned = false;
 
 	preflag=false;
 	focus_flag = false;
@@ -703,6 +704,8 @@ void CMytank::attacked(int score_){
 		HP -= score_;
 	}
 	score -= score_;
+	shake_start(SHAKE_STATUS::SMALL_SHAKE); // 画面振動
+	is_stunned = true; // 硬直フラグ
 }
 
 void CMytank::set_game_status(GAME_STATUS game_status_){
@@ -781,8 +784,21 @@ void CMytank::check_dead() {
 	}	
 }
 
-
-
+void CMytank::check_stun() {
+	int stunned_time; // 硬直開始からの経過時間
+	
+	if (!is_stunned) { // 硬直していなければ
+		stun_start_time = 0;
+		stun_end_time = 0;
+	} else {
+		stun_end_time++;
+		stunned_time = stun_end_time - stun_start_time;
+		if (1*30 < stunned_time) { // 硬直開始から1秒以上経っていれば
+			is_stunned = false;
+		}
+	}
+	return;
+}
 
 
 void CMytank::focus_to_up(){

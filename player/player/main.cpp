@@ -253,10 +253,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 
 				mytank->check_dead();
-
+				mytank->check_stun();
 		
 				/* 弾丸補充中は動作しない処理ここから */
-				if (!mytank->is_reloading && mytank->viability_status==ALIVE) {//死んでる場合も操作を許さない
+				if (!mytank->is_reloading && !mytank->is_stunned && mytank->viability_status==ALIVE) {//攻撃を受け硬直してる場合、死んでる場合も操作を許さない
 
 					//各キーを押し続けるとその動作をする。
 					if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
@@ -359,9 +359,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 					mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
 				}
-				//テスト用　Ｌを押すと自分のＨＰが減るよ
+				//テスト用　Ｌを押すと攻撃を受けるよ
 				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
-					mytank->lose_HP();
+					mytank->attacked(1);
 				}
 
 				//テスト用　H自分のポイント＋１

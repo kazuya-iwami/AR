@@ -49,9 +49,15 @@ void CObject::load(){
 
 	figure_id["F_RELOADING"]=LoadGraph("image/reloading.png");
 	figure_id["F_RELOADING_GAUGE"]=LoadGraph("image/reloading_gauge.png");
+	figure_id["F_RELOADING2"]=LoadGraph("image/reloading2.png");
+	figure_id["F_RELOADING_GAUGE2"]=LoadGraph("image/reloading2_gauge.png");
+
 	figure_id["F_BULLETNOKORI"]=LoadGraph("image/bullet_nokori.png");
 	figure_id["F_BULLETUSED"]=LoadGraph("image/bullet_used.png");
+
 	figure_id["F_REDBACK"]=LoadGraph("image/redback.png");
+	figure_id["F_BLACK"]=LoadGraph("image/back_black.png");
+
 	figure_id["F_FINISH"]=LoadGraph("image/finish.png");
 	figure_id["F_HP"]=LoadGraph("image/hp_gauge.png");
 	figure_id["F_HPFRAME"]=LoadGraph("image/hp_frame.png");

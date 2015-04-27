@@ -39,9 +39,10 @@ bool CMytank::draw() {
 	
 	//リロード画面表示
 	if(is_reloading){
-		DrawGraph(458, 370, figure_id["F_RELOADING"], true);
+		DrawGraph(LEFT_WINDOW_WIDTH, 0, figure_id["F_BLACK"], true);
+		DrawGraph(1350/2-456/2, 300, figure_id["F_RELOADING2"], true);
 		for(int i = 0; i < draw_timer; i++){
-			DrawGraph(464+i*7, 451, figure_id["F_RELOADING_GAUGE"], true);
+			DrawGraph(466+i*7, 382, figure_id["F_RELOADING_GAUGE2"], true);
 		}
 		draw_timer++;
 	}

@@ -78,6 +78,7 @@ void CObject::load(){
 	figure_id["F_WAIT06"]=LoadGraph("image/wait06.png");
 
 	figure_id["F_MAN"]=LoadGraph("image/man.png");
+	figure_id["F_SCORE"]=LoadGraph("image/back_card.png");
 
 	//マップで使うアイコン
 	figure_id["F_ICONRED"]=LoadGraph("image/iconred.png");

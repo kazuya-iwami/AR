@@ -487,13 +487,14 @@ bool CScore_Info::draw(){
 		}
 	}
 
-	SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 	//描画
 	for(int i=0;i<4;i++){
-		DrawOriginalString(900,score_info_enemy[i].info_y + 100,1.0,24,"+"+to_string(score_info_enemy[i].score)+"  "+to_string(i+1)+"P");
+		DrawGraph(920, score_info_enemy[i].info_y+10, figure_id["F_SCORE"], true);
 
+		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
+		DrawOriginalString(940,score_info_enemy[i].info_y + 18,1.0,24,"+"+to_string(score_info_enemy[i].score)+"  "+to_string(i+1)+"P");
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 	return true;
 

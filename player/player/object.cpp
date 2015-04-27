@@ -47,6 +47,13 @@ void CObject::load(){
 	figure_id["F_CURSUR"]=LoadGraph("image/cursur.png");
 	figure_id["F_CURSUR_ON"]=LoadGraph("image/cursur_on.png");
 
+	figure_id["F_CURSUR_OUT"]=LoadGraph("image/cursur/cursur_outside.png");
+	figure_id["F_CURSUR_IN"]=LoadGraph("image/cursur/cursur_inside.png");
+	figure_id["F_CURSUR_TRI"]=LoadGraph("image/cursur/cursur_triangle.png");
+	figure_id["F_CURSUR_ON_OUT"]=LoadGraph("image/cursur/cursur_on_outside.png");
+	figure_id["F_CURSUR_ON_IN"]=LoadGraph("image/cursur/cursur_on_inside.png");
+	figure_id["F_CURSUR_ON_TRI"]=LoadGraph("image/cursur/cursur_on_triangle.png");
+
 	figure_id["F_RELOADING"]=LoadGraph("image/reloading.png");
 	figure_id["F_RELOADING_GAUGE"]=LoadGraph("image/reloading_gauge.png");
 	figure_id["F_RELOADING2"]=LoadGraph("image/reloading2.png");

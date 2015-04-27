@@ -5,6 +5,7 @@
 #include "main.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include <cmath>
 #include <mutex>
 #include <thread>
 
@@ -23,20 +24,43 @@ bool CMytank::draw() {
 		if(id != 2 && enemy2->lockon ==true) attackable = true;
 		if(id != 3 && enemy3->lockon ==true) attackable = true;
 		if(attackable == true){//lockon状態
-			if(preflag==false){
+			if(!preflag){
 				preflag=true;
-				PlaySoundMem( sound_id["S_LOCK"] , DX_PLAYTYPE_BACK ) ;		
+				draw_timer = 0;
+			} 
+			if(preflag){
+				SetDrawBlendMode(DX_BLENDMODE_ADD,255);
+				if(draw_timer < 10){
+					double rate = 0.7 - draw_timer * 0.02;
+					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,rate,0,figure_id["F_CURSUR_OUT"],true);
+					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,rate,-draw_timer/3.5,figure_id["F_CURSUR_IN"],true);
+					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,rate, draw_timer/3.5,figure_id["F_CURSUR_TRI"],true);	
+				} else if(draw_timer < 40) {
+					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.58,	    0,figure_id["F_CURSUR_ON_OUT"],true);
+					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.58, 0.785,figure_id["F_CURSUR_ON_IN"],true);
+					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.58, 0.785,figure_id["F_CURSUR_ON_TRI"],true);
+				} else {
+					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.58, 0,figure_id["F_CURSUR_ON_OUT"],true);
+					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.58, -(draw_timer-40)/30.0+0.785,figure_id["F_CURSUR_ON_IN"],true);
+					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.58,  (draw_timer-40)/30.0+0.785,figure_id["F_CURSUR_ON_TRI"],true);
+				}
 			}
-			SetDrawBlendMode(DX_BLENDMODE_ADD,255);
+			/*　従来
 			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
+			*/
+			draw_timer++;
 		}else{//lockが外れている状態
 			preflag=false;
 			SetDrawBlendMode(DX_BLENDMODE_ADD,255);
-			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, 0,figure_id["F_CURSUR_OUT"],true);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,draw_timer/10.0,figure_id["F_CURSUR_IN"],true);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, 3.14*sin(draw_timer*0.07),figure_id["F_CURSUR_TRI"],true);
+			//　従来：DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 			draw_timer++;
 		}
 	}
-	
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
 	//リロード画面表示
 	if(is_reloading){
 		DrawGraph(LEFT_WINDOW_WIDTH, 0, figure_id["F_BLACK"], true);
@@ -46,8 +70,6 @@ bool CMytank::draw() {
 		}
 		draw_timer++;
 	}
-
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 	//HP表示
 	int i;

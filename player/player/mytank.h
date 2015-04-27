@@ -39,8 +39,6 @@ enum VIABILITY_STATUS { //生存状態
 
 class CMytank : public CObject, public CNetwork {
 	ITEM_KIND item_kind;
-	//VIABILITY_STATUS viability_status;//生存状態
-
 	int num_bullet; //残弾
 	OPERATION_STATUS ope_status; //操作用ステータス
 	int ope_timer; //操作用タイマー

@@ -85,6 +85,7 @@ void CObject::load(){
 	sound_id["S_KEIKOKU"]=LoadSoundMem("sound/keikoku.mp3");
 	sound_id["S_GET"]=LoadSoundMem("sound/get.mp3");
 	sound_id["S_LOCK"]=LoadSoundMem("sound/lock.mp3");
+	sound_id["S_ATTACKED"]=LoadSoundMem("sound/attacked.mp3");
 	//BGM
 	sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
 

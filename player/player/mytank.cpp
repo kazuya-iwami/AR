@@ -704,9 +704,11 @@ void CMytank::attacked(int score_){
 	if (HP > 0) {
 		HP -= score_;
 	}
+
 	score -= score_;
 	shake_start(SHAKE_STATUS::SMALL_SHAKE); // 画面振動
 	is_stunned = true; // 硬直フラグ
+	PlaySoundMem( sound_id["S_ATTACKED"] , DX_PLAYTYPE_BACK ); // 爆発音再生
 }
 
 void CMytank::set_game_status(GAME_STATUS game_status_){

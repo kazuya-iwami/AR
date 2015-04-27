@@ -82,6 +82,7 @@ void CObject::load(){
 
 	//上の効果音版
 	sound_id["S_BOMB"]=LoadSoundMem("sound/bomb1.mp3");
+	sound_id["S_EXPLOSION"]=LoadSoundMem("sound/explosion.wav");
 	sound_id["S_KEIKOKU"]=LoadSoundMem("sound/keikoku.mp3");
 	sound_id["S_GET"]=LoadSoundMem("sound/get.mp3");
 	sound_id["S_LOCK"]=LoadSoundMem("sound/lock.mp3");

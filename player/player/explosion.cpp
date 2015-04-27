@@ -14,6 +14,9 @@ bool CExplosion::draw(){
 
 	switch(kind){
 	case EXPLOSION_KIND::EXPLOSION_NOMAL :
+		if(draw_timer == 0){
+			 PlaySoundMem( sound_id["S_EXPLOSION"] , DX_PLAYTYPE_BACK );
+		}
 		if(draw_timer != 44){
 			// 爆発エフェクトの描画
 			DrawGraph(x-300 + LEFT_WINDOW_WIDTH, y-300, explosion[draw_timer], true);

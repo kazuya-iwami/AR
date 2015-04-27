@@ -122,9 +122,9 @@ void CEnemy::disconnect(){
 }
 
 void CEnemy::attacked(int score_){
-	//score -= score_;//撃たれてもsvoreは減らない
+	//score -= score_;//撃たれてもscoreは減らない
 	if (HP > 0) {//念のため
-	HP -= score_; //HPも撃たれたら減ります
+	HP -= score_; //HPは撃たれたら減ります
 	}
 	if(visible){
 		auto explosion = make_shared<CExplosion>(x , y, EXPLOSION_KIND::EXPLOSION_NOMAL);

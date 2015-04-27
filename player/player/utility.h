@@ -32,7 +32,7 @@ public:
 	bool exist;
 	bool lockon;
 	static int just_before_shooted; // 直前にプレイヤーが撃ったenemyのidが入る
-	bool countdown_finish_flag;
+	bool countdown_finish_flag; // 試合開始5秒間のカウントダウンが終了したか否か
 	int map_x;
 	int map_y;
 

@@ -99,9 +99,9 @@ bool CEnemy::draw(){
 		}else{ //切断されていたら
 			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
 		}
-		//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y , GetColor(255,255,255), "%dP", enemy_id);
 	}
-
+	// 視界に入っていないなら敵の位置情報をリセット
+	else if(countdown_finish_flag && !visible) x = y = -100;
 
 	return true;
 }

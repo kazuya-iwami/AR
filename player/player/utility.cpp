@@ -90,12 +90,13 @@ bool CEnemy::draw(){
 				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
 			}
 
-			if (enemy_id == CEnemy::just_before_shooted){
-				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
-			}
-			else if (HP == 0) {//死んでるときはlock-onできない
+			if (HP == 0) {//死んでるときはlock-onできない
 				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
 			}
+			else if (enemy_id == CEnemy::just_before_shooted){
+				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
+			}
+
 		}else{ //切断されていたら
 			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
 		}

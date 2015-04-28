@@ -111,9 +111,10 @@ public:
 	void update(const char key_buf[256]);
 	void play_init();
 	int mode;
-	int speed,hit;
-	bool bullet,enemy;
-	int bullet_x,bullet_y,enemy_x,enemy_y;
+	int speed;
+	bool bullet;
+	int bullet_x,bullet_y;
+	int ojisan_num;
 };
 
 //結果発表で紙ふぶき飛ばしたいよね
@@ -155,3 +156,14 @@ public:
 	bool draw();// 描画とともに動かす
 };
 
+class COjisan:public CObject{
+private:
+	int hit;
+	bool* bullet;
+	int* bullet_x;
+	int* bullet_y;
+	int* ojisan_num;
+public:
+	COjisan(int* bullet_x_,int* bullet_y_,bool *bullet_,int *ojisan_num_);
+	bool draw();
+};

@@ -347,8 +347,6 @@ bool CWait::draw(){
 		DrawRotaGraph(x-100,y+170,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
 		DrawRotaGraph(x,y+170,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
 		if(bullet) DrawRotaGraph(bullet_x,bullet_y,0.7,draw_timer/6+1,figure_id["F_WAIT03"],true);
-		if(enemy) DrawRotaGraph(enemy_x,enemy_y,0.7,hit/18.0,figure_id["F_MAN"],true,true);
-		if(hit>0) DrawExtendGraph(enemy_x-50,enemy_y-30,enemy_x+40,enemy_y+70,fire[hit%5],true);
 		draw_timer++;
 	}
 
@@ -366,9 +364,9 @@ void CWait::play_init(){
 	x=600;y=420;
 	speed=3;
 	bullet=false;
-	enemy=true;
-	enemy_x=1200;enemy_y=250;
-	hit=0;
+	auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num);
+	CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
+	ojisan_num=1;
 }
 
 void CWait::update(const char key_buf[256]){
@@ -382,29 +380,16 @@ void CWait::update(const char key_buf[256]){
 		bullet_y=y+70;
 		bullet=true;
 	}
+	if(key_buf[D_DIK_P] && ojisan_num <= 20){
+		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num);
+		CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
+		ojisan_num++;
+	}
 
 	if(bullet){
 		bullet_x +=8;
 		if(bullet_x > 1400) bullet=false;
-		if(enemy && hit==0 && bullet_x < enemy_x +10 && bullet_x > enemy_x -10 &&
-			bullet_y < enemy_y +60 && bullet_y > enemy_y -60){
-				bullet=false;
-				hit=1;
-		}
 	}
-	if(enemy){
-		if(hit>0){
-			hit++;
-			if(hit > 20){
-				enemy=0;
-				hit=0;
-			}
-		}else if(draw_timer%65 == 0){
-			enemy_x = rand()%200 +1050;
-			enemy_y = rand()%600 + 65;
-		}
-	}
-
 }
 
 bool CKamifubuki::draw(){
@@ -499,4 +484,40 @@ bool CScore_Info::draw(){
 	return true;
 
 
+}
+
+bool COjisan::draw(){
+	DrawRotaGraph(x,y,0.7,hit/18.0,figure_id["F_MAN"],true,true);
+	if(hit==0){
+		if(draw_timer % 60 == 0){
+			x = rand()%350 + 900;
+			y = rand()%600 + 65;
+		}
+		if(*bullet && *bullet_x < x +10 && *bullet_x > x -10 && *bullet_y < y +60 && *bullet_y > y -60){
+			hit=1;
+			*bullet = false;
+		}
+	}else{
+		DrawExtendGraph(x-50,y-30,x+40,y+70,fire[hit%5],true);
+		hit++;
+	}
+	
+	draw_timer++;
+
+	if(hit < 20) return true;
+	else{
+		*ojisan_num--;
+		return false;
+	}
+}
+
+COjisan::COjisan(int *bullet_x_,int *bullet_y_,bool *bullet_,int* ojisan_num_){
+	draw_timer=0;
+	bullet_x =bullet_x_;
+	bullet_y =bullet_y_;
+	bullet =bullet_;
+	ojisan_num =ojisan_num_;
+	x = rand()%350 + 900;
+	y = rand()%600 + 65;
+	hit=0;
 }

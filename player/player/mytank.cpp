@@ -52,9 +52,9 @@ bool CMytank::draw() {
 		}else{//lockが外れている状態
 			preflag=false;
 			SetDrawBlendMode(DX_BLENDMODE_ADD,255);
-			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, 0,figure_id["F_CURSUR_OUT"],true);
-			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,draw_timer/10.0,figure_id["F_CURSUR_IN"],true);
-			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, 3.14*sin(draw_timer*0.07),figure_id["F_CURSUR_TRI"],true);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,  0,figure_id["F_CURSUR_OUT"],true);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,  draw_timer/10.0,figure_id["F_CURSUR_IN"],true);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, -draw_timer/10.0,figure_id["F_CURSUR_TRI"],true);
 			//　従来：DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 			draw_timer++;
 		}

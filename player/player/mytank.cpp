@@ -211,7 +211,7 @@ void CMytank::check_focus(){
 				if(0 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy0->lockon = false;
 				}
-				if(enemy0->HP==0) {
+				if(VIABILITY_STATUS::DEAD == enemy0->viability_status) {
 					enemy0->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy0->lockon = false;
@@ -224,7 +224,7 @@ void CMytank::check_focus(){
 				if(1 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy1->lockon = false;
 				}
-				if(enemy1->HP==0) {
+				if(VIABILITY_STATUS::DEAD == enemy1->viability_status) {
 					enemy1->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy1->lockon = false;
@@ -237,7 +237,7 @@ void CMytank::check_focus(){
 				if(2 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy2->lockon = false;
 				}
-				if(enemy2->HP==0) {
+				if(VIABILITY_STATUS::DEAD == enemy2->viability_status) {
 					enemy2->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy2->lockon = false;
@@ -250,7 +250,7 @@ void CMytank::check_focus(){
 				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy3->lockon = false;
 				}
-				if(enemy3->HP==0) {
+				if(VIABILITY_STATUS::DEAD == enemy3->viability_status) {
 					enemy3->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy3->lockon = false;

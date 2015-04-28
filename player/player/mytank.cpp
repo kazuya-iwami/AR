@@ -669,19 +669,61 @@ void CMytank::get_msg(){
 			break;
 
 		case COMMAND_NAME::INFORM_DIE:
-			if (id == 0) {
-				break;
-			} 
+			if(player_from != id){ //死んだのが自分でなければ
+				switch(player_from){ //死んだ相手に対する処理
+					case 0:
+						{
+						enemy0->viability_status = VIABILITY_STATUS::DEAD;
+						break;
+						}
+					case 1:
+						{
+						enemy1->viability_status = VIABILITY_STATUS::DEAD;
+						break;
+						}
+					case 2:
+						{
+						enemy2->viability_status = VIABILITY_STATUS::DEAD;
+						break;
+						}
+					case 3:
+						{
+						enemy3->viability_status = VIABILITY_STATUS::DEAD;
+						break;
+						}
+
+				}
+			}
 			break;//lockon関係は別のところで処理
 
 		case COMMAND_NAME:: INFORM_REVIVE:
-			if (id == 0) {
-				viability_status = ALIVE;//生存状態の変更
-				HP=3;
-				score=0;
-				//データの初期化
-				break;//lockon関係は別のところで処理
-			} 
+			if(player_from != id){ //生き返ったのが自分でなければ
+				switch(player_from){ //生き返った相手に対する処理
+					case 0:
+						{
+						enemy0->viability_status = VIABILITY_STATUS::ALIVE;
+						break;
+						}
+					case 1:
+						{
+						enemy1->viability_status = VIABILITY_STATUS::ALIVE;
+						break;
+						}
+					case 2:
+						{
+						enemy2->viability_status = VIABILITY_STATUS::ALIVE;
+						break;
+						}
+					case 3:
+						{
+						enemy3->viability_status = VIABILITY_STATUS::ALIVE;
+						break;
+						}
+
+				}
+			}else{ // 生き返ったのが自分ならば
+				revive();
+			}
 			break;
 
 		default:
@@ -787,7 +829,7 @@ void CMytank::lose_HP() {
 void CMytank::check_dead() {
 	if (HP<= 0 && viability_status==VIABILITY_STATUS::ALIVE) {
 		send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
-		viability_status=DEAD;
+		viability_status=VIABILITY_STATUS::DEAD;
 	}	
 }
 
@@ -840,6 +882,12 @@ void CMytank::reloading(){
 		}
 	}
 	return;
+};
+
+void CMytank::revive(){
+	viability_status = VIABILITY_STATUS::ALIVE;//生存状態の変更
+	HP=3;
+	score=0;
 };
 
 void requestHttp_thread(tstring direction, tstring speed) {

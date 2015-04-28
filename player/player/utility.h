@@ -22,6 +22,12 @@ public:
 	bool get_countdown_finish_flag(){return countdown_finish_flag;}
 };
 
+
+enum VIABILITY_STATUS { //生存状態
+	ALIVE,
+	DEAD
+};
+
 //敵の位置情報管理クラス
 class CEnemy : public CImage_processer,public CObject {
 
@@ -29,6 +35,7 @@ public:
 	int enemy_id;
 	int score;
 	int HP;
+	VIABILITY_STATUS viability_status;//生存状態
 	bool exist;
 	bool lockon;
 	static int just_before_shooted; // 直前にプレイヤーが撃ったenemyのidが入る

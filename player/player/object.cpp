@@ -135,7 +135,12 @@ void CObject::load(){
 	figure_id["F_LIGHT_E"]=LoadGraph("image/denkyuE.png");
 	figure_id["F_LIGHT_I"]=LoadGraph("image/denkyuI.png");
 	figure_id["F_LIGHT_C"]=LoadGraph("image/denkyuC.png");
-	figure_id["F_LIGHT_0"]=LoadGraph("image/denkyu0.png");
+	figure_id["F_LIGHT_0"]=LoadGraph("image/denkyu0.png");	
+	figure_id["F_MINILIGHT_TOP"]=LoadGraph("image/minitop_light.png");
+	figure_id["F_MINILIGHT_E"]=LoadGraph("image/minidenkyuE.png");
+	figure_id["F_MINILIGHT_I"]=LoadGraph("image/minidenkyuI.png");
+	figure_id["F_MINILIGHT_C"]=LoadGraph("image/minidenkyuC.png");
+	figure_id["F_MINILIGHT_0"]=LoadGraph("image/minidenkyu0.png");
 
 	//movie
 	figure_id["M_IWAMI"]=LoadGraph("movie/iwami.avi");

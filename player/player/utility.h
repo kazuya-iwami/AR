@@ -174,3 +174,11 @@ public:
 	COjisan(int* bullet_x_,int* bullet_y_,bool *bullet_,int *ojisan_num_);
 	bool draw();
 };
+
+//EEICクラス
+class CEeic:public CObject{
+public:
+	CEeic();
+	int check[4];
+	bool draw();
+};

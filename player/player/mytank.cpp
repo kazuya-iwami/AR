@@ -138,6 +138,10 @@ CMytank::CMytank() {
 	map = map_;
 	CObject::register_object(map,DRAW_LAYER::IMFOMATION_LAYER);
 
+	auto eeic_ =make_shared<CEeic>();
+	eeic=eeic_;
+	CObject::register_object(eeic,DRAW_LAYER::IMFOMATION_LAYER);
+
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;

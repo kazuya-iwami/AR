@@ -68,6 +68,7 @@ public:
 	shared_ptr<CBullet_image> bullet_image;//残弾描画
 	shared_ptr<CMap> map;
 	shared_ptr<CScore_Info> score_info;
+	shared_ptr<CEeic> eeic;
 
 	CMytank();
 	void move(tstring direction, tstring speed);//移動

@@ -48,7 +48,7 @@ class CMytank : public CObject, public CNetwork {
 
 public:
 	int score;//撃墜数-被撃墜数
-
+	
 	int shaketimer;
 	int shakeflag;
 	int focus_x,focus_y;//照準の位置
@@ -59,6 +59,7 @@ public:
 
 	int HP;//ヒットポイント-なくなるといったん死ぬ
 	VIABILITY_STATUS viability_status;//生存状態
+	int hit_flag;
 
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;

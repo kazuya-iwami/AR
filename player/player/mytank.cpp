@@ -766,7 +766,6 @@ void CMytank::attacked(int score_){
 		hit_flag +=25;
 	}
 
-	score -= score_;
 	shake_start(SHAKE_STATUS::SMALL_SHAKE); // 画面振動
 	is_stunned = true; // 硬直フラグ
 	PlaySoundMem( sound_id["S_ATTACKED"] , DX_PLAYTYPE_BACK ); // 爆発音再生
@@ -845,6 +844,11 @@ void CMytank::check_dead() {
 	if (HP<= 0 && viability_status==VIABILITY_STATUS::ALIVE) {
 		send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
 		viability_status=VIABILITY_STATUS::DEAD;
+		if (3 < score){
+			score -= 3; 
+		}else {
+			score = 0;
+		}
 	}	
 }
 
@@ -902,7 +906,6 @@ void CMytank::reloading(){
 void CMytank::revive(){
 	viability_status = VIABILITY_STATUS::ALIVE;//生存状態の変更
 	HP=3;
-	score=0;
 };
 
 void requestHttp_thread(tstring direction, tstring speed) {

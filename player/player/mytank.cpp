@@ -14,6 +14,8 @@
 
 void requestHttp_thread(tstring direction, tstring speed);
 
+
+
 bool CMytank::draw() {
 
 	//カーソル表示

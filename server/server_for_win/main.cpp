@@ -5,7 +5,15 @@
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
 #define PORT_NUM 1
+#define SERIAL_PORT  "\\\\.\\COM3" //シリアルポート名  "\\\\.\\COM3"
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
+
+//arduino用
+HANDLE arduino;
+bool Ret;
+int denkyu_flag =0;//初期化 000
+
+//server用
 
 static int retval, nsockfd[PORT_NUM], maxfd;
 static struct hostent *shost;
@@ -24,30 +32,39 @@ void check_item_valid();
 void check_dead_valid();
 void init();
 int kbhit(void);
+
+void serial_init();
+void set_denkyu(int denkyu_id,bool flag);
+
+
 time_t item_start_time[4], item_end_time;
 time_t dead_start_time[4], dead_end_time;
+
+//キーボード用
+char key_buf [ 256 ] ;
+char key_prev_buf [ 256 ] ;
 
 
 // WinMain関数
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
-					 LPSTR lpCmdLine, int nCmdShow )
+				   LPSTR lpCmdLine, int nCmdShow )
 {
 
-	
-	// ウインドウ関連の処理はＤＸライブラリでは一切行わない
-	SetNotWinFlag( TRUE );
+
+	// ウインドウモードで起動
+	SetMainWindowText( "server" ) ;
+	ChangeWindowMode( TRUE ) ;//falseならフルスクリーン
+	SetGraphMode(500,300,32);//画面サイズ1000×750に設定
 
 	// ＤＸライブラリ初期化処理
 	if( DxLib_Init() == -1 ) return -1;
 
-	// 描画先画面を裏画面にする
-	SetDrawScreen( DX_SCREEN_BACK ) ;
-
+	SetDrawScreen( DX_SCREEN_BACK );
 
 	//consoleを使用可に
 	AllocConsole();
 	freopen ( "CONOUT$", "w", stdout ); 
-	
+
 
 	//winsocket初期化
 
@@ -55,6 +72,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	WSAStartup(MAKEWORD(2,0), &wsaData);
 
+	//シリアル通信初期化
+	serial_init();
 
 	//以下メインコード
 
@@ -80,6 +99,50 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	shost = gethostbyname(shostn);
 	if (shost == NULL) Err("gethostbyname");
 
+	while(1){ //テスト用
+		//キー状態取得
+		//書き方は以下の通り
+		for(int i=0;i<256;i++){
+			key_prev_buf[i] = key_buf[i];
+		}
+
+		GetHitKeyStateAll( key_buf ) ;
+
+
+		// 上下左右のキー入力に対応して x, y の座標値を変更する
+		if( key_buf[ KEY_INPUT_1] == 1 && key_prev_buf[ KEY_INPUT_1 ] == 0 ){
+			set_denkyu(1,true);
+			
+		}
+		if( key_buf[ KEY_INPUT_2] == 1 && key_prev_buf[ KEY_INPUT_2 ] == 0 ){
+			set_denkyu(2,true);
+		}
+		if( key_buf[ KEY_INPUT_3] == 1 && key_prev_buf[ KEY_INPUT_3 ] == 0 ){
+			set_denkyu(3,true);
+		}
+		if( key_buf[ KEY_INPUT_1] == 0 && key_prev_buf[ KEY_INPUT_1 ] == 1 ){
+			set_denkyu(1,false);
+			
+		}
+		if( key_buf[ KEY_INPUT_2] == 0 && key_prev_buf[ KEY_INPUT_2 ] == 1 ){
+			set_denkyu(2,false);
+		}
+		if( key_buf[ KEY_INPUT_3] == 0 && key_prev_buf[ KEY_INPUT_3 ] == 1 ){
+			set_denkyu(3,false);
+		}
+		if( key_buf[ KEY_INPUT_4] == 0 && key_prev_buf[ KEY_INPUT_4 ] == 1 ){
+			PlaySoundMem( bgm_id , DX_PLAYTYPE_BACK );
+		}
+		// 待たないと処理が早すぎるのでここで２０ミリ秒待つ
+		WaitTimer( 20 ) ;
+
+		// Windows システムからくる情報を処理する
+		if( ProcessMessage() == -1 ) break ;
+
+		// ＥＳＣキーが押されたらループから抜ける
+		//if( CheckHitKey( KEY_INPUT_ESCAPE ) == 1 ) break ;
+	}
+
 	maxfd = 0;
 	for (int i = 0; i < PORT_NUM; i++) {
 		nsockfd[i] = set_tcp_socket(BASE_PORT + i, shost);
@@ -90,10 +153,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	std::cout << "接続完了"<<std::endl;
 
 	init();
-
-	//キーボード用
-	char key_buf [ 256 ] ;
-	char key_prev_buf [ 256 ] ;
 
 	while( 1 )
 	{
@@ -108,6 +167,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		// 画面に描かれているものをすべて消す
 		ClearDrawScreen() ;
+
+
 
 		// 上下左右のキー入力に対応して x, y の座標値を変更する
 		if( key_buf[ KEY_INPUT_RETURN] == 1 && key_prev_buf[ KEY_INPUT_RETURN ] == 0 ){
@@ -131,9 +192,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 		}
 
-
-		// 裏画面の内容を表画面に反映させる
-		ScreenFlip() ;
 
 		check_item_valid();
 		check_dead_valid();
@@ -172,16 +230,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 
 			if(all_finish_flag){ //生きている人がみなfinish状態ならゲーム終了
-//				if(disconnect_flag){ //ゲーム終了時誰かが切断していたらサーバー落とす
-//					std::cout << "切断したプレイヤーが存在するためゲームを終了します" << std::endl;
-//					exit(1);
-//				}
+				//				if(disconnect_flag){ //ゲーム終了時誰かが切断していたらサーバー落とす
+				//					std::cout << "切断したプレイヤーが存在するためゲームを終了します" << std::endl;
+				//					exit(1);
+				//				}
 				StopSoundMem(bgm_id);//BGM停止
 				init();
 			}
 
 		}
 
+		// 裏画面の内容を表画面に反映させる
+		ScreenFlip() ;
 
 
 		// 待たないと処理が早すぎるのでここで２０ミリ秒待つ
@@ -195,7 +255,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	}
 
 	for (int i = 0; i < PORT_NUM; i++) {
-		 closesocket(nsockfd[i]);
+		closesocket(nsockfd[i]);
 	}
 
 	//console閉じる
@@ -232,8 +292,8 @@ int set_tcp_socket(int portnum, struct hostent *shost) {
 
 
 	/*if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
-		perror("setsockopt");
-		exit(1);
+	perror("setsockopt");
+	exit(1);
 	}*/
 
 	/* bind socket */
@@ -304,3 +364,65 @@ void CPlayer_param::init() {
 	viability = VIABILITY_STATUS::ALIVE;
 }
 
+void serial_init(){
+	//1.ポートをオープン
+	arduino = CreateFile(SERRIAL_PORT,GENERIC_WRITE,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+
+	if(arduino == INVALID_HANDLE_VALUE){
+		printf("PORT COULD NOT OPEN\n");
+	}
+	//2.送受信バッファ初期化
+	Ret = SetupComm(arduino,1024,1024);
+	if(!Ret){
+		printf("SET UP FAILED\n");
+		CloseHandle(arduino);
+
+	}
+	Ret = PurgeComm(arduino,PURGE_TXABORT|PURGE_RXABORT|PURGE_TXCLEAR|PURGE_RXCLEAR);
+	if(!Ret){
+		printf("CLEAR FAILED\n");
+		CloseHandle(arduino);
+	}
+	//3.基本通信条件の設定
+	DCB dcb;
+	GetCommState(arduino,&dcb);
+	dcb.DCBlength = sizeof(DCB);
+	dcb.BaudRate = 9600;
+	dcb.fBinary = TRUE;
+	dcb.ByteSize = 8;
+	dcb.fParity =NOPARITY;
+	dcb.StopBits = ONESTOPBIT;
+
+	Ret = SetCommState(arduino,&dcb);
+	if(!Ret){
+		printf("SetCommState FAILED\n");
+		CloseHandle(arduino);
+	}
+}
+void set_denkyu(int denkyu_id,bool flag){
+
+	int tmp_flag;
+	if(denkyu_id == 1)tmp_flag=0x01; //001
+	if(denkyu_id == 2)tmp_flag=0x02; //010
+	if(denkyu_id == 3)tmp_flag=0x04; //100
+
+	if(flag){
+		denkyu_flag |= tmp_flag; //あるビットをオンにする
+	}else denkyu_flag &= ~tmp_flag;  //あるビットをオフにする
+
+
+	BYTE data = denkyu_flag;
+	
+	//4.送信
+	DWORD dwSendSize;
+	DWORD dwErrorMask;
+
+	Ret = WriteFile(arduino,&data,sizeof(data),&dwSendSize,NULL);
+	if(!Ret){
+		printf("SEND FAILED\n");
+		CloseHandle(arduino);
+
+	}
+	printf("FINISH\n");
+
+}

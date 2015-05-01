@@ -9,10 +9,11 @@ using namespace std;
 //グローバル変数
 
 extern bool init_flag;
+extern int hsv[4][4];
 
-#define SERVER_IP_ADDRESS "157.82.7.4"	//サーバーのIPアドレス
-#define RASPI_IP_ADDRESS "pi@rpi04.local"//ラズパイのＩＰアドレス
+extern std::string SERVER_IP_ADDRESS;// "157.82.7.4"	//サーバーのIPアドレス
+extern std::string RASPI_IP_ADDRESS ;//"pi@rpi04.local"//ラズパイのＩＰアドレス
 
-#define PLAYER_NM 0	//自分のプレイヤー番号
+extern int PLAYER_NM ;	//自分のプレイヤー番号
 
 string encode(COMMAND_NAME, int, int, int);

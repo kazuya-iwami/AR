@@ -342,15 +342,23 @@ bool CWait::draw(){
 		break;
 	}
 
-	if(mode==0){
+	if(mode<=0){
 		DrawGraph(x-220,y,figure_id["F_WAIT02"],true);
 		DrawRotaGraph(x-100,y+170,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
 		DrawRotaGraph(x,y+170,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
 		if(bullet) DrawRotaGraph(bullet_x,bullet_y,0.7,draw_timer/6+1,figure_id["F_WAIT03"],true);
+		if(mode<0 && mode > -60){
+			DrawExtendGraph(0,0,1349,729,kamifubuki[((-mode)%120)/5],true);
+			DrawOriginalString(200,500,3,100,"Perfect!!");
+		}
+		if(mode < -60){
+			DrawExtendGraph(0,0,1349,729,fire[(-mode)%5],true);
+			DrawOriginalString(170,500,3,100,"Game Over...");
+		}
 		draw_timer++;
-	}
+	}else draw_timer += mode;
 
-	draw_timer += mode;
+	//DrawFormatString(0,0,1,"%d %d",mode,draw_timer);
 	
 	return true;
 }
@@ -362,11 +370,10 @@ CWait::CWait(){
 
 void CWait::play_init(){
 	x=600;y=420;
-	speed=3;
+	speed=4;
 	bullet=false;
-	auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num);
-	CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
-	ojisan_num=1;
+	ojisan_num=0;
+	ojisan_pop_num=0;
 }
 
 void CWait::update(const char key_buf[256]){
@@ -380,15 +387,24 @@ void CWait::update(const char key_buf[256]){
 		bullet_y=y+70;
 		bullet=true;
 	}
-	if(key_buf[D_DIK_P] && ojisan_num <= 20){
-		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num);
+	if(( draw_timer%60 == 0 )&& ojisan_pop_num < 20){
+		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num,&mode);
 		CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
-		ojisan_num++;
+		ojisan_pop_num++;
 	}
 
 	if(bullet){
 		bullet_x +=8;
 		if(bullet_x > 1400) bullet=false;
+	}
+
+	if(mode<0 && mode> -60){
+		mode--;
+		if(mode == -60){mode=1;}
+	}
+	if(mode < -60 && mode > -120){
+		mode--;
+		if(mode == -120){mode=1;}
 	}
 }
 
@@ -489,10 +505,7 @@ bool CScore_Info::draw(){
 bool COjisan::draw(){
 	DrawRotaGraph(x,y,0.7,hit/18.0,figure_id["F_MAN"],true,true);
 	if(hit==0){
-		if(draw_timer % 60 == 0){
-			x = rand()%350 + 900;
-			y = rand()%600 + 65;
-		}
+		x -= 3;
 		if(*bullet && *bullet_x < x +10 && *bullet_x > x -10 && *bullet_y < y +60 && *bullet_y > y -60){
 			hit=1;
 			*bullet = false;
@@ -504,20 +517,33 @@ bool COjisan::draw(){
 	
 	draw_timer++;
 
-	if(hit < 20) return true;
+	if(hit < 20){
+		if((*mode) > 0) return false;
+		if(x<0){
+			(*mode)= -61;
+			return false;
+		}
+		else return true;
+	}
 	else{
-		*ojisan_num--;
+		(*ojisan_num)++;
+		if((*ojisan_num) ==20){
+			(*mode)=-1;
+			//auto kamifubuki=make_shared<CKamifubuki>();
+			//CObject::register_object(kamifubuki,DRAW_LAYER::IMFOMATION_LAYER);
+		}
 		return false;
 	}
 }
 
-COjisan::COjisan(int *bullet_x_,int *bullet_y_,bool *bullet_,int* ojisan_num_){
+COjisan::COjisan(int *bullet_x_,int *bullet_y_,bool *bullet_,int* ojisan_num_,int *mode_){
 	draw_timer=0;
 	bullet_x =bullet_x_;
 	bullet_y =bullet_y_;
 	bullet =bullet_;
 	ojisan_num =ojisan_num_;
-	x = rand()%350 + 900;
+	mode=mode_;
+	x = 1400;;
 	y = rand()%600 + 65;
 	hit=0;
 }

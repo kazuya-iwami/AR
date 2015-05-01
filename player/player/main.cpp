@@ -213,7 +213,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				wait->play_init();
 				wait->mode=0;
 			}
-			if(wait->mode==0) wait->update(key_buf);
+			if(wait->mode<=0) wait->update(key_buf);
 			
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
 

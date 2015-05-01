@@ -114,7 +114,7 @@ public:
 	int speed;
 	bool bullet;
 	int bullet_x,bullet_y;
-	int ojisan_num;
+	int ojisan_num,ojisan_pop_num;
 };
 
 //結果発表で紙ふぶき飛ばしたいよね
@@ -163,7 +163,8 @@ private:
 	int* bullet_x;
 	int* bullet_y;
 	int* ojisan_num;
+	int* mode;
 public:
-	COjisan(int* bullet_x_,int* bullet_y_,bool *bullet_,int *ojisan_num_);
+	COjisan(int* bullet_x_,int* bullet_y_,bool *bullet_,int *ojisan_num_,int* mode_);
 	bool draw();
 };

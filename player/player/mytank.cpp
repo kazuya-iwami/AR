@@ -59,7 +59,15 @@ bool CMytank::draw() {
 			draw_timer++;
 		}
 	}
+
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	//HP表示
+	DrawGraph(0+LEFT_WINDOW_WIDTH,9,figure_id["F_HPFRAME"],true);
+	int i;
+	for(i=0;i<HP;i++){
+		DrawGraph(14+96*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
+	}
+
 
 	//リロード画面表示
 	if(is_reloading){
@@ -71,13 +79,6 @@ bool CMytank::draw() {
 		draw_timer++;
 	}
 
-	//HP表示
-	int i;
-	for(i=0;i<HP;i++){
-		DrawGraph(14+96*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
-	}
-	DrawGraph(0+LEFT_WINDOW_WIDTH,9,figure_id["F_HPFRAME"],true);
-	
 
 	//アイテム枠表示
 	//DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);

@@ -116,10 +116,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PLAY,0,0),4);
 				game_status = GAME_STATUS::GAME_PLAY;
 				std::cout << "ƒQ[ƒ€ƒXƒ^[ƒg" << std::endl;
+				//BGMÄ¶
+				PlaySoundMem( bgm_id , DX_PLAYTYPE_BACK );
+
 			}else if(game_status == GAME_STATUS::GAME_PLAY){
 				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PAUSE,0,0),4);
 				game_status = GAME_STATUS::GAME_PAUSE;
 				std::cout << "ˆêŽž’âŽ~" << std::endl;
+
 			}else if(game_status == GAME_STATUS::GAME_PAUSE) {
 				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PLAY, 0, 0), 4);
 				game_status = GAME_STATUS::GAME_PLAY;
@@ -172,6 +176,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 //					std::cout << "Ø’f‚µ‚½ƒvƒŒƒCƒ„[‚ª‘¶Ý‚·‚é‚½‚ßƒQ[ƒ€‚ðI—¹‚µ‚Ü‚·" << std::endl;
 //					exit(1);
 //				}
+				StopSoundMem(bgm_id);//BGM’âŽ~
 				init();
 			}
 

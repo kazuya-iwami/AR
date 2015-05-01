@@ -153,7 +153,7 @@ bool HttpRequest(tstring strUrl, bool isMethodGet, tstring speed, tstring& rstrR
 		0,
 		0);
 	if (NULL == hInternetConnect){
-		assert(!"HTTPÚ‘±‚É¸”s");
+		//assert(!"HTTPÚ‘±‚É¸”s");
 		closeInternet(hInternetOpen, hInternetConnect, hInternetRequest, pszOptional);
 		return false;
 	}

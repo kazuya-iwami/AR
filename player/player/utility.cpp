@@ -73,7 +73,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	y=y_;
 	system_timer = game_time * 30-1;
 	finish_flag = false;
-	countdown_timer= 5 * 30;
+	countdown_timer= 3 * 30;
 	countdown_finish_flag = false;
 }
 
@@ -284,9 +284,9 @@ bool CWait::draw(){
 	
 	int i;
 	for(i=0;i<mode;i++){
-		DrawGraph((draw_timer-i*339)%1800-350,470,figure_id["F_WAIT02"],true);
-		DrawRotaGraph((draw_timer-i*339)%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
-		DrawRotaGraph((draw_timer-i*339)%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
+		DrawGraph((draw_timer-i*360)%1800-350,470,figure_id["F_WAIT02"],true);
+		DrawRotaGraph((draw_timer-i*360)%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
+		DrawRotaGraph((draw_timer-i*360)%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
 	}
 	
 	DrawGraph(420,470,figure_id["F_WAIT05"],true);

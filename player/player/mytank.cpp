@@ -64,11 +64,19 @@ bool CMytank::draw() {
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	//HP表示
+	/*
 	DrawGraph(0+LEFT_WINDOW_WIDTH,9,figure_id["F_HPFRAME"],true);
 	int i;
 	for(i=0;i<HP;i++){
 		DrawGraph(14+96*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
+	}*/
+	SetDrawBright(255-(HP*75+3*hit_flag),HP*75+3*hit_flag,HP*25+hit_flag);
+	int j;
+	for(j=0;j<HP*50+2*hit_flag;j++){
+		DrawGraph(5+LEFT_WINDOW_WIDTH+2*j,15,figure_id["F_HPBAR"],true);
 	}
+	SetDrawBright(255,255,255);
+	if(hit_flag>0) hit_flag--;
 
 
 	//リロード画面表示
@@ -104,6 +112,7 @@ CMytank::CMytank() {
 	//初期化
 	score = 0;
 	HP = 3;//最初のHPは3
+	hit_flag = 0;
 	viability_status = VIABILITY_STATUS::ALIVE;//最初の状態は生存
 	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
@@ -756,9 +765,9 @@ void CMytank::detect_enemy(Mat image) {
 void CMytank::attacked(int score_){
 	if (HP > 0) {
 		HP -= score_;
+		hit_flag +=25;
 	}
 
-	score -= score_;
 	shake_start(SHAKE_STATUS::SMALL_SHAKE); // 画面振動
 	is_stunned = true; // 硬直フラグ
 	PlaySoundMem( sound_id["S_ATTACKED"] , DX_PLAYTYPE_BACK ); // 爆発音再生
@@ -837,6 +846,11 @@ void CMytank::check_dead() {
 	if (HP<= 0 && viability_status==VIABILITY_STATUS::ALIVE) {
 		send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
 		viability_status=VIABILITY_STATUS::DEAD;
+		if (3 < score){
+			score -= 3; 
+		}else {
+			score = 0;
+		}
 	}	
 }
 
@@ -894,7 +908,6 @@ void CMytank::reloading(){
 void CMytank::revive(){
 	viability_status = VIABILITY_STATUS::ALIVE;//生存状態の変更
 	HP=3;
-	score=0;
 };
 
 void requestHttp_thread(tstring direction, tstring speed) {

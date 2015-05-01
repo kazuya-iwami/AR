@@ -153,7 +153,7 @@ bool HttpRequest(tstring strUrl, bool isMethodGet, tstring speed, tstring& rstrR
 		0,
 		0);
 	if (NULL == hInternetConnect){
-		assert(!"HTTP接続に失敗");
+		//assert(!"HTTP接続に失敗");
 		closeInternet(hInternetOpen, hInternetConnect, hInternetRequest, pszOptional);
 		return false;
 	}
@@ -168,7 +168,7 @@ bool HttpRequest(tstring strUrl, bool isMethodGet, tstring speed, tstring& rstrR
 		dwFlags,
 		NULL);
 	if (NULL == hInternetRequest){
-		assert(!"HTTP接続を開くに失敗");
+		//assert(!"HTTP接続を開くに失敗");
 		closeInternet(hInternetOpen, hInternetConnect, hInternetRequest, pszOptional);
 		return false;
 	}
@@ -179,7 +179,7 @@ bool HttpRequest(tstring strUrl, bool isMethodGet, tstring speed, tstring& rstrR
 		(DWORD)strHeaders.length(),
 		(LPVOID)((char*)pszOptional),
 		pszOptional ? (DWORD)(strlen(pszOptional) * sizeof(char)) : 0)){
-		assert(!"HTTP要求送信に失敗");
+		//assert(!"HTTP要求送信に失敗");
 		closeInternet(hInternetOpen, hInternetConnect, hInternetRequest, pszOptional);
 		return false;
 	}
@@ -192,12 +192,12 @@ bool HttpRequest(tstring strUrl, bool isMethodGet, tstring speed, tstring& rstrR
 		&dwStatusCode,
 		&dwLength,
 		0)){
-		assert(!"HTTP要求に対応するステータスコードの取得に失敗");
+		//assert(!"HTTP要求に対応するステータスコードの取得に失敗");
 		closeInternet(hInternetOpen, hInternetConnect, hInternetRequest, pszOptional);
 		return false;
 	}
 	if (HTTP_STATUS_OK != dwStatusCode){
-		assert(!"ステータスコードがOKでない");
+		//assert(!"ステータスコードがOKでない");
 		closeInternet(hInternetOpen, hInternetConnect, hInternetRequest, pszOptional);
 		return false;
 	}
@@ -207,7 +207,7 @@ bool HttpRequest(tstring strUrl, bool isMethodGet, tstring speed, tstring& rstrR
 	while (1){
 		DWORD dwRead = 0;
 		if (!InternetReadFile(hInternetRequest, szReadBuffer, READBUFFER_SIZE, &dwRead)){
-			assert(!"HTTPファイル読み込みに失敗");
+			//assert(!"HTTPファイル読み込みに失敗");
 			closeInternet(hInternetOpen, hInternetConnect, hInternetRequest, pszOptional);
 			return false;
 		}

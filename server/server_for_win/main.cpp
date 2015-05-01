@@ -56,6 +56,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	WSAStartup(MAKEWORD(2,0), &wsaData);
 
 
+	//以下メインコード
+
+	//データのロード
+
+	int bgm_id=LoadSoundMem("../../player/player/sound/GameBGM.mp3");
+
+	//既存のコードを踏襲
+
 	bool loop = true;
 
 	tm.tv_sec = 0;

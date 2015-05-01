@@ -380,6 +380,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
 					mytank->enemy2->score++;
 				}
+				
+				//テスト用　eeicのボタンでeeic点灯
+				if(key_buf[KEY_INPUT_E]==1 && key_prev_buf[KEY_INPUT_E]==0){
+					mytank->eeic->check[0]=mytank->eeic->check[0]*(-1);
+					mytank->eeic->check[1]=mytank->eeic->check[1]*(-1);
+				}
+				if(key_buf[KEY_INPUT_I]==1 && key_prev_buf[KEY_INPUT_I]==0){
+					mytank->eeic->check[2]=mytank->eeic->check[2]*(-1);
+				}
+				if(key_buf[KEY_INPUT_C]==1 && key_prev_buf[KEY_INPUT_C]==0){
+					mytank->eeic->check[3]=mytank->eeic->check[3]*(-1);	
+				}
 			}
 
 

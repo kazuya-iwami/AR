@@ -10,7 +10,7 @@ using namespace std;
 
 extern bool init_flag;
 
-#define SERVER_IP_ADDRESS "157.82.6.203"	//サーバーのIPアドレス
+#define SERVER_IP_ADDRESS "157.82.7.4"	//サーバーのIPアドレス
 #define RASPI_IP_ADDRESS "pi@rpi04.local"//ラズパイのＩＰアドレス
 
 #define PLAYER_NM 0	//自分のプレイヤー番号

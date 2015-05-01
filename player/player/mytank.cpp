@@ -52,9 +52,9 @@ bool CMytank::draw() {
 		}else{//lockが外れている状態
 			preflag=false;
 			SetDrawBlendMode(DX_BLENDMODE_ADD,255);
-			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, 0,figure_id["F_CURSUR_OUT"],true);
-			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,draw_timer/10.0,figure_id["F_CURSUR_IN"],true);
-			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, 3.14*sin(draw_timer*0.07),figure_id["F_CURSUR_TRI"],true);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,  0,figure_id["F_CURSUR_OUT"],true);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,  draw_timer/10.0,figure_id["F_CURSUR_IN"],true);
+			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, -draw_timer/10.0,figure_id["F_CURSUR_TRI"],true);
 			//　従来：DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 			draw_timer++;
 		}
@@ -139,6 +139,10 @@ CMytank::CMytank() {
 	map = map_;
 	CObject::register_object(map,DRAW_LAYER::IMFOMATION_LAYER);
 
+	auto eeic_ =make_shared<CEeic>();
+	eeic=eeic_;
+	CObject::register_object(eeic,DRAW_LAYER::IMFOMATION_LAYER);
+
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
@@ -212,7 +216,7 @@ void CMytank::check_focus(){
 				if(0 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy0->lockon = false;
 				}
-				if(enemy0->HP==0) {
+				if(VIABILITY_STATUS::DEAD == enemy0->viability_status) {
 					enemy0->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy0->lockon = false;
@@ -225,7 +229,7 @@ void CMytank::check_focus(){
 				if(1 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy1->lockon = false;
 				}
-				if(enemy1->HP==0) {
+				if(VIABILITY_STATUS::DEAD == enemy1->viability_status) {
 					enemy1->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy1->lockon = false;
@@ -238,7 +242,7 @@ void CMytank::check_focus(){
 				if(2 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy2->lockon = false;
 				}
-				if(enemy2->HP==0) {
+				if(VIABILITY_STATUS::DEAD == enemy2->viability_status) {
 					enemy2->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy2->lockon = false;
@@ -251,7 +255,7 @@ void CMytank::check_focus(){
 				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
 					enemy3->lockon = false;
 				}
-				if(enemy3->HP==0) {
+				if(VIABILITY_STATUS::DEAD == enemy3->viability_status) {
 					enemy3->lockon = false;//死んだ相手への攻撃禁止
 				}
 			} else enemy3->lockon = false;
@@ -670,19 +674,61 @@ void CMytank::get_msg(){
 			break;
 
 		case COMMAND_NAME::INFORM_DIE:
-			if (id == 0) {
-				break;
-			} 
+			if(player_from != id){ //死んだのが自分でなければ
+				switch(player_from){ //死んだ相手に対する処理
+					case 0:
+						{
+						enemy0->viability_status = VIABILITY_STATUS::DEAD;
+						break;
+						}
+					case 1:
+						{
+						enemy1->viability_status = VIABILITY_STATUS::DEAD;
+						break;
+						}
+					case 2:
+						{
+						enemy2->viability_status = VIABILITY_STATUS::DEAD;
+						break;
+						}
+					case 3:
+						{
+						enemy3->viability_status = VIABILITY_STATUS::DEAD;
+						break;
+						}
+
+				}
+			}
 			break;//lockon関係は別のところで処理
 
 		case COMMAND_NAME:: INFORM_REVIVE:
-			if (id == 0) {
-				viability_status = ALIVE;//生存状態の変更
-				HP=3;
-				score=0;
-				//データの初期化
-				break;//lockon関係は別のところで処理
-			} 
+			if(player_from != id){ //生き返ったのが自分でなければ
+				switch(player_from){ //生き返った相手に対する処理
+					case 0:
+						{
+						enemy0->viability_status = VIABILITY_STATUS::ALIVE;
+						break;
+						}
+					case 1:
+						{
+						enemy1->viability_status = VIABILITY_STATUS::ALIVE;
+						break;
+						}
+					case 2:
+						{
+						enemy2->viability_status = VIABILITY_STATUS::ALIVE;
+						break;
+						}
+					case 3:
+						{
+						enemy3->viability_status = VIABILITY_STATUS::ALIVE;
+						break;
+						}
+
+				}
+			}else{ // 生き返ったのが自分ならば
+				revive();
+			}
 			break;
 
 		default:
@@ -788,7 +834,7 @@ void CMytank::lose_HP() {
 void CMytank::check_dead() {
 	if (HP<= 0 && viability_status==VIABILITY_STATUS::ALIVE) {
 		send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
-		viability_status=DEAD;
+		viability_status=VIABILITY_STATUS::DEAD;
 	}	
 }
 
@@ -841,6 +887,12 @@ void CMytank::reloading(){
 		}
 	}
 	return;
+};
+
+void CMytank::revive(){
+	viability_status = VIABILITY_STATUS::ALIVE;//生存状態の変更
+	HP=3;
+	score=0;
 };
 
 void requestHttp_thread(tstring direction, tstring speed) {

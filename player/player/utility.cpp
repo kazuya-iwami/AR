@@ -90,12 +90,13 @@ bool CEnemy::draw(){
 				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
 			}
 
-			if (enemy_id == CEnemy::just_before_shooted){
-				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
-			}
-			else if (HP == 0) {//死んでるときはlock-onできない
+			if (VIABILITY_STATUS::DEAD == viability_status) {//死んでるときはlock-onできない
 				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
 			}
+			else if (enemy_id == CEnemy::just_before_shooted){
+				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
+			}
+
 		}else{ //切断されていたら
 			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
 		}
@@ -227,7 +228,40 @@ bool CThunder :: draw(){
 	else return false;
 }
 
+bool CEeic::draw(){
+	if(check[0]==1){
+		DrawGraph(LEFT_WINDOW_WIDTH+600,600,figure_id["F_MINILIGHT_E"],true);
+		DrawGraph(LEFT_WINDOW_WIDTH+600,590,figure_id["F_MINILIGHT_TOP"],true);
+	}else{
+		DrawGraph(LEFT_WINDOW_WIDTH+600,600,figure_id["F_MINILIGHT_0"],true);
+	}
+	if(check[1]==1){
+		DrawGraph(LEFT_WINDOW_WIDTH+700,600,figure_id["F_MINILIGHT_E"],true);	
+		DrawGraph(LEFT_WINDOW_WIDTH+700,590,figure_id["F_MINILIGHT_TOP"],true);
+	}else{
+		DrawGraph(LEFT_WINDOW_WIDTH+700,600,figure_id["F_MINILIGHT_0"],true);
+	}
+	if(check[2]==1){
+		DrawGraph(LEFT_WINDOW_WIDTH+800,600,figure_id["F_MINILIGHT_I"],true);		
+		DrawGraph(LEFT_WINDOW_WIDTH+800,590,figure_id["F_MINILIGHT_TOP"],true);
+	}else{
+		DrawGraph(LEFT_WINDOW_WIDTH+800,600,figure_id["F_MINILIGHT_0"],true);
+	}
+	if(check[3]==1){
+		DrawGraph(LEFT_WINDOW_WIDTH+900,600,figure_id["F_MINILIGHT_C"],true);
+		DrawGraph(LEFT_WINDOW_WIDTH+900,590,figure_id["F_MINILIGHT_TOP"],true);
+	}else{
+		DrawGraph(LEFT_WINDOW_WIDTH+900,600,figure_id["F_MINILIGHT_0"],true);
+	}		
+	return true;
+}
 
+CEeic::CEeic(){
+	check[0]=-1;
+	check[1]=-1;
+	check[2]=-1;
+	check[3]=-1;
+}
 
 bool CMap::draw(){
 

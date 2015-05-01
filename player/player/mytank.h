@@ -30,11 +30,6 @@ enum SHAKE_STATUS{
 	SMALL_SHAKE
 };
 
-enum VIABILITY_STATUS { //生存状態
-	ALIVE,
-	DEAD
-};
-
 //自機クラス
 
 class CMytank : public CObject, public CNetwork {
@@ -73,6 +68,7 @@ public:
 	shared_ptr<CBullet_image> bullet_image;//残弾描画
 	shared_ptr<CMap> map;
 	shared_ptr<CScore_Info> score_info;
+	shared_ptr<CEeic> eeic;
 
 	CMytank();
 	void move(tstring direction, tstring speed);//移動
@@ -102,4 +98,5 @@ public:
 	void check_dead();//生死状態の判定
 	void check_stun();//敵に攻撃された影響が残ってるかの判定
 	void reloading();
+	void revive();
 };

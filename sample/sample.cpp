@@ -161,7 +161,7 @@ Point2f Field::getLocation(Point2f p) {
             cout << "d2: " << d2.x << ", " << d2.y << endl;
             double det = d1.x * d2.y - d1.y * d2.x;
             if (det == 0) {
-                return Point2f(0.5, 0.5);
+                return 100 * Point2f(0.5, 0.5);
             } else {
                 double s = (d2.y * relative.x - d2.x * relative.y) / det;
                 double t = (d1.x * relative.y - d1.y * relative.x) / det;
@@ -169,18 +169,18 @@ Point2f Field::getLocation(Point2f p) {
                 if (s < 0 || t < 0) continue;
                 switch(i) {
                     case 0:
-                        return Point2f(0.5 * (1 - s - t), 0.5 * (1 - s + t));
+                        return 100 * Point2f(0.5 * (1 - s - t), 0.5 * (1 - s + t));
                     case 1:
-                        return Point2f(0.5 * (1 - s + t), 0.5 * (1 + s + t));
+                        return 100 * Point2f(0.5 * (1 - s + t), 0.5 * (1 + s + t));
                     case 2: 
-                        return Point2f(0.5 * (1 + s + t), 0.5 * (1 + s - t));
+                        return 100 * Point2f(0.5 * (1 + s + t), 0.5 * (1 + s - t));
                     case 3:
-                        return Point2f(0.5 * (1 + s - t), 0.5 * (1 - s - t));
+                        return 100 * Point2f(0.5 * (1 + s - t), 0.5 * (1 - s - t));
                 }
             }
         }
     }
-    return Point2f(0.5, 0.5);
+    return 100 * Point2f(0.5, 0.5);
 }
 
 // Field f();

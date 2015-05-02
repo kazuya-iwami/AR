@@ -1,12 +1,18 @@
 #include "DxLib.h"
 #include "server.h"
 #include <windows.h>
+#include "minimap.h"
 
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
 #define PORT_NUM 1
 #define SERIAL_PORT  "\\\\.\\COM3" //シリアルポート名  "\\\\.\\COM3"
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
+
+//minimap用
+Object player[4];
+Field field;
+int loop_counter=0;
 
 //arduino用
 HANDLE arduino;
@@ -75,6 +81,35 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//シリアル通信初期化
 	serial_init();
 
+	//にみまっぷ
+	Mat image;
+
+    VideoCapture cap(0); // デフォルトカメラをオープン
+    if(!cap.isOpened()){  // 成功したかどうかをチェック
+		return -1;
+	}
+	if(!cap.read(image)) {
+		std::cout << "No frame" << std::endl;
+		MessageBox(NULL,"画像フレーム取得失敗(´・ω・`)","error",MB_OK | MB_APPLMODAL);
+		cv::waitKey();
+		return;
+	}
+
+	field.setCorners(image);//ここでフィールドのコーナー検出
+
+    int lowerH = 0;
+    int upperH = 143;
+    int lowerS = 0;
+    int upperS = 255;
+    int lowerV = 189;
+    int upperV = 255;
+    field.init(lowerH, upperH, lowerS, upperS, lowerV, upperV);
+	player[0].init(0,30,100,200,100,200);
+	player[1].init(30,60,100,200,100,200);
+	player[2].init(60,90,100,200,100,200);
+	player[3].init(90,120,100,200,100,200);
+
+
 	//以下メインコード
 
 	//データのロード
@@ -98,50 +133,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	shost = gethostbyname(shostn);
 	if (shost == NULL) Err("gethostbyname");
-
-	while(1){ //テスト用
-		//キー状態取得
-		//書き方は以下の通り
-		for(int i=0;i<256;i++){
-			key_prev_buf[i] = key_buf[i];
-		}
-
-		GetHitKeyStateAll( key_buf ) ;
-
-
-		// 上下左右のキー入力に対応して x, y の座標値を変更する
-		if( key_buf[ KEY_INPUT_1] == 1 && key_prev_buf[ KEY_INPUT_1 ] == 0 ){
-			set_denkyu(1,true);
-			
-		}
-		if( key_buf[ KEY_INPUT_2] == 1 && key_prev_buf[ KEY_INPUT_2 ] == 0 ){
-			set_denkyu(2,true);
-		}
-		if( key_buf[ KEY_INPUT_3] == 1 && key_prev_buf[ KEY_INPUT_3 ] == 0 ){
-			set_denkyu(3,true);
-		}
-		if( key_buf[ KEY_INPUT_1] == 0 && key_prev_buf[ KEY_INPUT_1 ] == 1 ){
-			set_denkyu(1,false);
-			
-		}
-		if( key_buf[ KEY_INPUT_2] == 0 && key_prev_buf[ KEY_INPUT_2 ] == 1 ){
-			set_denkyu(2,false);
-		}
-		if( key_buf[ KEY_INPUT_3] == 0 && key_prev_buf[ KEY_INPUT_3 ] == 1 ){
-			set_denkyu(3,false);
-		}
-		if( key_buf[ KEY_INPUT_4] == 0 && key_prev_buf[ KEY_INPUT_4 ] == 1 ){
-			PlaySoundMem( bgm_id , DX_PLAYTYPE_BACK );
-		}
-		// 待たないと処理が早すぎるのでここで２０ミリ秒待つ
-		WaitTimer( 20 ) ;
-
-		// Windows システムからくる情報を処理する
-		if( ProcessMessage() == -1 ) break ;
-
-		// ＥＳＣキーが押されたらループから抜ける
-		//if( CheckHitKey( KEY_INPUT_ESCAPE ) == 1 ) break ;
-	}
 
 	maxfd = 0;
 	for (int i = 0; i < PORT_NUM; i++) {
@@ -168,6 +159,40 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		// 画面に描かれているものをすべて消す
 		ClearDrawScreen() ;
 
+		//ミニマップ処理
+		// cap >> image; // カメラから新しいフレームを取得
+        //image = imread("image2.png"); 
+		if(!cap.read(image)) {
+			std::cout << "No frame" << std::endl;
+			MessageBox(NULL,"画像フレーム取得失敗(´・ω・`)","error",MB_OK | MB_APPLMODAL);
+			cv::waitKey();
+			return;
+		}
+		
+		//ここでフィールドのコーナー再検出
+		if( key_buf[ KEY_INPUT_F] == 1 && key_prev_buf[ KEY_INPUT_F ] == 0 ){
+			field.setCorners(image);
+		}
+
+		//正規化されたplayerの位置取得
+		for(int i = 0;i<4;i++){
+			player[i].detect(image,&field);
+		}
+
+		//minimapを送信
+		if(game_status == GAME_STATUS::GAME_PLAY){
+			loop_counter++;
+			if(loop_counter >100000)loop_counter=0;
+
+			//更新速度を制限
+			if(loop_counter%30 == 1){
+				std::ostringstream stream;
+				stream << (int)COMMAND_NAME::UPDATE_LOCATIONS << ","  << player[0].x << "," <<  player[0].y << "," 
+					<< player[1].x << "," <<  player[1].y << "," << player[2].x << "," <<  player[2].y << ","
+					<< player[3].x << "," <<  player[3].y;
+				send_message(stream.str(),4);
+			}
+		}
 
 
 		// 上下左右のキー入力に対応して x, y の座標値を変更する
@@ -366,7 +391,7 @@ void CPlayer_param::init() {
 
 void serial_init(){
 	//1.ポートをオープン
-	arduino = CreateFile(SERRIAL_PORT,GENERIC_WRITE,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+	arduino = CreateFile(SERIAL_PORT,GENERIC_WRITE,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
 	if(arduino == INVALID_HANDLE_VALUE){
 		printf("PORT COULD NOT OPEN\n");

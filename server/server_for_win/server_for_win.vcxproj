@@ -14,12 +14,14 @@
   <ItemGroup>
     <ClCompile Include="control.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="minimap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="control.h" />
+    <ClInclude Include="minimap.h" />
     <ClInclude Include="server.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

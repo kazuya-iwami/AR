@@ -187,9 +187,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//XV‘¬“x‚ğ§ŒÀ
 			if(loop_counter%30 == 1){
 				std::ostringstream stream;
-				stream << (int)COMMAND_NAME::UPDATE_LOCATIONS << ","  << player[0].x << "," <<  player[0].y << "," 
-					<< player[1].x << "," <<  player[1].y << "," << player[2].x << "," <<  player[2].y << ","
-					<< player[3].x << "," <<  player[3].y;
+				stream << (int)COMMAND_NAME::UPDATE_LOCATIONS << ","  << player[0].normalized_x << "," <<  player[0].normalized_y << "," 
+					<< player[1].normalized_x << "," <<  player[1].normalized_y << "," 
+					<< player[2].normalized_x << "," <<  player[2].normalized_y << ","
+					<< player[3].normalized_x << "," <<  player[3].normalized_y;
 				send_message(stream.str(),4);
 			}
 		}

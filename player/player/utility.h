@@ -106,7 +106,10 @@ public:
 
 
 class CMap:public CObject {
+	int player_x[4];
+	int player_y[4];
 public:
+	void update_pos(int p0_x,int p0_y,int p1_x, int p1_y,int p2_x,int p2_y,int p3_x,int p3_y);
 	bool draw();
 };
 

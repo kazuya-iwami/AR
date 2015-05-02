@@ -9,6 +9,7 @@ int CEnemy::just_before_shooted;
 #define RANK_HEIGHT 70
 
 #define DENKYU_HEIGHT 120
+#define MAP_PARAM 2.0
 
 bool CSystem_timer::draw(){
 	if(system_timer > 0){
@@ -263,13 +264,24 @@ CEeic::CEeic(){
 	check[3]=-1;
 }
 
+void CMap::update_pos(int p0_x,int p0_y,int p1_x, int p1_y,int p2_x,int p2_y,int p3_x,int p3_y){
+	player_x[0]=p0_x*MAP_PARAM;
+	player_y[0]=p0_y*MAP_PARAM;
+	player_x[1]=p1_x*MAP_PARAM;
+	player_y[1]=p1_y*MAP_PARAM;
+	player_x[2]=p2_x*MAP_PARAM;
+	player_y[2]=p2_y*MAP_PARAM;
+	player_x[3]=p3_x*MAP_PARAM;
+	player_y[4]=p3_y*MAP_PARAM;
+
+}
 bool CMap::draw(){
 
 	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
-	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_ICONRED"],true);
-	DrawGraph(10+LEFT_WINDOW_WIDTH,720-15,figure_id["F_ICONGREEN"],true);
-	DrawGraph(210-15+LEFT_WINDOW_WIDTH,520,figure_id["F_ICONBLUE"],true);
-	DrawGraph(210-15+LEFT_WINDOW_WIDTH,720-15,figure_id["F_ICONYELLOW"],true);
+	DrawGraph(player_x[0]+LEFT_WINDOW_WIDTH,520+player_y[0],figure_id["F_ICONRED"],true);
+	DrawGraph(player_x[1]+LEFT_WINDOW_WIDTH,520+player_y[1],figure_id["F_ICONGREEN"],true);
+	DrawGraph(player_x[2]+LEFT_WINDOW_WIDTH,520+player_y[2],figure_id["F_ICONBLUE"],true);
+	DrawGraph(player_x[3]+LEFT_WINDOW_WIDTH,520+player_y[3],figure_id["F_ICONYELLOW"],true);
 	DrawGraph(110-15+LEFT_WINDOW_WIDTH,620-15,figure_id["F_ICONDEAD"],true);
 	return true;
 }

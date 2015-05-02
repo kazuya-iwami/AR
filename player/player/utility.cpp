@@ -264,6 +264,13 @@ CEeic::CEeic(){
 	check[3]=-1;
 }
 
+CMap::CMap(){
+	for(int i=0;i<4;i++){
+		player_x[i]=0;
+		player_y[i]=0;
+	}
+}
+
 void CMap::update_pos(int p0_x,int p0_y,int p1_x, int p1_y,int p2_x,int p2_y,int p3_x,int p3_y){
 	player_x[0]=p0_x*MAP_PARAM;
 	player_y[0]=p0_y*MAP_PARAM;
@@ -278,10 +285,10 @@ void CMap::update_pos(int p0_x,int p0_y,int p1_x, int p1_y,int p2_x,int p2_y,int
 bool CMap::draw(){
 
 	DrawGraph(10+LEFT_WINDOW_WIDTH,520,figure_id["F_MAPFRAME"],true);
-	DrawGraph(player_x[0]+LEFT_WINDOW_WIDTH,520+player_y[0],figure_id["F_ICONRED"],true);
-	DrawGraph(player_x[1]+LEFT_WINDOW_WIDTH,520+player_y[1],figure_id["F_ICONGREEN"],true);
-	DrawGraph(player_x[2]+LEFT_WINDOW_WIDTH,520+player_y[2],figure_id["F_ICONBLUE"],true);
-	DrawGraph(player_x[3]+LEFT_WINDOW_WIDTH,520+player_y[3],figure_id["F_ICONYELLOW"],true);
+	DrawGraph(15+player_x[0]+LEFT_WINDOW_WIDTH,520+player_y[0],figure_id["F_ICONRED"],true);
+	DrawGraph(15+player_x[1]+LEFT_WINDOW_WIDTH,520+player_y[1],figure_id["F_ICONGREEN"],true);
+	DrawGraph(15+player_x[2]+LEFT_WINDOW_WIDTH,520+player_y[2],figure_id["F_ICONBLUE"],true);
+	DrawGraph(15+player_x[3]+LEFT_WINDOW_WIDTH,520+player_y[3],figure_id["F_ICONYELLOW"],true);
 	DrawGraph(110-15+LEFT_WINDOW_WIDTH,620-15,figure_id["F_ICONDEAD"],true);
 	return true;
 }

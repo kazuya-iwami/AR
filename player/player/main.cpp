@@ -26,7 +26,7 @@ using namespace std;
 #define GAME_TIME 300 //プレー時間　30秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
- #define USE_CAMERA_FLAG 2
+ #define USE_CAMERA_FLAG 1
 
 //0:画像 1:カメラ 2:ラズパイ
 
@@ -34,7 +34,7 @@ using namespace std;
 int hsv[4][4];
 
 std::string SERVER_IP_ADDRESS;// "157.82.7.4"	//サーバーのIPアドレス
-std::string RASPI_IP_ADDRESS = "pi@rpi03.local";//ラズパイのＩＰアドレス
+std::string RASPI_IP_ADDRESS = "pi@rpi02.local";//ラズパイのＩＰアドレス
 
 int PLAYER_NM ;	//自分のプレイヤー番号
 

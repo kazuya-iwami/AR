@@ -69,14 +69,14 @@ bool CMytank::draw() {
 	for(i=0;i<HP;i++){
 		DrawGraph(14+96*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
 	}*/
-	SetDrawBright(255-(HP*75+3*hit_counter),HP*75+3*hit_counter,0);
+	//SetDrawBright(255-(HP*75+3*hit_counter),HP*75+3*hit_counter,0);
 	int j;
 	for(j=0;j<HP*50+2*hit_counter;j++){
 		DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,15,figure_id["F_HPBAR"],true);
 	}
-	SetDrawBright(255,255,255);
+	//SetDrawBright(255,255,255);
 	DrawGraph(33+LEFT_WINDOW_WIDTH,13,figure_id["F_HPFRAME2"],true);
-	DrawExtendGraph(8+LEFT_WINDOW_WIDTH,10,57+LEFT_WINDOW_WIDTH,45,figure_id["F_WAIT01"],true);
+	//DrawExtendGraph(8+LEFT_WINDOW_WIDTH,10,57+LEFT_WINDOW_WIDTH,45,figure_id["F_WAIT01"],true);
 	if(hit_counter>0) hit_counter--;
 
 

@@ -170,6 +170,7 @@ public:
 class COjisan:public CObject{
 private:
 	int hit;
+	int speed;
 	bool* bullet;
 	int* bullet_x;
 	int* bullet_y;

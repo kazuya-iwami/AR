@@ -59,7 +59,7 @@ public:
 
 	int HP;//ヒットポイント-なくなるといったん死ぬ
 	VIABILITY_STATUS viability_status;//生存状態
-	int hit_flag;
+	int hit_counter;
 
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;

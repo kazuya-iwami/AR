@@ -18,6 +18,7 @@
 #include "debug.h"
 #include <mutex>
 #include <thread>
+#include <fstream>
 
 using namespace std;
 	
@@ -671,15 +672,18 @@ int configuration(){
 	}
 	//sprintf_s(SERVER_IP_ADDRESS,"%d.%d.%d.%d",ip[0],ip[1],ip[2],ip[3]);
 	SERVER_IP_ADDRESS = to_string(ip[0]) + "." + to_string(ip[1]) + "." + to_string(ip[2]) + "." + to_string(ip[3]);
-	FileHandle=FileRead_open("data/playernum.csv");
-	if(FileHandle==0){
+
+	ifstream ifs("data/playernum.csv");
+	if(ifs.fail()){
 		return 3;
 	}
-	FileRead_scanf(FileHandle,"%d",&PLAYER_NM);
+	string row;
+	getline(ifs, row);
+	PLAYER_NM = atoi(row.c_str());
 	if(PLAYER_NM<0){
-		FileRead_close(FileHandle);
 		return 3;
-	}	
+	}
+
 	//sprintf_s(RASPI_IP_ADDRESS,"pi@rpi0%d.local",PLAYER_NM);
 	RASPI_IP_ADDRESS = "pi@rpi0" + to_string(PLAYER_NM) + ".local";
 	FileRead_close(FileHandle);

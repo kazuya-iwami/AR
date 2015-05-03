@@ -2,12 +2,15 @@
 #include "server.h"
 #include <windows.h>
 #include "minimap.h"
+#include <fstream>
 
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
 #define PORT_NUM 1
 #define SERIAL_PORT  "\\\\.\\COM4" //シリアルポート名  "\\\\.\\COM3"
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
+
+Data hsv_data;
 
 //minimap用
 Object player[4];
@@ -94,21 +97,32 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		return -1;
 	}
 
-	/*
+	std::ifstream ifs( "../../player/player/data/hsv.csv" );
+	std::string str;
+
+	ifs >> str;
+	int result = sscanf_s(str.c_str(),"1p:%d,%d,%d,%d,%d,%d,2p:%d,%d,%d,%d,%d,%d,3p:%d,%d,%d,%d,%d,%d,4p:%d,%d,%d,%d,%d,%d,hsv_data.corner:%d,%d,%d,%d,%d,%d",
+		&(hsv_data.player[0].minH),&(hsv_data.player[0].maxH),&(hsv_data.player[0].minS),&(hsv_data.player[0].maxS),&(hsv_data.player[0].minV),&(hsv_data.player[0].maxV),
+		&(hsv_data.player[1].minH),&(hsv_data.player[1].maxH),&(hsv_data.player[1].minS),&(hsv_data.player[1].maxS),&(hsv_data.player[1].minV),&(hsv_data.player[1].maxV),
+		&(hsv_data.player[2].minH),&(hsv_data.player[2].maxH),&(hsv_data.player[2].minS),&(hsv_data.player[2].maxS),&(hsv_data.player[2].minV),&(hsv_data.player[2].maxV),
+		&(hsv_data.player[3].minH),&(hsv_data.player[3].maxH),&(hsv_data.player[3].minS),&(hsv_data.player[3].maxS),&(hsv_data.player[3].minV),&(hsv_data.player[3].maxV),
+		&(hsv_data.corner.minH),&(hsv_data.corner.maxH),&(hsv_data.corner.minS),&(hsv_data.corner.maxS),&(hsv_data.corner.minV),&(hsv_data.corner.maxV));
+	if(result != 30){ //30個の入力どれかに失敗した場合
+			//cout << "hsv.csv load failed" <<endl;
+
+		MessageBox(NULL,"hsv.csv取得失敗(´・ω・`)","error",MB_OK | MB_APPLMODAL);
+		cv::waitKey();
+		return -1;
+				
+	}
+
 	field.setCorners(image);//ここでフィールドのコーナー検出
 
-    int lowerH = 0;
-    int upperH = 143;
-    int lowerS = 0;
-    int upperS = 255;
-    int lowerV = 189;
-    int upperV = 255;
-    field.init(lowerH, upperH, lowerS, upperS, lowerV, upperV);
-	player[0].init(0,30,100,200,100,200);
-	player[1].init(30,60,100,200,100,200);
-	player[2].init(60,90,100,200,100,200);
-	player[3].init(90,120,100,200,100,200);
-	*/
+	field.init(hsv_data.corner.minH,hsv_data.corner.maxH,hsv_data.corner.minS,hsv_data.corner.maxS,hsv_data.corner.minV,hsv_data.corner.maxV);
+	player[0].init(hsv_data.player[0].minH,hsv_data.player[0].maxH,hsv_data.player[0].minS,hsv_data.player[0].maxS,hsv_data.player[0].minV,hsv_data.player[0].maxV);
+	player[1].init(hsv_data.player[1].minH,hsv_data.player[1].maxH,hsv_data.player[1].minS,hsv_data.player[1].maxS,hsv_data.player[1].minV,hsv_data.player[1].maxV);
+	player[2].init(hsv_data.player[2].minH,hsv_data.player[2].maxH,hsv_data.player[2].minS,hsv_data.player[2].maxS,hsv_data.player[2].minV,hsv_data.player[2].maxV);
+	player[3].init(hsv_data.player[3].minH,hsv_data.player[3].maxH,hsv_data.player[3].minS,hsv_data.player[3].maxS,hsv_data.player[3].minV,hsv_data.player[3].maxV);
 
 	//以下メインコード
 

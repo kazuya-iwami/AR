@@ -49,6 +49,23 @@ enum COMMAND_NAME {
 	RETURN_DENKYU
 };
 
+class Hsv {
+public:
+	int minH, maxH;
+    int minS, maxS;
+    int minV, maxV;
+};
+
+class Data{
+public:
+	Hsv player[4];
+	Hsv corner;
+	void open();
+	void save();
+};
+
+extern Data hsv_data;
+
 class CPlayer_param{
 public:
 	CPlayer_param();

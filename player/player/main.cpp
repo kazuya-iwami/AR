@@ -644,7 +644,7 @@ int configuration(){
 	//		return 1;
 	//	}
 	//}
-	std::ifstream ifs( "../../player/player/data/hsv.csv" );
+	std::ifstream ifs( "data/hsv.csv" );
 	std::string str;
 
 	ifs >> str;

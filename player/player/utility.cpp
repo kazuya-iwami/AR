@@ -448,6 +448,7 @@ void CWait::update(const char key_buf[256]){
 		bullet_y=y+70;
 		bullet=true;
 	}
+	if(key_buf[D_DIK_Q]) mode=1;
 	if(key_buf[D_DIK_4]) speed =4;
 	if(key_buf[D_DIK_8]) speed =8;
 	if(( draw_timer%60 == 0 )&& ojisan_pop_num < 20){
@@ -457,7 +458,7 @@ void CWait::update(const char key_buf[256]){
 	}
 
 	if(bullet){
-		bullet_x +=8;
+		bullet_x +=4+speed;
 		if(bullet_x > 1400) bullet=false;
 	}
 

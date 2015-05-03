@@ -56,7 +56,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				   LPSTR lpCmdLine, int nCmdShow )
 {
 
-
 	// ウインドウモードで起動
 	SetMainWindowText( "server" ) ;
 	ChangeWindowMode( TRUE ) ;//falseならフルスクリーン
@@ -148,7 +147,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	while( 1 )
 	{
-
 		//キー状態取得
 		//書き方は以下の通り
 		for(int i=0;i<256;i++){
@@ -197,7 +195,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 
 
-		// 上下左右のキー入力に対応して x, y の座標値を変更する
+		// Enter入力処理
 		if( key_buf[ KEY_INPUT_RETURN] == 1 && key_prev_buf[ KEY_INPUT_RETURN ] == 0 ){
 			if(game_status == GAME_STATUS::GAME_WAIT) {
 				//ゲーム開始命令
@@ -220,7 +218,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 
 
-		check_item_valid();
+		//check_item_valid();
 		check_dead_valid();
 
 		FD_ZERO(&mask);
@@ -232,7 +230,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		for (int i = 0; i < PORT_NUM; i++) {
 			if(!player_param[i].exist)continue;
 			if (FD_ISSET(nsockfd[i], &mask)) {
-
 				int n = (int)recv(nsockfd[i], buf, BUFMAX,0);
 				if (n <= 0) {
 					std::cout << "プレイヤー:"<< i <<"が切断しました" <<std::endl;
@@ -278,9 +275,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		if( ProcessMessage() == -1 ) break ;
 
 		// ＥＳＣキーが押されたらループから抜ける
-		if( CheckHitKey( KEY_INPUT_ESCAPE ) == 1 ) break ;
+		if( key_buf[ KEY_INPUT_ESCAPE] == 1 && key_prev_buf[ KEY_INPUT_ESCAPE ] == 0 ){
+			break;
+		}
+		//if( CheckHitKey( KEY_INPUT_ESCAPE ) == 1 ) break ;
 	}
-
 	for (int i = 0; i < PORT_NUM; i++) {
 		closesocket(nsockfd[i]);
 	}
@@ -431,7 +430,7 @@ void serial_init(){
 }
 void set_denkyu(int denkyu_id,bool flag){
 
-	int tmp_flag;
+	int tmp_flag = 0x00;
 	if(denkyu_id == 1)tmp_flag=0x01; //001
 	if(denkyu_id == 2)tmp_flag=0x02; //010
 	if(denkyu_id == 3)tmp_flag=0x04; //100
@@ -453,6 +452,6 @@ void set_denkyu(int denkyu_id,bool flag){
 		CloseHandle(arduino);
 
 	}
-	printf("FINISH\n");
+	printf("set_denkyu() FINISH\n");
 
 }

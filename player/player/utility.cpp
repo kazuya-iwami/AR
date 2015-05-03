@@ -446,6 +446,7 @@ void CWait::update(const char key_buf[256]){
 		bullet_y=y+70;
 		bullet=true;
 	}
+	if(key_buf[D_DIK_8]) speed =8;
 	if(( draw_timer%60 == 0 )&& ojisan_pop_num < 20){
 		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num,&mode);
 		CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
@@ -564,7 +565,7 @@ bool CScore_Info::draw(){
 bool COjisan::draw(){
 	DrawRotaGraph(x,y,0.7,hit/18.0,figure_id["F_MAN"],true,true);
 	if(hit==0){
-		x -= 3;
+		x -= speed;
 		if(*bullet && *bullet_x < x +10 && *bullet_x > x -10 && *bullet_y < y +60 && *bullet_y > y -60){
 			hit=1;
 			*bullet = false;
@@ -605,6 +606,7 @@ COjisan::COjisan(int *bullet_x_,int *bullet_y_,bool *bullet_,int* ojisan_num_,in
 	x = 1400;;
 	y = rand()%600 + 65;
 	hit=0;
+	speed = rand()%3 + 3;
 }
 
 void CDenkyu::attaacked(){

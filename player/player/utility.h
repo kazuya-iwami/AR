@@ -4,7 +4,7 @@
 #include "image_processing.h"
 #include "explosion.h"
 #include <string>
-
+#include "network.h"
 //細かいクラスはここにかき集めている
 
 
@@ -180,10 +180,26 @@ public:
 	bool draw();
 };
 
+
+//電球一つ一つのクラス　攻撃判定用
+class CDenkyu :public CImage_processer,public CNetwork,public CObject{
+public:
+	bool hit;//既に攻撃されていたらtrue
+	int denkyu_id;
+	bool lockon;
+
+	void attaacked();//攻撃が当たった場合の処理
+	bool draw();
+	int get_x(){return x;};
+	int get_y(){return y;};
+
+};
 //EEICクラス
 class CEeic:public CObject{
 public:
+	CDenkyu denkyu[3];
 	CEeic();
-	int check[4];
 	bool draw();
+	void detect(Mat image);
+
 };

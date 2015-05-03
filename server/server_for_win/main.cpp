@@ -361,6 +361,9 @@ void send_message(std::string msg, int id=4) {
 }
 
 void init(){
+	set_denkyu(0,false);
+	set_denkyu(1,false);
+	set_denkyu(2,false);
 	game_status=GAME_STATUS::GAME_WAIT;
 	item_end_time = 0;
 	for(int i=0;i<4;i++){

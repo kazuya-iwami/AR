@@ -214,11 +214,26 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	if (id != 2 && enemy2->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 2, (int)BULLET_KIND::BULLET_NOMAL));
 	if (id != 3 && enemy3->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 3, (int)BULLET_KIND::BULLET_NOMAL));
 
+	//電球攻撃
+	for(int i=0;i<3;i++){
+		if(eeic->denkyu[i].lockon)eeic->denkyu[i].attaacked();
+	}
+
 }
 
 void CMytank::check_focus(){
 
 	if(focus_flag){
+		//電球のロックオン
+		for(int i=0;i<3;i++){
+			if(eeic->denkyu[i].get_x()- ENEMY_MARGIN < focus_x && eeic->denkyu[i].get_x() + ENEMY_MARGIN > focus_x && eeic->denkyu[i].get_y() -ENEMY_MARGIN < focus_y && eeic->denkyu[i].get_y() + ENEMY_MARGIN > focus_y){
+				if(eeic->denkyu[i].hit == false){ //切断したプレーヤーへの攻撃禁止
+					eeic->denkyu[i].lockon = true;
+				}
+			}else eeic->denkyu[i].lockon = false;
+		}
+
+		//敵のロックオン
 		if(id != 0){
 			if(enemy0->get_x() - ENEMY_MARGIN < focus_x && enemy0->get_x() + ENEMY_MARGIN > focus_x && enemy0->get_y() -ENEMY_MARGIN < focus_y && enemy0->get_y() + ENEMY_MARGIN > focus_y){
 				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
@@ -746,6 +761,11 @@ void CMytank::get_msg(){
 			}
 			break;
 
+		case COMMAND_NAME::RETURN_DENKYU:
+			//自分or他人が電球を攻撃した場合
+			eeic->denkyu[data[1]].hit=true;
+			break;
+
 		default:
 			break;
 
@@ -759,11 +779,12 @@ void CMytank::get_msg(){
 
 void CMytank::detect_enemy(Mat image) {
 
-	if (id != 0)enemy0->detect(image,0);
-	if (id != 1)enemy1->detect(image,1);
-	if (id != 2)enemy2->detect(image,2);
-	if (id != 3)enemy3->detect(image,3);
+	if (id != 0)enemy0->detect(image);
+	if (id != 1)enemy1->detect(image);
+	if (id != 2)enemy2->detect(image);
+	if (id != 3)enemy3->detect(image);
 
+	eeic->detect(image);
 }
 
 void CMytank::attacked(int score_){

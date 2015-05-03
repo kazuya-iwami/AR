@@ -110,6 +110,11 @@ void recv_message(string msg, int id) {
 				cout << "プレイヤー:"<< id << "が生き返りました。"<<endl;
 				//player_param[id].viability = ALIVE;
 				break;
+			case COMMAND_NAME::UPDATE_DENKYU:
+				cout << "プレイヤー:" << id << "が電球:" << player_from << "を" << player_to << "にしました" << endl;
+				if(player_to == 1)set_denkyu(player_from,true);
+				send_message(encode(COMMAND_NAME::RETURN_DENKYU,player_from,0,0),4);
+				break;
 			default:
 				std::cout << "COMMAND_NAME ERROR" << std::endl;
 				break;

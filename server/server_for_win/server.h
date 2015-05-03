@@ -34,7 +34,7 @@ enum GAME_STATUS {
 	GAME_FINISH
 };
 
-enum COMMAND_NAME{
+enum COMMAND_NAME {
 	FINISH,
 	USE_ITEM,
 	INFORM_ITEM,
@@ -44,7 +44,9 @@ enum COMMAND_NAME{
 	UPDATE_LOCATIONS,
 	DISCONNECT,
 	INFORM_DIE,
-	INFORM_REVIVE
+	INFORM_REVIVE,
+	UPDATE_DENKYU,
+	RETURN_DENKYU
 };
 
 class CPlayer_param{
@@ -62,5 +64,6 @@ public:
 void send_message(std::string msg, int id);
 
 std::string encode(COMMAND_NAME command_name, int player_from, int player_to, int kind);
+void set_denkyu(int denkyu_id,bool flag);
 
 #endif //_AR_SOCKET_SERVER_H_

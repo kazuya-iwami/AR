@@ -14,14 +14,14 @@ void CImage_processer::init(int minH_, int maxH_, int minS_, int maxS_, int minV
 	for(int i=0;i<4;i++){
 		for(int j=0;j<2;j++){
 			for(int k=0;k<10;k++){
-				ip[i][j][k]=-100;
+				ip[j][k]=-100;
 			}
 		}
 	}
 	visible = false;
 }  
 
-Mat CImage_processer::detect(Mat image, int id) {
+Mat CImage_processer::detect(Mat image) {
 
 	// HSVに変換
 	Mat hsv;
@@ -59,8 +59,8 @@ Mat CImage_processer::detect(Mat image, int id) {
 	if (contour_index >= 0 && max_area > 150) {
 		int xx=0,yy=0;	
 		for(int j=0;j<10;j++){	
-		xx+=ip[id][0][j];
-		yy+=ip[id][1][j];
+		xx+=ip[0][j];
+		yy+=ip[1][j];
 		}
 		// 重心
 		Moments moments = cv::moments(contours[contour_index], true);
@@ -69,19 +69,19 @@ Mat CImage_processer::detect(Mat image, int id) {
 		if((xx-ip_x)*(xx-ip_x)+(yy-ip_y)*(yy-ip_y)>1000){
 			//敵の位置がこれまでの平均よりも極端に離れていたら履歴を削除して作り直し.適当に閾値は調整すること
 			for(int j=0;j<10;j++){
-				ip[id][0][j]=ip_x;
-				ip[id][1][j]=ip_y;
+				ip[0][j]=ip_x;
+				ip[1][j]=ip_y;
 			}
 		}else{
 			for(int j=8;j>=0;j--){
-				ip[id][0][j+1]=ip[id][0][j];
-				ip[id][1][j+1]=ip[id][1][j];
+				ip[0][j+1]=ip[0][j];
+				ip[1][j+1]=ip[1][j];
 			}
-			ip[id][0][0]=ip_x;
-			ip[id][1][0]=ip_y;
+			ip[0][0]=ip_x;
+			ip[1][0]=ip_y;
 			for(int j=0;j<10;j++){	
-				xx+=ip[id][0][j];
-				yy+=ip[id][1][j];
+				xx+=ip[0][j];
+				yy+=ip[1][j];
 			}
 			ip_x=xx/10;	
 			ip_y=yy/10;
@@ -94,11 +94,11 @@ Mat CImage_processer::detect(Mat image, int id) {
 		visible = true;
 	} else {
 		for(int j=8;j>=0;j--){
-			ip[id][0][j+1]=ip[id][0][j];
-			ip[id][1][j+1]=ip[id][1][j];
+			ip[0][j+1]=ip[0][j];
+			ip[1][j+1]=ip[1][j];
 		}
-		ip[id][0][0]=-100;
-		ip[id][0][1]=-100;
+		ip[0][0]=-100;
+		ip[0][1]=-100;
 		visible = false;
 	}
 

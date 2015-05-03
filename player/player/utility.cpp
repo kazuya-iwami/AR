@@ -230,38 +230,44 @@ bool CThunder :: draw(){
 }
 
 bool CEeic::draw(){
-	if(check[0]==1){
-		DrawGraph(LEFT_WINDOW_WIDTH+600,600,figure_id["F_MINILIGHT_E"],true);
+	if(denkyu[0].hit){ 
+		DrawGraph(LEFT_WINDOW_WIDTH+600,600,figure_id["F_MINILIGHT_E"],true); 
 		DrawGraph(LEFT_WINDOW_WIDTH+600,590,figure_id["F_MINILIGHT_TOP"],true);
 	}else{
 		DrawGraph(LEFT_WINDOW_WIDTH+600,600,figure_id["F_MINILIGHT_0"],true);
 	}
-	if(check[1]==1){
+	if(denkyu[1].hit){
 		DrawGraph(LEFT_WINDOW_WIDTH+700,600,figure_id["F_MINILIGHT_E"],true);	
 		DrawGraph(LEFT_WINDOW_WIDTH+700,590,figure_id["F_MINILIGHT_TOP"],true);
 	}else{
 		DrawGraph(LEFT_WINDOW_WIDTH+700,600,figure_id["F_MINILIGHT_0"],true);
 	}
-	if(check[2]==1){
+	if(denkyu[2].hit){
 		DrawGraph(LEFT_WINDOW_WIDTH+800,600,figure_id["F_MINILIGHT_I"],true);		
 		DrawGraph(LEFT_WINDOW_WIDTH+800,590,figure_id["F_MINILIGHT_TOP"],true);
 	}else{
 		DrawGraph(LEFT_WINDOW_WIDTH+800,600,figure_id["F_MINILIGHT_0"],true);
 	}
-	if(check[3]==1){
-		DrawGraph(LEFT_WINDOW_WIDTH+900,600,figure_id["F_MINILIGHT_C"],true);
-		DrawGraph(LEFT_WINDOW_WIDTH+900,590,figure_id["F_MINILIGHT_TOP"],true);
-	}else{
-		DrawGraph(LEFT_WINDOW_WIDTH+900,600,figure_id["F_MINILIGHT_0"],true);
-	}		
+	
 	return true;
 }
 
+void CEeic::detect(Mat image){
+		for(int i = 0;i<3;i++){
+		denkyu[i].detect(image);
+	}
+}
+
 CEeic::CEeic(){
-	check[0]=-1;
-	check[1]=-1;
-	check[2]=-1;
-	check[3]=-1;
+	for(int i=0;i<3;i++){
+		denkyu[i].hit=false;
+		denkyu[i].denkyu_id = i;
+		denkyu[i].lockon=false;
+	}
+
+	denkyu[0].init(0,30,100,200,100,200);
+	denkyu[1].init(100,150,100,200,100,200);
+	denkyu[2].init(150,200,100,200,100,200);
 }
 
 CMap::CMap(){
@@ -599,4 +605,22 @@ COjisan::COjisan(int *bullet_x_,int *bullet_y_,bool *bullet_,int* ojisan_num_,in
 	x = 1400;;
 	y = rand()%600 + 65;
 	hit=0;
+}
+
+void CDenkyu::attaacked(){
+	hit = true;
+	send_msg(encode(COMMAND_NAME::UPDATE_DENKYU,denkyu_id,1,0)); //denkyu_idをONに;
+
+}
+
+bool CDenkyu::draw(){
+
+	x=ip_x*1000/320;//画面引き延ばしてる分の補正
+	y=ip_y*750/240;
+
+	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "電");
+	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "気");
+	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "系");
+
+	return true;
 }

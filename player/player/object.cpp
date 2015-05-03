@@ -69,6 +69,7 @@ void CObject::load(){
 	figure_id["F_HP"]=LoadGraph("image/hp_gauge.png");
 	figure_id["F_HPFRAME"]=LoadGraph("image/hp_frame.png");
 	figure_id["F_HPBAR"]=LoadGraph("image/hp_bar.png");
+	figure_id["F_HPFRAME2"]=LoadGraph("image/hp_frame2.png");
 
 	figure_id["F_MAPFRAME"] = LoadGraph("image/map_frame.png");
 

@@ -70,13 +70,15 @@ bool CMytank::draw() {
 	for(i=0;i<HP;i++){
 		DrawGraph(14+96*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
 	}*/
-	SetDrawBright(255-(HP*75+3*hit_flag),HP*75+3*hit_flag,HP*25+hit_flag);
+	SetDrawBright(255-(HP*75+3*hit_counter),HP*75+3*hit_counter,0);
 	int j;
-	for(j=0;j<HP*50+2*hit_flag;j++){
-		DrawGraph(5+LEFT_WINDOW_WIDTH+2*j,15,figure_id["F_HPBAR"],true);
+	for(j=0;j<HP*50+2*hit_counter;j++){
+		DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,15,figure_id["F_HPBAR"],true);
 	}
 	SetDrawBright(255,255,255);
-	if(hit_flag>0) hit_flag--;
+	DrawGraph(33+LEFT_WINDOW_WIDTH,13,figure_id["F_HPFRAME2"],true);
+	DrawExtendGraph(8+LEFT_WINDOW_WIDTH,10,57+LEFT_WINDOW_WIDTH,45,figure_id["F_WAIT01"],true);
+	if(hit_counter>0) hit_counter--;
 
 
 	//リロード画面表示
@@ -94,10 +96,11 @@ bool CMytank::draw() {
 	//DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
 
 	//man
-	double kakudo;
-	if(draw_timer%40 < 20) kakudo = -0.5+(draw_timer%40)/20.0;
-	else kakudo = 0.5-(draw_timer%40-20)/20.0;
-	DrawRotaGraph(80,600,1.0,kakudo,figure_id["F_MAN"],true);
+	//if(draw_timer%40 < 20) kakudo = -0.5+(draw_timer%40)/20.0;
+	//else kakudo = 0.5-(draw_timer%40-20)/20.0;
+	DrawRotaGraph(80,600,1.0,0,figure_id["F_MAN"],true);
+	if(attackable) DrawOriginalString(20,470,0.75,20,"SHOOT!");
+	
 
 	//upadte score_info
 	if(id == 0)	score_info->update_score(score,enemy1->score,enemy2->score,enemy3->score);
@@ -112,7 +115,7 @@ CMytank::CMytank() {
 	//初期化
 	score = 0;
 	HP = 3;//最初のHPは3
-	hit_flag = 0;
+	hit_counter = 0;
 	viability_status = VIABILITY_STATUS::ALIVE;//最初の状態は生存
 	num_bullet = 10; //残弾10こ
 	ope_status = OPERATION_STATUS::REGULAR;
@@ -790,7 +793,7 @@ void CMytank::detect_enemy(Mat image) {
 void CMytank::attacked(int score_){
 	if (HP > 0) {
 		HP -= score_;
-		hit_flag +=25;
+		hit_counter +=25;
 	}
 
 	shake_start(SHAKE_STATUS::SMALL_SHAKE); // 画面振動

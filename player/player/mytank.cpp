@@ -15,7 +15,6 @@
 void requestHttp_thread(tstring direction, tstring speed);
 
 
-
 bool CMytank::draw() {
 
 	//カーソル表示
@@ -161,7 +160,7 @@ CMytank::CMytank() {
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
-		enemy0->init(137,180,100,255,56,184);//スマホの赤
+		enemy0->init(0,3,162,255,0,255);//ガチャピンの頭の赤
 		CObject::register_object(enemy0,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 1) {
@@ -173,13 +172,13 @@ CMytank::CMytank() {
 	if (id != 2) {
 		auto enemy2_ = make_shared<CEnemy>(2);
 		enemy2 = enemy2_;
-		enemy2->init(0,0,100,200,100,200);
+		enemy2->init(20,24,115,255,0,255);//コップの黄色
 		CObject::register_object(enemy2,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 3) {
 		auto enemy3_ = make_shared<CEnemy>(3);
 		enemy3 = enemy3_;
-		enemy3->init(30,30,100,200,100,200);
+		enemy3->init(180,180,255,255,255,255);		
 		CObject::register_object(enemy3,DRAW_LAYER::ENEMY_LAYER);
 	}
 };

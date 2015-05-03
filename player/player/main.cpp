@@ -22,10 +22,11 @@
 
 using namespace std;
 	
-#define GAME_TIME 30 //プレー時間　30秒
+
+#define GAME_TIME 300 //プレー時間　30秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
-#define USE_CAMERA_FLAG 1
+ #define USE_CAMERA_FLAG 2
 
 //0:画像 1:カメラ 2:ラズパイ
 
@@ -33,7 +34,7 @@ using namespace std;
 int hsv[4][4];
 
 std::string SERVER_IP_ADDRESS;// "157.82.7.4"	//サーバーのIPアドレス
-std::string RASPI_IP_ADDRESS ;//"pi@rpi04.local"//ラズパイのＩＰアドレス
+std::string RASPI_IP_ADDRESS = "pi@rpi03.local";//ラズパイのＩＰアドレス
 
 int PLAYER_NM ;	//自分のプレイヤー番号
 
@@ -686,7 +687,7 @@ int configuration(){
 	}
 
 	//sprintf_s(RASPI_IP_ADDRESS,"pi@rpi0%d.local",PLAYER_NM);
-	RASPI_IP_ADDRESS = "pi@rpi0" + to_string(PLAYER_NM) + ".local";
+	//RASPI_IP_ADDRESS = "pi@rpi0" + to_string(PLAYER_NM) + ".local";
 	FileRead_close(FileHandle);
 	return 0;
 }

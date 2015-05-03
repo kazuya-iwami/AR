@@ -438,10 +438,10 @@ void CWait::play_init(){
 }
 
 void CWait::update(const char key_buf[256]){
-	if(key_buf[D_DIK_W]) y -=speed;
-	if(key_buf[D_DIK_S]) y +=speed;
-	if(key_buf[D_DIK_D]) x +=speed;
-	if(key_buf[D_DIK_A]) x -=speed;
+	if(key_buf[D_DIK_W] || key_buf[D_DIK_UP]) y -=speed;
+	if(key_buf[D_DIK_S] || key_buf[D_DIK_DOWN]) y +=speed;
+	if(key_buf[D_DIK_D] || key_buf[D_DIK_RIGHT]) x +=speed;
+	if(key_buf[D_DIK_A] || key_buf[D_DIK_LEFT]) x -=speed;
 
 	if(key_buf[D_DIK_SPACE] && bullet == false){
 		bullet_x=x+140;

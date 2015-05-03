@@ -6,7 +6,7 @@
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
 #define PORT_NUM 1
-#define SERIAL_PORT  "\\\\.\\COM3" //シリアルポート名  "\\\\.\\COM3"
+#define SERIAL_PORT  "\\\\.\\COM4" //シリアルポート名  "\\\\.\\COM3"
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
 //minimap用
@@ -92,9 +92,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		std::cout << "No frame" << std::endl;
 		MessageBox(NULL,"画像フレーム取得失敗(´・ω・`)","error",MB_OK | MB_APPLMODAL);
 		cv::waitKey();
-		return;
+		return -1;
 	}
 
+	/*
 	field.setCorners(image);//ここでフィールドのコーナー検出
 
     int lowerH = 0;
@@ -108,7 +109,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	player[1].init(30,60,100,200,100,200);
 	player[2].init(60,90,100,200,100,200);
 	player[3].init(90,120,100,200,100,200);
-
+	*/
 
 	//以下メインコード
 
@@ -166,7 +167,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			std::cout << "No frame" << std::endl;
 			MessageBox(NULL,"画像フレーム取得失敗(´・ω・`)","error",MB_OK | MB_APPLMODAL);
 			cv::waitKey();
-			return;
+			return -1;
 		}
 		
 		//ここでフィールドのコーナー再検出

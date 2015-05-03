@@ -157,25 +157,29 @@ CMytank::CMytank() {
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
-		enemy0->init(137,180,100,255,56,184);//スマホの赤
+		enemy0->init(hsv_data.player[0].minH,hsv_data.player[0].maxH,hsv_data.player[0].minS,hsv_data.player[0].maxS,
+			hsv_data.player[0].minV,hsv_data.player[0].maxV);//スマホの赤
 		CObject::register_object(enemy0,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 1) {
 		auto enemy1_ = make_shared<CEnemy>(1);
 		enemy1 = enemy1_;
-		enemy1->init(70,93,65,255,56,184);//サボテンだー
+		enemy1->init(hsv_data.player[1].minH,hsv_data.player[1].maxH,hsv_data.player[1].minS,hsv_data.player[1].maxS,
+			hsv_data.player[1].minV,hsv_data.player[1].maxV);//サボテンだー
 		CObject::register_object(enemy1,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 2) {
 		auto enemy2_ = make_shared<CEnemy>(2);
 		enemy2 = enemy2_;
-		enemy2->init(0,0,100,200,100,200);
+		enemy2->init(hsv_data.player[2].minH,hsv_data.player[2].maxH,hsv_data.player[2].minS,hsv_data.player[2].maxS,
+			hsv_data.player[2].minV,hsv_data.player[2].maxV);
 		CObject::register_object(enemy2,DRAW_LAYER::ENEMY_LAYER);
 	}
 	if (id != 3) {
 		auto enemy3_ = make_shared<CEnemy>(3);
 		enemy3 = enemy3_;
-		enemy3->init(30,30,100,200,100,200);
+		enemy3->init(hsv_data.player[3].minH,hsv_data.player[3].maxH,hsv_data.player[3].minS,hsv_data.player[3].maxS,
+			hsv_data.player[3].minV,hsv_data.player[3].maxV);
 		CObject::register_object(enemy3,DRAW_LAYER::ENEMY_LAYER);
 	}
 };

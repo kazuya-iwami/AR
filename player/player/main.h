@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "object.h"
 #include "utility.h"
+#include <fstream>
 
 using namespace std;
 
@@ -16,4 +17,23 @@ extern std::string RASPI_IP_ADDRESS ;//"pi@rpi04.local"//ラズパイのＩＰ�
 
 extern int PLAYER_NM ;	//自分のプレイヤー番号
 
+
+
 string encode(COMMAND_NAME, int, int, int);
+
+class Hsv {
+public:
+	int minH, maxH;
+    int minS, maxS;
+    int minV, maxV;
+};
+
+class Data{
+public:
+	Hsv player[4];
+	Hsv corner;
+	void open();
+	void save();
+};
+
+extern Data hsv_data;

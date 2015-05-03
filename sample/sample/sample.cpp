@@ -1,187 +1,58 @@
-#include <iostream>
-
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
-#define NCORNERS 4
+﻿
+#include "sample.h"
 
 using namespace std;
 using namespace cv;
 
-Point corners[NCORNERS];
+//hsv.csv読み込み
+void Data::open(){
+	std::ifstream ifs( "../../player/player/data/hsv.csv" );
+	std::string str;
 
-class Object {
+	ifs >> str;
+	int result = sscanf_s(str.c_str(),"1p:%d,%d,%d,%d,%d,%d,2p:%d,%d,%d,%d,%d,%d,3p:%d,%d,%d,%d,%d,%d,4p:%d,%d,%d,%d,%d,%d,corner:%d,%d,%d,%d,%d,%d",
+		&(player[0].minH),&(player[0].maxH),&(player[0].minS),&(player[0].maxS),&(player[0].minV),&(player[0].maxV),
+		&(player[1].minH),&(player[1].maxH),&(player[1].minS),&(player[1].maxS),&(player[1].minV),&(player[1].maxV),
+		&(player[2].minH),&(player[2].maxH),&(player[2].minS),&(player[2].maxS),&(player[2].minV),&(player[2].maxV),
+		&(player[3].minH),&(player[3].maxH),&(player[3].minS),&(player[3].maxS),&(player[3].minV),&(player[3].maxV),
+		&(corner.minH),&(corner.maxH),&(corner.minS),&(corner.maxS),&(corner.minV),&(corner.maxV));
+	if(result != 30){ //30個の入力どれかに失敗した場合
+			cout << "hsv.csv load failed" <<endl;
 
-public:
-    int x, y;
-
-    int minH, maxH;
-    int minS, maxS;
-    int minV, maxV;
-
-    bool visible; //視界に入っているかのフラグ
-
-    void init(int minH_, int maxH_, int minS_, int maxS_, int minV_, int maxV_) {
-        minH = minH_;
-        minS = minS_;
-        minV = minV_;
-        maxH = maxH_;
-        maxS = maxS_;
-        maxV = maxV_;
-
-        x = 0;
-        y = 0;
-
-        visible = false;
-    }
-
-   void detect(Mat image);
-};
-
-
-/*
- * corners are ordered as below
- *
- *  0 ------ 3
- *  |        |
- *  |        |
- *  |        |
- *  1 ------ 2
- */
-class Field {
-    Point2f corners[4];
-    Point2f center;
-public:
-    Field() {};
-    Field(Point corners[NCORNERS]);
-    void setCorners(Point corners[NCORNERS]);
-    void drawBoundaries(Mat image);
-    Point2f getLocation(Point2f p);
-};
-
-Field f;
-
-void Field::setCorners(Point corners[NCORNERS]) {
-    // find digonal
-    int diagnal = 0;
-    double max_dist = 0.0;
-    for (int i = 1; i < NCORNERS; ++i) {
-        double dist = norm(corners[i] - corners[0]);
-        if (dist > max_dist) {
-            diagnal = i;
-            dist = max_dist;
-        }
-    }
-
-    this->corners[0] = corners[0];
-    if (diagnal == 1) {
-        this->corners[1] = corners[2];
-        this->corners[2] = corners[1];
-        this->corners[3] = corners[3];
-    } else if (diagnal == 2) {
-        for (int i = 1; i < NCORNERS; ++i) {
-            this->corners[i] = corners[i];
-        }
-    } else if (diagnal == 3) {
-        this->corners[1] = corners[1];
-        this->corners[2] = corners[3];
-        this->corners[3] = corners[2];
-    }
-
-    this->center = Point(0, 0);
-    for (int i = 0; i < NCORNERS; ++i) {
-        this->center += this->corners[i];
-    }
-    this->center = Point2f(this->center.x / 4.0, this->center.y / 4.0);
+			for(int i=0;i<4;i++){
+				player[i].minH=0;
+				player[i].maxH=180;
+				player[i].minS=0;
+				player[i].maxS=255;
+				player[i].minV=0;
+				player[i].maxV=255;
+			}
+			corner.minH=0;
+			corner.maxH=180;
+			corner.minS=0;
+			corner.maxS=255;
+			corner.minV=0;
+			corner.maxV=255;
+				
+	}else{
+		cout<< "load succeeded!" << endl;
+	}
 }
+//hsv.csv書き込み
+void Data::save(){
+	 std::ofstream ofs("../../player/player/data/hsv.csv");
+	 char str_c[400];
 
+	 sprintf_s(str_c,"1p:%d,%d,%d,%d,%d,%d,2p:%d,%d,%d,%d,%d,%d,3p:%d,%d,%d,%d,%d,%d,4p:%d,%d,%d,%d,%d,%d,corner:%d,%d,%d,%d,%d,%d",
+		(player[0].minH),(player[0].maxH),(player[0].minS),(player[0].maxS),(player[0].minV),(player[0].maxV),
+		(player[1].minH),(player[1].maxH),(player[1].minS),(player[1].maxS),(player[1].minV),(player[1].maxV),
+		(player[2].minH),(player[2].maxH),(player[2].minS),(player[2].maxS),(player[2].minV),(player[2].maxV),
+		(player[3].minH),(player[3].maxH),(player[3].minS),(player[3].maxS),(player[3].minV),(player[3].maxV),
+		(corner.minH),(corner.maxH),(corner.minS),(corner.maxS),(corner.minV),(corner.maxV));
 
-Field::Field(Point corners[NCORNERS]) {
-    // find digonal
-    int diagnal = 0;
-    double max_dist = 0.0;
-    for (int i = 1; i < NCORNERS; ++i) {
-        double dist = norm(corners[i] - corners[0]);
-        if (dist > max_dist) {
-            diagnal = i;
-            dist = max_dist;
-        }
-    }
-
-    this->corners[0] = corners[0];
-    if (diagnal == 1) {
-        this->corners[1] = corners[2];
-        this->corners[2] = corners[1];
-        this->corners[3] = corners[3];
-    } else if (diagnal == 2) {
-        for (int i = 1; i < NCORNERS; ++i) {
-            this->corners[i] = corners[i];
-        }
-    } else if (diagnal == 3) {
-        this->corners[1] = corners[1];
-        this->corners[2] = corners[3];
-        this->corners[3] = corners[2];
-    }
-
-    this->center = Point(0, 0);
-    for (int i = 0; i < NCORNERS; ++i) {
-        this->center += this->corners[i];
-    }
-    this->center = Point2f(this->center.x / 4.0, this->center.y / 4.0);
+	 string str = str_c;
+	 ofs << str;
 }
-
-void Field::drawBoundaries(Mat image) {
-    for (int i = 0; i < NCORNERS; ++i) {
-        cout << "corners[" << i << "] : " << corners[i].x << ", " << corners[i].y << endl;
-        line(image, corners[i], corners[(i+1)%4], Scalar(255, 255, 255));
-    }
-    for (int i = 0; i < NCORNERS; ++i) {
-        line(image, corners[i], center, Scalar(255, 255, 255));
-    }
-    cout << "center : " << center.x << " , " << center.y << endl;
-}
-
-Point2f Field::getLocation(Point2f p) {
-    Point2f dirs[NCORNERS];
-    for (int i = 0; i < NCORNERS; ++i) {
-        dirs[i] = corners[i] - center;
-    }
-
-    Point2f relative = p - center;
-
-    for (int i = 0; i < NCORNERS; ++i) {
-        Point2f d1 = dirs[i];
-        Point2f d2 = dirs[(i+1)%NCORNERS];
-        if (d1.dot(relative) > -0.3 && d2.dot(relative) > -0.3) {
-            cout << "i: " << i << endl;
-            cout << "relative: " << relative.x << ", " << relative.y << endl;
-            cout << "d1: " << d1.x << ", " << d1.y << endl;
-            cout << "d2: " << d2.x << ", " << d2.y << endl;
-            double det = d1.x * d2.y - d1.y * d2.x;
-            if (det == 0) {
-                return Point2f(0.5, 0.5);
-            } else {
-                double s = (d2.y * relative.x - d2.x * relative.y) / det;
-                double t = (d1.x * relative.y - d1.y * relative.x) / det;
-                cout << "s: " << s << ", t: " << t << endl;
-                if (s < 0 || t < 0) continue;
-                switch(i) {
-                    case 0:
-                        return Point2f(0.5 * (1 - s - t), 0.5 * (1 - s + t));
-                    case 1:
-                        return Point2f(0.5 * (1 - s + t), 0.5 * (1 + s + t));
-                    case 2: 
-                        return Point2f(0.5 * (1 + s + t), 0.5 * (1 + s - t));
-                    case 3:
-                        return Point2f(0.5 * (1 + s - t), 0.5 * (1 - s - t));
-                }
-            }
-        }
-    }
-    return Point2f(0.5, 0.5);
-}
-
-// Field f();
 
 void Object::detect(Mat image) {
 
@@ -201,9 +72,8 @@ void Object::detect(Mat image) {
     //imshow("morphologyEx", binalized);
 
     // 輪郭を検出
-    std::vector<std::vector<Point> > contours;
+    std::vector<std::vector<Point>> contours;
     findContours(binalized.clone(), contours, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
-
 
     // 一番大きい輪郭を抽出
     int contour_index = -1;
@@ -216,162 +86,176 @@ void Object::detect(Mat image) {
         }
     }
 
-    std::sort(contours.begin(), contours.end(),
-        [](const std::vector<Point> &a, const std::vector<Point> &b) {
-        return fabs(contourArea(a)) > fabs(contourArea(b));
-    });
-
-    Point corners[4];
     Rect rect;
 
-    // cout << contours.size() << endl;
-    for (int i = 0; i < NCORNERS; ++i) {
-        Moments moments = cv::moments(contours[i], true);
-
+    // マーカが見つかった
+    if (contour_index >= 0 && max_area > 150) {
+        // 重心
+        Moments moments = cv::moments(contours[contour_index], true);
         y = (int)(moments.m01 / moments.m00);
         x = (int)(moments.m10 / moments.m00);
-        corners[i] = Point(x, y);
 
-        rect = boundingRect(contours[i]);
-        // cout << fabs(contourArea(contours[i])) << endl;
-        drawContours(image, contours, i, Scalar(0, 255, 0));
+        // 表示
+        rect = boundingRect(contours[contour_index]);
+
+        //drawContours(image, contours, contour_index, Scalar(0,255,0));
+
+        visible = true;
+    } else {
+        visible = false;
     }
-
-    f.setCorners(corners);
-
-    // // マーカが見つかった
-    // if (contour_index >= 0 && max_area > 150) {
-    //     // 重心
-    //     Moments moments = cv::moments(contours[contour_index], true);
-    //     y = (int)(moments.m01 / moments.m00);
-    //     x = (int)(moments.m10 / moments.m00);
-
-    //     // 表示
-    //     rect = boundingRect(contours[contour_index]);
-
-    //     //drawContours(image, contours, contour_index, Scalar(0,255,0));
-
-    //     visible = true;
-    // } else {
-    //     visible = false;
-    // }
 
     Mat output(image.size(),image.type(), Scalar::all(0));
     image.copyTo(output ,binalized);
     rectangle(output, rect, Scalar(0, 255, 0));
 
-    // find digonal
-    int diagnal = 0;
-    double max_dist = 0.0;
-    for (int i = 1; i < NCORNERS; ++i) {
-        double dist = norm(corners[i] - corners[0]);
-        if (dist > max_dist) {
-            diagnal = i;
-            dist = max_dist;
-        }
-    }
-    // draw boundaries
-    // for (int i = 1; i < NCORNERS; ++i) {
-    //     if (i != diagnal) {
-    //         line(output, corners[0], corners[i], Scalar(255, 255, 255));
-    //         line(output, corners[diagnal], corners[i], Scalar(255, 255, 255));
-    //     }
-    // }
-    f.drawBoundaries(output);
-
     // 表示
     imshow("Captured Image", output);
 }
 
-// Point getLocation(Point x) {
-
-// }
-
 Object obj;
-
-void notifyTrackbarChange() {
-    cout << "minH: " << obj.minH << endl;
-    cout << "maxH: " << obj.maxH << endl;
-    cout << "minS: " << obj.minS << endl;
-    cout << "maxS: " << obj.maxS << endl;
-    cout << "minV: " << obj.minV << endl;
-    cout << "maxV: " << obj.maxV << endl;
-}
 
 void callbackForLowerH(int lowerH, void *data) {
     obj.minH = lowerH;
-    notifyTrackbarChange();
 }
 
 void callbackForUpperH(int upperH, void *data) {
     obj.maxH = upperH;
-    notifyTrackbarChange();
 }
 
 void callbackForLowerS(int lowerS, void *data) {
     obj.minS = lowerS;
-    notifyTrackbarChange();
 }
 
 void callbackForUpperS(int upperS, void *data) {
     obj.maxS = upperS;
-    notifyTrackbarChange();
 }
 
 void callbackForLowerV(int lowerV, void *data) {
     obj.minV = lowerV;
-    notifyTrackbarChange();
 }
 
 void callbackForUpperV(int upperV, void *data) {
     obj.maxV = upperV;
-    notifyTrackbarChange();
-}
-
-void mouseCallback(int event, int x, int y, int flags, void *data) {
-    if (event == EVENT_LBUTTONDOWN || event == EVENT_RBUTTONDOWN) {
-        cout << "x: " << x << " y: " << y << endl;
-        Point2f p = f.getLocation(Point2f((double)x, (double)y));
-        cout << "px: " << p.x << "py: " << p.y << endl;
-    }
 }
 
 int main(int argc, char *argv[]) {
 
     Mat image;
+	Data data;
 
-    // VideoCapture cap(0); // デフォルトカメラをオープン
-    // if(!cap.isOpened())  // 成功したかどうかをチェック
-    //     return -1;
+    VideoCapture cap(0); // デフォルトカメラをオープン
+    if(!cap.isOpened())  // 成功したかどうかをチェック
+        return -1;
 
-    int lowerH = 0;
-    int upperH = 143;
-    int lowerS = 0;
-    int upperS = 255;
-    int lowerV = 189;
-    int upperV = 255;
+	//hsv.csv開く
+	data.open();
+
+	
+	int lowerH = data.player[0].minH;
+	int upperH = data.player[0].maxH;
+	int lowerS = data.player[0].minS;
+	int upperS = data.player[0].maxS;
+	int lowerV = data.player[0].minV;
+	int upperV = data.player[0].maxV;
     obj.init(lowerH, upperH, lowerS, upperS, lowerV, upperV);
-    namedWindow("Captured Image", WINDOW_AUTOSIZE);
+    namedWindow("Captured Image", WINDOW_NORMAL);
+	namedWindow("Captured Image2", WINDOW_NORMAL);
 
-     createTrackbar("Lower Hue/2", "Captured Image", &lowerH, 180, callbackForLowerH);
-    // createTrackbar("Upper Hue/2", "Captured Image", &upperH, 180, callbackForUpperH);
-    // createTrackbar("Lower Sat", "Captured Image", &lowerS, 255, callbackForLowerS);
-    // createTrackbar("Upper Sat", "Captured Image", &upperS, 255, callbackForUpperS);
-    // createTrackbar("Lower Val", "Captured Image", &lowerV, 255, callbackForLowerV);
-    // createTrackbar("Upper Val", "Captured Image", &upperV, 255, callbackForUpperV);
+    createTrackbar("Lower Hue/2", "Captured Image2", &lowerH, 180, callbackForLowerH);
+    createTrackbar("Upper Hue/2", "Captured Image2", &upperH, 180, callbackForUpperH);
+    createTrackbar("Lower Sat", "Captured Image2", &lowerS, 255, callbackForLowerS);
+    createTrackbar("Upper Sat", "Captured Image2", &upperS, 255, callbackForUpperS);
+    createTrackbar("Lower Val", "Captured Image2", &lowerV, 255, callbackForLowerV);
+    createTrackbar("Upper Val", "Captured Image2", &upperV, 255, callbackForUpperV);
 
-    setMouseCallback("Captured Image", mouseCallback, NULL);
+	int status = 0;//現在どのパラメーターをセットしているかを示すフラグ
 
     for (;;) {
-        // cap >> image; // カメラから新しいフレームを取得
+        cap >> image; // カメラから新しいフレームを取得
 
-        image = imread("image2.png"); 
-        // obj.detect(image);
         obj.detect(image);
 
         int k = waitKey(30);
+		if(status == 0 && k == '1'){
+			data.player[0].minH = lowerH;
+			data.player[0].maxH = upperH;
+			data.player[0].minS = lowerS;
+			data.player[0].maxS = upperS;
+			data.player[0].minV = lowerV;
+			data.player[0].maxV = upperV;
+
+			cout <<"set player1"<< endl;
+
+			setTrackbarPos("Lower Hue/2", "Captured Image2", data.player[1].minH);
+			setTrackbarPos("Upper Hue/2", "Captured Image2", data.player[1].maxH);
+			setTrackbarPos("Lower Sat", "Captured Image2", data.player[1].minS);
+			setTrackbarPos("Upper Sat", "Captured Image2", data.player[1].maxS);
+			setTrackbarPos("Lower Val", "Captured Image2", data.player[1].minV);
+			setTrackbarPos("Upper Val", "Captured Image2", data.player[1].maxV);
+
+			status++;
+		}else if(status == 1 && k == '2'){
+			data.player[1].minH = lowerH;
+			data.player[1].maxH = upperH;
+			data.player[1].minS = lowerS;
+			data.player[1].maxS = upperS;
+			data.player[1].minV = lowerV;
+			data.player[1].maxV = upperV;
+			cout << "set player2" << endl;
+			setTrackbarPos("Lower Hue/2", "Captured Image2", data.player[2].minH);
+			setTrackbarPos("Upper Hue/2", "Captured Image2", data.player[21].maxH);
+			setTrackbarPos("Lower Sat", "Captured Image2", data.player[2].minS);
+			setTrackbarPos("Upper Sat", "Captured Image2", data.player[2].maxS);
+			setTrackbarPos("Lower Val", "Captured Image2", data.player[2].minV);
+			setTrackbarPos("Upper Val", "Captured Image2", data.player[2].maxV);
+			status++;
+		}else if(status == 2 && k == '3'){
+			data.player[2].minH = lowerH;
+			data.player[2].maxH = upperH;
+			data.player[2].minS = lowerS;
+			data.player[2].maxS = upperS;
+			data.player[2].minV = lowerV;
+			data.player[2].maxV = upperV;
+			cout << "set player3" << endl;
+			setTrackbarPos("Lower Hue/2", "Captured Image2", data.player[3].minH);
+			setTrackbarPos("Upper Hue/2", "Captured Image2", data.player[3].maxH);
+			setTrackbarPos("Lower Sat", "Captured Image2", data.player[3].minS);
+			setTrackbarPos("Upper Sat", "Captured Image2", data.player[3].maxS);
+			setTrackbarPos("Lower Val", "Captured Image2", data.player[3].minV);
+			setTrackbarPos("Upper Val", "Captured Image2", data.player[3].maxV);
+			status++;
+		}else if(status == 3 && k == '4'){
+			data.player[3].minH = lowerH;
+			data.player[3].maxH = upperH;
+			data.player[3].minS = lowerS;
+			data.player[3].maxS = upperS;
+			data.player[3].minV = lowerV;
+			data.player[3].maxV = upperV;
+			cout << "set player4" << endl;
+			setTrackbarPos("Lower Hue/2", "Captured Image2", data.corner.minH);
+			setTrackbarPos("Upper Hue/2", "Captured Image2", data.corner.maxH);
+			setTrackbarPos("Lower Sat", "Captured Image2", data.corner.minS);
+			setTrackbarPos("Upper Sat", "Captured Image2", data.corner.maxS);
+			setTrackbarPos("Lower Val", "Captured Image2", data.corner.minV);
+			setTrackbarPos("Upper Val", "Captured Image2", data.corner.maxV);
+			status++;
+		}else if(status == 4 && k == '5'){
+			data.corner.minH = lowerH;
+			data.corner.maxH = upperH;
+			data.corner.minS = lowerS;
+			data.corner.maxS = upperS;
+			data.corner.minV = lowerV;
+			data.corner.maxV = upperV;
+			std::cout << "set corner" << std::endl;
+			
+			data.save();
+			break;
+
+		}
         if (k == 'q' || k == 'Q') break;
     }
 
     return 0;
 }
+

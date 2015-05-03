@@ -54,6 +54,8 @@ bool exist_flag[4];
 
 bool init_flag;//初期化関数init()用のフラグ
 
+Data hsv_data;//hsv情報用
+
 shared_ptr<CMytank> mytank;
 shared_ptr<CSystem_timer> system_timer;
 
@@ -631,19 +633,35 @@ bool list_cmp(std::shared_ptr<CObject>& v1,std::shared_ptr<CObject>& v2 ){
 //色認識、IP初期化
 int configuration(){
 	int ip[4];
-	int FileHandle=FileRead_open("data/hsv.csv");
-	if(FileHandle==0){
-		return 1;
-	}
-	for(int i=0;i<4;i++){
-		FileRead_scanf(FileHandle,"%d,%d,%d,%d",&hsv[i][0],&hsv[i][1],&hsv[i][2],&hsv[i][3]);
-		if(hsv[i][0]<0 || hsv[i][1]<0 || hsv[i][2]<0 || hsv[i][3]<0){
-			FileRead_close(FileHandle);
+	//int FileHandle=FileRead_open("data/hsv.csv");
+	//if(FileHandle==0){
+	//	return 1;
+	//}
+	//for(int i=0;i<4;i++){
+	//	FileRead_scanf(FileHandle,"%d,%d,%d,%d",&hsv[i][0],&hsv[i][1],&hsv[i][2],&hsv[i][3]);
+	//	if(hsv[i][0]<0 || hsv[i][1]<0 || hsv[i][2]<0 || hsv[i][3]<0){
+	//		FileRead_close(FileHandle);
+	//		return 1;
+	//	}
+	//}
+	std::ifstream ifs( "../../player/player/data/hsv.csv" );
+	std::string str;
+
+	ifs >> str;
+	int result = sscanf_s(str.c_str(),"1p:%d,%d,%d,%d,%d,%d,2p:%d,%d,%d,%d,%d,%d,3p:%d,%d,%d,%d,%d,%d,4p:%d,%d,%d,%d,%d,%d,hsv_data.corner:%d,%d,%d,%d,%d,%d",
+		&(hsv_data.player[0].minH),&(hsv_data.player[0].maxH),&(hsv_data.player[0].minS),&(hsv_data.player[0].maxS),&(hsv_data.player[0].minV),&(hsv_data.player[0].maxV),
+		&(hsv_data.player[1].minH),&(hsv_data.player[1].maxH),&(hsv_data.player[1].minS),&(hsv_data.player[1].maxS),&(hsv_data.player[1].minV),&(hsv_data.player[1].maxV),
+		&(hsv_data.player[2].minH),&(hsv_data.player[2].maxH),&(hsv_data.player[2].minS),&(hsv_data.player[2].maxS),&(hsv_data.player[2].minV),&(hsv_data.player[2].maxV),
+		&(hsv_data.player[3].minH),&(hsv_data.player[3].maxH),&(hsv_data.player[3].minS),&(hsv_data.player[3].maxS),&(hsv_data.player[3].minV),&(hsv_data.player[3].maxV),
+		&(hsv_data.corner.minH),&(hsv_data.corner.maxH),&(hsv_data.corner.minS),&(hsv_data.corner.maxS),&(hsv_data.corner.minV),&(hsv_data.corner.maxV));
+	if(result != 30){ //30個の入力どれかに失敗した場合
+			//cout << "hsv.csv load failed" <<endl;
+
 			return 1;
-		}
+				
 	}
 
-	FileHandle=FileRead_open("data/ip.csv");
+	int FileHandle=FileRead_open("data/ip.csv");
 	if(FileHandle==0){
 		return 2;
 	}

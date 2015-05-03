@@ -101,7 +101,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	std::string str;
 
 	ifs >> str;
-	int result = sscanf_s(str.c_str(),"1p:%d,%d,%d,%d,%d,%d,2p:%d,%d,%d,%d,%d,%d,3p:%d,%d,%d,%d,%d,%d,4p:%d,%d,%d,%d,%d,%d,hsv_data.corner:%d,%d,%d,%d,%d,%d",
+	int result = sscanf_s(str.c_str(),"1p:%d,%d,%d,%d,%d,%d,2p:%d,%d,%d,%d,%d,%d,3p:%d,%d,%d,%d,%d,%d,4p:%d,%d,%d,%d,%d,%d,corner:%d,%d,%d,%d,%d,%d",
 		&(hsv_data.player[0].minH),&(hsv_data.player[0].maxH),&(hsv_data.player[0].minS),&(hsv_data.player[0].maxS),&(hsv_data.player[0].minV),&(hsv_data.player[0].maxV),
 		&(hsv_data.player[1].minH),&(hsv_data.player[1].maxH),&(hsv_data.player[1].minS),&(hsv_data.player[1].maxS),&(hsv_data.player[1].minV),&(hsv_data.player[1].maxV),
 		&(hsv_data.player[2].minH),&(hsv_data.player[2].maxH),&(hsv_data.player[2].minS),&(hsv_data.player[2].maxS),&(hsv_data.player[2].minV),&(hsv_data.player[2].maxV),

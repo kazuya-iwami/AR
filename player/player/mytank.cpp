@@ -99,7 +99,8 @@ bool CMytank::draw() {
 	//if(draw_timer%40 < 20) kakudo = -0.5+(draw_timer%40)/20.0;
 	//else kakudo = 0.5-(draw_timer%40-20)/20.0;
 	DrawRotaGraph(80,600,1.0,0,figure_id["F_MAN"],true);
-	if(attackable) DrawOriginalString(20,470,0.75,20,"SHOOT!");
+	if(is_reloading) DrawOriginalString(17,470,0.5,12,"Be careful...");
+	else if(attackable) DrawOriginalString(20,470,0.75,20,"SHOOT!!");
 	
 
 	//upadte score_info

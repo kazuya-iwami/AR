@@ -402,9 +402,11 @@ bool CWait::draw(){
 	}
 
 	if(mode<=0){
-		DrawGraph(x-220,y,figure_id["F_WAIT02"],true);
-		DrawRotaGraph(x-100,y+170,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
-		DrawRotaGraph(x,y+170,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
+		if(speed == 4){
+			DrawGraph(x-220,y,figure_id["F_WAIT02"],true);
+			DrawRotaGraph(x-100,y+170,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
+			DrawRotaGraph(x,y+170,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
+		}else DrawGraph(x-220,y+5,figure_id["F_WAIT01"],true);
 		if(bullet) DrawRotaGraph(bullet_x,bullet_y,0.7,draw_timer/6+1,figure_id["F_WAIT03"],true);
 		if(mode<0 && mode > -60){
 			DrawExtendGraph(0,0,1349,729,kamifubuki[((-mode)%120)/5],true);
@@ -446,6 +448,7 @@ void CWait::update(const char key_buf[256]){
 		bullet_y=y+70;
 		bullet=true;
 	}
+	if(key_buf[D_DIK_4]) speed =4;
 	if(key_buf[D_DIK_8]) speed =8;
 	if(( draw_timer%60 == 0 )&& ojisan_pop_num < 20){
 		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num,&mode);
@@ -589,8 +592,6 @@ bool COjisan::draw(){
 		(*ojisan_num)++;
 		if((*ojisan_num) ==20){
 			(*mode)=-1;
-			//auto kamifubuki=make_shared<CKamifubuki>();
-			//CObject::register_object(kamifubuki,DRAW_LAYER::IMFOMATION_LAYER);
 		}
 		return false;
 	}

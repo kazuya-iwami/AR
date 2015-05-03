@@ -25,7 +25,7 @@ using namespace std;
 #define GAME_TIME 30 //プレー時間　30秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
-#define USE_CAMERA_FLAG 2
+#define USE_CAMERA_FLAG 1
 
 //0:画像 1:カメラ 2:ラズパイ
 
@@ -657,7 +657,7 @@ int configuration(){
 		&(hsv_data.corner.minH),&(hsv_data.corner.maxH),&(hsv_data.corner.minS),&(hsv_data.corner.maxS),&(hsv_data.corner.minV),&(hsv_data.corner.maxV));
 	if(result != 30){ //30個の入力どれかに失敗した場合
 			//cout << "hsv.csv load failed" <<endl;
-
+			
 			return 1;
 				
 	}

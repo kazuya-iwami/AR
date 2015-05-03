@@ -116,13 +116,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				
 	}
 
-	field.setCorners(image);//ここでフィールドのコーナー検出
+	//field.setCorners(image);//ここでフィールドのコーナー検出
 
-	field.init(hsv_data.corner.minH,hsv_data.corner.maxH,hsv_data.corner.minS,hsv_data.corner.maxS,hsv_data.corner.minV,hsv_data.corner.maxV);
-	player[0].init(hsv_data.player[0].minH,hsv_data.player[0].maxH,hsv_data.player[0].minS,hsv_data.player[0].maxS,hsv_data.player[0].minV,hsv_data.player[0].maxV);
-	player[1].init(hsv_data.player[1].minH,hsv_data.player[1].maxH,hsv_data.player[1].minS,hsv_data.player[1].maxS,hsv_data.player[1].minV,hsv_data.player[1].maxV);
-	player[2].init(hsv_data.player[2].minH,hsv_data.player[2].maxH,hsv_data.player[2].minS,hsv_data.player[2].maxS,hsv_data.player[2].minV,hsv_data.player[2].maxV);
-	player[3].init(hsv_data.player[3].minH,hsv_data.player[3].maxH,hsv_data.player[3].minS,hsv_data.player[3].maxS,hsv_data.player[3].minV,hsv_data.player[3].maxV);
+	//field.init(hsv_data.corner.minH,hsv_data.corner.maxH,hsv_data.corner.minS,hsv_data.corner.maxS,hsv_data.corner.minV,hsv_data.corner.maxV);
+	//player[0].init(hsv_data.player[0].minH,hsv_data.player[0].maxH,hsv_data.player[0].minS,hsv_data.player[0].maxS,hsv_data.player[0].minV,hsv_data.player[0].maxV);
+	//player[1].init(hsv_data.player[1].minH,hsv_data.player[1].maxH,hsv_data.player[1].minS,hsv_data.player[1].maxS,hsv_data.player[1].minV,hsv_data.player[1].maxV);
+	//player[2].init(hsv_data.player[2].minH,hsv_data.player[2].maxH,hsv_data.player[2].minS,hsv_data.player[2].maxS,hsv_data.player[2].minV,hsv_data.player[2].maxV);
+	//player[3].init(hsv_data.player[3].minH,hsv_data.player[3].maxH,hsv_data.player[3].minS,hsv_data.player[3].maxS,hsv_data.player[3].minV,hsv_data.player[3].maxV);
 
 	//以下メインコード
 

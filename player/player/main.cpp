@@ -644,11 +644,11 @@ int configuration(){
 	//		return 1;
 	//	}
 	//}
-	std::ifstream ifs( "../../player/player/data/hsv.csv" );
+	std::ifstream hsv_file( "data/hsv.csv" );
 	std::string str;
 
-	ifs >> str;
-	int result = sscanf_s(str.c_str(),"1p:%d,%d,%d,%d,%d,%d,2p:%d,%d,%d,%d,%d,%d,3p:%d,%d,%d,%d,%d,%d,4p:%d,%d,%d,%d,%d,%d,hsv_data.corner:%d,%d,%d,%d,%d,%d",
+	hsv_file >> str;
+	int result = sscanf_s(str.c_str(),"1p:%d,%d,%d,%d,%d,%d,2p:%d,%d,%d,%d,%d,%d,3p:%d,%d,%d,%d,%d,%d,4p:%d,%d,%d,%d,%d,%d,corner:%d,%d,%d,%d,%d,%d",
 		&(hsv_data.player[0].minH),&(hsv_data.player[0].maxH),&(hsv_data.player[0].minS),&(hsv_data.player[0].maxS),&(hsv_data.player[0].minV),&(hsv_data.player[0].maxV),
 		&(hsv_data.player[1].minH),&(hsv_data.player[1].maxH),&(hsv_data.player[1].minS),&(hsv_data.player[1].maxS),&(hsv_data.player[1].minV),&(hsv_data.player[1].maxV),
 		&(hsv_data.player[2].minH),&(hsv_data.player[2].maxH),&(hsv_data.player[2].minS),&(hsv_data.player[2].maxS),&(hsv_data.player[2].minV),&(hsv_data.player[2].maxV),
@@ -673,12 +673,12 @@ int configuration(){
 	//sprintf_s(SERVER_IP_ADDRESS,"%d.%d.%d.%d",ip[0],ip[1],ip[2],ip[3]);
 	SERVER_IP_ADDRESS = to_string(ip[0]) + "." + to_string(ip[1]) + "." + to_string(ip[2]) + "." + to_string(ip[3]);
 
-	ifstream ifs("data/playernum.csv");
-	if(ifs.fail()){
+	ifstream playnum_file("data/playernum.csv");
+	if(playnum_file.fail()){
 		return 3;
 	}
 	string row;
-	getline(ifs, row);
+	getline(playnum_file, row);
 	PLAYER_NM = atoi(row.c_str());
 	if(PLAYER_NM<0){
 		return 3;

@@ -34,7 +34,7 @@ using namespace std;
 int hsv[4][4];
 
 std::string SERVER_IP_ADDRESS;// "157.82.7.4"	//サーバーのIPアドレス
-std::string RASPI_IP_ADDRESS = "pi@rpi02.local";//ラズパイのＩＰアドレス
+std::string RASPI_IP_ADDRESS;// = "pi@rpi02.local";//ラズパイのＩＰアドレス
 
 int PLAYER_NM ;	//自分のプレイヤー番号
 
@@ -69,17 +69,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//各ヘッダファイルを見るとclass構成がわかるよ
 
 	//色認識およびIP初期化
-	if(configuration()==1){
+	int config_result = configuration();
+	if(config_result == 1){
 		MessageBox(NULL,"hsvが間違ってます(´・ω・`)","error",MB_OK | MB_APPLMODAL);
 		exit(1);
 	}
 
-	if(configuration()==2){
+	if(config_result == 2){
 		MessageBox(NULL,"ipが間違ってます(´・ω・`)","error",MB_OK | MB_APPLMODAL);
 		exit(1);
 	}
 
-	if(configuration()==3){
+	if(config_result == 3){
 		MessageBox(NULL,"playが間違ってます(´・ω・`)","error",MB_OK | MB_APPLMODAL);
 		exit(1);
 	}
@@ -663,16 +664,17 @@ int configuration(){
 				
 	}
 
-	int FileHandle=FileRead_open("data/ip.csv");
-	if(FileHandle==0){
+	ifstream ip_file("data/ip.csv");
+	string ip_data;
+	if(ip_file.fail()){
 		return 2;
 	}
-	FileRead_scanf(FileHandle,"%d,%d,%d,%d",&ip[0],&ip[1],&ip[2],&ip[3]);
+	ip_file >> ip_data;
+	if(sscanf_s(ip_data.c_str(),"%d,%d,%d,%d", &ip[0], &ip[1], &ip[2], &ip[3]) != 4) return 2;
+
 	if(ip[0]<0 || ip[1]<0 || ip[2]<0 ||ip[3]<0){
-		FileRead_close(FileHandle);	
 		return 2;
 	}
-	//sprintf_s(SERVER_IP_ADDRESS,"%d.%d.%d.%d",ip[0],ip[1],ip[2],ip[3]);
 	SERVER_IP_ADDRESS = to_string(ip[0]) + "." + to_string(ip[1]) + "." + to_string(ip[2]) + "." + to_string(ip[3]);
 
 	ifstream playnum_file("data/playernum.csv");
@@ -680,7 +682,7 @@ int configuration(){
 		return 3;
 	}
 	string row;
-	getline(playnum_file, row);
+	std::getline(playnum_file, row);
 	PLAYER_NM = atoi(row.c_str());
 	if(PLAYER_NM<0){
 		return 3;
@@ -688,6 +690,5 @@ int configuration(){
 
 	//sprintf_s(RASPI_IP_ADDRESS,"pi@rpi0%d.local",PLAYER_NM);
 	//RASPI_IP_ADDRESS = "pi@rpi0" + to_string(PLAYER_NM) + ".local";
-	FileRead_close(FileHandle);
 	return 0;
 }

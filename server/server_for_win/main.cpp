@@ -219,6 +219,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PLAY,0,0),4);
 				game_status = GAME_STATUS::GAME_PLAY;
 				std::cout << "ゲームスタート" << std::endl;
+				for (int i = 0;i < PORT_NUM;i++){
+					player_param[i].init();
+				}
 				//BGM再生
 				PlaySoundMem( bgm_id , DX_PLAYTYPE_BACK );
 
@@ -384,7 +387,7 @@ void init(){
 	game_status=GAME_STATUS::GAME_WAIT;
 	item_end_time = 0;
 	for(int i=0;i<4;i++){
-		item_start_time[i] = 0;
+		//item_start_time[i] = 0;
 		player_param[i].init();
 	}
 }
@@ -399,13 +402,13 @@ std::string encode(COMMAND_NAME command_name, int player_from, int player_to, in
 CPlayer_param::CPlayer_param() {
 	exist = true;
 	score = 0;
-	using_item = ITEM_KIND::ITEM_NONE ;
+	//using_item = ITEM_KIND::ITEM_NONE ;
 	finish_flag = false;
 	viability = VIABILITY_STATUS::ALIVE;
 }
 void CPlayer_param::init() {
 	score = 0;
-	using_item = ITEM_KIND::ITEM_NONE ;
+	//using_item = ITEM_KIND::ITEM_NONE ;
 	finish_flag = false;
 	viability = VIABILITY_STATUS::ALIVE;
 }

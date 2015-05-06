@@ -6,7 +6,7 @@
 
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
-#define PORT_NUM 1
+#define PORT_NUM 1	
 #define SERIAL_PORT  "\\\\.\\COM4" //シリアルポート名  "\\\\.\\COM3"
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
@@ -84,6 +84,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	serial_init();
 
 	//にみまっぷ
+	/*
 	Mat image;
 
     VideoCapture cap(0); // デフォルトカメラをオープン
@@ -96,6 +97,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		cv::waitKey();
 		return -1;
 	}
+	*/
 
 	std::ifstream ifs( "../../player/player/data/hsv.csv" );
 	std::string str;
@@ -173,8 +175,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		ClearDrawScreen() ;
 
 		//ミニマップ処理
-		// cap >> image; // カメラから新しいフレームを取得
-        //image = imread("image2.png"); 
+		/*
+		cap >> image; // カメラから新しいフレームを取得
+        image = imread("image2.png"); 
 		if(!cap.read(image)) {
 			std::cout << "No frame" << std::endl;
 			MessageBox(NULL,"画像フレーム取得失敗(´・ω・`)","error",MB_OK | MB_APPLMODAL);
@@ -207,7 +210,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				send_message(stream.str(),4);
 			}
 		}
-
+		*/
 
 		// Enter入力処理
 		if( key_buf[ KEY_INPUT_RETURN] == 1 && key_prev_buf[ KEY_INPUT_RETURN ] == 0 ){

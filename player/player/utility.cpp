@@ -6,17 +6,18 @@
 
 int CEnemy::just_before_shooted;
 #define SORT_SPEED 5
-#define RANK_HEIGHT 70
+#define RANK_HEIGHT 40
 
 #define DENKYU_HEIGHT 120
 #define MAP_PARAM 2.0
 
 bool CSystem_timer::draw(){
 	if(system_timer > 0){
+		//背景出力
+			DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
+
 		if(countdown_finish_flag){
 			//残り時間表示
-			//背景出力
-			DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
 
 			//文字出力
 			std::ostringstream sout1, sout2;
@@ -43,6 +44,8 @@ bool CSystem_timer::draw(){
 
 	//最初5秒カウントダウン
 	if(countdown_timer > 0){
+		DrawOriginalString(440+LEFT_WINDOW_WIDTH, 30, 1.0, 30,"TIME");
+
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,200);
 		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,140);
@@ -556,10 +559,10 @@ bool CScore_Info::draw(){
 
 	//描画
 	for(int i=0;i<4;i++){
-		DrawGraph(920, score_info_enemy[i].info_y+10, figure_id["F_SCORE"], true);
+		DrawExtendGraph(1050, score_info_enemy[i].info_y+10,1170,score_info_enemy[i].info_y+RANK_HEIGHT+5, figure_id["F_SCORE"], true);
 
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
-		DrawOriginalString(940,score_info_enemy[i].info_y + 18,1.0,24,"+"+to_string(score_info_enemy[i].score)+"  "+to_string(i+1)+"P");
+		DrawOriginalString(1060,score_info_enemy[i].info_y + 12,0.625,16,"+"+to_string(score_info_enemy[i].score)+"  "+to_string(i+1)+"P");
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
 

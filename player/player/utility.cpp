@@ -282,14 +282,14 @@ CMap::CMap(){
 }
 
 void CMap::update_pos(int p0_x,int p0_y,int p1_x, int p1_y,int p2_x,int p2_y,int p3_x,int p3_y){
-	player_x[0]=p0_x*MAP_PARAM;
-	player_y[0]=p0_y*MAP_PARAM;
-	player_x[1]=p1_x*MAP_PARAM;
-	player_y[1]=p1_y*MAP_PARAM;
-	player_x[2]=p2_x*MAP_PARAM;
-	player_y[2]=p2_y*MAP_PARAM;
-	player_x[3]=p3_x*MAP_PARAM;
-	player_y[4]=p3_y*MAP_PARAM;
+	player_x[0]=(int)(p0_x*MAP_PARAM);
+	player_y[0]=(int)(p0_y*MAP_PARAM);
+	player_x[1]=(int)(p1_x*MAP_PARAM);
+	player_y[1]=(int)(p1_y*MAP_PARAM);
+	player_x[2]=(int)(p2_x*MAP_PARAM);
+	player_y[2]=(int)(p2_y*MAP_PARAM);
+	player_x[3]=(int)(p3_x*MAP_PARAM);
+	player_y[4]=(int)(p3_y*MAP_PARAM);
 
 }
 bool CMap::draw(){

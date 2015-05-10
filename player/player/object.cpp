@@ -156,6 +156,9 @@ void CObject::load(){
 	figure_id["F_MINILIGHT_C"]=LoadGraph("image/minidenkyuC.png");
 	figure_id["F_MINILIGHT_0"]=LoadGraph("image/minidenkyu0.png");
 
+	//3次元用、図と同様に扱えるっぽい?
+	figure_id["X_TANK"]=MV1LoadModel("image/tank.pmx");
+
 	//movie
 	/* 動画はmp4不可。ogvは必ず再生できる。 */
 	figure_id["M_IWAMI"]=LoadGraph("movie/LinkStart.ogv");

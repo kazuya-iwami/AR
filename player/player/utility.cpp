@@ -314,22 +314,28 @@ bool CWait::draw(){
 	int wordy=310;
 //	タイトル表示
 	if(mode>0){
-	SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
-	DrawGraph(wordstart,wordy,figure_id["F_TITLE"],true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-	DrawGraph(wordstart+500,wordy+115,figure_id["F_CONNECT"],true);
-	if(draw_timer%160>40){
-		DrawGraph(wordstart+740,wordy+125,figure_id["F_DOTGRAY"],true);
-		if(draw_timer%160>80){
-			DrawGraph(wordstart+760,wordy+125,figure_id["F_DOTGRAY"],true);
-			if(draw_timer%160>120){
-				DrawGraph(wordstart+780,wordy+125,figure_id["F_DOTGRAY"],true);
+		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
+		DrawGraph(wordstart,wordy,figure_id["F_TITLE"],true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		DrawGraph(wordstart+500,wordy+115,figure_id["F_CONNECT"],true);
+		if(draw_timer%160>40){
+			DrawGraph(wordstart+740,wordy+125,figure_id["F_DOTGRAY"],true);
+			if(draw_timer%160>80){
+				DrawGraph(wordstart+760,wordy+125,figure_id["F_DOTGRAY"],true);
+				if(draw_timer%160>120){
+					DrawGraph(wordstart+780,wordy+125,figure_id["F_DOTGRAY"],true);
+				}
 			}
 		}
 	}
 	
-	}
+	MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
+	MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
+	MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
+	MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,draw_timer*0.1f,0.0f));
+	MV1DrawModel(figure_id["X_TANK"]);
 	
+
 	//modeが変わるとりんくスタート,現在はPでモード変更可能
 	if(mode<=0){
 		

@@ -308,10 +308,32 @@ bool CMap::draw(){
 bool CWait::draw(){
 	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
 	//DrawBox(0,0,1350,730,GetColor(70,70,70),TRUE);
-
+	
+	int wordwidth=48;
+	int wordstart=400;
+	int wordy=310;
+//	タイトル表示
+	SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
+	DrawGraph(wordstart,wordy,figure_id["F_TITLE"],true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+/*	DrawGraph(wordstart,wordy,figure_id["F_R"],true);
+	DrawGraph(wordstart+1*wordwidth,wordy,figure_id["F_E"],true);
+	DrawGraph(wordstart+2*wordwidth,wordy,figure_id["F_A"],true);
+	DrawGraph(wordstart+3*wordwidth,wordy,figure_id["F_L"],true);
+	DrawGraph(wordstart+5*wordwidth,wordy,figure_id["F_T"],true);
+	DrawGraph(wordstart+6*wordwidth,wordy,figure_id["F_A"],true);
+	DrawGraph(wordstart+7*wordwidth,wordy,figure_id["F_N"],true);
+	DrawGraph(wordstart+8*wordwidth,wordy,figure_id["F_K"],true);
+	DrawGraph(wordstart+10*wordwidth,wordy,figure_id["F_B"],true);
+	DrawGraph(wordstart+11*wordwidth,wordy,figure_id["F_A"],true);
+	DrawGraph(wordstart+12*wordwidth,wordy,figure_id["F_T"],true);
+	DrawGraph(wordstart+13*wordwidth,wordy,figure_id["F_T"],true);
+	DrawGraph(wordstart+14*wordwidth,wordy,figure_id["F_L"],true);
+	DrawGraph(wordstart+15*wordwidth,wordy,figure_id["F_E"],true);
+	*/
 	//DrawGraph(300,630,figure_id["F_WAIT05"],true);
 	//DrawGraph(620,660,figure_id["F_WAIT05"],true);
-	
+
 	/*
 	for(int i=0;i<mode;i++){
 		DrawGraph((draw_timer-i*360)%1800-350,470,figure_id["F_WAIT02"],true);
@@ -427,7 +449,7 @@ bool CWait::draw(){
 	}else draw_timer += mode;
 	*/
 	//DrawFormatString(0,0,1,"%d %d",mode,draw_timer);
-	
+	draw_timer++;
 	return true;
 }
 

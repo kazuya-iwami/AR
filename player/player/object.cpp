@@ -85,6 +85,15 @@ void CObject::load(){
 	figure_id["F_WAIT04"]=LoadGraph("image/wait04.png");
 	figure_id["F_WAIT05"]=LoadGraph("image/wait05.png");
 	figure_id["F_WAIT06"]=LoadGraph("image/wait06.png");
+	figure_id["F_R"]=LoadGraph("image/word/R.png");
+	figure_id["F_E"]=LoadGraph("image/word/E.png");
+	figure_id["F_A"]=LoadGraph("image/word/A.png");
+	figure_id["F_L"]=LoadGraph("image/word/L.png");
+	figure_id["F_T"]=LoadGraph("image/word/T.png");
+	figure_id["F_N"]=LoadGraph("image/word/N.png");
+	figure_id["F_K"]=LoadGraph("image/word/K.png");
+	figure_id["F_B"]=LoadGraph("image/word/B.png");
+	figure_id["F_TITLE"]=LoadGraph("image/word/title.png");
 
 	figure_id["F_MAN"]=LoadGraph("image/man.png");
 	figure_id["F_SCORE"]=LoadGraph("image/back_card.png");

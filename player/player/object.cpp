@@ -94,6 +94,9 @@ void CObject::load(){
 	figure_id["F_K"]=LoadGraph("image/word/K.png");
 	figure_id["F_B"]=LoadGraph("image/word/B.png");
 	figure_id["F_TITLE"]=LoadGraph("image/word/title.png");
+	figure_id["F_CONNECT"]=LoadGraph("image/connect.png");
+	figure_id["F_DOTGRAY"]=LoadGraph("image/dotgray.png");
+
 
 	figure_id["F_MAN"]=LoadGraph("image/man.png");
 	figure_id["F_SCORE"]=LoadGraph("image/back_card.png");

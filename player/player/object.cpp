@@ -22,6 +22,8 @@ int fog[10];
 
 //文字用
 int word[160];
+int digit[18];
+
 
 //燃える
 int fire[5];
@@ -140,6 +142,7 @@ void CObject::load(){
 
 	//文字読み込み
 	LoadDivGraph("image/font.png",128,16,8,47,54,word);
+	LoadDivGraph("image/digit.png",18,6,3,67,88,digit);
 
 	//紙ふぶき
 	LoadDivGraph("image/kamifubuki.png",24,2,12,960,480,kamifubuki);
@@ -188,5 +191,52 @@ void CObject::set_layer_id(DRAW_LAYER layer_id_){
 void CObject::DrawOriginalString(int x,int y,float size,int space,string str){
 	for(int i = 0; i < (int)str.length(); i++){
 		DrawExtendGraph(x+space*i,y,x+space*i+(int)(49*size),y+(int)(51*size),word[(int)str[i]],true);
+	}
+}
+
+
+void CObject::DrawDigitNum(int x, int y, float size, int space, string s){
+	for(int i = 0; i < (int)s.length(); i++){
+		switch (s[i]){
+		case '1':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[0], true);
+			break;
+		case '2':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[1], true);
+			break;
+		case '3':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[2], true);
+			break;
+		case '4':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[3], true);
+			break;
+		case '5':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[4], true);
+			break;
+		case '6':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[6], true);
+			break;
+		case '7':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[7], true);
+			break;
+		case '8':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[8], true);
+			break;
+		case '9':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[9], true);
+			break;
+		case '0':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[10], true);
+			break;
+		case ':':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[5], true);
+			break;
+		case '.':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[17], true);
+			break;
+		default:
+			exit(1);
+			break;
+		}
 	}
 }

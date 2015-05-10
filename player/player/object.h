@@ -24,6 +24,7 @@ extern int fog[10];
 
 //文字用
 extern int word[160];
+extern int digit[18];
 
 //燃える
 extern int fire[5];
@@ -81,6 +82,7 @@ public:
 	static void register_object(std::shared_ptr<CObject> obj,DRAW_LAYER layer_id);//drawlistに登録
 
 	void DrawOriginalString(int x,int y,float size,int space,string str);
+	void DrawDigitNum(int x, int y, float size, int space, string s);
 };
 
 /* 描画方法

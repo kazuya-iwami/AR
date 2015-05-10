@@ -14,18 +14,20 @@ int CEnemy::just_before_shooted;
 bool CSystem_timer::draw(){
 	if(system_timer > 0){
 		//背景出力
-			DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
+		//DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
 
 		if(countdown_finish_flag){
 			//残り時間表示
 
 			//文字出力
-			std::ostringstream sout1, sout2;
+			std::ostringstream sout0, sout1, sout2;
+			sout0 << std::setfill('0') << std::setw(2) << ((system_timer%30)*100)/30;
+			std::string under_sec = sout0.str();
 			sout1 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
 			std::string sec = sout1.str();
-			sout2 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)/60;
+			sout2 << std::setfill('0') << std::setw(1) << (system_timer/30 + 1)/60;
 			std::string min = sout2.str();
-			DrawOriginalString(438+LEFT_WINDOW_WIDTH, 30, 1.0, 24, min+":"+sec);
+			DrawDigitNum(438+LEFT_WINDOW_WIDTH, 10, 0.3, 18, min+":"+sec+"."+under_sec);
 			//timerカウント
 			system_timer--;
 		}

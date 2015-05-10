@@ -802,7 +802,7 @@ void CMytank::detect_enemy(Mat image) {
 void CMytank::attacked(int score_){
 	if (HP > 0) {
 		HP -= score_;
-		hit_counter +=25;
+		hit_counter +=25*score_;
 	}
 
 	shake_start(SHAKE_STATUS::SMALL_SHAKE); // 画面振動
@@ -882,6 +882,7 @@ void CMytank::lose_HP() {
 void CMytank::check_dead() {
 	if (HP<= 0 && viability_status==VIABILITY_STATUS::ALIVE) {
 		send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
+		move( _T("stop"), _T("full"));
 		viability_status=VIABILITY_STATUS::DEAD;
 		if (3 < score){
 			score -= 3; 

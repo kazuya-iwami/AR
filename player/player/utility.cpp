@@ -309,20 +309,21 @@ bool CWait::draw(){
 	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
 	//DrawBox(0,0,1350,730,GetColor(70,70,70),TRUE);
 
-	DrawGraph(300,630,figure_id["F_WAIT05"],true);
-	DrawGraph(620,660,figure_id["F_WAIT05"],true);
+	//DrawGraph(300,630,figure_id["F_WAIT05"],true);
+	//DrawGraph(620,660,figure_id["F_WAIT05"],true);
 	
-	int i;
-	for(i=0;i<mode;i++){
+	/*
+	for(int i=0;i<mode;i++){
 		DrawGraph((draw_timer-i*360)%1800-350,470,figure_id["F_WAIT02"],true);
 		DrawRotaGraph((draw_timer-i*360)%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
 		DrawRotaGraph((draw_timer-i*360)%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
 	}
-	
-	DrawGraph(420,470,figure_id["F_WAIT05"],true);
-	DrawGraph(880,450,figure_id["F_WAIT05"],true);
+	*/
+	//DrawGraph(420,470,figure_id["F_WAIT05"],true);
+	//DrawGraph(880,450,figure_id["F_WAIT05"],true);
 
 	//以下でライトの点滅パターンを制御しましょう
+	/*
 	switch ((draw_timer/40)%10){
 	case 0:
 		DrawGraph(300,DENKYU_HEIGHT,figure_id["F_LIGHT_0"],true);
@@ -405,8 +406,9 @@ bool CWait::draw(){
 		
 		break;
 	}
+	*/
 
-	if(mode<=0){
+	/*if(mode<=0){
 		if(speed == 4){
 			DrawGraph(x-220,y,figure_id["F_WAIT02"],true);
 			DrawRotaGraph(x-100,y+170,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
@@ -423,7 +425,7 @@ bool CWait::draw(){
 		}
 		draw_timer++;
 	}else draw_timer += mode;
-
+	*/
 	//DrawFormatString(0,0,1,"%d %d",mode,draw_timer);
 	
 	return true;

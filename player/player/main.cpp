@@ -34,7 +34,7 @@ using namespace std;
 int hsv[4][4];
 
 std::string SERVER_IP_ADDRESS;// "157.82.7.4"	//サーバーのIPアドレス
-std::string RASPI_IP_ADDRESS;// = "pi@rpi02.local";//ラズパイのＩＰアドレス
+std::string RASPI_IP_ADDRESS = "pi@rpi04.local";//ラズパイのＩＰアドレス
 
 int PLAYER_NM ;	//自分のプレイヤー番号
 
@@ -265,14 +265,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//移動処理　この中に書く
 			//キー状態取得の後に移動します(2015/3/_31 大杉追記)
 			//mytank->move();
-
-
-			//カウントダウン終了後キーボード操作許す
-			if(system_timer->get_countdown_finish_flag()){
-
-				mytank->show_focus();//一度だけ呼べばいいのだけども…
-
-				tstring speed;
+			tstring speed;
 				//速度設定の分岐条件に関しては大杉は知らないです...
 				if(true){
 					//通常
@@ -281,6 +274,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					//サーバから減速命令が送られてきた場合
 					speed = _T("half");
 				}
+
+			//カウントダウン終了後キーボード操作許す
+			if(system_timer->get_countdown_finish_flag()){
+
+				mytank->show_focus();//一度だけ呼べばいいのだけども…
+
+				
 
 
 				mytank->check_dead();
@@ -423,12 +423,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
+				mytank->move(_T("stop"), speed);
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
 			}
 
 			//Qを押すとゲーム中だったのが終了画面へと遷移
 			//時間切れるとGAME_STATUS変更
 			if(system_timer->get_finish_flag() || key_buf[ KEY_INPUT_Q ] == 1){
+				mytank->move(_T("stop"), speed);
 				mytank->finish();
 				finish_timer = FINISH_TIME*30;
 				//時間切れの処理

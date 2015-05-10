@@ -145,7 +145,9 @@ void CObject::load(){
 	figure_id["F_MINILIGHT_0"]=LoadGraph("image/minidenkyu0.png");
 
 	//movie
-	figure_id["M_IWAMI"]=LoadGraph("movie/iwami.avi");
+	/* 動画はmp4不可。ogvは必ず再生できる。 */
+	figure_id["M_IWAMI"]=LoadGraph("movie/LinkStart.ogv");
+	//figure_id["M_LINKSTART"]=LoadGraph("movie/LinkStart.avi");
 }
 
 bool CObject::draw(){

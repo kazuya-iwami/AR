@@ -229,7 +229,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				if(wait->mode <5) wait->mode += 1;
 			}
 			else if(  key_buf[ KEY_INPUT_M ] == 1 && key_prev_buf[ KEY_INPUT_M] == 0){
-				auto iwami_=make_shared<CMovie>("M_IWAMI");
+				auto iwami_=make_shared<CMovie>("M_LINKSTART");
 				iwami =iwami_;
 				CObject::register_object(iwami,DRAW_LAYER::MOVIE_LAYER);
 				draw_mtx.lock();

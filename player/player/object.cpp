@@ -164,7 +164,7 @@ void CObject::load(){
 
 	//movie
 	/* 動画はmp4不可。ogvは必ず再生できる。 */
-	figure_id["M_IWAMI"]=LoadGraph("movie/LinkStart.ogv");
+	figure_id["M_LINKSTART"]=LoadGraph("movie/LinkStart.ogv");
 	//figure_id["M_LINKSTART"]=LoadGraph("movie/LinkStart.avi");
 }
 

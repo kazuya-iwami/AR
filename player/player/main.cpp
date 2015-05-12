@@ -242,6 +242,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 			if(wait->mode<=0) wait->update(key_buf);
 			
+			if(key_buf[KEY_INPUT_S]==1 && key_prev_buf[KEY_INPUT_S]==0){
+				wait->spin=wait->spin+2;
+			}
+
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
 
 			draw_mtx.lock(); //排他的処理

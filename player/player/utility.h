@@ -122,6 +122,8 @@ public:
 	void update(const char key_buf[256]);
 	void play_init();
 	int mode;
+	int flag;
+	int spin;
 	int speed;
 	bool bullet;
 	int bullet_x,bullet_y;

@@ -69,14 +69,15 @@ bool CMytank::draw() {
 	for(i=0;i<HP;i++){
 		DrawGraph(14+96*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
 	}*/
-	//SetDrawBright(255-(HP*75+3*hit_counter),HP*75+3*hit_counter,0);
 	int j;
 	for(j=0;j<HP*50+2*hit_counter;j++){
-		DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,15,figure_id["F_HPBAR"],true);
+		DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,30,figure_id["F_HPBAR"],true);
 	}
-	//SetDrawBright(255,255,255);
-	DrawGraph(33+LEFT_WINDOW_WIDTH,13,figure_id["F_HPFRAME2"],true);
-	//DrawExtendGraph(8+LEFT_WINDOW_WIDTH,10,57+LEFT_WINDOW_WIDTH,45,figure_id["F_WAIT01"],true);
+	DrawGraph(33+LEFT_WINDOW_WIDTH,28,figure_id["F_HPFRAME2"],true);
+	if(viability_status)SetDrawBright(170,170,170);
+	else if(HP==1) SetDrawBright(255,70,70);
+	DrawOriginalString(39+LEFT_WINDOW_WIDTH,14,0.3125,10,"LIFE");
+	SetDrawBright(255,255,255);
 	if(hit_counter>0) hit_counter--;
 
 
@@ -97,12 +98,13 @@ bool CMytank::draw() {
 	//man
 	//if(draw_timer%40 < 20) kakudo = -0.5+(draw_timer%40)/20.0;
 	//else kakudo = 0.5-(draw_timer%40-20)/20.0;
+	/*
 	DrawRotaGraph(80,600,1.0,0,figure_id["F_MAN"],true);
 	if(viability_status==VIABILITY_STATUS::DEAD)DrawOriginalString(17,470,0.5,12,"donmai(^-^)b");
 	else if(is_reloading) DrawOriginalString(17,470,0.5,12,"Be careful...");
 	else if(num_bullet == 0) DrawOriginalString(20,470,0.75,20,"RELOAD!");
 	else if(attackable) DrawOriginalString(20,470,0.75,20,"SHOOT!!");
-	
+	*/
 
 	//upadte score_info
 	if(id == 0)	score_info->update_score(score,enemy1->score,enemy2->score,enemy3->score);

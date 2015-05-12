@@ -16,21 +16,20 @@ bool CSystem_timer::draw(){
 		//背景出力
 		//DrawGraph(LEFT_WINDOW_WIDTH+500-75, 20, figure_id["F_TIMER_FRAME"], true);
 
-		if(countdown_finish_flag){
-			//残り時間表示
 
-			//文字出力
-			std::ostringstream sout0, sout1, sout2;
-			sout0 << std::setfill('0') << std::setw(2) << ((system_timer%30)*100)/30;
-			std::string under_sec = sout0.str();
-			sout1 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
-			std::string sec = sout1.str();
-			sout2 << std::setfill('0') << std::setw(1) << (system_timer/30 + 1)/60;
-			std::string min = sout2.str();
-			DrawDigitNum(438+LEFT_WINDOW_WIDTH, 10, 0.3, 18, min+":"+sec+"."+under_sec);
-			//timerカウント
-			system_timer--;
-		}
+		//文字出力
+		std::ostringstream sout0, sout1, sout2;
+		sout0 << std::setfill('0') << std::setw(2) << (((system_timer)%30)*100)/30;
+		std::string under_sec = sout0.str();
+		sout1 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
+		std::string sec = sout1.str();
+		sout2 << std::setfill('0') << std::setw(1) << (system_timer/30 + 1)/60;
+		std::string min = sout2.str();
+		DrawDigitNum(438+LEFT_WINDOW_WIDTH, 20, 0.3, 18, min+":"+sec+"."+under_sec);
+		//timerカウント
+
+		if(countdown_finish_flag)system_timer--;
+		
 	}else finish_flag = true;
 
 	//残り10秒になったら警告
@@ -46,8 +45,6 @@ bool CSystem_timer::draw(){
 
 	//最初5秒カウントダウン
 	if(countdown_timer > 0){
-		DrawOriginalString(440+LEFT_WINDOW_WIDTH, 30, 1.0, 30,"TIME");
-
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,200);
 		DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,140);
@@ -77,7 +74,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	//ChangeFont("07ロゴたいぷゴシック7");
 	x=x_;
 	y=y_;
-	system_timer = game_time * 30-1;
+	system_timer = (game_time -1 ) * 30;
 	finish_flag = false;
 	countdown_timer= 3 * 30;
 	countdown_finish_flag = false;
@@ -343,21 +340,20 @@ bool CWait::draw(){
 	//DrawBox(0,0,1350,730,GetColor(70,70,70),TRUE);
 	
 	int wordwidth=48;
-	int wordstart=400;
-	int wordy=310;
+	int wordstart=435;
+	int wordy=300;
 //	タイトル表示
 	if(mode>0){
 		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
 		DrawGraph(wordstart,wordy,figure_id["F_TITLE"],true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-		DrawGraph(wordstart+500,wordy+115,figure_id["F_CONNECT"],true);
-		
+		DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECT"],true);
 		if(draw_timer%160>40){
-			DrawGraph(wordstart+740,wordy+125,figure_id["F_DOTGRAY"],true);
+			DrawGraph(wordstart+740,wordy+135,figure_id["F_DOTGRAY"],true);
 			if(draw_timer%160>80){
-				DrawGraph(wordstart+760,wordy+125,figure_id["F_DOTGRAY"],true);
+				DrawGraph(wordstart+760,wordy+135,figure_id["F_DOTGRAY"],true);
 				if(draw_timer%160>120){
-					DrawGraph(wordstart+780,wordy+125,figure_id["F_DOTGRAY"],true);
+					DrawGraph(wordstart+780,wordy+135,figure_id["F_DOTGRAY"],true);
 				}
 			}
 		}

@@ -305,18 +305,18 @@ bool CMap::draw(){
 
 float setposition(int n,int i){
 	if(n>i*5){
-			return 400-(n-i*5)*(n-i*5)*(n-i*5)/20.0;
+			return 435-(n-i*5)*(n-i*5)*(n-i*5)/20.0;
 		}else{
-			return 400;
+			return 435;
 		}
 }
 
 //消えゆくタイトルを表示,流れるタイトル
 void Drawtitle(int n){
-	int wordstart=400;
+	int wordstart=435;
 	for(int i =0;i<14;i++){
 		DrawGraph(setposition(n,i)	
-		,310,title[i],true);
+		,300,title[i],true);
 	}
 	/*	DrawGraph(wordstart-n,360,title[1],true);
 		DrawGraph(wordstart-n,360,title[2],true);
@@ -363,8 +363,8 @@ bool CWait::draw(){
 		MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
 		MV1DrawModel(figure_id["X_TANK"]);
 	}else{//Pでモード変更
+		flag++;
 		if(flag<250){
-			flag++;
 			Drawtitle(flag);
 			//ムービー前に戦車にはきえてもらう
 			MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
@@ -378,10 +378,23 @@ bool CWait::draw(){
 			}
 			MV1DrawModel(figure_id["X_TANK"]);
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag);
-			DrawGraph(wordstart+500,wordy+115,figure_id["F_CONNECTED"],true);
+			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
 		}else{//画面から物体がすべて消えた状態
-			DrawFormatString(0,0,1,"%d %d",mode,flag);
+			
+			//SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
+			/*DrawModiGraph(
+				0,375-((flag-230)*(flag-230))/4,
+				1350,375-((flag-230)*(flag-230))/4,
+				1350,375+((flag-230)*(flag-230))/4,
+				0,375+((flag-230)*(flag-230))/4,
+				figure_id["F_WAITBLACK"],false
+				);*/
+			DrawExtendGraph(0,400-((flag-230)*(flag-230))/4,1350,400+((flag-230)*(flag-230))/8,figure_id["F_WAITBLACK"],false);
+			//DrawGraph(0,0,figure_id["F_WAITBLACK"],false);
+			//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+		//	DrawFormatString(0,0,1,"%d %d",mode,flag);
 		}
 	}
 	if(spin>1 && draw_timer%60==0){spin--;}

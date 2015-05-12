@@ -106,6 +106,7 @@ void CObject::load(){
 	title[12]=LoadGraph("image/title/titleL_2.png");
 	title[13]=LoadGraph("image/title/titleE_2.png");
 
+	figure_id["F_WAITBLACK"]=LoadGraph("image/background_wait_black.png");
 	figure_id["F_CONNECT"]=LoadGraph("image/connect.png");
 	figure_id["F_DOTGRAY"]=LoadGraph("image/dotgray.png");
 	figure_id["F_CONNECTED"]=LoadGraph("image/connected.png");

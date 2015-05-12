@@ -34,7 +34,7 @@ using namespace std;
 int hsv[4][4];
 
 std::string SERVER_IP_ADDRESS;// "157.82.7.4"	//サーバーのIPアドレス
-std::string RASPI_IP_ADDRESS = "pi@rpi04.local";//ラズパイのＩＰアドレス
+std::string RASPI_IP_ADDRESS;// = "pi@rpi04.local";//ラズパイのＩＰアドレス
 
 int PLAYER_NM ;	//自分のプレイヤー番号
 
@@ -684,8 +684,11 @@ int configuration(){
 		return 3;
 	}
 	string row;
-	std::getline(playnum_file, row);
-	PLAYER_NM = atoi(row.c_str());
+	int tmp[2];
+	playnum_file >> row;
+	if(sscanf_s(row.c_str(),"rpi:%d,id:%d", &tmp[0],&tmp[1]) != 2) return 2;
+	PLAYER_NM = tmp[1];
+	RASPI_IP_ADDRESS = "pi@rpi0"+to_string(tmp[0])+".local";
 	if(PLAYER_NM<0){
 		return 3;
 	}

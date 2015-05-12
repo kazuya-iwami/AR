@@ -303,6 +303,37 @@ bool CMap::draw(){
 	return true;
 }
 
+float setposition(int n,int i){
+	if(n>i*5){
+			return 435-(n-i*5)*(n-i*5)*(n-i*5)/20.0;
+		}else{
+			return 435;
+		}
+}
+
+//消えゆくタイトルを表示,流れるタイトル
+void Drawtitle(int n){
+	int wordstart=435;
+	for(int i =0;i<14;i++){
+		DrawGraph(setposition(n,i)	
+		,300,title[i],true);
+	}
+	/*	DrawGraph(wordstart-n,360,title[1],true);
+		DrawGraph(wordstart-n,360,title[2],true);
+		DrawGraph(wordstart-n,360,title[3],true);
+		DrawGraph(wordstart-n,360,title[4],true);
+		DrawGraph(wordstart-n,360,title[5],true);
+		DrawGraph(wordstart-n,360,title[6],true);
+		DrawGraph(wordstart-n,360,title[7],true);
+		DrawGraph(wordstart-n,360,title[8],true);
+		DrawGraph(wordstart-n,360,title[9],true);
+		DrawGraph(wordstart-n,360,title[10],true);
+		DrawGraph(wordstart-n,360,title[11],true);
+		DrawGraph(wordstart-n,360,title[12],true);
+		DrawGraph(wordstart-n,360,title[13],true);*/
+	
+}
+
 
 bool CWait::draw(){
 	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
@@ -326,20 +357,52 @@ bool CWait::draw(){
 				}
 			}
 		}
-	}
-	
-	MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
-	MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
-	MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
-	MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,draw_timer*0.1f,0.0f));
-	MV1DrawModel(figure_id["X_TANK"]);
-	
+		MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
+		MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
+		MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
+		MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
+		MV1DrawModel(figure_id["X_TANK"]);
+	}else{//Pでモード変更
+		flag++;
+		if(flag<250){
+			Drawtitle(flag);
+			//ムービー前に戦車にはきえてもらう
+			MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
+			MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
+			if(flag>100){
+				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50+((flag-100)*(flag-100))/10)*1.0f,150.0f));
+				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*(draw_timer+((flag-100)*(flag-100))/4)/10.0*1.0f,0.0f));
+			}else{
+				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50)*1.0f,150.0f));
+				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
+			}
+			MV1DrawModel(figure_id["X_TANK"]);
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag);
+			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
+		}else{//画面から物体がすべて消えた状態
+			
+			//SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
+			/*DrawModiGraph(
+				0,375-((flag-230)*(flag-230))/4,
+				1350,375-((flag-230)*(flag-230))/4,
+				1350,375+((flag-230)*(flag-230))/4,
+				0,375+((flag-230)*(flag-230))/4,
+				figure_id["F_WAITBLACK"],false
+				);*/
+			DrawExtendGraph(0,400-((flag-230)*(flag-230))/4,1350,400+((flag-230)*(flag-230))/8,figure_id["F_WAITBLACK"],false);
+			//DrawGraph(0,0,figure_id["F_WAITBLACK"],false);
+			//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
-	//modeが変わるとりんくスタート,現在はPでモード変更可能
-	if(mode<=0){
-		
+		//	DrawFormatString(0,0,1,"%d %d",mode,flag);
+		}
 	}
-
+	if(spin>1 && draw_timer%60==0){spin--;}
+	//DrawFormatString(0,0,1,"%d %d",mode,flag);
+	draw_timer++;
+	return true;
+}
+//以下のコメントアウト部分はdraw()で使わなくなった部分。邪魔なので関数外に出しました。必要に応じて戻してください
 /*	DrawGraph(wordstart,wordy,figure_id["F_R"],true);
 	DrawGraph(wordstart+1*wordwidth,wordy,figure_id["F_E"],true);
 	DrawGraph(wordstart+2*wordwidth,wordy,figure_id["F_A"],true);
@@ -473,13 +536,13 @@ bool CWait::draw(){
 	}else draw_timer += mode;
 	*/
 	//DrawFormatString(0,0,1,"%d %d",mode,draw_timer);
-	draw_timer++;
-	return true;
-}
+	
 
 CWait::CWait(){
 	draw_timer=0;
 	mode=1;
+	spin=1;
+	flag=1;
 }
 
 void CWait::play_init(){
@@ -505,8 +568,8 @@ void CWait::update(const char key_buf[256]){
 	if(key_buf[D_DIK_4]) speed =4;
 	if(key_buf[D_DIK_8]) speed =8;
 	if(( draw_timer%60 == 0 )&& ojisan_pop_num < 20){
-		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num,&mode);
-		CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
+//		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num,&mode);
+	//	CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
 		ojisan_pop_num++;
 	}
 

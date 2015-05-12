@@ -5,6 +5,7 @@ map<string,int> CObject::sound_id;
 std::list<std::shared_ptr<CObject>> CObject::drawlist;
 int CObject::shake_x;
 int CObject::shake_y;
+int title[14];
 
 //爆発エフェクト用配列
 int explosion[45];
@@ -87,18 +88,28 @@ void CObject::load(){
 	figure_id["F_WAIT04"]=LoadGraph("image/wait04.png");
 	figure_id["F_WAIT05"]=LoadGraph("image/wait05.png");
 	figure_id["F_WAIT06"]=LoadGraph("image/wait06.png");
-	figure_id["F_R"]=LoadGraph("image/word/R.png");
-	figure_id["F_E"]=LoadGraph("image/word/E.png");
-	figure_id["F_A"]=LoadGraph("image/word/A.png");
-	figure_id["F_L"]=LoadGraph("image/word/L.png");
-	figure_id["F_T"]=LoadGraph("image/word/T.png");
-	figure_id["F_N"]=LoadGraph("image/word/N.png");
-	figure_id["F_K"]=LoadGraph("image/word/K.png");
-	figure_id["F_B"]=LoadGraph("image/word/B.png");
-	figure_id["F_TITLE"]=LoadGraph("image/word/title.png");
+
+	//タイトルのあつまり
+	figure_id["F_TITLE"]=LoadGraph("image/title/title.png");
+	title[0]=LoadGraph("image/title/titleR.png");
+	title[1]=LoadGraph("image/title/titleE.png");
+	title[2]=LoadGraph("image/title/titleA.png");
+	title[3]=LoadGraph("image/title/titleL.png");
+	title[4]=LoadGraph("image/title/titleT.png");
+	title[5]=LoadGraph("image/title/titleA_2.png");
+	title[6]=LoadGraph("image/title/titleN.png");
+	title[7]=LoadGraph("image/title/titleK.png");
+	title[8]=LoadGraph("image/title/titleB.png");
+	title[9]=LoadGraph("image/title/titleA_3.png");
+	title[10]=LoadGraph("image/title/titleT_2.png");
+	title[11]=LoadGraph("image/title/titleT_3.png");
+	title[12]=LoadGraph("image/title/titleL_2.png");
+	title[13]=LoadGraph("image/title/titleE_2.png");
+
+	figure_id["F_WAITBLACK"]=LoadGraph("image/background_wait_black.png");
 	figure_id["F_CONNECT"]=LoadGraph("image/connect.png");
 	figure_id["F_DOTGRAY"]=LoadGraph("image/dotgray.png");
-
+	figure_id["F_CONNECTED"]=LoadGraph("image/connected.png");
 
 	figure_id["F_MAN"]=LoadGraph("image/man.png");
 	figure_id["F_SCORE"]=LoadGraph("image/back_card.png");

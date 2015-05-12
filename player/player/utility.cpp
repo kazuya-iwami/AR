@@ -555,8 +555,8 @@ void CWait::update(const char key_buf[256]){
 	if(key_buf[D_DIK_4]) speed =4;
 	if(key_buf[D_DIK_8]) speed =8;
 	if(( draw_timer%60 == 0 )&& ojisan_pop_num < 20){
-		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num,&mode);
-		CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
+//		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num,&mode);
+	//	CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
 		ojisan_pop_num++;
 	}
 

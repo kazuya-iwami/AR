@@ -586,7 +586,11 @@ bool CScore_Info::draw(){
 		DrawExtendGraph(1050, score_info_enemy[i].info_y+10,1170,score_info_enemy[i].info_y+RANK_HEIGHT+5, figure_id["F_SCORE"], true);
 
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
-		DrawOriginalString(1060,score_info_enemy[i].info_y + 12,0.625,16,"+"+to_string(score_info_enemy[i].score)+"  "+to_string(i+1)+"P");
+		if(score_info_enemy[i].score <10){
+			DrawOriginalString(1070,score_info_enemy[i].info_y + 12,0.625,16,to_string(i+1)+"P: "+to_string(score_info_enemy[i].score));
+		}else{
+			DrawOriginalString(1070,score_info_enemy[i].info_y + 12,0.625,16,to_string(i+1)+"P:"+to_string(score_info_enemy[i].score));
+		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
 

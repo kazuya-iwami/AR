@@ -104,8 +104,7 @@ void CObject::load(){
 	figure_id["F_GRAYBACK"]=LoadGraph("image/grayback.png");
 	figure_id["F_WHITEBACK"]=LoadGraph("image/whiteback.png");
 	figure_id["F_BACK"]=LoadGraph("image/back.png");
-
-	figure_id["F_SCORE"]=LoadGraph("image/back_card.png");
+	figure_id["F_SCORE"]=LoadGraph("image/back_card2.png");
 
 	//マップで使うアイコン
 	figure_id["F_ICONRED"]=LoadGraph("image/iconred.png");

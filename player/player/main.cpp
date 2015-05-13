@@ -332,11 +332,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 						mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 					}
-
-					//テスト用　Iを押したタイミングでItem生成
-					if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
-						mytank->use_item();
-					}
 	
 					
 					//テスト用　Dを押すとカーソルが右に
@@ -376,11 +371,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				}
 				/* 弾丸補充処理ここまで */
 
-				//テスト用　とりあえずX押したら画面が振動するよ
-				if(key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0){
 
-					mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
-				}
 				//テスト用　Ｌを押すと攻撃を受けるよ
 				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
 					mytank->attacked(1);

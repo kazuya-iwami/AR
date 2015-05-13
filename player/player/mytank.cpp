@@ -75,8 +75,8 @@ bool CMytank::draw() {
 		DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,30,figure_id["F_HPBAR"],true);
 	}
 	DrawGraph(33+LEFT_WINDOW_WIDTH,28,figure_id["F_HPFRAME2"],true);
-	if(viability_status)SetDrawBright(170,170,170);
-	else if(HP==1) SetDrawBright(255,70,70);
+	if(HP==0)SetDrawBright(170,170,170);
+	else if(HP==1) SetDrawBright(255,100,100);
 	DrawOriginalString(39+LEFT_WINDOW_WIDTH,14,0.3125,10,"LIFE");
 	SetDrawBright(255,255,255);
 	if(hit_counter>0) hit_counter--;

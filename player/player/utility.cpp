@@ -25,7 +25,7 @@ bool CSystem_timer::draw(){
 		std::string sec = sout1.str();
 		sout2 << std::setfill('0') << std::setw(1) << (system_timer/30 + 1)/60;
 		std::string min = sout2.str();
-		DrawDigitNum(438+LEFT_WINDOW_WIDTH, 20, 0.3, 18, min+":"+sec+"."+under_sec);
+		DrawDigitNum(438+LEFT_WINDOW_WIDTH, 20, (float)0.3, 18, min+":"+sec+"."+under_sec);
 		//timerカウント
 
 		if(countdown_finish_flag)system_timer--;

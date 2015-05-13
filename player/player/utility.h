@@ -124,11 +124,11 @@ public:
 	CWait();
 	void update(const char key_buf[256]);
 	void play_init();
-	int mode;
-	int flag;
+	int mode; //ゲームスタートまでの映像再生状態　1:待機　0:動画再生からのGAME_PLAYへ
+	int flag;//draw_timer モドキ
 	int spin;
 	int speed;
-	int gameflag;
+	int gameflag; // 1:動画再生の終了案内
 	bool bullet;
 	int bullet_x,bullet_y;
 	int ojisan_num,ojisan_pop_num;

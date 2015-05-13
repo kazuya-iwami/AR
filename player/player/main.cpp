@@ -26,7 +26,7 @@ using namespace std;
 #define GAME_TIME 180 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
- #define USE_CAMERA_FLAG 2
+ #define USE_CAMERA_FLAG 1
 
 //0:画像 1:カメラ 2:ラズパイ
 
@@ -188,6 +188,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	auto wait=make_shared<CWait>();
 	CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
+	mytank->get_mode(&(wait->mode));
 
 	shared_ptr<CMovie> iwami;
 

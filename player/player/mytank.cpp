@@ -428,7 +428,8 @@ void CMytank::get_msg(){
 			switch (player_from) {
 			case GAME_STATUS::GAME_PLAY:
 				if(game_status == GAME_STATUS::GAME_WAIT){
-					start();
+					//start();
+					(*wait_mode) = 0;
 				}else if( game_status == GAME_STATUS::GAME_PAUSE ) {
 					game_status = GAME_STATUS::GAME_PLAY;
 				}
@@ -970,5 +971,10 @@ void requestHttp_thread(tstring direction, tstring speed) {
 	bool isMethodGet = true;
 	tstring strResult;
 	HttpRequest(strUrl, isMethodGet, speed, strResult);
+
+}
+
+void CMytank::get_mode(int* mode_){
+	wait_mode = mode_;
 
 }

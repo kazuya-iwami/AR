@@ -336,7 +336,11 @@ void Drawtitle(int n){
 
 
 bool CWait::draw(){
-	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
+	if(flag<265){
+		DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
+	}else{
+		DrawGraph(0,0,figure_id["F_WAITBLACK"],false);
+	}
 	//DrawBox(0,0,1350,730,GetColor(70,70,70),TRUE);
 	
 	int wordwidth=48;
@@ -382,25 +386,27 @@ bool CWait::draw(){
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
 		}else if(flag>=250 && flag <250+2*15){
+
+
 			//画面から物体がすべて消えた状態
 			DrawGraph(0,0,flash[((flag-250)/2)%16],true);
 		}else if( flag>= 280 && flag <320){
-			DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
 			DrawGraph(0,0,flash[14],true);
 		}else{
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
 			DrawGraph(0,0,figure_id["F_BACK"],false);
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,500+255-flag);
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,500-(flag-255));
 			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			if(755-flag==-60){
+			if(500-(flag-255)<=-30){
 				gameflag=1;
 			}
 		}
 	}
 	if(spin>1 && draw_timer%60==0){spin--;}
-	DrawFormatString(0,0,1,"%d %d",mode,flag);
+	//DrawFormatString(0,0,1,"%d %d",mode,flag);
 	draw_timer++;
 	return true;
 }

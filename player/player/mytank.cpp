@@ -905,12 +905,12 @@ void CMytank::focus_to_down(){
 };
 
 void CMytank::focus_to_right(){
-	if(focus_x > 675+150) return;
+	if(focus_x > 675+150 -LEFT_WINDOW_WIDTH) return;
 	focus_x += FOCUS_SPEED;
 };
 
 void CMytank::focus_to_left(){
-	if(focus_x < 675-150 ) return;
+	if(focus_x < 675-150 -LEFT_WINDOW_WIDTH) return;
 	focus_x -= FOCUS_SPEED;
 };
 

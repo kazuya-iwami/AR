@@ -26,6 +26,7 @@ bool CMytank::draw() {
 		if(id != 3 && enemy3->lockon ==true) attackable = true;
 		if(attackable == true){//lockon状態
 			if(!preflag){
+				PlaySoundMem(sound_id["S_LOCK"], DX_PLAYTYPE_BACK);
 				preflag=true;
 				draw_timer = 0;
 			} 

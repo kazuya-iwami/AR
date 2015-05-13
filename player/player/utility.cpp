@@ -315,7 +315,7 @@ float setposition(int n,int i){
 void Drawtitle(int n){
 	int wordstart=435;
 	for(int i =0;i<14;i++){
-		DrawGraph(setposition(n,i)	
+		DrawGraph(setposition(n*2,i)	
 		,300,title[i],true);
 	}
 	/*	DrawGraph(wordstart-n,360,title[1],true);

@@ -9,7 +9,6 @@ int title[14];
 
 //爆発エフェクト用配列
 int explosion[45];
-int explosion1[140];
 
 //弾エフェクト用配列
 int bullet[30];
@@ -76,6 +75,7 @@ void CObject::load(){
 	figure_id["F_HPFRAME"]=LoadGraph("image/hp_frame.png");
 	figure_id["F_HPBAR"]=LoadGraph("image/hp_bar.png");
 	figure_id["F_HPFRAME2"]=LoadGraph("image/hp_frame2.png");
+	figure_id["F_LIFE"]=LoadGraph("image/life.png");
 
 	figure_id["F_MAPFRAME"] = LoadGraph("image/map_frame.png");
 
@@ -113,6 +113,7 @@ void CObject::load(){
 	figure_id["F_CONNECT"]=LoadGraph("image/connect.png");
 	figure_id["F_DOTGRAY"]=LoadGraph("image/dotgray.png");
 	figure_id["F_CONNECTED"]=LoadGraph("image/connected.png");
+	figure_id["F_CONNECTED_JA"]=LoadGraph("image/connected_ja.png");
 	figure_id["F_GRAYBACK"]=LoadGraph("image/grayback.png");
 	figure_id["F_WHITEBACK"]=LoadGraph("image/whiteback.png");
 	figure_id["F_BACK"]=LoadGraph("image/back.png");
@@ -140,7 +141,6 @@ void CObject::load(){
 	// explosion
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
 	LoadDivGraph("image/explosion_sample.png", 45, 9, 5, 600, 600, explosion);
-	LoadDivGraph("image/explosion1.png", 140, 14, 10, 600, 600, explosion1);
 
 	// bullet
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード

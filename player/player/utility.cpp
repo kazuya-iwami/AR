@@ -273,9 +273,9 @@ bool CMap::draw(){
 	return true;
 }
 
-float setposition(int n,int i){
+int setposition(int n,int i){
 	if(n>i*5){
-			return 435-(n-i*5)*(n-i*5)*(n-i*5)/20.0;
+			return 435-(n-i*5)*(n-i*5)*(n-i*5)/20;
 		}else{
 			return 435;
 		}

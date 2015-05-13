@@ -392,10 +392,9 @@ bool CWait::draw(){
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
 		}else if(flag>=250 && flag <250+2*15){
-
-
-			//画面から物体がすべて消えた状態
-			DrawGraph(0,0,flash[((flag-250)/2)%16],true);
+			//画面から物体がすべて消えた状態　フラッシュしていく
+			PlaySoundMem( sound_id["S_LINKSTART"], DX_PLAYTYPE_BACK );
+			//DrawGraph(0,0,flash[((flag-250)/2)%16],true);
 		}else if( flag>= 280 && flag <320){
 			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
 			//DrawGraph(0,0,flash[14],true);

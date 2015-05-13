@@ -25,6 +25,9 @@ int fog[10];
 int word[160];
 int digit[18];
 
+//光
+int flash[16];
+int flash2[10];
 
 //燃える
 int fire[5];
@@ -110,6 +113,9 @@ void CObject::load(){
 	figure_id["F_CONNECT"]=LoadGraph("image/connect.png");
 	figure_id["F_DOTGRAY"]=LoadGraph("image/dotgray.png");
 	figure_id["F_CONNECTED"]=LoadGraph("image/connected.png");
+	figure_id["F_GRAYBACK"]=LoadGraph("image/grayback.png");
+	figure_id["F_WHITEBACK"]=LoadGraph("image/whiteback.png");
+	figure_id["F_BACK"]=LoadGraph("image/back.png");
 
 	figure_id["F_MAN"]=LoadGraph("image/man.png");
 	figure_id["F_SCORE"]=LoadGraph("image/back_card.png");
@@ -144,6 +150,9 @@ void CObject::load(){
 	//分割して読み込み
 	LoadDivGraph("image/number.png",10,5,2,55,100,number);
 
+	//光
+	LoadDivGraph("image/flash2.png",10,10,1,240,240,flash2);	
+	LoadDivGraph("image/flash.png",16,2,8,1350,730,flash);
 	//fire
 	LoadDivGraph("image/gamenfire.png",5,1,5,640,480,fire);
 	//up_effect
@@ -157,6 +166,8 @@ void CObject::load(){
 
 	//紙ふぶき
 	LoadDivGraph("image/kamifubuki.png",24,2,12,960,480,kamifubuki);
+
+
 
 	//EEICの電球
 	figure_id["F_LIGHT_TOP"]=LoadGraph("image/top_light.png");

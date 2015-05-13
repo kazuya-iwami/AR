@@ -45,7 +45,7 @@ int configuration();
 
 cv::VideoCapture vcap;
 
-int camera_image_handle;//スレッド処理用
+int camera_image_handle;
 std::mutex draw_mtx;
 std::mutex mytank_mtx;
 bool thread_flag;
@@ -221,8 +221,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 			
-			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
+			if( ( key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0) || wait->gameflag==1){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
+				
+				wait->gameflag=0;			
+				
 				mytank->start();
 			}
 			else if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0 && wait->mode > 0){
@@ -244,6 +247,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			
 			if(key_buf[KEY_INPUT_S]==1 && key_prev_buf[KEY_INPUT_S]==0){
 				wait->spin=wait->spin+2;
+			}
+			if(wait->flag==280){
+				auto iwami_=make_shared<CMovie>("M_LINKSTART");
+				iwami =iwami_;
+				CObject::register_object(iwami,DRAW_LAYER::MOVIE_LAYER);
+				draw_mtx.lock();
+				iwami->init();
+				draw_mtx.unlock();
 			}
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
@@ -598,7 +609,6 @@ void image_get_process() {
 
 //ゲームの初期化
 void init(){
-
 	
 
 	//描画リストの要素をすべて削除

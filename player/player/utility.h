@@ -5,6 +5,9 @@
 #include "explosion.h"
 #include <string>
 #include "network.h"
+#include"main.h"
+
+
 //細かいクラスはここにかき集めている
 
 
@@ -125,6 +128,7 @@ public:
 	int flag;
 	int spin;
 	int speed;
+	int gameflag;
 	bool bullet;
 	int bullet_x,bullet_y;
 	int ojisan_num,ojisan_pop_num;

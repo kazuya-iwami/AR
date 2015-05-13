@@ -99,7 +99,7 @@ string explode(int n,char const *y,char const *str,string *target){
 	n--;
 	string r_str[1000];
 	int d=0,g=0,t=strlen(y),a=0;
-	for(int i=0;i<strlen(str);i++){
+	for(int i=0;i<(int)strlen(str);i++){
 		if(y[a]==str[i]){
 			a++;
 			if(a==t){
@@ -114,7 +114,7 @@ string explode(int n,char const *y,char const *str,string *target){
 			a=0;
 		}
 	}
-	for(int i=d;i<strlen(str);i++) r_str[g]+=str[i];
+	for(int i=d;i<(int)strlen(str);i++) r_str[g]+=str[i];
 	if(option){
 		for(int i=0;i<=g;i++){
 			*target=r_str[i];

@@ -273,9 +273,9 @@ bool CMap::draw(){
 	return true;
 }
 
-float setposition(int n,int i){
+int setposition(int n,int i){
 	if(n>i*5){
-			return 435-(n-i*5)*(n-i*5)*(n-i*5)/20.0;
+			return 435-(n-i*5)*(n-i*5)*(n-i*5)/20;
 		}else{
 			return 435;
 		}
@@ -344,14 +344,15 @@ bool CWait::draw(){
 			//ムービー前に戦車にはきえてもらう
 			MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
 			MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
-			if(flag == title_end_time) draw_timer= 0;
+			if(flag == title_end_time) draw_timer= 40;
 			if(flag>title_end_time){
 				//戦車が回転を始める
 				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50+((flag-title_end_time)*(flag-title_end_time))/8)*1.0f,150.0f));
 				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*(draw_timer+(flag-title_end_time)*(flag-title_end_time))/50.0f,0.0f));
-				//「接続完了」の文字出力
+				//「接続開始」の文字出力
+				if(draw_timer % 80 == 60) PlaySoundMem( sound_id["S_PI"], DX_PLAYTYPE_BACK );
 				SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
-				DrawGraph(520,wordy,figure_id["F_CONNECTED_JA"],true);
+				DrawGraph(400,wordy,figure_id["F_CONNECTED_JA"],true);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			}else{
 				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50)*1.0f,150.0f));

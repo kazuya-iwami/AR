@@ -121,6 +121,7 @@ void CObject::load(){
 	sound_id["S_LOCK"]=LoadSoundMem("sound/lock.mp3");
 	sound_id["S_ATTACKED"]=LoadSoundMem("sound/attacked.mp3");
 	sound_id["S_LINKSTART"]=LoadSoundMem("sound/linkstart.mp3");
+	sound_id["S_PI"]=LoadSoundMem("sound/pi.mp3");
 	//BGM
 	sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
 

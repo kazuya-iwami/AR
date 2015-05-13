@@ -923,6 +923,15 @@ void CMytank::focus_to_down(){
 	focus_y += FOCUS_SPEED;
 };
 
+void CMytank::focus_to_right(){
+	if(focus_x > 675+150) return;
+	focus_x += FOCUS_SPEED;
+};
+
+void CMytank::focus_to_left(){
+	if(focus_x < 675-150 ) return;
+	focus_x -= FOCUS_SPEED;
+};
 
 int CMytank::get_num_bullet(){
 	return num_bullet;

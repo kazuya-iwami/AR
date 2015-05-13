@@ -23,7 +23,7 @@
 using namespace std;
 	
 
-#define GAME_TIME 300 //プレー時間　300秒
+#define GAME_TIME 180 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
  #define USE_CAMERA_FLAG 2
@@ -186,7 +186,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//描画リストの要素をすべて削除 waitでは描画しない
 	CObject::drawlist.clear();
 
-	auto wait = make_shared<CWait>();
+	auto wait=make_shared<CWait>();
 	CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
 
 	shared_ptr<CMovie> iwami;
@@ -307,19 +307,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					//各キーを押し続けるとその動作をする。
 					if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
 					//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
-					mytank->move(_T("forward"), speed);
+					mytank->move(_T("forward"), _T("full"));
 					}
 					if(  key_buf[ KEY_INPUT_DOWN ] == 1 && key_prev_buf[ KEY_INPUT_DOWN] == 0 ){
 					//mytank->set_vel(-1,-1);
-					mytank->move(_T("backward"), speed);
+					mytank->move(_T("backward"), _T("full"));
 					}
 					if(  key_buf[ KEY_INPUT_LEFT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
 					//mytank->set_vel(-1,1);
-					mytank->move(_T("left"), speed);
+					mytank->move(_T("left"), _T("half"));
 					}
 					if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
 					//mytank->set_vel(1,-1);
-					mytank->move(_T("right"), speed);
+					mytank->move(_T("right"), _T("half"));
 					}
 					//各キーを離したらstop
 					if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 
@@ -357,17 +357,17 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					
 					/*************
 					上下に照準固定
-					**************
+					**************/
 					//テスト用　Dを押すとカーソルが右に
 					if(  key_buf[ KEY_INPUT_D ] == 1){
-						mytank->focus_x += FOCUS_SPEED;
+						mytank->focus_to_right();
 					}
 	
 					//テスト用　Aを押すとカーソルが左に
 					if(  key_buf[ KEY_INPUT_A ] == 1){
-						mytank->focus_x -=  FOCUS_SPEED;
+						mytank->focus_to_left();
 					}
-					*/
+					
 					//テスト用　Wを押すとカーソルが上に
 					if(  key_buf[ KEY_INPUT_W ] == 1 ){
 						mytank->focus_to_up();

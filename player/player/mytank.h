@@ -90,6 +90,8 @@ public:
 	void show_focus();
 	void focus_to_up();
 	void focus_to_down();
+	void focus_to_right();
+	void focus_to_left();
 
 	void bullet_charge(int charge);
 	void start();

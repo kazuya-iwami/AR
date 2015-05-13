@@ -20,7 +20,6 @@ extern std::string RASPI_IP_ADDRESS ;//"pi@rpi04.local"//ラズパイのＩＰ�
 extern int PLAYER_NM ;	//自分のプレイヤー番号
 
 
-
 string encode(COMMAND_NAME, int, int, int);
 
 class Hsv {

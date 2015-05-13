@@ -167,22 +167,6 @@ void CBullet_image :: update_num_bullet(int num_bullet_){
 }
 
 
-CFire ::CFire(){
-	draw_timer = 0;
-}
-
-bool CFire::draw(){
-	
-	DrawExtendGraph( LEFT_WINDOW_WIDTH , 0,
-				1000 + LEFT_WINDOW_WIDTH  , 750 , fire[draw_timer % 5], true ) ;
-
-	draw_timer++;
-
-
-	if(draw_timer <120) return true;
-	else return false;
-}
-
 CUp_effect :: CUp_effect(){
 	draw_timer = 0;
 }
@@ -216,20 +200,6 @@ SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 return true;
 }
 
-
-CThunder :: CThunder(){
-	draw_timer = 0;
-}
-
-bool CThunder :: draw(){
-	DrawExtendGraph( LEFT_WINDOW_WIDTH , 0,
-				1000 + LEFT_WINDOW_WIDTH  , 750 , thunder[draw_timer % 10], true ) ;
-
-	draw_timer++;
-
-	if(draw_timer <90) return true;
-	else return false;
-}
 
 bool CEeic::draw(){
 	/*
@@ -560,48 +530,7 @@ CWait::CWait(){
 	gameflag=0;
 }
 
-void CWait::play_init(){
-	x=600;y=420;
-	speed=4;
-	bullet=false;
-	ojisan_num=0;
-	ojisan_pop_num=0;
-}
 
-void CWait::update(const char key_buf[256]){
-	if(key_buf[D_DIK_W] || key_buf[D_DIK_UP]) y -=speed;
-	if(key_buf[D_DIK_S] || key_buf[D_DIK_DOWN]) y +=speed;
-	if(key_buf[D_DIK_D] || key_buf[D_DIK_RIGHT]) x +=speed;
-	if(key_buf[D_DIK_A] || key_buf[D_DIK_LEFT]) x -=speed;
-
-	if(key_buf[D_DIK_SPACE] && bullet == false){
-		bullet_x=x+140;
-		bullet_y=y+70;
-		bullet=true;
-	}
-	if(key_buf[D_DIK_Q]) mode=1;
-	if(key_buf[D_DIK_4]) speed =4;
-	if(key_buf[D_DIK_8]) speed =8;
-	if(( draw_timer%60 == 0 )&& ojisan_pop_num < 20){
-//		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num,&mode);
-	//	CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
-		ojisan_pop_num++;
-	}
-
-	if(bullet){
-		bullet_x +=4+speed;
-		if(bullet_x > 1400) bullet=false;
-	}
-
-	if(mode<0 && mode> -60){
-		mode--;
-		if(mode == -60){mode=1;}
-	}
-	if(mode < -60 && mode > -120){
-		mode--;
-		if(mode == -120){mode=1;}
-	}
-}
 
 bool CKamifubuki::draw(){
 	DrawExtendGraph(0,0,1500,750,kamifubuki[(draw_timer%120)/5],true);
@@ -697,50 +626,7 @@ bool CScore_Info::draw(){
 
 }
 
-bool COjisan::draw(){
-	DrawRotaGraph(x,y,0.7,hit/18.0,figure_id["F_MAN"],true,true);
-	if(hit==0){
-		x -= speed;
-		if(*bullet && *bullet_x < x +10 && *bullet_x > x -10 && *bullet_y < y +60 && *bullet_y > y -60){
-			hit=1;
-			*bullet = false;
-		}
-	}else{
-		DrawExtendGraph(x-50,y-30,x+40,y+70,fire[hit%5],true);
-		hit++;
-	}
-	
-	draw_timer++;
 
-	if(hit < 20){
-		if((*mode) > 0) return false;
-		if(x<0){
-			(*mode)= -61;
-			return false;
-		}
-		else return true;
-	}
-	else{
-		(*ojisan_num)++;
-		if((*ojisan_num) ==20){
-			(*mode)=-1;
-		}
-		return false;
-	}
-}
-
-COjisan::COjisan(int *bullet_x_,int *bullet_y_,bool *bullet_,int* ojisan_num_,int *mode_){
-	draw_timer=0;
-	bullet_x =bullet_x_;
-	bullet_y =bullet_y_;
-	bullet =bullet_;
-	ojisan_num =ojisan_num_;
-	mode=mode_;
-	x = 1400;;
-	y = rand()%600 + 65;
-	hit=0;
-	speed = rand()%3 + 3;
-}
 
 void CDenkyu::attaacked(){
 	hit = true;

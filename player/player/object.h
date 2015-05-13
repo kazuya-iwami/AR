@@ -32,12 +32,8 @@ extern int flash2[10];
 extern int word[160];
 extern int digit[18];
 
-//燃える
-extern int fire[5];
 //up_effect
 extern int up_effect[10];
-//THUNDER
-extern int thunder[10];
 
 //紙ふぶき
 extern int kamifubuki[24];

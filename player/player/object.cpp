@@ -152,7 +152,7 @@ void CObject::load(){
 
 	//光
 	LoadDivGraph("image/flash2.png",10,10,1,240,240,flash2);	
-	LoadDivGraph("image/flash.png",16,2,8,1350,730,flash);
+	//LoadDivGraph("image/flash.png",16,2,8,1350,730,flash);
 	//fire
 	LoadDivGraph("image/gamenfire.png",5,1,5,640,480,fire);
 	//up_effect

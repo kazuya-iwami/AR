@@ -342,17 +342,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 						mytank->use_item();
 					}
 	
-					//my test
-					if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
-						auto fire = make_shared<CFire>();
-						CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
-					}
-	
-				
-					if(  key_buf[ KEY_INPUT_T ] == 1 && key_prev_buf[ KEY_INPUT_T] == 0){
-						auto thunder =make_shared<CThunder>();
-					CObject::register_object(thunder,DRAW_LAYER::EXPLOSION_LAYER);
-					}
+					
 					
 					/*************
 					上下に照準固定

@@ -371,6 +371,11 @@ bool CWait::draw(){
 			//DrawGraph(0,0,flash[14],true);
 		}else{
 			int movie_end_time = 440;
+			if(flag == movie_end_time){
+				//GameBGMの再生
+				StopSoundMem( sound_id["S_LINKSTART"] );
+				PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
+			}
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
 			DrawGraph(0,0,figure_id["F_BACK"],false);
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;

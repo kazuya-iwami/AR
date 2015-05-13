@@ -825,8 +825,6 @@ void CMytank::bullet_charge(int charge){
 
 
 void CMytank::start(){
-	//GameBGMの再生
-	PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
 	//Game スタート
 	//set_game_status(GAME_STATUS::GAME_PLAY);//init()で無効化されるのでその後行う
 	init_flag = true;

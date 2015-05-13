@@ -392,15 +392,16 @@ bool CWait::draw(){
 			DrawGraph(0,0,flash[((flag-250)/2)%16],true);
 		}else if( flag>= 280 && flag <320){
 			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
-			DrawGraph(0,0,flash[14],true);
+			//DrawGraph(0,0,flash[14],true);
 		}else{
+			int movie_end_time = 440;
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
 			DrawGraph(0,0,figure_id["F_BACK"],false);
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,500-(flag-255));
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-(flag-movie_end_time)*2);
 			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			if(500-(flag-255)<=-30){
+			if(255-(flag-movie_end_time)*2<=-50){
 				gameflag=1;
 			}
 		}

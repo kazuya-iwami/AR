@@ -241,10 +241,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				draw_mtx.unlock();
 			}
 			else if(  key_buf[ KEY_INPUT_P ] == 1 && key_prev_buf[ KEY_INPUT_P] == 0 && wait->mode > 0){
-				wait->play_init();
 				wait->mode=0;
 			}
-			if(wait->mode<=0) wait->update(key_buf);
 			
 			if(key_buf[KEY_INPUT_S]==1 && key_prev_buf[KEY_INPUT_S]==0){
 				wait->spin=wait->spin+2;

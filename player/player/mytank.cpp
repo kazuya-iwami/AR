@@ -47,9 +47,6 @@ bool CMytank::draw() {
 					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.58,  (draw_timer-40)/30.0+0.785,figure_id["F_CURSUR_ON_TRI"],true);
 				}
 			}
-			/*　従来
-			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
-			*/
 			draw_timer++;
 		}else{//lockが外れている状態
 			preflag=false;
@@ -57,19 +54,12 @@ bool CMytank::draw() {
 			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,  0,figure_id["F_CURSUR_OUT"],true);
 			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,  draw_timer/10.0,figure_id["F_CURSUR_IN"],true);
 			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, -draw_timer/10.0,figure_id["F_CURSUR_TRI"],true);
-			//　従来：DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 			draw_timer++;
 		}
 	}
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	//HP表示
-	/*
-	DrawGraph(0+LEFT_WINDOW_WIDTH,9,figure_id["F_HPFRAME"],true);
-	int i;
-	for(i=0;i<HP;i++){
-		DrawGraph(14+96*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
-	}*/
 	int j;
 	for(j=0;j<HP*50+2*hit_counter;j++){
 		DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,30,figure_id["F_HPBAR"],true);
@@ -97,16 +87,6 @@ bool CMytank::draw() {
 	//アイテム枠表示
 	//DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
 
-	//man
-	//if(draw_timer%40 < 20) kakudo = -0.5+(draw_timer%40)/20.0;
-	//else kakudo = 0.5-(draw_timer%40-20)/20.0;
-	/*
-	DrawRotaGraph(80,600,1.0,0,figure_id["F_MAN"],true);
-	if(viability_status==VIABILITY_STATUS::DEAD)DrawOriginalString(17,470,0.5,12,"donmai(^-^)b");
-	else if(is_reloading) DrawOriginalString(17,470,0.5,12,"Be careful...");
-	else if(num_bullet == 0) DrawOriginalString(20,470,0.75,20,"RELOAD!");
-	else if(attackable) DrawOriginalString(20,470,0.75,20,"SHOOT!!");
-	*/
 
 	//upadte score_info
 	if(id == 0)	score_info->update_score(score,enemy1->score,enemy2->score,enemy3->score);

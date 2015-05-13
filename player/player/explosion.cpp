@@ -25,15 +25,6 @@ bool CExplosion::draw(){
 		} else {
 			return false;
 		}
-	case EXPLOSION_KIND::EXPLOSION_1 :
-		if(draw_timer != 140){
-			// 爆発エフェクトの描画
-			DrawGraph(x-300 + LEFT_WINDOW_WIDTH, y-300, explosion1[draw_timer], true);
-			draw_timer++;
-			return true;
-		} else {
-			return false;
-		}
 	}
 	return false;
 }

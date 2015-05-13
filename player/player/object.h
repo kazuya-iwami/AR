@@ -17,13 +17,17 @@ extern int explosion1[140];
 extern int bullet[30];
 extern int bullet_start[45];
 
+
 //タイトル用
 extern int title[14];
 
 //数字用
-
 extern int number[10];
 extern int fog[10];
+
+//光
+extern int flash[16];
+extern int flash2[10];
 
 //文字用
 extern int word[160];

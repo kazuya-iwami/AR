@@ -336,7 +336,11 @@ void Drawtitle(int n){
 
 
 bool CWait::draw(){
-	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
+	if(flag<265){
+		DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
+	}else{
+		DrawGraph(0,0,figure_id["F_WAITBLACK"],false);
+	}
 	//DrawBox(0,0,1350,730,GetColor(70,70,70),TRUE);
 	
 	int wordwidth=48;
@@ -370,8 +374,9 @@ bool CWait::draw(){
 			MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
 			MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
 			if(flag>100){
-				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50+((flag-100)*(flag-100))/10)*1.0f,150.0f));
-				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*(draw_timer+((flag-100)*(flag-100))/4)/10.0*1.0f,0.0f));
+				//戦車が回転を始める
+				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50+((flag-100)*(flag-100))/8)*1.0f,150.0f));
+				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*(draw_timer+(flag-100)*(flag-100))/50.0f,0.0f));
 			}else{
 				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50)*1.0f,150.0f));
 				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
@@ -380,21 +385,24 @@ bool CWait::draw(){
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag);
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
-		}else{//画面から物体がすべて消えた状態
-			
-			//SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
-			/*DrawModiGraph(
-				0,375-((flag-230)*(flag-230))/4,
-				1350,375-((flag-230)*(flag-230))/4,
-				1350,375+((flag-230)*(flag-230))/4,
-				0,375+((flag-230)*(flag-230))/4,
-				figure_id["F_WAITBLACK"],false
-				);*/
-			DrawExtendGraph(0,400-((flag-230)*(flag-230))/4,1350,400+((flag-230)*(flag-230))/8,figure_id["F_WAITBLACK"],false);
-			//DrawGraph(0,0,figure_id["F_WAITBLACK"],false);
-			//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}else if(flag>=250 && flag <250+2*15){
 
-		//	DrawFormatString(0,0,1,"%d %d",mode,flag);
+
+			//画面から物体がすべて消えた状態
+			DrawGraph(0,0,flash[((flag-250)/2)%16],true);
+		}else if( flag>= 280 && flag <320){
+			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+			DrawGraph(0,0,flash[14],true);
+		}else{
+			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
+			DrawGraph(0,0,figure_id["F_BACK"],false);
+			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,500-(flag-255));
+			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			if(500-(flag-255)<=-30){
+				gameflag=1;
+			}
 		}
 	}
 	if(spin>1 && draw_timer%60==0){spin--;}
@@ -543,6 +551,7 @@ CWait::CWait(){
 	mode=1;
 	spin=1;
 	flag=1;
+	gameflag=0;
 }
 
 void CWait::play_init(){

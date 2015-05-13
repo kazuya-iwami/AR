@@ -1,5 +1,5 @@
 各種ファイルの書き方
-・playnum.csv
+・playernum.csv
 	rpi:1,id:1
 	のように、rpi:(ﾗｽﾞﾊﾟｲ番号),id:(ﾌﾟﾚｲﾔｰ番号)の形式で使用すること
 ・ip.csv

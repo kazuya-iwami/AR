@@ -402,18 +402,6 @@ bool CWait::draw(){
 	DrawGraph(wordstart+14*wordwidth,wordy,figure_id["F_L"],true);
 	DrawGraph(wordstart+15*wordwidth,wordy,figure_id["F_E"],true);
 	*/
-	//DrawGraph(300,630,figure_id["F_WAIT05"],true);
-	//DrawGraph(620,660,figure_id["F_WAIT05"],true);
-
-	/*
-	for(int i=0;i<mode;i++){
-		DrawGraph((draw_timer-i*360)%1800-350,470,figure_id["F_WAIT02"],true);
-		DrawRotaGraph((draw_timer-i*360)%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
-		DrawRotaGraph((draw_timer-i*360)%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
-	}
-	*/
-	//DrawGraph(420,470,figure_id["F_WAIT05"],true);
-	//DrawGraph(880,450,figure_id["F_WAIT05"],true);
 
 	//以下でライトの点滅パターンを制御しましょう
 	/*
@@ -501,25 +489,6 @@ bool CWait::draw(){
 	}
 	*/
 
-	/*if(mode<=0){
-		if(speed == 4){
-			DrawGraph(x-220,y,figure_id["F_WAIT02"],true);
-			DrawRotaGraph(x-100,y+170,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
-			DrawRotaGraph(x,y+170,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
-		}else DrawGraph(x-220,y+5,figure_id["F_WAIT01"],true);
-		if(bullet) DrawRotaGraph(bullet_x,bullet_y,0.7,draw_timer/6+1,figure_id["F_WAIT03"],true);
-		if(mode<0 && mode > -60){
-			DrawExtendGraph(0,0,1349,729,kamifubuki[((-mode)%120)/5],true);
-			DrawOriginalString(200,500,3,100,"Perfect!!");
-		}
-		if(mode < -60){
-			DrawExtendGraph(0,0,1349,729,fire[(-mode)%5],true);
-			DrawOriginalString(170,500,3,100,"Game Over...");
-		}
-		draw_timer++;
-	}else draw_timer += mode;
-	*/
-	//DrawFormatString(0,0,1,"%d %d",mode,draw_timer);
 	
 
 CWait::CWait(){

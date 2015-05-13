@@ -895,12 +895,12 @@ void CMytank::check_stun() {
 
 
 void CMytank::focus_to_up(){
-	if(focus_y < 10) return;
+	if(focus_y < 365 - 150) return;
 	focus_y -= FOCUS_SPEED;
 };
 
 void CMytank::focus_to_down(){
-	if(focus_y > 720) return;
+	if(focus_y > 365 + 280) return;
 	focus_y += FOCUS_SPEED;
 };
 

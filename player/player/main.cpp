@@ -332,21 +332,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 						mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 					}
-					//テスト用　3を押したタイミングで3D球(Bullet)生成
-					if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
-						auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
-						CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
-					}
+
 					//テスト用　Iを押したタイミングでItem生成
 					if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
 						mytank->use_item();
 					}
 	
 					
-					
-					/*************
-					上下に照準固定
-					**************/
 					//テスト用　Dを押すとカーソルが右に
 					if(  key_buf[ KEY_INPUT_D ] == 1){
 						mytank->focus_to_right();

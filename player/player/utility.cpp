@@ -343,10 +343,11 @@ bool CWait::draw(){
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			if(flag>=title_end_time){
+				beforeflag=flag;
 				waitflag=1;
 			}
 		}else if (waitflag==1){//タイトルはけてからホワイトアウトまで
-			if(flag == title_end_time) draw_timer= 30;
+			//if(flag == title_end_time) draw_timer= 60;
 			//「接続開始」の文字出力
 			if(draw_timer % 60 == 50) PlaySoundMem( sound_id["S_PI"], DX_PLAYTYPE_BACK );
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%60-30)*(draw_timer%60-30))/5);
@@ -355,30 +356,31 @@ bool CWait::draw(){
 			//接続開始と同時にジョジョに画面をホワイトアウト
 			//SetDrawBlendMode(DX_BLENDMODE_MULA,2*(flag-title_end_time-10));//黒使うときはこっち
 			//DrawGraph(0,0,figure_id["F_BLACKBACK"],false);
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,2*(flag-title_end_time-40));
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,2*(flag-beforeflag-40));
 			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
 			//SetDrawBlendMode(DX_BLENDMODE_ADD,255);//2*(flag-title_end_time-10));
 			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag);
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag-(beforeflag));
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			if(2*(flag-title_end_time-40)>250){
+			if(2*(flag-beforeflag-40)>360){
 				waitflag=2;
+				beforeflag=flag;
 			}
-		}else if(waitflag==2 && movieflag==-1){//ムービー再生
-			//接続開始と同時にジョジョに画面をホワイトアウト			
-		/*	SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,2*(flag-title_end_time-40));
-			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
-			//SetDrawBlendMode(DX_BLENDMODE_MULA,2*(flag-title_end_time-10));//黒系使うときはこっち
-			//DrawGraph(0,0,figure_id["F_BLACKBACK"],true);
-			//SetDrawBlendMode(DX_BLENDMODE_ADD,255);//2*(flag-title_end_time-10));
-			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	*/
+		}else if(waitflag==2){//ホワイトアウトからグレーへ
+			DrawGraph(0,0,gray[(flag-beforeflag)/3],true);
+			if(flag-beforeflag>=30){
+				DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+				beforeflag=flag;
+				waitflag=3;
+			}			
+		}else if(waitflag==3 && movieflag==-1){//ムービー再生
 			movieflag=1;
 			PlaySoundMem( sound_id["S_LINKSTART"], DX_PLAYTYPE_BACK );
 			movie_end_time=flag+150;
-		}else if (waitflag==2){
+			DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+		}else if (waitflag==3){
 			if(flag == movie_end_time){
 				//GameBGMの再生
 				StopSoundMem( sound_id["S_LINKSTART"] );
@@ -387,9 +389,8 @@ bool CWait::draw(){
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
 			DrawGraph(0,0,figure_id["F_BACK"],false);
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
-			if(flag<movie_end_time-100){
-			//	DrawGraph(0,0,figure_id["F_BLACKBACK"],true);
-				DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			if(flag<movie_end_time){
+				DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
 			}else{
 				SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-(flag-movie_end_time)*4);
 				DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
@@ -519,6 +520,7 @@ CWait::CWait(){
 	gameflag=0;
 	movieflag=-1;
 	waitflag=0;
+	beforeflag=0;
 }
 
 

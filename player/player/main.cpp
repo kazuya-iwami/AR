@@ -405,14 +405,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
-				mytank->move(_T("stop"), speed);
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
 			}
 
 			//Qを押すとゲーム中だったのが終了画面へと遷移
 			//時間切れるとGAME_STATUS変更
 			if(system_timer->get_finish_flag() || key_buf[ KEY_INPUT_Q ] == 1){
-				mytank->move(_T("stop"), speed);
 				mytank->finish();
 				finish_timer = FINISH_TIME*30;
 				//時間切れの処理

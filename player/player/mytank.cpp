@@ -796,6 +796,7 @@ void CMytank::attacked(int score_){
 }
 
 void CMytank::set_game_status(GAME_STATUS game_status_){
+	move(_T("stop"), _T("full"));
 	game_status = game_status_;
 	if(game_status == GAME_STATUS::GAME_WAIT){ //FINIHSからWAITに移行する際サーバーにメッセージ送る
 		send_msg(encode(COMMAND_NAME::FINISH,0,0,0));

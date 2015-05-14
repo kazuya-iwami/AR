@@ -290,7 +290,12 @@ bool CResult::draw(){
 		//自分のスコアは点滅
 		for(int i = 0; i < 4; i++){
 			if(PLAYER_NM == result_score[i].second){
+				int alpha_palam = 30 + draw_timer - float_end_time;
+				alpha_palam = (alpha_palam%60-30)*(alpha_palam%60-30)/3;
 				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_palam);
+				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD_WHITE"], true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
 			} else {
 				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);

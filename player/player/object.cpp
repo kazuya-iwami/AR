@@ -80,6 +80,7 @@ void CObject::load(){
 	figure_id["F_BACKGROUND_WAIT"]=LoadGraph("image/background_wait.png");
 
 	figure_id["F_RESULT_CARD"]=LoadGraph("image/result_score_card.png");
+	figure_id["F_RESULT_CARD_WHITE"]=LoadGraph("image/result_score_card_white.png");
 
 	//タイトルのあつまり
 	figure_id["F_TITLE"]=LoadGraph("image/title/title.png");

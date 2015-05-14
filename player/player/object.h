@@ -48,8 +48,8 @@ enum DRAW_LAYER{ //描画レイヤー 下に行くほど前面
 	MESSAGE_LAYER,
 	MYTANK_LAYER,
 	IMFOMATION_LAYER,
-	RESULT_LAYER,
-	MOVIE_LAYER
+	MOVIE_LAYER,
+	RESULT_LAYER
 };
 
 //描画、音声を取りまとめるクラス

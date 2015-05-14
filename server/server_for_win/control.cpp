@@ -108,7 +108,8 @@ void recv_message(string msg, int id) {
 				break;
 			case COMMAND_NAME:: INFORM_REVIVE:
 				cout << "プレイヤー:"<< id << "が生き返りました。"<<endl;
-				//player_param[id].viability = ALIVE;
+				send_message(encode(COMMAND_NAME::INFORM_REVIVE,id,0,0),4);
+				player_param[id].viability = ALIVE;
 				break;
 			case COMMAND_NAME::UPDATE_DENKYU:
 				cout << "プレイヤー:" << id << "が電球:" << player_from << "を" << player_to << "にしました" << endl;

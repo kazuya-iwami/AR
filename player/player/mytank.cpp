@@ -706,21 +706,41 @@ void CMytank::get_msg(){
 					case 0:
 						{
 						enemy0->viability_status = VIABILITY_STATUS::DEAD;
+						if (enemy0->score >= 3) {
+							enemy0->score = score-3;
+						} else {
+							enemy0->score = 0;
+						}
 						break;
 						}
 					case 1:
 						{
 						enemy1->viability_status = VIABILITY_STATUS::DEAD;
+						if (enemy1->score >= 3) {
+							enemy1->score = score-3;
+						} else {
+							enemy1->score = 0;
+						}
 						break;
 						}
 					case 2:
 						{
 						enemy2->viability_status = VIABILITY_STATUS::DEAD;
+						if (enemy2->score >= 3) {
+							enemy2->score = score-3;
+						} else {
+							enemy2->score = 0;
+						}
 						break;
 						}
 					case 3:
 						{
 						enemy3->viability_status = VIABILITY_STATUS::DEAD;
+						if (enemy3->score >= 3) {
+							enemy3->score = score-3;
+						} else {
+							enemy3->score = 0;
+						}
 						break;
 						}
 

@@ -96,9 +96,7 @@ bool CEnemy::draw(){
 			if (VIABILITY_STATUS::DEAD == viability_status) {//死んでるときはlock-onできない
 				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
 			}
-			else if (enemy_id == CEnemy::just_before_shooted){
-				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
-			}
+			
 
 		}else{ //切断されていたら
 			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");

@@ -244,54 +244,16 @@ bool CResult::draw(){
 	int fade_in_end_time = 15;
 
 	//リザルト画面の描画
-	if(draw_timer == 0){
-		//動画スタート
-		result_movie_handle = LoadGraph("movie/result.ogv");
-		PlayMovieToGraph( result_movie_handle ) ;
-	}
+	if(1){
+		DrawGraph(0,0,figure_id["F_FINISH"],false);
 
-	//ずっと動画再生
-	if(!(ProcessMessage() == 0 && GetMovieStateToGraph( result_movie_handle ) == 1)){
-		//動画はループし続ける
-		 SeekMovieToGraph( result_movie_handle , 0 ) ;
-		 PlayMovieToGraph( result_movie_handle ) ;
-	}
-	DrawGraph( 0 , 0 , result_movie_handle , FALSE ) ;
-	// ウエイトをかけます、あまり速く描画すると画面がちらつくからです
-    //WaitTimer( 17 ) ;
-
-	/*
-		仕様：
-			・はじめは動画のみ
-			・結果発表の文字登場
-			・カードが流れる
-			・自分のカードはずっと点滅
-	*/
-	int float_start_time = 60;
-	if(draw_timer < 30){
-		//はじめは待機
-	} else if(draw_timer <  float_start_time){
-		//結果発表であることを知らせる
-		
-	} else if(draw_timer < 100){
-		//スコアカードが流れてくる
-
-		int time_pal = draw_timer - float_start_time;
-		for(int i = 0; i < 4; i++){
-			DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
-			DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+		//スコア表示
+		SetDrawBlendMode(DX_BLENDMODE_SUB,200);
+		DrawOriginalString(300,85,2.0,48," player "+to_string(result_score[0].second+1)+"\t\t\t\t\t"+to_string(result_score[0].first));
+		for(int i = 1; i < 4; i++){
+			DrawOriginalString(560,170+100*i,1.0,24," player "+to_string(result_score[i].second+1)+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
 		}
-	} else {
-		//自分のスコアは点滅
-		for(int i = 0; i < 4; i++){
-			if(PLAYER_NM == result_score[i].second){
-				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
-				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
-			} else {
-				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
-				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
-			}
-		}
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
 	draw_timer++;
 	return true;

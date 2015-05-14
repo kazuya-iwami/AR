@@ -94,7 +94,6 @@ public:
 
 class CResult: public CObject{
 public:
-	int result_movie_handle;
 	std::vector<pair<int,int> > result_score;
 	CResult(vector<pair<int,int> > result_score_);
 	bool draw();

@@ -258,7 +258,7 @@ bool CResult::draw(){
 	}
 	DrawGraph( 0 , 0 , result_movie_handle , FALSE ) ;
 	// ウエイトをかけます、あまり速く描画すると画面がちらつくからです
-    //WaitTimer( 17 ) ;
+    WaitTimer( 17 ) ;
 
 	/*
 		仕様：
@@ -268,19 +268,24 @@ bool CResult::draw(){
 			・自分のカードはずっと点滅
 	*/
 	int float_start_time = 60;
+	int float_end_time = 120;
 	if(draw_timer < 30){
 		//はじめは待機
 	} else if(draw_timer <  float_start_time){
 		//結果発表であることを知らせる
 		
-	} else if(draw_timer < 100){
-		//スコアカードが流れてくる
+	} else if(draw_timer < float_end_time){
 
-		int time_pal = draw_timer - float_start_time;
+		//スコアカードが流れてくる
+		int dx = (draw_timer - float_start_time)*100;
 		for(int i = 0; i < 4; i++){
-			DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
-			DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+			int x = 1400 + i*400 -dx;
+			if(x == 1000) PlaySoundMem(sound_id["S_SHU"], DX_PLAYTYPE_BACK);
+			if(x < 360) x = 360;
+			DrawGraph(x, 150+140*i, figure_id["F_RESULT_CARD"], true);
+			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
 		}
+
 	} else {
 		//自分のスコアは点滅
 		for(int i = 0; i < 4; i++){

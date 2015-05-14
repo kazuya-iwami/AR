@@ -23,7 +23,7 @@
 using namespace std;
 	
 
-#define GAME_TIME 300 //プレー時間　300秒
+#define GAME_TIME 180 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
  #define USE_CAMERA_FLAG 1
@@ -45,7 +45,7 @@ int configuration();
 
 cv::VideoCapture vcap;
 
-int camera_image_handle;//スレッド処理用
+int camera_image_handle;
 std::mutex draw_mtx;
 std::mutex mytank_mtx;
 bool thread_flag;
@@ -186,8 +186,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//描画リストの要素をすべて削除 waitでは描画しない
 	CObject::drawlist.clear();
 
-	auto wait = make_shared<CWait>();
+	auto wait=make_shared<CWait>();
 	CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
+	mytank->get_mode(&(wait->mode));
 
 	shared_ptr<CMovie> iwami;
 
@@ -221,8 +222,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 			
-			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
+			if( ( key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0) || wait->gameflag==1){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
+				
+				wait->gameflag=0;			
+				
 				mytank->start();
 			}
 			else if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0 && wait->mode > 0){
@@ -237,11 +241,21 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				draw_mtx.unlock();
 			}
 			else if(  key_buf[ KEY_INPUT_P ] == 1 && key_prev_buf[ KEY_INPUT_P] == 0 && wait->mode > 0){
-				wait->play_init();
 				wait->mode=0;
 			}
-			if(wait->mode<=0) wait->update(key_buf);
 			
+			if(key_buf[KEY_INPUT_S]==1 && key_prev_buf[KEY_INPUT_S]==0){
+				wait->spin=wait->spin+2;
+			}
+			if(wait->flag==280){
+				auto iwami_=make_shared<CMovie>("M_LINKSTART");
+				iwami =iwami_;
+				CObject::register_object(iwami,DRAW_LAYER::MOVIE_LAYER);
+				draw_mtx.lock();
+				iwami->init();
+				draw_mtx.unlock();
+			}
+
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
 
 			draw_mtx.lock(); //排他的処理
@@ -292,19 +306,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					//各キーを押し続けるとその動作をする。
 					if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
 					//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
-					mytank->move(_T("forward"), speed);
+					mytank->move(_T("forward"), _T("full"));
 					}
 					if(  key_buf[ KEY_INPUT_DOWN ] == 1 && key_prev_buf[ KEY_INPUT_DOWN] == 0 ){
 					//mytank->set_vel(-1,-1);
-					mytank->move(_T("backward"), speed);
+					mytank->move(_T("backward"), _T("full"));
 					}
 					if(  key_buf[ KEY_INPUT_LEFT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
 					//mytank->set_vel(-1,1);
-					mytank->move(_T("left"), speed);
+					mytank->move(_T("left"), _T("half"));
 					}
 					if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
 					//mytank->set_vel(1,-1);
-					mytank->move(_T("right"), speed);
+					mytank->move(_T("right"), _T("half"));
 					}
 					//各キーを離したらstop
 					if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 
@@ -318,46 +332,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
 						mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 					}
-					//テスト用　3を押したタイミングで3D球(Bullet)生成
-					if(  key_buf[ KEY_INPUT_3 ] == 1 && key_prev_buf[ KEY_INPUT_3] == 0){
-						auto bullet = make_shared<CBullet>(0, 0, 0, BULLET_KIND::BULLET_3D);
-						CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
-					}
-					//テスト用　1を押したタイミングでExplosion生成
-					if(  key_buf[ KEY_INPUT_1 ] == 1 && key_prev_buf[ KEY_INPUT_1] == 0){
-						auto explosion = make_shared<CExplosion>(530 , 50, EXPLOSION_KIND::EXPLOSION_1);
-						CObject::register_object(explosion,DRAW_LAYER::EXPLOSION_LAYER);
-					}
-					//テスト用　Iを押したタイミングでItem生成
-					if(  key_buf[ KEY_INPUT_I ] == 1 && key_prev_buf[ KEY_INPUT_I] == 0){
-						mytank->use_item();
-					}
 	
-					//my test
-					if(  key_buf[ KEY_INPUT_B ] == 1 && key_prev_buf[ KEY_INPUT_B] == 0){
-						auto fire = make_shared<CFire>();
-						CObject::register_object(fire,DRAW_LAYER::EXPLOSION_LAYER);
-					}
-	
-				
-					if(  key_buf[ KEY_INPUT_T ] == 1 && key_prev_buf[ KEY_INPUT_T] == 0){
-						auto thunder =make_shared<CThunder>();
-					CObject::register_object(thunder,DRAW_LAYER::EXPLOSION_LAYER);
-					}
 					
-					/*************
-					上下に照準固定
-					**************
 					//テスト用　Dを押すとカーソルが右に
 					if(  key_buf[ KEY_INPUT_D ] == 1){
-						mytank->focus_x += FOCUS_SPEED;
+						mytank->focus_to_right();
 					}
 	
 					//テスト用　Aを押すとカーソルが左に
 					if(  key_buf[ KEY_INPUT_A ] == 1){
-						mytank->focus_x -=  FOCUS_SPEED;
+						mytank->focus_to_left();
 					}
-					*/
+					
 					//テスト用　Wを押すとカーソルが上に
 					if(  key_buf[ KEY_INPUT_W ] == 1 ){
 						mytank->focus_to_up();
@@ -385,11 +371,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				}
 				/* 弾丸補充処理ここまで */
 
-				//テスト用　とりあえずX押したら画面が振動するよ
-				if(key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0){
 
-					mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
-				}
 				//テスト用　Ｌを押すと攻撃を受けるよ
 				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
 					mytank->attacked(1);
@@ -423,14 +405,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
-				mytank->move(_T("stop"), speed);
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
 			}
 
 			//Qを押すとゲーム中だったのが終了画面へと遷移
 			//時間切れるとGAME_STATUS変更
 			if(system_timer->get_finish_flag() || key_buf[ KEY_INPUT_Q ] == 1){
-				mytank->move(_T("stop"), speed);
 				mytank->finish();
 				finish_timer = FINISH_TIME*30;
 				//時間切れの処理
@@ -594,7 +574,6 @@ void image_get_process() {
 
 //ゲームの初期化
 void init(){
-
 	
 
 	//描画リストの要素をすべて削除

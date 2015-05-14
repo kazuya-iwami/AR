@@ -144,7 +144,7 @@ int main(int argc, char *argv[]) {
     Mat image;
 	Data data;
 
-    VideoCapture cap(0); // デフォルトカメラをオープン
+    VideoCapture cap(1); // デフォルトカメラをオープン
     if(!cap.isOpened())  // 成功したかどうかをチェック
         return -1;
 

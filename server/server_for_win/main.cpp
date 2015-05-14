@@ -6,7 +6,7 @@
 
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
-#define PORT_NUM 1	
+#define PORT_NUM 1
 #define SERIAL_PORT  "\\\\.\\COM4" //シリアルポート名  "\\\\.\\COM3"
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 

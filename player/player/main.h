@@ -12,11 +12,12 @@ using namespace std;
 extern bool init_flag;
 extern int hsv[4][4];
 
+extern int camera_image_handle;//スレッド処理用
+
 extern std::string SERVER_IP_ADDRESS;// "157.82.7.4"	//サーバーのIPアドレス
 extern std::string RASPI_IP_ADDRESS ;//"pi@rpi04.local"//ラズパイのＩＰアドレス
 
 extern int PLAYER_NM ;	//自分のプレイヤー番号
-
 
 
 string encode(COMMAND_NAME, int, int, int);

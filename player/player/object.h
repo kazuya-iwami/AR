@@ -13,25 +13,27 @@ using namespace std;
 
 // 爆発エフェクト用
 extern int explosion[45];
-extern int explosion1[140];
 extern int bullet[30];
 extern int bullet_start[45];
 
-//数字用
 
+//タイトル用
+extern int title[14];
+
+//数字用
 extern int number[10];
 extern int fog[10];
+
+//光
+extern int flash[16];
+extern int flash2[10];
 
 //文字用
 extern int word[160];
 extern int digit[18];
 
-//燃える
-extern int fire[5];
 //up_effect
 extern int up_effect[10];
-//THUNDER
-extern int thunder[10];
 
 //紙ふぶき
 extern int kamifubuki[24];

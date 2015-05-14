@@ -61,6 +61,8 @@ public:
 	VIABILITY_STATUS viability_status;//生存状態
 	int hit_counter;
 
+	int* wait_mode;
+
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;
@@ -90,6 +92,8 @@ public:
 	void show_focus();
 	void focus_to_up();
 	void focus_to_down();
+	void focus_to_right();
+	void focus_to_left();
 
 	void bullet_charge(int charge);
 	void start();
@@ -100,4 +104,5 @@ public:
 	void check_stun();//敵に攻撃された影響が残ってるかの判定
 	void reloading();
 	void revive();
+	void get_mode(int* mode_);
 };

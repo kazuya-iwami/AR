@@ -25,7 +25,7 @@ bool CSystem_timer::draw(){
 		std::string sec = sout1.str();
 		sout2 << std::setfill('0') << std::setw(1) << (system_timer/30 + 1)/60;
 		std::string min = sout2.str();
-		DrawDigitNum(438+LEFT_WINDOW_WIDTH, 20, 0.3, 18, min+":"+sec+"."+under_sec);
+		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, min+":"+sec+"."+under_sec);
 		//timerカウント
 
 		if(countdown_finish_flag)system_timer--;
@@ -167,22 +167,6 @@ void CBullet_image :: update_num_bullet(int num_bullet_){
 }
 
 
-CFire ::CFire(){
-	draw_timer = 0;
-}
-
-bool CFire::draw(){
-	
-	DrawExtendGraph( LEFT_WINDOW_WIDTH , 0,
-				1000 + LEFT_WINDOW_WIDTH  , 750 , fire[draw_timer % 5], true ) ;
-
-	draw_timer++;
-
-
-	if(draw_timer <120) return true;
-	else return false;
-}
-
 CUp_effect :: CUp_effect(){
 	draw_timer = 0;
 }
@@ -216,20 +200,6 @@ SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 return true;
 }
 
-
-CThunder :: CThunder(){
-	draw_timer = 0;
-}
-
-bool CThunder :: draw(){
-	DrawExtendGraph( LEFT_WINDOW_WIDTH , 0,
-				1000 + LEFT_WINDOW_WIDTH  , 750 , thunder[draw_timer % 10], true ) ;
-
-	draw_timer++;
-
-	if(draw_timer <90) return true;
-	else return false;
-}
 
 bool CEeic::draw(){
 	/*
@@ -303,9 +273,44 @@ bool CMap::draw(){
 	return true;
 }
 
+int setposition(int n,int i){
+	if(n>i*5){
+			return 435-(n-i*5)*(n-i*5)*(n-i*5)/20;
+		}else{
+			return 435;
+		}
+}
+
+//消えゆくタイトルを表示,流れるタイトル
+void Drawtitle(int n){
+	int wordstart=435;
+	for(int i =0;i<14;i++){
+		DrawGraph(setposition(n*2,i)	
+		,300,title[i],true);
+	}
+	/*	DrawGraph(wordstart-n,360,title[1],true);
+		DrawGraph(wordstart-n,360,title[2],true);
+		DrawGraph(wordstart-n,360,title[3],true);
+		DrawGraph(wordstart-n,360,title[4],true);
+		DrawGraph(wordstart-n,360,title[5],true);
+		DrawGraph(wordstart-n,360,title[6],true);
+		DrawGraph(wordstart-n,360,title[7],true);
+		DrawGraph(wordstart-n,360,title[8],true);
+		DrawGraph(wordstart-n,360,title[9],true);
+		DrawGraph(wordstart-n,360,title[10],true);
+		DrawGraph(wordstart-n,360,title[11],true);
+		DrawGraph(wordstart-n,360,title[12],true);
+		DrawGraph(wordstart-n,360,title[13],true);*/
+	
+}
+
 
 bool CWait::draw(){
-	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
+	if(flag<265){
+		DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
+	}else{
+		DrawGraph(0,0,figure_id["F_WAITBLACK"],false);
+	}
 	//DrawBox(0,0,1350,730,GetColor(70,70,70),TRUE);
 	
 	int wordwidth=48;
@@ -326,20 +331,68 @@ bool CWait::draw(){
 				}
 			}
 		}
+		MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
+		MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
+		MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
+		MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
+		MV1DrawModel(figure_id["X_TANK"]);
+	}else{//Pでモード変更
+		flag++;
+		if(flag<250){
+			Drawtitle(flag);
+			int title_end_time = 80;
+			//ムービー前に戦車にはきえてもらう
+			MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
+			MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
+			if(flag == title_end_time) draw_timer= 40;
+			if(flag>title_end_time){
+				//戦車が回転を始める
+				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50+((flag-title_end_time)*(flag-title_end_time))/8)*1.0f,150.0f));
+				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*(draw_timer+(flag-title_end_time)*(flag-title_end_time))/50.0f,0.0f));
+				//「接続開始」の文字出力
+				if(draw_timer % 80 == 60) PlaySoundMem( sound_id["S_PI"], DX_PLAYTYPE_BACK );
+				SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
+				DrawGraph(400,wordy,figure_id["F_CONNECTED_JA"],true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			}else{
+				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50)*1.0f,150.0f));
+				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
+			}
+			MV1DrawModel(figure_id["X_TANK"]);
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag);
+			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
+		}else if(flag>=250 && flag <250+2*15){
+			//画面から物体がすべて消えた状態　フラッシュしていく
+			PlaySoundMem( sound_id["S_LINKSTART"], DX_PLAYTYPE_BACK );
+			//DrawGraph(0,0,flash[((flag-250)/2)%16],true);
+		}else if( flag>= 280 && flag <320){
+			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+			//DrawGraph(0,0,flash[14],true);
+		}else{
+			int movie_end_time = 440;
+			if(flag == movie_end_time){
+				//GameBGMの再生
+				StopSoundMem( sound_id["S_LINKSTART"] );
+				PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
+			}
+			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
+			DrawGraph(0,0,figure_id["F_BACK"],false);
+			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-(flag-movie_end_time)*4);
+			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			if(255-(flag-movie_end_time)*4<=-150){
+				gameflag=1;
+			}
+		}
 	}
-	
-	MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
-	MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
-	MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
-	MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,draw_timer*0.1f,0.0f));
-	MV1DrawModel(figure_id["X_TANK"]);
-	
-
-	//modeが変わるとりんくスタート,現在はPでモード変更可能
-	if(mode<=0){
-		
-	}
-
+	if(spin>1 && draw_timer%60==0){spin--;}
+	//DrawFormatString(0,0,1,"%d %d",mode,flag);
+	draw_timer++;
+	return true;
+}
+//以下のコメントアウト部分はdraw()で使わなくなった部分。邪魔なので関数外に出しました。必要に応じて戻してください
 /*	DrawGraph(wordstart,wordy,figure_id["F_R"],true);
 	DrawGraph(wordstart+1*wordwidth,wordy,figure_id["F_E"],true);
 	DrawGraph(wordstart+2*wordwidth,wordy,figure_id["F_A"],true);
@@ -355,18 +408,6 @@ bool CWait::draw(){
 	DrawGraph(wordstart+14*wordwidth,wordy,figure_id["F_L"],true);
 	DrawGraph(wordstart+15*wordwidth,wordy,figure_id["F_E"],true);
 	*/
-	//DrawGraph(300,630,figure_id["F_WAIT05"],true);
-	//DrawGraph(620,660,figure_id["F_WAIT05"],true);
-
-	/*
-	for(int i=0;i<mode;i++){
-		DrawGraph((draw_timer-i*360)%1800-350,470,figure_id["F_WAIT02"],true);
-		DrawRotaGraph((draw_timer-i*360)%1800-230,640,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
-		DrawRotaGraph((draw_timer-i*360)%1800-130,640,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
-	}
-	*/
-	//DrawGraph(420,470,figure_id["F_WAIT05"],true);
-	//DrawGraph(880,450,figure_id["F_WAIT05"],true);
 
 	//以下でライトの点滅パターンを制御しましょう
 	/*
@@ -454,76 +495,17 @@ bool CWait::draw(){
 	}
 	*/
 
-	/*if(mode<=0){
-		if(speed == 4){
-			DrawGraph(x-220,y,figure_id["F_WAIT02"],true);
-			DrawRotaGraph(x-100,y+170,1.0,draw_timer/12,figure_id["F_WAIT03"],true);
-			DrawRotaGraph(x,y+170,1.0,draw_timer/12+2,figure_id["F_WAIT03"],true);
-		}else DrawGraph(x-220,y+5,figure_id["F_WAIT01"],true);
-		if(bullet) DrawRotaGraph(bullet_x,bullet_y,0.7,draw_timer/6+1,figure_id["F_WAIT03"],true);
-		if(mode<0 && mode > -60){
-			DrawExtendGraph(0,0,1349,729,kamifubuki[((-mode)%120)/5],true);
-			DrawOriginalString(200,500,3,100,"Perfect!!");
-		}
-		if(mode < -60){
-			DrawExtendGraph(0,0,1349,729,fire[(-mode)%5],true);
-			DrawOriginalString(170,500,3,100,"Game Over...");
-		}
-		draw_timer++;
-	}else draw_timer += mode;
-	*/
-	//DrawFormatString(0,0,1,"%d %d",mode,draw_timer);
-	draw_timer++;
-	return true;
-}
+	
 
 CWait::CWait(){
 	draw_timer=0;
 	mode=1;
+	spin=1;
+	flag=1;
+	gameflag=0;
 }
 
-void CWait::play_init(){
-	x=600;y=420;
-	speed=4;
-	bullet=false;
-	ojisan_num=0;
-	ojisan_pop_num=0;
-}
 
-void CWait::update(const char key_buf[256]){
-	if(key_buf[D_DIK_W] || key_buf[D_DIK_UP]) y -=speed;
-	if(key_buf[D_DIK_S] || key_buf[D_DIK_DOWN]) y +=speed;
-	if(key_buf[D_DIK_D] || key_buf[D_DIK_RIGHT]) x +=speed;
-	if(key_buf[D_DIK_A] || key_buf[D_DIK_LEFT]) x -=speed;
-
-	if(key_buf[D_DIK_SPACE] && bullet == false){
-		bullet_x=x+140;
-		bullet_y=y+70;
-		bullet=true;
-	}
-	if(key_buf[D_DIK_Q]) mode=1;
-	if(key_buf[D_DIK_4]) speed =4;
-	if(key_buf[D_DIK_8]) speed =8;
-	if(( draw_timer%60 == 0 )&& ojisan_pop_num < 20){
-		auto ojisan=make_shared<COjisan>(&bullet_x,&bullet_y,&bullet,&ojisan_num,&mode);
-		CObject::register_object(ojisan,DRAW_LAYER::IMFOMATION_LAYER);
-		ojisan_pop_num++;
-	}
-
-	if(bullet){
-		bullet_x +=4+speed;
-		if(bullet_x > 1400) bullet=false;
-	}
-
-	if(mode<0 && mode> -60){
-		mode--;
-		if(mode == -60){mode=1;}
-	}
-	if(mode < -60 && mode > -120){
-		mode--;
-		if(mode == -120){mode=1;}
-	}
-}
 
 bool CKamifubuki::draw(){
 	DrawExtendGraph(0,0,1500,750,kamifubuki[(draw_timer%120)/5],true);
@@ -610,7 +592,11 @@ bool CScore_Info::draw(){
 		DrawExtendGraph(1050, score_info_enemy[i].info_y+10,1170,score_info_enemy[i].info_y+RANK_HEIGHT+5, figure_id["F_SCORE"], true);
 
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
-		DrawOriginalString(1060,score_info_enemy[i].info_y + 12,0.625,16,"+"+to_string(score_info_enemy[i].score)+"  "+to_string(i+1)+"P");
+		if(score_info_enemy[i].score <10){
+			DrawOriginalString(1070,score_info_enemy[i].info_y + 12,0.625,16,to_string(i+1)+"P: "+to_string(score_info_enemy[i].score));
+		}else{
+			DrawOriginalString(1070,score_info_enemy[i].info_y + 12,0.625,16,to_string(i+1)+"P:"+to_string(score_info_enemy[i].score));
+		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
 
@@ -619,50 +605,7 @@ bool CScore_Info::draw(){
 
 }
 
-bool COjisan::draw(){
-	DrawRotaGraph(x,y,0.7,hit/18.0,figure_id["F_MAN"],true,true);
-	if(hit==0){
-		x -= speed;
-		if(*bullet && *bullet_x < x +10 && *bullet_x > x -10 && *bullet_y < y +60 && *bullet_y > y -60){
-			hit=1;
-			*bullet = false;
-		}
-	}else{
-		DrawExtendGraph(x-50,y-30,x+40,y+70,fire[hit%5],true);
-		hit++;
-	}
-	
-	draw_timer++;
 
-	if(hit < 20){
-		if((*mode) > 0) return false;
-		if(x<0){
-			(*mode)= -61;
-			return false;
-		}
-		else return true;
-	}
-	else{
-		(*ojisan_num)++;
-		if((*ojisan_num) ==20){
-			(*mode)=-1;
-		}
-		return false;
-	}
-}
-
-COjisan::COjisan(int *bullet_x_,int *bullet_y_,bool *bullet_,int* ojisan_num_,int *mode_){
-	draw_timer=0;
-	bullet_x =bullet_x_;
-	bullet_y =bullet_y_;
-	bullet =bullet_;
-	ojisan_num =ojisan_num_;
-	mode=mode_;
-	x = 1400;;
-	y = rand()%600 + 65;
-	hit=0;
-	speed = rand()%3 + 3;
-}
 
 void CDenkyu::attaacked(){
 	hit = true;

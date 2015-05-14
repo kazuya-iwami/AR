@@ -26,6 +26,7 @@ bool CMytank::draw() {
 		if(id != 3 && enemy3->lockon ==true) attackable = true;
 		if(attackable == true){//lockon状態
 			if(!preflag){
+				PlaySoundMem(sound_id["S_LOCK"], DX_PLAYTYPE_BACK);
 				preflag=true;
 				draw_timer = 0;
 			} 
@@ -46,9 +47,6 @@ bool CMytank::draw() {
 					DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.58,  (draw_timer-40)/30.0+0.785,figure_id["F_CURSUR_ON_TRI"],true);
 				}
 			}
-			/*　従来
-			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR_ON"],true);
-			*/
 			draw_timer++;
 		}else{//lockが外れている状態
 			preflag=false;
@@ -56,27 +54,21 @@ bool CMytank::draw() {
 			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,  0,figure_id["F_CURSUR_OUT"],true);
 			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7,  draw_timer/10.0,figure_id["F_CURSUR_IN"],true);
 			DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,0.7, -draw_timer/10.0,figure_id["F_CURSUR_TRI"],true);
-			//　従来：DrawRotaGraph(focus_x+shake_x + LEFT_WINDOW_WIDTH,focus_y+shake_y,1.0,draw_timer/9.0,figure_id["F_CURSUR"],true);
 			draw_timer++;
 		}
 	}
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	//HP表示
-	/*
-	DrawGraph(0+LEFT_WINDOW_WIDTH,9,figure_id["F_HPFRAME"],true);
-	int i;
-	for(i=0;i<HP;i++){
-		DrawGraph(14+96*i+LEFT_WINDOW_WIDTH,15,figure_id["F_HP"],true);
-	}*/
 	int j;
 	for(j=0;j<HP*50+2*hit_counter;j++){
 		DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,30,figure_id["F_HPBAR"],true);
 	}
 	DrawGraph(33+LEFT_WINDOW_WIDTH,28,figure_id["F_HPFRAME2"],true);
-	if(viability_status)SetDrawBright(170,170,170);
-	else if(HP==1) SetDrawBright(255,70,70);
-	DrawOriginalString(39+LEFT_WINDOW_WIDTH,14,0.3125,10,"LIFE");
+	if(HP==0)SetDrawBright(20,20,20);
+	else if(HP==1) SetDrawBright(255,50,50);
+	//DrawOriginalString(39+LEFT_WINDOW_WIDTH,14,0.3125,10,"LIFE");
+	DrawGraph(34+LEFT_WINDOW_WIDTH,-1,figure_id["F_LIFE"],true);
 	SetDrawBright(255,255,255);
 	if(hit_counter>0) hit_counter--;
 
@@ -95,16 +87,6 @@ bool CMytank::draw() {
 	//アイテム枠表示
 	//DrawGraph(0 + LEFT_WINDOW_WIDTH, 0, figure_id["F_FRAME"], true);
 
-	//man
-	//if(draw_timer%40 < 20) kakudo = -0.5+(draw_timer%40)/20.0;
-	//else kakudo = 0.5-(draw_timer%40-20)/20.0;
-	/*
-	DrawRotaGraph(80,600,1.0,0,figure_id["F_MAN"],true);
-	if(viability_status==VIABILITY_STATUS::DEAD)DrawOriginalString(17,470,0.5,12,"donmai(^-^)b");
-	else if(is_reloading) DrawOriginalString(17,470,0.5,12,"Be careful...");
-	else if(num_bullet == 0) DrawOriginalString(20,470,0.75,20,"RELOAD!");
-	else if(attackable) DrawOriginalString(20,470,0.75,20,"SHOOT!!");
-	*/
 
 	//upadte score_info
 	if(id == 0)	score_info->update_score(score,enemy1->score,enemy2->score,enemy3->score);
@@ -426,7 +408,8 @@ void CMytank::get_msg(){
 			switch (player_from) {
 			case GAME_STATUS::GAME_PLAY:
 				if(game_status == GAME_STATUS::GAME_WAIT){
-					start();
+					//start();
+					(*wait_mode) = 0;
 				}else if( game_status == GAME_STATUS::GAME_PAUSE ) {
 					game_status = GAME_STATUS::GAME_PLAY;
 				}
@@ -813,6 +796,7 @@ void CMytank::attacked(int score_){
 }
 
 void CMytank::set_game_status(GAME_STATUS game_status_){
+	move(_T("stop"), _T("full"));
 	game_status = game_status_;
 	if(game_status == GAME_STATUS::GAME_WAIT){ //FINIHSからWAITに移行する際サーバーにメッセージ送る
 		send_msg(encode(COMMAND_NAME::FINISH,0,0,0));
@@ -842,8 +826,6 @@ void CMytank::bullet_charge(int charge){
 
 
 void CMytank::start(){
-	//GameBGMの再生
-	PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
 	//Game スタート
 	//set_game_status(GAME_STATUS::GAME_PLAY);//init()で無効化されるのでその後行う
 	init_flag = true;
@@ -912,15 +894,24 @@ void CMytank::check_stun() {
 
 
 void CMytank::focus_to_up(){
-	if(focus_y < 10) return;
+	if(focus_y < 365 - 150) return;
 	focus_y -= FOCUS_SPEED;
 };
 
 void CMytank::focus_to_down(){
-	if(focus_y > 720) return;
+	if(focus_y > 365 + 280) return;
 	focus_y += FOCUS_SPEED;
 };
 
+void CMytank::focus_to_right(){
+	if(focus_x > 675+150 -LEFT_WINDOW_WIDTH) return;
+	focus_x += FOCUS_SPEED;
+};
+
+void CMytank::focus_to_left(){
+	if(focus_x < 675-150 -LEFT_WINDOW_WIDTH) return;
+	focus_x -= FOCUS_SPEED;
+};
 
 int CMytank::get_num_bullet(){
 	return num_bullet;
@@ -959,5 +950,10 @@ void requestHttp_thread(tstring direction, tstring speed) {
 	bool isMethodGet = true;
 	tstring strResult;
 	HttpRequest(strUrl, isMethodGet, speed, strResult);
+
+}
+
+void CMytank::get_mode(int* mode_){
+	wait_mode = mode_;
 
 }

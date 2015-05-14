@@ -5,6 +5,9 @@
 #include "explosion.h"
 #include <string>
 #include "network.h"
+#include"main.h"
+
+
 //細かいクラスはここにかき集めている
 
 
@@ -75,14 +78,6 @@ public:
 };
 
 
-//燃やすクラス
-class CFire:public CObject{
-public:
-	CFire();
-	bool draw();
-};
-
-
 //up_effect
 class CUp_effect:public CObject{
 public:
@@ -97,12 +92,6 @@ public:
 	bool draw();
 };
 
-//thunder
-class CThunder:public CObject{
-public:
-	CThunder();
-	bool draw();
-};
 
 
 class CMap:public CObject {
@@ -119,13 +108,10 @@ class CWait:public CObject{
 public:
 	bool draw();
 	CWait();
-	void update(const char key_buf[256]);
-	void play_init();
-	int mode;
-	int speed;
-	bool bullet;
-	int bullet_x,bullet_y;
-	int ojisan_num,ojisan_pop_num;
+	int mode; //ゲームスタートまでの映像再生状態　1:待機　0:動画再生からのGAME_PLAYへ
+	int flag;//draw_timer モドキ
+	int spin;
+	int gameflag; // 1:動画再生の終了案内
 };
 
 //結果発表で紙ふぶき飛ばしたいよね
@@ -165,20 +151,6 @@ public:
 	void update_score(int score0,int score1, int score2,int score3);
 	vector<pair<int, int> > get_rank_info(){ return rank_info; };
 	bool draw();// 描画とともに動かす
-};
-
-class COjisan:public CObject{
-private:
-	int hit;
-	int speed;
-	bool* bullet;
-	int* bullet_x;
-	int* bullet_y;
-	int* ojisan_num;
-	int* mode;
-public:
-	COjisan(int* bullet_x_,int* bullet_y_,bool *bullet_,int *ojisan_num_,int* mode_);
-	bool draw();
 };
 
 

@@ -182,7 +182,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	init(); //ゲームの初期化
 
 	mytank->set_game_status(GAME_STATUS::GAME_WAIT);//初回のみWAITから始める
-	
+
 	//描画リストの要素をすべて削除 waitでは描画しない
 	CObject::drawlist.clear();
 
@@ -429,7 +429,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
 			// 描画
-			/*
 			draw_mtx.lock(); //排他的処理
 			DrawGraph(0,0,back,false);
 			draw_mtx.unlock();
@@ -437,7 +436,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			draw_mtx.lock(); //排他的処理
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
 			draw_mtx.unlock();
-			*/
+			
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
 

@@ -190,10 +190,11 @@ CFinish :: CFinish(vector<pair<int,int> > result_score_){
 
 
 bool CFinish::draw(){
-	DrawFormatString(0, 0, GetColor(255,255,255), "%d", draw_timer);
+
+	//DrawFormatString(0, 0, GetColor(255,255,255), "%d", draw_timer);
 	/*
 		仕様
-		・時間0:00.00を表示、「finish」の文字を数秒出す
+		・時間0:00.00を表示、「finish」等の文字を数秒出す
 		・真っ黒フェードアウト
 		・結果画面フェードイン、結果画面再生
 	*/
@@ -201,6 +202,7 @@ bool CFinish::draw(){
 	//config
 	int fade_out_time = 60;
 	int fade_in_start_time = 120;
+
 	if(draw_timer == 0){
 		//GameBGM音量を小さくする
 		//serverからのみGameBGMを流すので音量変化はしない
@@ -212,12 +214,12 @@ bool CFinish::draw(){
 
 
 	} else if(draw_timer < fade_in_start_time){
-		int black_value = (draw_timer - fade_out_time) * 20;
-		int black_color = (255-black_value < 0) ? 0 : 255-black_value;
+		int black_value = (draw_timer - fade_out_time) * 15;
+		black_value = (255 < black_value) ? 255 : black_value;
 		//真っ暗画面にフェードアウト
-		//SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, black_value);
-		DrawBox(0, 0, 1350, 730, GetColor(black_color, black_color, black_color), true) ;
-		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		SetDrawBlendMode(DX_BLENDMODE_SUB, black_value);
+		DrawBox( 0, 0, 1350, 730,GetColor(255, 255, 255), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 	} else if(draw_timer == fade_in_start_time){
 		//BGMの変更

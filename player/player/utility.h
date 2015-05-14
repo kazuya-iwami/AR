@@ -87,11 +87,17 @@ public:
 
 class CFinish:public CObject{
 public:
-	std::vector<pair<int,int> > result;
-	CFinish(std::vector<pair<int,int> > result_);
+	std::vector<pair<int,int> > result_score;
+	CFinish(std::vector<pair<int,int> > resul_score_);
 	bool draw();
 };
 
+class CResult: public CObject{
+public:
+	std::vector<pair<int,int> > result_score;
+	CResult(vector<pair<int,int> > result_score_);
+	bool draw();
+};
 
 
 class CMap:public CObject {

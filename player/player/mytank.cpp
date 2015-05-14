@@ -833,18 +833,14 @@ void CMytank::start(){
 }
 
 void CMytank::finish(){
-	//GameBGMの停止
-	StopSoundMem(sound_id["S_GAME_BGM"]);
 	//ゲーム終了
 	set_game_status(GAME_STATUS::GAME_FINISH);
 
-	//描画リストの要素をすべて削除
-	CObject::drawlist.clear();
-
+	//結果画面の描画準備
 	auto finish = make_shared<CFinish>(score_info->get_rank_info());
 	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);
-	auto kamifubuki=make_shared<CKamifubuki>();
-	CObject::register_object(kamifubuki,DRAW_LAYER::IMFOMATION_LAYER);
+	//auto kamifubuki=make_shared<CKamifubuki>();
+	//CObject::register_object(kamifubuki,DRAW_LAYER::IMFOMATION_LAYER);
 
 }
 

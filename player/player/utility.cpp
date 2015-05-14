@@ -30,8 +30,10 @@ bool CSystem_timer::draw(){
 
 		if(countdown_finish_flag)system_timer--;
 		
-	}else finish_flag = true;
-
+	}else {
+		finish_flag = true;
+		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, "0:00.00");
+	}
 	//残り10秒になったら警告
 	if(system_timer<=10*30){
 		if(system_timer%30<15){
@@ -181,25 +183,79 @@ bool CUp_effect::draw(){
 }
 
 
-CFinish :: CFinish(vector<pair<int,int> > result_){
-	result = result_;
+CFinish :: CFinish(vector<pair<int,int> > result_score_){
+	result_score = result_score_;
+	draw_timer = 0;
 }
 
 
 bool CFinish::draw(){
-DrawGraph(0,0,figure_id["F_FINISH"],false);
-int i;
+	DrawFormatString(0, 0, GetColor(255,255,255), "%d", draw_timer);
+	/*
+		仕様
+		・時間0:00.00を表示、「finish」の文字を数秒出す
+		・真っ黒フェードアウト
+		・結果画面フェードイン、結果画面再生
+	*/
 
-SetDrawBlendMode(DX_BLENDMODE_SUB,200);
-DrawOriginalString(300,85,2.0,48," player "+to_string(result[0].second+1)+"\t\t\t\t\t"+to_string(result[0].first));
-for(i=1;i<4;i++){
-		DrawOriginalString(560,170+100*i,1.0,24," player "+to_string(result[i].second+1)+"\t\t\t\t\t\t\t"+to_string(result[i].first));
-	}
-SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	//config
+	int fade_out_time = 60;
+	int fade_in_start_time = 120;
+	if(draw_timer == 0){
+		//GameBGM音量を小さくする
+		//serverからのみGameBGMを流すので音量変化はしない
+		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
+	} else if(draw_timer < fade_out_time) {
+		//カメラ入力はmain関数で描画
+		//finishの文字出力
+	} else if(draw_timer == fade_out_time){
 
-return true;
+
+	} else if(draw_timer < fade_in_start_time){
+		int black_value = (draw_timer - fade_out_time) * 20;
+		int black_color = (255-black_value < 0) ? 0 : 255-black_value;
+		//真っ暗画面にフェードアウト
+		//SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, black_value);
+		DrawBox(0, 0, 1350, 730, GetColor(black_color, black_color, black_color), true) ;
+		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+	} else if(draw_timer == fade_in_start_time){
+		//BGMの変更
+		StopSoundMem(sound_id["S_GAME_BGM"]);
+
+		//描画リストの要素をすべて削除せず、リザルトレイヤーを一番上に
+		auto result = make_shared<CResult>(result_score);
+		CObject::register_object(result,DRAW_LAYER::RESULT_LAYER);
+	} 
+	draw_timer++;
+	return true;
 }
 
+
+CResult :: CResult(vector<pair<int,int> > result_score_){
+	result_score = result_score_;
+	draw_timer = 0;
+}
+
+bool CResult::draw(){
+	//config
+	int fade_in_end_time = 15;
+
+	//リザルト画面の描画
+	if(1){
+		DrawGraph(0,0,figure_id["F_FINISH"],false);
+
+		//スコア表示
+		SetDrawBlendMode(DX_BLENDMODE_SUB,200);
+		DrawOriginalString(300,85,2.0,48," player "+to_string(result_score[0].second+1)+"\t\t\t\t\t"+to_string(result_score[0].first));
+		for(int i = 1; i < 4; i++){
+			DrawOriginalString(560,170+100*i,1.0,24," player "+to_string(result_score[i].second+1)+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+		}
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	}
+	draw_timer++;
+	return true;
+}
 
 bool CEeic::draw(){
 	/*

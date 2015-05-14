@@ -167,7 +167,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	SetUseASyncLoadFlag(TRUE);
 	CObject::load();//すべての画像はこの中で読み込む
-	int back=LoadGraph("image/back.png");
+	int back=LoadGraph("image/back/back.png");
 	SetUseASyncLoadFlag(FALSE);
 
 	while(GetASyncLoadNum() > 0){ //全て読み込むまで次の動作行わない
@@ -247,7 +247,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			if(key_buf[KEY_INPUT_S]==1 && key_prev_buf[KEY_INPUT_S]==0){
 				wait->spin=wait->spin+2;
 			}
-			if(wait->flag==280){
+			if(wait->movieflag==1){
+				wait->movieflag=0;
 				auto iwami_=make_shared<CMovie>("M_LINKSTART");
 				iwami =iwami_;
 				CObject::register_object(iwami,DRAW_LAYER::MOVIE_LAYER);

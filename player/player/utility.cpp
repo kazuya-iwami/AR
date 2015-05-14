@@ -273,19 +273,19 @@ bool CMap::draw(){
 	return true;
 }
 
-int setposition(int n,int i){
-	if(n>i*5){
-			return 435-(n-i*5)*(n-i*5)*(n-i*5)/20;
+int setposition(int flag,int i){
+	if(flag-i*3>0){
+			return 435-(flag-i*3)*(flag-i*3)*(flag-i*3)/20;
 		}else{
 			return 435;
 		}
 }
 
 //消えゆくタイトルを表示,流れるタイトル
-void Drawtitle(int n){
+void Drawtitle(int flag){
 	int wordstart=435;
 	for(int i =0;i<14;i++){
-		DrawGraph(setposition(n*2,i)	
+		DrawGraph(setposition(flag,i)	
 		,300,title[i],true);
 	}
 	/*	DrawGraph(wordstart-n,360,title[1],true);
@@ -300,77 +300,85 @@ void Drawtitle(int n){
 		DrawGraph(wordstart-n,360,title[10],true);
 		DrawGraph(wordstart-n,360,title[11],true);
 		DrawGraph(wordstart-n,360,title[12],true);
-		DrawGraph(wordstart-n,360,title[13],true);*/
-	
+		DrawGraph(wordstart-n,360,title[13],true);*/	
 }
 
 
 bool CWait::draw(){
-	if(flag<265){
-		DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
-	}else{
-		DrawGraph(0,0,figure_id["F_WAITBLACK"],false);
-	}
-	//DrawBox(0,0,1350,730,GetColor(70,70,70),TRUE);
-	
+	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
 	int wordwidth=48;
 	int wordstart=435;
 	int wordy=300;
+	int title_end_time = 80;
+	int movie_end_time =500;
+	
+	//回る戦車
+		MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
+		MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
+		MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
+		MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin++/10.0f,0.0f));
+		MV1DrawModel(figure_id["X_TANK"]);
+
 //	タイトル表示
 	if(mode>0){
+		//タイトルロゴ表示
 		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
 		DrawGraph(wordstart,wordy,figure_id["F_TITLE"],true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		//接続中表示
 		DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECT"],true);
 		if(draw_timer%160>40){
 			DrawGraph(wordstart+740,wordy+135,figure_id["F_DOTGRAY"],true);
 			if(draw_timer%160>80){
 				DrawGraph(wordstart+760,wordy+135,figure_id["F_DOTGRAY"],true);
 				if(draw_timer%160>120){
-					DrawGraph(wordstart+780,wordy+135,figure_id["F_DOTGRAY"],true);
-				}
-			}
-		}
-		MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
-		MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
-		MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
-		MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
-		MV1DrawModel(figure_id["X_TANK"]);
+					DrawGraph(wordstart+780,wordy+135,figure_id["F_DOTGRAY"],true);}}}
 	}else{//Pでモード変更
 		flag++;
-		if(flag<250){
+		if(waitflag==0){//P押してからタイトルがはけるまで
+			//タイトル移動開始
 			Drawtitle(flag);
-			int title_end_time = 80;
-			//ムービー前に戦車にはきえてもらう
-			MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
-			MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
-			if(flag == title_end_time) draw_timer= 40;
-			if(flag>title_end_time){
-				//戦車が回転を始める
-				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50+((flag-title_end_time)*(flag-title_end_time))/8)*1.0f,150.0f));
-				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*(draw_timer+(flag-title_end_time)*(flag-title_end_time))/50.0f,0.0f));
-				//「接続開始」の文字出力
-				if(draw_timer % 80 == 60) PlaySoundMem( sound_id["S_PI"], DX_PLAYTYPE_BACK );
-				SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
-				DrawGraph(400,wordy,figure_id["F_CONNECTED_JA"],true);
-				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			}else{
-				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50)*1.0f,150.0f));
-				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
-			}
-			MV1DrawModel(figure_id["X_TANK"]);
+			//conected表示
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag);
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
-		}else if(flag>=250 && flag <250+2*15){
-			//画面から物体がすべて消えた状態　フラッシュしていく
-			PlaySoundMem( sound_id["S_LINKSTART"], DX_PLAYTYPE_BACK );
-			//DrawGraph(0,0,flash[((flag-250)/2)%16],true);
-		}else if( flag>= 280 && flag <320){
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			if(flag>=title_end_time){
+				waitflag=1;
+			}
+		}else if (waitflag==1){//タイトルはけてからホワイトアウトまで
+			if(flag == title_end_time) draw_timer= 30;
+			//「接続開始」の文字出力
+			if(draw_timer % 60 == 50) PlaySoundMem( sound_id["S_PI"], DX_PLAYTYPE_BACK );
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%60-30)*(draw_timer%60-30))/5);
+			DrawGraph(400,wordy,figure_id["F_CONNECTED_JA"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			//接続開始と同時にジョジョに画面をホワイトアウト
+			//SetDrawBlendMode(DX_BLENDMODE_MULA,2*(flag-title_end_time-10));//黒使うときはこっち
+			//DrawGraph(0,0,figure_id["F_BLACKBACK"],false);
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,2*(flag-title_end_time-40));
+			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			//SetDrawBlendMode(DX_BLENDMODE_ADD,255);//2*(flag-title_end_time-10));
 			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
-			//DrawGraph(0,0,flash[14],true);
-		}else{
-			int movie_end_time = 440;
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag);
+			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			if(2*(flag-title_end_time-40)>250){
+				waitflag=2;
+			}
+		}else if(waitflag==2 && movieflag==-1){//ムービー再生
+			//接続開始と同時にジョジョに画面をホワイトアウト			
+		/*	SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,2*(flag-title_end_time-40));
+			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			//SetDrawBlendMode(DX_BLENDMODE_MULA,2*(flag-title_end_time-10));//黒系使うときはこっち
+			//DrawGraph(0,0,figure_id["F_BLACKBACK"],true);
+			//SetDrawBlendMode(DX_BLENDMODE_ADD,255);//2*(flag-title_end_time-10));
+			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	*/
+			movieflag=1;
+			PlaySoundMem( sound_id["S_LINKSTART"], DX_PLAYTYPE_BACK );
+			movie_end_time=flag+150;
+		}else if (waitflag==2){
 			if(flag == movie_end_time){
 				//GameBGMの再生
 				StopSoundMem( sound_id["S_LINKSTART"] );
@@ -379,9 +387,15 @@ bool CWait::draw(){
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
 			DrawGraph(0,0,figure_id["F_BACK"],false);
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-(flag-movie_end_time)*4);
-			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			if(flag<movie_end_time-100){
+			//	DrawGraph(0,0,figure_id["F_BLACKBACK"],true);
+				DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			}else{
+				SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-(flag-movie_end_time)*4);
+				DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			}
+			//明るくなったらゲーム開始
 			if(255-(flag-movie_end_time)*4<=-150){
 				gameflag=1;
 			}
@@ -503,6 +517,8 @@ CWait::CWait(){
 	spin=1;
 	flag=1;
 	gameflag=0;
+	movieflag=-1;
+	waitflag=0;
 }
 
 

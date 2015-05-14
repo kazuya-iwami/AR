@@ -61,8 +61,8 @@ void CObject::load(){
 	figure_id["F_BULLETNOKORI"]=LoadGraph("image/bullet_nokori.png");
 	figure_id["F_BULLETUSED"]=LoadGraph("image/bullet_used.png");
 
-	figure_id["F_REDBACK"]=LoadGraph("image/redback.png");
-	figure_id["F_BLACK"]=LoadGraph("image/back_black.png");
+	figure_id["F_REDBACK"]=LoadGraph("image/back/redback.png");
+	figure_id["F_BLACK"]=LoadGraph("image/back/back_black.png");
 
 	figure_id["F_FINISH"]=LoadGraph("image/finish.png");
 
@@ -77,7 +77,7 @@ void CObject::load(){
 	figure_id["F_COUNTBASE"]=LoadGraph("image/countbase.png");
 	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
 
-	figure_id["F_BACKGROUND_WAIT"]=LoadGraph("image/background_wait.png");
+	figure_id["F_BACKGROUND_WAIT"]=LoadGraph("image/back/background_wait.png");
 
 	//タイトルのあつまり
 	figure_id["F_TITLE"]=LoadGraph("image/title/title.png");
@@ -96,15 +96,15 @@ void CObject::load(){
 	title[12]=LoadGraph("image/title/titleL_2.png");
 	title[13]=LoadGraph("image/title/titleE_2.png");
 
-	figure_id["F_WAITBLACK"]=LoadGraph("image/background_wait_black.png");
+	figure_id["F_BLACKBACK"]=LoadGraph("image/back/blackback.png");
 	figure_id["F_CONNECT"]=LoadGraph("image/connect.png");
 	figure_id["F_DOTGRAY"]=LoadGraph("image/dotgray.png");
 	figure_id["F_CONNECTED"]=LoadGraph("image/connected.png");
 	figure_id["F_CONNECTED_JA"]=LoadGraph("image/connected_ja.png");
-	figure_id["F_GRAYBACK"]=LoadGraph("image/grayback.png");
-	figure_id["F_WHITEBACK"]=LoadGraph("image/whiteback.png");
-	figure_id["F_BACK"]=LoadGraph("image/back.png");
-	figure_id["F_SCORE"]=LoadGraph("image/back_card2.png");
+	figure_id["F_GRAYBACK"]=LoadGraph("image/back/grayback.png");
+	figure_id["F_WHITEBACK"]=LoadGraph("image/back/whiteback.png");
+	figure_id["F_BACK"]=LoadGraph("image/back/back.png");
+	figure_id["F_SCORE"]=LoadGraph("image/back/back_card2.png");
 
 	//マップで使うアイコン
 	figure_id["F_ICONRED"]=LoadGraph("image/iconred.png");

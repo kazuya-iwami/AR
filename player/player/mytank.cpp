@@ -14,13 +14,13 @@
 
 void requestHttp_thread(tstring direction, tstring speed);
 
-
 bool CMytank::draw() {
 	//打ちまくり状態関係
 	if(endless_bullet_flag == true){
-		endless_bullet_timer --;
-		if(endless_bullet_timer < 0){
+		endless_bullet_timer--;
+		if(endless_bullet_timer <= 0){
 			endless_bullet_flag = false;
+			endless_bullet_timer = 0;
 		}
 	}
 
@@ -146,7 +146,7 @@ CMytank::CMytank() {
 	score_info =  score_info_;
 	CObject::register_object( score_info,DRAW_LAYER::IMFOMATION_LAYER);
 
-	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
+	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet,&endless_bullet_timer);
 	bullet_image = bullet_image_;
 	CObject::register_object(bullet_image,DRAW_LAYER::IMFOMATION_LAYER);
 
@@ -242,15 +242,18 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	for(int i=0;i<3;i++){
 		if(eeic->denkyu[i].lockon)eeic->denkyu[i].attaacked();
 	}
+
 	if(marker->lockon && marker->visible){
-		if(marker->marker_id == MARKER_ID::MARKER_BULLET){
+		if(marker->marker_id == MARKER_ID::MARKER_BULLET ){
 			endless_bullet_flag = true;
 			endless_bullet_timer = 30*8;
-			bullet_charge(bullet_image->max_bullet_num);//チャージ
+			num_bullet=(bullet_image->max_bullet_num);
+			bullet_image->update_num_bullet(num_bullet);//チャージ
 		}else if(marker->marker_id == MARKER_ID::MARKER_SUMI){
-
+			auto sumi = make_shared<CSumi>(LEFT_WINDOW_WIDTH+150+rand()%700,150+rand()%400,(rand()%100)*0.004+1.6,rand()%50,true);
+			CObject::register_object(sumi,DRAW_LAYER::SUMI_LAYER);
 		}else if(marker->marker_id == MARKER_ID::MARKER_SOUND){
-
+			PlaySoundMem(sound_id["S_AN"],DX_PLAYTYPE_BACK);
 		}else if(marker->marker_id == MARKER_ID::MARKER_STOP){
 			marker->denkyu_hit = true;
 			send_msg(encode(COMMAND_NAME::ATTACK_DENKYU,0,0,0)); //denkyu_idをONに;
@@ -271,7 +274,9 @@ void CMytank::check_focus(){
 			}else eeic->denkyu[i].lockon = false;
 		}
 
-		if(marker->get_x()- ENEMY_MARGIN < focus_x && marker->get_x() + ENEMY_MARGIN > focus_x && marker->get_y() -ENEMY_MARGIN < focus_y &&marker->get_y() + ENEMY_MARGIN > focus_y){
+		if(marker->get_x()- ENEMY_MARGIN < focus_x && marker->get_x() + ENEMY_MARGIN > focus_x &&
+			marker->get_y() -ENEMY_MARGIN < focus_y &&marker->get_y() + ENEMY_MARGIN > focus_y &&
+			(marker->marker_id != MARKER_ID::MARKER_BULLET || endless_bullet_flag == false)){
 			//if(!(marker->denkyu_hit == true && marker->marker_id == MARKER_ID::MARKER_STOP)){ //切断したプレーヤーへの攻撃禁止
 					marker->lockon = true;
 			//	}
@@ -283,7 +288,7 @@ void CMytank::check_focus(){
 				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy0->lockon = true;
 				}
-				if(0 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+				if((0 == CEnemy::just_before_shooted) && (CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-5*30)) { // 直前に撃った相手への攻撃禁止
 					enemy0->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy0->viability_status) {
@@ -296,7 +301,7 @@ void CMytank::check_focus(){
 				if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy1->lockon = true;
 				}
-				if(1 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+				if((1 == CEnemy::just_before_shooted) &&( CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-5*30)) { // 直前に撃った相手への攻撃禁止
 					enemy1->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy1->viability_status) {
@@ -309,7 +314,7 @@ void CMytank::check_focus(){
 				if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy2->lockon = true;
 				}
-				if(2 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+				if((2 == CEnemy::just_before_shooted) && (CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-5*30)) { // 直前に撃った相手への攻撃禁止
 					enemy2->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy2->viability_status) {
@@ -322,7 +327,7 @@ void CMytank::check_focus(){
 				if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy3->lockon = true;
 				}
-				if(3 == CEnemy::just_before_shooted) { // 直前に撃った相手への攻撃禁止
+				if((3 == CEnemy::just_before_shooted) && (CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-5*30)) { // 直前に撃った相手への攻撃禁止
 					enemy3->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy3->viability_status) {
@@ -514,6 +519,7 @@ void CMytank::get_msg(){
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
 					CEnemy::just_before_shooted = player_to;
+					CEnemy::just_before_shooted_time=CSystem_timer::system_timer;
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -557,6 +563,7 @@ void CMytank::get_msg(){
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
 					CEnemy::just_before_shooted = player_to;
+					CEnemy::just_before_shooted_time=CSystem_timer::system_timer;
 					switch(player_to){
 					case 0:
 						enemy0->attacked(bullet_score);
@@ -600,6 +607,8 @@ void CMytank::get_msg(){
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
 					CEnemy::just_before_shooted = player_to;
+					CEnemy::just_before_shooted_time=CSystem_timer::system_timer;
+					
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -642,6 +651,8 @@ void CMytank::get_msg(){
 				}else{ //自分が攻撃 攻撃先はすべて敵 
 					score += bullet_score;
 					CEnemy::just_before_shooted = player_to;
+					CEnemy::just_before_shooted_time=CSystem_timer::system_timer;
+					
 					switch(player_to){
 					case 1:
 						enemy1->attacked(bullet_score);
@@ -761,7 +772,7 @@ void CMytank::get_msg(){
 						{
 						enemy0->viability_status = VIABILITY_STATUS::DEAD;
 						if (enemy0->score >= 3) {
-							enemy0->score = score-3;
+							enemy0->score -= 3;
 						} else {
 							enemy0->score = 0;
 						}
@@ -771,7 +782,7 @@ void CMytank::get_msg(){
 						{
 						enemy1->viability_status = VIABILITY_STATUS::DEAD;
 						if (enemy1->score >= 3) {
-							enemy1->score = score-3;
+							enemy1->score -= 3;
 						} else {
 							enemy1->score = 0;
 						}
@@ -781,7 +792,7 @@ void CMytank::get_msg(){
 						{
 						enemy2->viability_status = VIABILITY_STATUS::DEAD;
 						if (enemy2->score >= 3) {
-							enemy2->score = score-3;
+							enemy2->score -= 3;
 						} else {
 							enemy2->score = 0;
 						}
@@ -791,7 +802,7 @@ void CMytank::get_msg(){
 						{
 						enemy3->viability_status = VIABILITY_STATUS::DEAD;
 						if (enemy3->score >= 3) {
-							enemy3->score = score-3;
+							enemy3->score -= 3;
 						} else {
 							enemy3->score = 0;
 						}

@@ -22,10 +22,12 @@
 
 using namespace std;
 
-#define GAME_TIME 300 //プレー時間　300秒
+#define GAME_TIME 180 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
- #define USE_CAMERA_FLAG 1
+
+#define USE_CAMERA_FLAG 2
+
 
 //0:画像 1:カメラ 2:ラズパイ
 
@@ -316,7 +318,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					}
 					
 					//bullet生成
-					if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
+					if( ( key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0) ||
+						 mytank->endless_bullet_timer % 5 == 2){
 						mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 					}
 	

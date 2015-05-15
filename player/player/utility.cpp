@@ -5,6 +5,9 @@
 #include <algorithm>
 
 int CEnemy::just_before_shooted;
+int CEnemy::just_before_shooted_time;
+int CSystem_timer::system_timer;
+
 #define SORT_SPEED 5
 #define RANK_HEIGHT 40
 
@@ -108,7 +111,7 @@ bool CEnemy::draw(){
 			// 敵アイコンの表示
 			DrawGraph(x-60 + LEFT_WINDOW_WIDTH + slide_x, y-40 + slide_y, figure_id["F_ICON"+to_string(enemy_id+1)],true);
 			// 前回打った敵は攻撃できない
-			if(enemy_id == CEnemy::just_before_shooted){
+			if(enemy_id == CEnemy::just_before_shooted && CSystem_timer::system_timer-CEnemy::just_before_shooted_time<10*30){
 				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
 			}
 
@@ -134,6 +137,7 @@ CEnemy::CEnemy(int enemy_id_){
 	enemy_id = enemy_id_;
 	lockon = false;
 	just_before_shooted = -1; // 直前には誰も撃たれていない
+	just_before_shooted_time=-1;//直前には誰も撃っていない
 	countdown_finish_flag = false;
 }
 
@@ -155,7 +159,7 @@ void CEnemy::attacked(int score_){
 
 bool CBullet_image :: draw(){
 	int i;
-	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 );
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 +10*((*endless_timer)%20) );
 	for(i=0;i<num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,70+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
@@ -167,10 +171,11 @@ bool CBullet_image :: draw(){
 	return true;
 }
 
-CBullet_image :: CBullet_image(int x_, int y_, int max_bullet_num_): max_bullet_num(max_bullet_num_){
+CBullet_image :: CBullet_image(int x_, int y_, int max_bullet_num_,int* endless_timer_): max_bullet_num(max_bullet_num_){
 	x=x_;
 	y=y_;
 	num_bullet = max_bullet_num_; //残弾補充数は一定
+	endless_timer=endless_timer_;
 }
 
 //num_bulletを更新する関数
@@ -452,13 +457,6 @@ void Drawtitle(int flag){
 		DrawGraph(wordstart-n,360,title[13],true);*/	
 }
 
-void printinfo(){
-	//auto sysy=make_shared<CSystem_timer>(10,10,180);		
-	//sysy->draw();
-	auto bullet =make_shared<CBullet_image>(10,10,10);
-	bullet->draw();
-}
-
 void DrawDigitTime(int x, int y, float size, int space, string s){
 	for(int i = 0; i < (int)s.length(); i++){
 		switch (s[i]){
@@ -616,7 +614,14 @@ bool CWait::draw(){
 			DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_MASK"],true);
 			
 			//カーソルとかの情報をひょうじするならここ
-			printinfo();
+			//printinfo();
+			int i;
+			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140  );
+			for(i=0;i<10;i++){
+			DrawGraph(5 + LEFT_WINDOW_WIDTH,70+9*25-25*i,figure_id["F_BULLETNOKORI"],true);	
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
 			for(int j=0;j<3*50+2;j++){
 				DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,30,figure_id["F_HPBAR"],true);
 			}
@@ -953,5 +958,28 @@ bool CMarker::draw(){
 
 	return true;
 
+}
 
+bool CSumi::draw(){
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA,240 - 3*draw_timer);
+	DrawRotaGraph(x,y,scale,rota,figure_id["F_SUMI"],true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	draw_timer++;
+
+	if(draw_timer == 10 && chain_flag ){
+		auto cosumi = make_shared<CSumi>(LEFT_WINDOW_WIDTH+150+rand()%700,150+rand()%400,(rand()%100)*0.004+1,rand()%50,false);
+			CObject::register_object(cosumi,DRAW_LAYER::SUMI_LAYER);
+
+	}
+
+	if(draw_timer < 80) return true;
+	else return false;
+}
+
+CSumi::CSumi(int x_,int y_,double scale_,double rota_,bool chain){
+	x=x_;y=y_;
+	scale=scale_;
+	rota=rota_;
+	draw_timer=0;
+	chain_flag=chain;
 }

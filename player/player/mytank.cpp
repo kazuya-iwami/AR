@@ -237,6 +237,7 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	if (id != 1 && enemy1->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 1, (int)BULLET_KIND::BULLET_NOMAL));
 	if (id != 2 && enemy2->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 2, (int)BULLET_KIND::BULLET_NOMAL));
 	if (id != 3 && enemy3->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 3, (int)BULLET_KIND::BULLET_NOMAL));
+		
 
 	//電球攻撃
 	for(int i=0;i<3;i++){
@@ -771,6 +772,8 @@ void CMytank::get_msg(){
 					case 0:
 						{
 						enemy0->viability_status = VIABILITY_STATUS::DEAD;
+						auto smoke0 = make_shared<CSmoke>(enemy0->pget_x(),enemy0->pget_y());
+						CObject::register_object(smoke0,DRAW_LAYER::IMFOMATION_LAYER);
 						if (enemy0->score >= 3) {
 							enemy0->score -= 3;
 						} else {
@@ -781,6 +784,8 @@ void CMytank::get_msg(){
 					case 1:
 						{
 						enemy1->viability_status = VIABILITY_STATUS::DEAD;
+						auto smoke1 = make_shared<CSmoke>(enemy1->pget_x(),enemy1->pget_y());
+						CObject::register_object(smoke1,DRAW_LAYER::IMFOMATION_LAYER);
 						if (enemy1->score >= 3) {
 							enemy1->score -= 3;
 						} else {
@@ -791,6 +796,8 @@ void CMytank::get_msg(){
 					case 2:
 						{
 						enemy2->viability_status = VIABILITY_STATUS::DEAD;
+						auto smoke2 = make_shared<CSmoke>(enemy2->pget_x(),enemy2->pget_y());
+						CObject::register_object(smoke2,DRAW_LAYER::IMFOMATION_LAYER);
 						if (enemy2->score >= 3) {
 							enemy2->score -= 3;
 						} else {
@@ -801,6 +808,8 @@ void CMytank::get_msg(){
 					case 3:
 						{
 						enemy3->viability_status = VIABILITY_STATUS::DEAD;
+						auto smoke3 = make_shared<CSmoke>(enemy3->pget_x(),enemy3->pget_y());
+						CObject::register_object(smoke3,DRAW_LAYER::IMFOMATION_LAYER);
 						if (enemy3->score >= 3) {
 							enemy3->score -= 3;
 						} else {

@@ -917,18 +917,9 @@ bool CMarker::draw(){
 		x = marker_x;
 		y = marker_y;
 
-		DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "marker:%d",marker_id);
+		//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "marker:%d",marker_id);
 	}
 
 	return true;
 
-}
-
-void CMarker::attaacked(){
-	if(marker_id == MARKER_ID::MARKER_STOP){
-		denkyu_hit = true;
-		send_msg(encode(COMMAND_NAME::ATTACK_DENKYU,0,0,0)); //denkyu_idをONに;
-	}else if(marker_id == MARKER_ID::MARKER_BULLET){
-		
-	}
 }

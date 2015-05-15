@@ -191,7 +191,6 @@ public:
 	bool lockon;
 
 	bool draw();
-	void attaacked();//攻撃が当たった場合の処理
 	int get_x(){return x;};
 	int get_y(){return y;};
 };

@@ -249,6 +249,8 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 			bullet_charge(bullet_image->max_bullet_num);//チャージ
 		}else if(marker->marker_id == MARKER_ID::MARKER_SUMI){
 
+		}else if(marker->marker_id == MARKER_ID::MARKER_SOUND){
+
 		}else if(marker->marker_id == MARKER_ID::MARKER_STOP){
 			marker->denkyu_hit = true;
 			send_msg(encode(COMMAND_NAME::ATTACK_DENKYU,0,0,0)); //denkyu_idをONに;

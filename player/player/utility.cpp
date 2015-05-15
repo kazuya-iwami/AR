@@ -78,7 +78,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	y=y_;
 	system_timer = (game_time -1 ) * 30;
 	finish_flag = false;
-	countdown_timer= 3 * 30;
+	countdown_timer= 5 * 30 -1;
 	countdown_finish_flag = false;
 }
 
@@ -98,9 +98,7 @@ bool CEnemy::draw(){
 			if (VIABILITY_STATUS::DEAD == viability_status) {//死んでるときはlock-onできない
 				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
 			}
-			else if (enemy_id == CEnemy::just_before_shooted){
-				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
-			}
+			
 
 		}else{ //切断されていたら
 			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
@@ -409,6 +407,13 @@ void Drawtitle(int flag){
 		DrawGraph(wordstart-n,360,title[13],true);*/	
 }
 
+void printinfo(){
+	/*DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[4], true);
+	DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[5], true);
+	DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[10], true);
+	DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[10], true);*/
+
+}
 
 bool CWait::draw(){
 	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
@@ -417,7 +422,7 @@ bool CWait::draw(){
 	int wordy=300;
 	int title_end_time = 80;
 	int movie_end_time =500;
-	
+
 	//回る戦車
 		MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
 		MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
@@ -495,6 +500,9 @@ bool CWait::draw(){
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
 			DrawGraph(0,0,figure_id["F_BACK"],false);
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
+			//カーソルとかの情報をひょうじするならここ
+			printinfo();
+
 			if(flag<movie_end_time-100){
 				DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
 			}else{

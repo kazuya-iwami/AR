@@ -107,6 +107,126 @@ Mat CImage_processer::detect(Mat image) {
 	image.copyTo(output);
 	rectangle(output, rect, Scalar(0, 255, 0));
 
-	// 表示
+	 //表示
 	return output;
 }
+
+
+void MarkerDetector::reorder(vector<Point> &boundingBox)
+{
+    Point v1 = boundingBox[1] - boundingBox[0];
+    Point v2 = boundingBox[2] - boundingBox[0];
+    if (v1.x * v2.y - v1.y * v2.x > 0) {
+        swap(boundingBox[1], boundingBox[3]);
+    }
+    Moments mu = moments(boundingBox);
+    Point center = Point(mu.m10 / mu.m00, mu.m01 / mu.m00);
+
+    // find top left corner
+    int topLeftCornerIdx = -1;
+    for (int i = 0; i < 4; ++i) {
+        if (boundingBox[i].x < center.x && boundingBox[i].y < center.y)
+            topLeftCornerIdx = i;
+    }
+    if (topLeftCornerIdx >= 0) {
+        vector<Point> buf;
+        for (int i = 0; i < 4; ++i) {
+            buf.push_back(boundingBox[(topLeftCornerIdx+i)%4]);
+        }
+        boundingBox.clear();
+        for (int i = 0; i < 4; ++i) {
+            boundingBox.push_back(buf[i]);
+        }
+    }
+}
+
+int MarkerDetector::templateMatch(Mat &src)
+{
+    double scores[3];
+    for (int i = 0; i < 3; ++i) {
+        scores[i] = norm(templates[i] - src);
+        // cout << "scores[" << i << "] = " << scores[i] << endl;
+    }
+    int minIdx = min_element(scores, scores + 3) - scores;
+    return scores[minIdx] < 5000 ? minIdx : -1;
+}
+
+void MarkerDetector::init(){
+	templates[0] = imread("marker_image/bulb_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    templates[1] = imread("marker_image/bullet_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    templates[2] = imread("marker_image/target_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+}
+
+void MarkerDetector::findMarker(Mat &src)
+{
+    Mat gray, preprocessed;
+    cvtColor(src, gray, CV_BGRA2GRAY);
+    threshold(gray, preprocessed, 150, 255, THRESH_BINARY_INV);
+	
+    vector<vector<Point> > allContours, contours;
+    vector<Vec4i> hierarchy;
+    findContours(preprocessed.clone(), allContours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_NONE);
+
+    for (int i = 0; i < allContours.size(); ++i) {
+        if (allContours[i].size() > 10 && hierarchy[i][3] != -1) {
+            contours.push_back(allContours[i]);
+        }
+	}
+	
+    vector<Point> approxCurve;
+    vector<vector<Point> > candidates;
+    for (int i = 0; i < contours.size(); ++i) {
+        double epsilon = contours[i].size() * 0.01;
+        approxPolyDP(contours[i], approxCurve, epsilon, true);
+
+        if (approxCurve.size() != 4) continue;
+        if (!isContourConvex(approxCurve)) continue;
+
+        reorder(approxCurve);
+        candidates.push_back(approxCurve);
+    }
+
+    vector<vector<Point> > markers;
+
+    vector<Point2f> corners;
+    corners.push_back(Point(0, 0));
+    corners.push_back(Point(0, 200));
+    corners.push_back(Point(200, 200));
+    corners.push_back(Point(200, 0));
+
+    // converts to Point2f 'cause getPerspectiveTransform requires
+    // vector of Point2f
+    vector<Point2f> copied;
+    Mat image = Mat::zeros(200, 200, CV_8UC3);
+
+	//マーカー取得出来なかったら抜ける
+	if(candidates.empty()){
+		visible = false;
+
+	}else{
+		Mat(candidates[0]).copyTo(copied);
+
+		Mat m = getPerspectiveTransform(copied, corners);
+		warpPerspective(preprocessed, image, m, image.size());
+		//cout << "Template matched: " << templateMatch(image) << endl;
+		int result = templateMatch(image);
+		if(result != -1){
+			visible = true;
+			marker_id = result;
+
+			Moments moment = moments(candidates[0]);
+			Point center = Point(moment.m10 / moment.m00, moment.m01 / moment.m00);
+			marker_x = center.x*1000/320;
+			marker_y = center.y*750/240; //画面を引き延ばしている分の補正
+		}else{
+			visible = false;
+		}
+	}
+}
+
+//int main(int argc, char** argv)
+//{
+//    Mat src = imread(argv[1], 1);
+//    MarkerDetector m;
+//    m.findMarker(src);
+//}

@@ -21,12 +21,11 @@
 #include <fstream>
 
 using namespace std;
-	
 
-#define GAME_TIME 5 //プレー時間　300秒
+#define GAME_TIME 300 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
- #define USE_CAMERA_FLAG 1
+ #define USE_CAMERA_FLAG 2
 
 //0:画像 1:カメラ 2:ラズパイ
 
@@ -649,11 +648,13 @@ int configuration(){
 		return 3;
 	}
 	string row;
-	int tmp[2];
+	int tmp[5];
 	playnum_file >> row;
-	if(sscanf_s(row.c_str(),"rpi:%d,id:%d", &tmp[0],&tmp[1]) != 2) return 2;
-	PLAYER_NM = tmp[1];
-	RASPI_IP_ADDRESS = "pi@rpi0"+to_string(tmp[0])+".local";
+
+	if(sscanf_s(row.c_str(),"rpi:%d,%d,%d,%d,id:%d", &tmp[0],&tmp[1],&tmp[2],&tmp[3],&tmp[4]) != 5) return 2;
+	PLAYER_NM = tmp[4];
+	RASPI_IP_ADDRESS =  to_string(tmp[0]) + "." + to_string(tmp[1]) + "." + to_string(tmp[2]) + "." + to_string(tmp[3]);
+
 	if(PLAYER_NM<0){
 		return 3;
 	}

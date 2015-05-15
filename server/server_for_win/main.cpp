@@ -311,7 +311,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				//				}
 				StopSoundMem(bgm_id);//BGM’âŽ~
 				PlaySoundMem(result_sound,DX_PLAYTYPE_LOOP);//Œ‹‰Ê‰æ–Ê‚ÉˆÚ‚é
-				game_status == GAME_STATUS::GAME_FINISH;
+				game_status = GAME_STATUS::GAME_FINISH;
 
 			}
 

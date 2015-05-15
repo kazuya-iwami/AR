@@ -106,6 +106,15 @@ bool CMytank::draw() {
 	if(id == 2)	score_info->update_score(enemy0->score,enemy1->score,score,enemy3->score);
 	if(id == 3)	score_info->update_score(enemy0->score,enemy1->score,enemy2->score,score);
 	
+	if(viability_status == DEAD){
+		int palam = (dead_time - 30)*8;
+		SetDrawBlendMode(DX_BLENDMODE_SUB, palam);
+		DrawBox( LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+1000, 730 ,GetColor(255, 255, 255), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		dead_time++;
+	}
+
+
 	return true;
 };
 
@@ -898,7 +907,6 @@ void CMytank::set_game_status(GAME_STATUS game_status_){
 		send_msg(encode(COMMAND_NAME::FINISH,0,0,0));
 	}
 
-
 }
 
 
@@ -960,6 +968,7 @@ void CMytank::check_dead() {
 		send_msg(encode(COMMAND_NAME::INFORM_DIE, id, 0, 0));
 		move( _T("stop"), _T("full"));
 		viability_status=VIABILITY_STATUS::DEAD;
+		dead_time = 0;
 		if (3 < score){
 			score -= 3; 
 		}else {

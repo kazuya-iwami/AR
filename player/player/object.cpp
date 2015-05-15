@@ -118,6 +118,7 @@ void CObject::load(){
 	figure_id["F_SCORE"]=LoadGraph("image/back/back_card2.png");
 	figure_id["F_MASK"]=LoadGraph("image/mask.png");
 	figure_id["F_PLUS1"]=LoadGraph("image/plus1.png");
+	figure_id["F_SUMI"]=LoadGraph("image/sumi.png");
 
 	//白からグレーに変わるとき用
 	gray[0]=LoadGraph("image/back/grayback10.png");	
@@ -162,6 +163,7 @@ void CObject::load(){
 	sound_id["S_WAIT"]=LoadSoundMem("sound/wait.mp3");
 	sound_id["S_RESULT"]=LoadSoundMem("sound/result.mp3");
 	sound_id["S_RESULT_SCORE"]=LoadSoundMem("sound/result_score.mp3");
+	sound_id["S_AN"]=LoadSoundMem("sound/an.wav");
 	//BGM
 	sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
 

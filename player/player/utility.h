@@ -185,9 +185,21 @@ public:
 	bool draw();
 };
 
+
 class CPlus:public CObject{
 public:
 	CPlus(int* score_y_);
 	int* score_y;
 	bool draw();
+};
+
+class CMarker : public CObject,public MarkerDetector,public CNetwork{
+public:
+	bool denkyu_hit;//既に攻撃されていたらtrue
+	bool lockon;
+
+	bool draw();
+	int get_x(){return x;};
+	int get_y(){return y;};
+
 };

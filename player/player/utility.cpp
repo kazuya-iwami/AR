@@ -871,7 +871,7 @@ bool CScore_Info::draw(){
 
 void CDenkyu::attaacked(){
 	hit = true;
-	send_msg(encode(COMMAND_NAME::UPDATE_DENKYU,denkyu_id,1,0)); //denkyu_idをONに;
+	//send_msg(encode(COMMAND_NAME::UPDATE_DENKYU,denkyu_id,1,0)); //denkyu_idをONに;
 
 }
 
@@ -912,6 +912,7 @@ bool CBack::draw(){
 	return true;
 }
 
+
 bool CPlus::draw(){
 	int slide =draw_timer/5;
 
@@ -927,4 +928,17 @@ CPlus::CPlus(int* score_y_){
 	x= 1000;
 	score_y=score_y_;
 	draw_timer=0;
+}
+
+bool CMarker::draw(){
+	if(visible){
+		x = marker_x;
+		y = marker_y;
+
+		//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "marker:%d",marker_id);
+	}
+
+	return true;
+
+
 }

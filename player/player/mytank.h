@@ -60,6 +60,8 @@ public:
 	int HP;//ヒットポイント-なくなるといったん死ぬ
 	VIABILITY_STATUS viability_status;//生存状態
 	int hit_counter;
+	bool endless_bullet_flag;
+	int  endless_bullet_timer;
 
 	int* wait_mode;
 
@@ -67,6 +69,7 @@ public:
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;
 	shared_ptr<CEnemy> enemy3;
+	shared_ptr<CMarker> marker; 
 	
 	shared_ptr<CBullet_image> bullet_image;//残弾描画
 	shared_ptr<CMap> map;

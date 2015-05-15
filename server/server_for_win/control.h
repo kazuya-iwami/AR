@@ -13,6 +13,8 @@ extern int left_time;//今のところ実装放置
 extern CPlayer_param player_param[4];
 extern time_t item_start_time[4], item_end_time;
 extern time_t dead_start_time[4], dead_end_time;
+extern time_t denkyu_start_time,denkyu_end_time;
+extern int denkyu_timer_flag;
 
 using namespace std;
 

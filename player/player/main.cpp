@@ -25,12 +25,8 @@ using namespace std;
 #define GAME_TIME 300 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
-<<<<<<< HEAD
- #define USE_CAMERA_FLAG 1
-=======
  #define USE_CAMERA_FLAG 2
 
->>>>>>> 39de398eed63902be7cac797ad2a5068d48134bd
 //0:画像 1:カメラ 2:ラズパイ
 
 

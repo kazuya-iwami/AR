@@ -242,10 +242,10 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	for(int i=0;i<3;i++){
 		if(eeic->denkyu[i].lockon)eeic->denkyu[i].attaacked();
 	}
-	if(marker->lockon){
+	if(marker->lockon && marker->visible){
 		if(marker->marker_id == MARKER_ID::MARKER_BULLET){
 			endless_bullet_flag = true;
-			endless_bullet_timer = 450;
+			endless_bullet_timer = 30*8;
 			bullet_charge(bullet_image->max_bullet_num);//チャージ
 		}else if(marker->marker_id == MARKER_ID::MARKER_SUMI){
 

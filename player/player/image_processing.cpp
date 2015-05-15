@@ -142,19 +142,20 @@ void MarkerDetector::reorder(vector<Point> &boundingBox)
 
 int MarkerDetector::templateMatch(Mat &src)
 {
-    double scores[3];
-    for (int i = 0; i < 3; ++i) {
+    double scores[MARKER_NUM];
+    for (int i = 0; i < MARKER_NUM; ++i) {
         scores[i] = norm(templates[i] - src);
         // cout << "scores[" << i << "] = " << scores[i] << endl;
     }
-    int minIdx = min_element(scores, scores + 3) - scores;
+	int minIdx = min_element(scores, scores + MARKER_NUM) - scores;
     return scores[minIdx] < 5000 ? minIdx : -1;
 }
 
 void MarkerDetector::init(){
-	templates[0] = imread("marker_image/bulb_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+	templates[0] = imread("marker_image/stop_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
     templates[1] = imread("marker_image/bullet_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
-    templates[2] = imread("marker_image/target_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    templates[2] = imread("marker_image/octo_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+	templates[3] = imread("marker_image/music_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
 }
 
 void MarkerDetector::findMarker(Mat &src)

@@ -85,11 +85,13 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 bool CEnemy::draw(){
 	x=ip_x*1000/320;//画面引き延ばしてる分の補正
 	y=ip_y*750/240;
+	int slide_x = -70;
+	int slide_y = -70;
 
 	if(countdown_finish_flag && visible){//視界に入っているなら
 		if(exist){
 			// 敵アイコンの表示
-			DrawGraph(x-60 + LEFT_WINDOW_WIDTH, y-40, figure_id["F_ICON"+to_string(enemy_id+1)],true);
+			DrawGraph(x-60 + LEFT_WINDOW_WIDTH + slide_x, y-40 + slide_y, figure_id["F_ICON"+to_string(enemy_id+1)],true);
 			// 前回打った敵は攻撃できない
 			if(enemy_id == CEnemy::just_before_shooted){
 				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
@@ -140,11 +142,11 @@ bool CBullet_image :: draw(){
 	int i;
 	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 );
 	for(i=0;i<num_bullet;i++){
-		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
+		DrawGraph(5 + LEFT_WINDOW_WIDTH,70+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
 	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 80 );
 	for(i=0;i<max_bullet_num - num_bullet;i++){
-		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+25*i,figure_id["F_BULLETUSED"],true);
+		DrawGraph(5 + LEFT_WINDOW_WIDTH,70+25*i,figure_id["F_BULLETUSED"],true);
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	return true;
@@ -810,13 +812,13 @@ bool CScore_Info::draw(){
 
 	//描画
 	for(int i=0;i<4;i++){
-		DrawExtendGraph(1050, score_info_enemy[i].info_y+10,1170,score_info_enemy[i].info_y+RANK_HEIGHT+5, figure_id["F_SCORE"], true);
+		DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
 
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		if(score_info_enemy[i].score <10){
-			DrawOriginalString(1070,score_info_enemy[i].info_y + 12,0.625,16,to_string(i+1)+"P: "+to_string(score_info_enemy[i].score));
+			DrawOriginalString(1070,score_info_enemy[i].info_y + 86,0.625,16,to_string(i+1)+"P: "+to_string(score_info_enemy[i].score));
 		}else{
-			DrawOriginalString(1070,score_info_enemy[i].info_y + 12,0.625,16,to_string(i+1)+"P:"+to_string(score_info_enemy[i].score));
+			DrawOriginalString(1070,score_info_enemy[i].info_y + 86,0.625,16,to_string(i+1)+"P:"+to_string(score_info_enemy[i].score));
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}

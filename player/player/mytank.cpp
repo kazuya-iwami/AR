@@ -72,6 +72,8 @@ bool CMytank::draw() {
 	SetDrawBright(255,255,255);
 	if(hit_counter>0) hit_counter--;
 
+	if( true /*id == 2*/ )DrawGraph(750+LEFT_WINDOW_WIDTH,2,figure_id["F_P3"],true);
+
 
 	//リロード画面表示
 	if(is_reloading){

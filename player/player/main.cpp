@@ -23,7 +23,7 @@
 using namespace std;
 	
 
-#define GAME_TIME 2 //プレー時間　300秒
+#define GAME_TIME 60 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
  #define USE_CAMERA_FLAG 1
@@ -416,15 +416,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
-			// 描画
-			draw_mtx.lock(); //排他的処理
-			DrawGraph(0,0,back,false);
-			draw_mtx.unlock();
-
-			draw_mtx.lock(); //排他的処理
-			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
-			draw_mtx.unlock();
 			
+
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
 

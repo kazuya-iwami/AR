@@ -489,16 +489,26 @@ bool CWait::draw(){
 		}else if(waitflag==3 && movieflag==-1){//ムービー再生
 			movieflag=1;
 			PlaySoundMem( sound_id["S_LINKSTART"], DX_PLAYTYPE_BACK );
+			
 			movie_end_time=flag+150;
 			DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
 		}else if (waitflag==3){
+			DrawFormatString(0, 0, GetColor(0, 0, 0), "%d", flag);
 			if(flag == movie_end_time){
 				//GameBGMの再生
 				StopSoundMem( sound_id["S_LINKSTART"] );
+				PlayMovieToGraph(figure_id["M_SYBACK"]);
 				PlaySoundMem( sound_id["S_GAME_BGM"] , DX_PLAYTYPE_BACK );
 			}
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
-			DrawGraph(0,0,figure_id["F_BACK"],false);
+			//DrawGraph(0,0,figure_id["F_BACK"],false);
+			if(!(ProcessMessage() == 0 && GetMovieStateToGraph( figure_id["M_SYBACK"] ) == 1)){
+				SeekMovieToGraph( figure_id["M_SYBACK"] , 1 ) ;
+				PlayMovieToGraph(figure_id["M_SYBACK"]);
+				 
+			}
+			DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , FALSE ) ;
+
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
 			//カーソルとかの情報をひょうじするならここ
 			printinfo();
@@ -753,6 +763,15 @@ bool CDenkyu::draw(){
 	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "電");
 	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "気");
 	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "系");
+
+	return true;
+}
+
+CBack::CBack(){
+
+}
+
+bool CBack::draw(){
 
 	return true;
 }

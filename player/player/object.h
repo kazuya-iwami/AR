@@ -43,6 +43,7 @@ extern int kamifubuki[24];
 #define LEFT_WINDOW_WIDTH 175
 
 enum DRAW_LAYER{ //描画レイヤー 下に行くほど前面
+	BACK_LAYER,
 	EXPLOSION_LAYER,
 	BULLET_LAYER,
 	ITEM_LAYER,

@@ -18,6 +18,13 @@ void requestHttp_thread(tstring direction, tstring speed);
 bool CMytank::draw() {
 
 	//DrawGraph(0,0,figure_id["F_BACK"],false);
+	if(!(ProcessMessage() == 0 && GetMovieStateToGraph( figure_id["M_SYBACK"] ) == 1)){
+			int v = GetMovieStateToGraph( figure_id["M_SYBACK"] );
+			SeekMovieToGraph( figure_id["M_SYBACK"] , 0 ) ;
+			PlayMovieToGraph(figure_id["M_SYBACK"]);
+	}
+	DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , FALSE );
+	WaitTimer(17);
 
 	// 読みこんだグラフィックを拡大描画
 	DrawExtendGraph(shake_x + LEFT_WINDOW_WIDTH,shake_y,1000+shake_x + LEFT_WINDOW_WIDTH, 750+shake_y , camera_image_handle,false) ;

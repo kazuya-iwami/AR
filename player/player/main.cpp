@@ -316,7 +316,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					}
 					
 					//bullet生成
-					if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
+					if( ( key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0) ||
+						 mytank->endless_bullet_timer % 5 == 2){
 						mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 					}
 	
@@ -367,6 +368,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				//テスト用　H自分のポイント＋１
 				if (key_buf[KEY_INPUT_H]==1 && key_prev_buf[KEY_INPUT_H]==0) {
 					mytank->score++;
+					auto plus=make_shared<CPlus>(&(mytank->score_info->score_info_enemy[PLAYER_NM].info_y));
+					CObject::register_object(plus,DRAW_LAYER::IMFOMATION_LAYER);
 				}
 				//テスト用　J自分のポイント＋１
 				if (key_buf[KEY_INPUT_J]==1 && key_prev_buf[KEY_INPUT_J]==0) {
@@ -651,7 +654,7 @@ int configuration(){
 	int tmp[5];
 	playnum_file >> row;
 
-	if(sscanf_s(row.c_str(),"rpi:%d,%d,%d,%d,id:%d", &tmp[0],&tmp[1],&tmp[2],&tmp[3],&tmp[4]) != 5) return 2;
+	if(sscanf_s(row.c_str(),"rpi:%d,%d,%d,%d,id:%d", &tmp[0],&tmp[1],&tmp[2],&tmp[3],&tmp[4]) != 5) return 3;
 	PLAYER_NM = tmp[4];
 	RASPI_IP_ADDRESS =  to_string(tmp[0]) + "." + to_string(tmp[1]) + "." + to_string(tmp[2]) + "." + to_string(tmp[3]);
 

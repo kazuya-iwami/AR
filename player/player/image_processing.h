@@ -13,6 +13,8 @@ using namespace cv;
 //画像処理クラス
 //読まなくていい
 
+#define MARKER_NUM 4
+
 class CImage_processer {
 
 public:
@@ -36,7 +38,7 @@ public:
 	void init();
     void findMarker(Mat &src);
     int templateMatch(Mat &src);
-    Mat templates[3];
+    Mat templates[MARKER_NUM];
 
 	bool visible;
 	int marker_x,marker_y;

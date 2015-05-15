@@ -155,7 +155,7 @@ void CEnemy::attacked(int score_){
 
 bool CBullet_image :: draw(){
 	int i;
-	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 );
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 +10*((*endless_timer)%20) );
 	for(i=0;i<num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,70+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
@@ -167,10 +167,11 @@ bool CBullet_image :: draw(){
 	return true;
 }
 
-CBullet_image :: CBullet_image(int x_, int y_, int max_bullet_num_): max_bullet_num(max_bullet_num_){
+CBullet_image :: CBullet_image(int x_, int y_, int max_bullet_num_,int* endless_timer_): max_bullet_num(max_bullet_num_){
 	x=x_;
 	y=y_;
 	num_bullet = max_bullet_num_; //残弾補充数は一定
+	endless_timer=endless_timer_;
 }
 
 //num_bulletを更新する関数
@@ -445,13 +446,6 @@ void Drawtitle(int flag){
 		DrawGraph(wordstart-n,360,title[13],true);*/	
 }
 
-void printinfo(){
-	//auto sysy=make_shared<CSystem_timer>(10,10,180);		
-	//sysy->draw();
-	auto bullet =make_shared<CBullet_image>(10,10,10);
-	bullet->draw();
-}
-
 void DrawDigitTime(int x, int y, float size, int space, string s){
 	for(int i = 0; i < (int)s.length(); i++){
 		switch (s[i]){
@@ -609,7 +603,14 @@ bool CWait::draw(){
 			DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_MASK"],true);
 			
 			//カーソルとかの情報をひょうじするならここ
-			printinfo();
+			//printinfo();
+			int i;
+			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140  );
+			for(i=0;i<10;i++){
+			DrawGraph(5 + LEFT_WINDOW_WIDTH,70+9*25-25*i,figure_id["F_BULLETNOKORI"],true);	
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
 			for(int j=0;j<3*50+2;j++){
 				DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,30,figure_id["F_HPBAR"],true);
 			}
@@ -877,7 +878,7 @@ bool CScore_Info::draw(){
 
 void CDenkyu::attaacked(){
 	hit = true;
-	send_msg(encode(COMMAND_NAME::UPDATE_DENKYU,denkyu_id,1,0)); //denkyu_idをONに;
+	//send_msg(encode(COMMAND_NAME::UPDATE_DENKYU,denkyu_id,1,0)); //denkyu_idをONに;
 
 }
 
@@ -918,18 +919,33 @@ bool CBack::draw(){
 	return true;
 }
 
+
+bool CPlus::draw(){
+	int slide =draw_timer/5;
+
+	DrawGraph(x,(*score_y)+ 82 - slide,figure_id["F_PLUS1"],true);
+
+	draw_timer++;
+
+	if(draw_timer <25)return true;
+	else return false;
+}
+
+CPlus::CPlus(int* score_y_){
+	x= 1000;
+	score_y=score_y_;
+	draw_timer=0;
+}
+
 bool CMarker::draw(){
 	if(visible){
 		x = marker_x;
 		y = marker_y;
 
-		DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "marker:%d",marker_id);
+		//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "marker:%d",marker_id);
 	}
 
 	return true;
 
-}
-
-void CMarker::attaacked(){
 
 }

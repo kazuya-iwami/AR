@@ -162,14 +162,14 @@ void CObject::load(){
 	sound_id["S_PI"]=LoadSoundMem("sound/pi.mp3");
 	sound_id["S_SHU"]=LoadSoundMem("sound/shu.mp3");
 	sound_id["S_GAMEEND"]=LoadSoundMem("sound/gameend.mp3");
-	sound_id["S_WAIT"]=LoadSoundMem("sound/wait.mp3");
-	sound_id["S_RESULT"]=LoadSoundMem("sound/result.mp3");
 	sound_id["S_RESULT_SCORE"]=LoadSoundMem("sound/result_score.mp3");
 	sound_id["S_FINISH"]=LoadSoundMem("sound/finish.mp3");
 	sound_id["S_AN"]=LoadSoundMem("sound/an.wav");
 
 	//BGM
-	sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
+	//sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
+	sound_id["S_WAIT"]=LoadSoundMem("sound/wait.mp3");
+	sound_id["S_RESULT"]=LoadSoundMem("sound/result.mp3");
 
 	// explosion
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード

@@ -296,7 +296,8 @@ bool CResult::draw(){
 	if(draw_timer == 0){
 		//動画スタート
 		result_movie_handle = LoadGraph("movie/result.ogv");
-		PlaySoundMem(sound_id["S_RESULT"], DX_PLAYTYPE_BACK);
+		SetLoopPosSoundMem( 0, sound_id["S_RESULT"] ) ;
+		PlaySoundMem(sound_id["S_RESULT"], DX_PLAYTYPE_LOOP);
 		PlayMovieToGraph( result_movie_handle ) ;
 	}
 
@@ -521,7 +522,8 @@ bool CWait::draw(){
 		MV1DrawModel(figure_id["X_TANK"]);
 	if(draw_timer == 0){
 		StopSoundMem(sound_id["S_RESULT"]);
-		PlaySoundMem(sound_id["S_WAIT"], DX_PLAYTYPE_BACK);
+		SetLoopPosSoundMem( 0, sound_id["S_WAIT"] ) ;
+		PlaySoundMem(sound_id["S_WAIT"], DX_PLAYTYPE_LOOP);
 	}
 //	タイトル表示
 	if(mode>0){

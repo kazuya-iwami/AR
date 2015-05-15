@@ -215,19 +215,24 @@ bool CFinish::draw(){
 	*/
 
 	//config
-	int fade_out_time = 60;
-	int fade_in_start_time = 120;
+	int fade_out_time = 150;
+	int fade_in_start_time = 210;
 
 	if(draw_timer == 0){
 		//GameBGM音量を小さくする
 		//serverからのみGameBGMを流すので音量変化はしない
 		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
 	} else if(draw_timer < fade_out_time) {
-		//カメラ入力はmain関数で描画
-		//finishの文字出力
+		//画面変化
+		int alpha_val = draw_timer*8;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_val); 
+		DrawExtendGraph(LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+999, 730, figure_id["F_FINISH_CYBER"], true); 
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		//GameEnd文字出力
+
+
+		//paの音を文字が出るたびに出す
 	} else if(draw_timer == fade_out_time){
-
-
 	} else if(draw_timer < fade_in_start_time){
 		int black_value = (draw_timer - fade_out_time) * 15;
 		black_value = (255 < black_value) ? 255 : black_value;
@@ -537,7 +542,7 @@ bool CWait::draw(){
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag-(beforeflag));
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			if(2*(flag-beforeflag-40)>360){
+			if(2*(flag-beforeflag-40)>390){
 				waitflag=2;
 				beforeflag=flag;
 			}
@@ -825,8 +830,15 @@ bool CScore_Info::draw(){
 
 	//描画
 	for(int i=0;i<4;i++){
-		DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
-
+		if(PLAYER_NM==i){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
+			DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}else{
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,155);
+			DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		if(score_info_enemy[i].score <10){
 			DrawOriginalString(1070,score_info_enemy[i].info_y + 86,0.625,16,to_string(i+1)+"P: "+to_string(score_info_enemy[i].score));

@@ -143,6 +143,11 @@ CMytank::CMytank() {
 	eeic=eeic_;
 	CObject::register_object(eeic,DRAW_LAYER::IMFOMATION_LAYER);
 
+	auto marker_ = make_shared<CMarker>();
+	marker = marker_;
+	//marker->init();
+	CObject::register_object(marker,DRAW_LAYER::ENEMY_LAYER);
+
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
@@ -782,6 +787,7 @@ void CMytank::detect_enemy(Mat image) {
 	if (id != 3)enemy3->detect(image);
 
 	eeic->detect(image);
+	//marker->findMarker(image);
 }
 
 void CMytank::attacked(int score_){

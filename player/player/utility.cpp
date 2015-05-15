@@ -624,3 +624,13 @@ bool CDenkyu::draw(){
 
 	return true;
 }
+
+bool CMarker::draw(){
+	x = marker_x;
+	y = marker_y;
+
+	DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "marker:%d",marker_id);
+
+	return true;
+
+}

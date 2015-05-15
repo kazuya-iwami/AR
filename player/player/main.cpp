@@ -27,7 +27,6 @@ using namespace std;
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
  #define USE_CAMERA_FLAG 1
-
 //0:画像 1:カメラ 2:ラズパイ
 
 
@@ -314,11 +313,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					}
 					if(  key_buf[ KEY_INPUT_LEFT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
 					//mytank->set_vel(-1,1);
-					mytank->move(_T("left"), _T("half"));
+					mytank->move(_T("left"), _T("full"));
 					}
 					if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
 					//mytank->set_vel(1,-1);
-					mytank->move(_T("right"), _T("half"));
+					mytank->move(_T("right"), _T("full"));
 					}
 					//各キーを離したらstop
 					if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 

@@ -30,4 +30,18 @@ public:
 	Mat detect(Mat image);
 };
 
-//ここ見なくていい
+class MarkerDetector
+{
+public:
+	void init();
+    void findMarker(Mat &src);
+    int templateMatch(Mat &src);
+    Mat templates[3];
+
+	bool visible;
+	int marker_x,marker_y;
+	int marker_id;
+private:
+    void reorder(vector<Point>& boundingBox);
+	
+};

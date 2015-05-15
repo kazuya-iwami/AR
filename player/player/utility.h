@@ -176,3 +176,10 @@ public:
 	void detect(Mat image);
 
 };
+
+class CMarker : public CObject,public MarkerDetector{
+public:
+	bool draw();
+
+
+};

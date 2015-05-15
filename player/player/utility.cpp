@@ -235,7 +235,7 @@ bool CFinish::draw(){
 		if(draw_timer >= 120) DrawGraph(LEFT_WINDOW_WIDTH+644, 200,figure_id["F_GAME_END_d"], true);
 	}
 	//音
-	if(draw_timer >= 84 && draw_timer <= 120 && draw_timer%6 == 0) PlaySoundMem(sound_id["S_PI"], DX_PLAYTYPE_BACK);
+	if(draw_timer >= 84 && draw_timer <= 120 && draw_timer%6 == 0) PlaySoundMem(sound_id["S_GAMEEND"], DX_PLAYTYPE_BACK);
 
 	//色変化
 	if(draw_timer > 30){
@@ -250,6 +250,7 @@ bool CFinish::draw(){
 		//GameBGM音量を小さくする
 		//serverからのみGameBGMを流すので音量変化はしない
 		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
+		PlaySoundMem(sound_id["S_FINISH"], DX_PLAYTYPE_BACK);
 	} else if(draw_timer < fade_out_time) {
 	} else if(draw_timer == fade_out_time){
 	} else if(draw_timer < fade_in_start_time){
@@ -283,11 +284,18 @@ bool CResult::draw(){
 	//config
 	int fade_in_end_time = 15;
 
+	if(draw_timer > 20){
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 120);
+		DrawGraph(60, 60, figure_id["F_RESULT"], true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+
 	//リザルト画面の描画
 	if(draw_timer == 0){
 		//動画スタート
 		result_movie_handle = LoadGraph("movie/result.ogv");
-		PlaySoundMem(sound_id["S_RESULT"], DX_PLAYTYPE_BACK);
+		SetLoopPosSoundMem( 0, sound_id["S_RESULT"] ) ;
+		PlaySoundMem(sound_id["S_RESULT"], DX_PLAYTYPE_LOOP);
 		PlayMovieToGraph( result_movie_handle ) ;
 	}
 
@@ -512,7 +520,8 @@ bool CWait::draw(){
 		MV1DrawModel(figure_id["X_TANK"]);
 	if(draw_timer == 0){
 		StopSoundMem(sound_id["S_RESULT"]);
-		PlaySoundMem(sound_id["S_WAIT"], DX_PLAYTYPE_BACK);
+		SetLoopPosSoundMem( 0, sound_id["S_WAIT"] ) ;
+		PlaySoundMem(sound_id["S_WAIT"], DX_PLAYTYPE_LOOP);
 	}
 //	タイトル表示
 	if(mode>0){

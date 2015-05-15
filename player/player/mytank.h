@@ -72,6 +72,7 @@ public:
 	shared_ptr<CMap> map;
 	shared_ptr<CScore_Info> score_info;
 	shared_ptr<CEeic> eeic;
+	shared_ptr<CBack> back;
 
 	CMytank();
 	void move(tstring direction, tstring speed);//移動

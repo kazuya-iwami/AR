@@ -16,19 +16,7 @@ void requestHttp_thread(tstring direction, tstring speed);
 
 
 bool CMytank::draw() {
-
-	//DrawGraph(0,0,figure_id["F_BACK"],false);
-	if(!(ProcessMessage() == 0 && GetMovieStateToGraph( figure_id["M_SYBACK"] ) == 1)){
-			int v = GetMovieStateToGraph( figure_id["M_SYBACK"] );
-			SeekMovieToGraph( figure_id["M_SYBACK"] , 0 ) ;
-			PlayMovieToGraph(figure_id["M_SYBACK"]);
-	}
-	DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , FALSE );
-	WaitTimer(17);
-
-	// 読みこんだグラフィックを拡大描画
-	DrawExtendGraph(shake_x + LEFT_WINDOW_WIDTH,shake_y,1000+shake_x + LEFT_WINDOW_WIDTH, 750+shake_y , camera_image_handle,false) ;
-
+	
 	//カーソル表示
 	if(!is_reloading && focus_flag){
 		attackable = false;
@@ -154,6 +142,10 @@ CMytank::CMytank() {
 	auto eeic_ =make_shared<CEeic>();
 	eeic=eeic_;
 	CObject::register_object(eeic,DRAW_LAYER::IMFOMATION_LAYER);
+
+	auto back_ = make_shared<CBack>();
+	back=back_;
+	CObject::register_object(back,DRAW_LAYER::BACK_LAYER);
 
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため

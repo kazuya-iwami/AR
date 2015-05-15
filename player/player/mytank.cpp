@@ -17,6 +17,11 @@ void requestHttp_thread(tstring direction, tstring speed);
 
 bool CMytank::draw() {
 
+	//DrawGraph(0,0,figure_id["F_BACK"],false);
+
+	// 読みこんだグラフィックを拡大描画
+	DrawExtendGraph(shake_x + LEFT_WINDOW_WIDTH,shake_y,1000+shake_x + LEFT_WINDOW_WIDTH, 750+shake_y , camera_image_handle,false) ;
+
 	//カーソル表示
 	if(!is_reloading && focus_flag){
 		attackable = false;

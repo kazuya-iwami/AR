@@ -148,7 +148,7 @@ CMytank::CMytank() {
 	endless_bullet_flag = false;
 	endless_bullet_timer = 0;
 
-
+	wait_start_flag = false;
 	send_msg("HELLO");
 
 	auto score_info_ = make_shared<CScore_Info>(id);
@@ -481,6 +481,9 @@ void CMytank::get_msg(){
 				break;
 			case GAME_STATUS::GAME_PAUSE:
 				game_status = GAME_STATUS::GAME_PAUSE;
+				break;
+			case GAME_STATUS::GAME_WAIT:
+				wait_start_flag = true;
 				break;
 			default:
 				break;
@@ -904,7 +907,7 @@ void CMytank::attacked(int score_){
 void CMytank::set_game_status(GAME_STATUS game_status_){
 	move(_T("stop"), _T("full"));
 	game_status = game_status_;
-	if(game_status == GAME_STATUS::GAME_WAIT){ //FINIHSからWAITに移行する際サーバーにメッセージ送る
+	if(game_status == GAME_STATUS::GAME_FINISH){ //FINIHSからWAITに移行する際サーバーにメッセージ送る
 		send_msg(encode(COMMAND_NAME::FINISH,0,0,0));
 	}
 

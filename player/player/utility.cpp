@@ -471,7 +471,7 @@ bool CWait::draw(){
 			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
 			//SetDrawBlendMode(DX_BLENDMODE_ADD,255);//2*(flag-title_end_time-10));
 			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag-(beforeflag));
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
@@ -479,19 +479,27 @@ bool CWait::draw(){
 				waitflag=2;
 				beforeflag=flag;
 			}
-		}else if(waitflag==2){//ホワイトアウトからグレーへ
-			DrawGraph(0,0,gray[(flag-beforeflag)/3],true);
-			if(flag-beforeflag>=30){
-				DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+		}else if(waitflag==2){//ホワイトアウトからグレーへ→動画側で処理
+			//DrawGraph(0,0,gray[(flag-beforeflag)/3],true);
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
+			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			if(flag-beforeflag>=30){	
+				//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
 				beforeflag=flag;
 				waitflag=3;
-			}			
+			}		
 		}else if(waitflag==3 && movieflag==-1){//ムービー再生
 			movieflag=1;
 			PlaySoundMem( sound_id["S_LINKSTART"], DX_PLAYTYPE_BACK );
 			movie_end_time=flag+150;
-			DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
+			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		}else if (waitflag==3){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
+			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			if(flag == movie_end_time){
 				//GameBGMの再生
 				StopSoundMem( sound_id["S_LINKSTART"] );

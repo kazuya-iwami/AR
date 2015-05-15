@@ -222,13 +222,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 			
-			/*if( ( key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0) || wait->gameflag==1){
+			if( wait->gameflag==1){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
 				
 				wait->gameflag=0;			
 				
 				mytank->start();
-			}
+			}/*
 			else if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0 && wait->mode > 0){
 				if(wait->mode <5) wait->mode += 1;
 			}

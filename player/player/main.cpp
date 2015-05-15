@@ -424,7 +424,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			//リロードの棒が延びないように設定
 			mytank->is_reloading = false;
 
-			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
+			if( mytank->wait_start_flag ){
+				mytank->wait_start_flag = false;
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
 
 				if(mytank->get_id() != 0)exist_flag[0] = mytank->enemy0->exist;

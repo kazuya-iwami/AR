@@ -48,6 +48,7 @@ class CMytank : public CObject, public CNetwork {
 	int dead_time; //死んでから時間がどれだけかかったか
 
 public:
+	bool wait_start_flag;
 	int score;//撃墜数-被撃墜数
 	
 	int shaketimer;

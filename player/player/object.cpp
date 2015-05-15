@@ -68,6 +68,7 @@ void CObject::load(){
 	figure_id["F_BLACK"]=LoadGraph("image/back/back_black.png");
 
 	figure_id["F_FINISH"]=LoadGraph("image/finish.png");
+	figure_id["F_FINISH_CYBER"]=LoadGraph("image/finish_cyber.png");
 
 	figure_id["F_HPBAR"]=LoadGraph("image/hp_bar.png");
 	figure_id["F_HPFRAME2"]=LoadGraph("image/hp_frame2.png");

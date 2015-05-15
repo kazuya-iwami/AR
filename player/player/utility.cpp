@@ -212,19 +212,24 @@ bool CFinish::draw(){
 	*/
 
 	//config
-	int fade_out_time = 60;
-	int fade_in_start_time = 120;
+	int fade_out_time = 150;
+	int fade_in_start_time = 210;
 
 	if(draw_timer == 0){
 		//GameBGM音量を小さくする
 		//serverからのみGameBGMを流すので音量変化はしない
 		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
 	} else if(draw_timer < fade_out_time) {
-		//カメラ入力はmain関数で描画
-		//finishの文字出力
+		//画面変化
+		int alpha_val = draw_timer*8;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_val); 
+		DrawExtendGraph(LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+999, 730, figure_id["F_FINISH_CYBER"], true); 
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		//GameEnd文字出力
+
+
+		//paの音を文字が出るたびに出す
 	} else if(draw_timer == fade_out_time){
-
-
 	} else if(draw_timer < fade_in_start_time){
 		int black_value = (draw_timer - fade_out_time) * 15;
 		black_value = (255 < black_value) ? 255 : black_value;

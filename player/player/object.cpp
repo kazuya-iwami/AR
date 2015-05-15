@@ -165,12 +165,12 @@ void CObject::load(){
 	sound_id["S_RESULT_SCORE"]=LoadSoundMem("sound/result_score.mp3");
 	sound_id["S_FINISH"]=LoadSoundMem("sound/finish.mp3");
 	sound_id["S_AN"]=LoadSoundMem("sound/an.wav");
-
+	/*
 	//BGM
 	//sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
 	sound_id["S_WAIT"]=LoadSoundMem("sound/wait.mp3");
 	sound_id["S_RESULT"]=LoadSoundMem("sound/result.mp3");
-
+	*/
 	// explosion
 	// 画像ファイル分割を行うので、別にint型配列を用意して画像をロード
 	LoadDivGraph("image/explosion_sample.png", 45, 9, 5, 600, 600, explosion);

@@ -222,7 +222,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 			
-			if( ( key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0) || wait->gameflag==1){
+			/*if( ( key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0) || wait->gameflag==1){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
 				
 				wait->gameflag=0;			
@@ -243,7 +243,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			else if(  key_buf[ KEY_INPUT_P ] == 1 && key_prev_buf[ KEY_INPUT_P] == 0 && wait->mode > 0){
 				wait->mode=0;
 			}
-			
+			*/
 			if(key_buf[KEY_INPUT_S]==1 && key_prev_buf[KEY_INPUT_S]==0){
 				wait->spin=wait->spin+2;
 			}
@@ -394,12 +394,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				}
 			}
 
-
+			/*
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
 			}
-
+			*/
 			//Qを押すとゲーム中だったのが終了画面へと遷移
 			//時間切れるとGAME_STATUS変更
 			if(system_timer->get_finish_flag() || key_buf[ KEY_INPUT_Q ] == 1){
@@ -413,11 +413,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			draw_mtx.lock();
 			DrawFormatString(50 + LEFT_WINDOW_WIDTH, 300, GetColor(255,255,255), "PAUSE... ENTERで戻る");
 			draw_mtx.unlock();
-
+			/*
 			//ENTERでGAME_STAUTS変更
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_PLAY);
 			}
+			*/
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
 			//リロードの棒が延びないように設定

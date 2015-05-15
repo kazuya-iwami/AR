@@ -59,6 +59,14 @@ char key_buf [ 256 ] ;
 char key_prev_buf [ 256 ] ;
 
 
+
+//データのロード
+int bgm_id=LoadSoundMem("../../player/player/sound/GameBGM.mp3");
+int result_sound=LoadSoundMem("../../player/player/sound/result.mp3");
+int wait_sound=LoadSoundMem("../../player/player/sound/wait.mp3");
+
+
+
 // WinMain関数
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				   LPSTR lpCmdLine, int nCmdShow )
@@ -132,12 +140,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//player[3].init(hsv_data.player[3].minH,hsv_data.player[3].maxH,hsv_data.player[3].minS,hsv_data.player[3].maxS,hsv_data.player[3].minV,hsv_data.player[3].maxV);
 
 	//以下メインコード
-
-	//データのロード
-
-	int bgm_id=LoadSoundMem("../../player/player/sound/GameBGM.mp3");
-	//int result_sound=LoadSoundMem("../../player/player/sound/result.mp3");
-	int wait_sound=LoadSoundMem("../../player/player/sound/wait.mp3");
 
 	int bgm_timer = 0;
 
@@ -412,6 +414,7 @@ void init(){
 	denkyu_timer_flag=0;
 	denkyu_flag =1;//初期化 000
 	game_status=GAME_STATUS::GAME_WAIT;
+	PlaySoundMem(wait_sound, DX_PLAYTYPE_LOOP);
 	item_end_time = 0;
 	for(int i=0;i<4;i++){
 		//item_start_time[i] = 0;

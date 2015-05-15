@@ -5,6 +5,9 @@
 #include <algorithm>
 
 int CEnemy::just_before_shooted;
+int CEnemy::just_before_shooted_time;
+int CSystem_timer::system_timer;
+
 #define SORT_SPEED 5
 #define RANK_HEIGHT 40
 
@@ -108,7 +111,7 @@ bool CEnemy::draw(){
 			// 敵アイコンの表示
 			DrawGraph(x-60 + LEFT_WINDOW_WIDTH + slide_x, y-40 + slide_y, figure_id["F_ICON"+to_string(enemy_id+1)],true);
 			// 前回打った敵は攻撃できない
-			if(enemy_id == CEnemy::just_before_shooted){
+			if(enemy_id == CEnemy::just_before_shooted && CSystem_timer::system_timer-CEnemy::just_before_shooted_time<10*30){
 				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
 			}
 
@@ -134,6 +137,7 @@ CEnemy::CEnemy(int enemy_id_){
 	enemy_id = enemy_id_;
 	lockon = false;
 	just_before_shooted = -1; // 直前には誰も撃たれていない
+	just_before_shooted_time=-1;//直前には誰も撃っていない
 	countdown_finish_flag = false;
 }
 

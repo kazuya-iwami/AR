@@ -152,7 +152,7 @@ int MarkerDetector::templateMatch(Mat &src)
 }
 
 void MarkerDetector::init(){
-	templates[0] = imread("marker_image/target_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+	templates[0] = imread("marker_image/bulb_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
     templates[1] = imread("marker_image/bullet_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
     templates[2] = imread("marker_image/octo_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
 	templates[3] = imread("marker_image/music_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);

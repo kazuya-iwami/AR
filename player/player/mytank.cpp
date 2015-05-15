@@ -32,7 +32,7 @@ bool CMytank::draw() {
 		if(id != 1 && enemy1->lockon ==true) attackable = true;
 		if(id != 2 && enemy2->lockon ==true) attackable = true;
 		if(id != 3 && enemy3->lockon ==true) attackable = true;
-		if(marker->lockon ==true) attackable = true;
+		if(marker->visible && marker->lockon ==true) attackable = true;
 		if(attackable == true){//lockon状態
 			if(!preflag){
 				PlaySoundMem(sound_id["S_LOCK"], DX_PLAYTYPE_BACK);

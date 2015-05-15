@@ -47,7 +47,10 @@ void CObject::load(){
 	figure_id["F_ICON3"] =  LoadGraph("image/icon3.png");
 	figure_id["F_ICON4"] =  LoadGraph("image/icon4.png");
 	figure_id["F_X"]=LoadGraph("image/x.png");
-	
+	figure_id["F_P1"]=LoadGraph("image/player1.png");
+	figure_id["F_P2"]=LoadGraph("image/player2.png");
+	figure_id["F_P3"]=LoadGraph("image/player3.png");
+	figure_id["F_P4"]=LoadGraph("image/player4.png");
 
 	figure_id["F_CURSUR_OUT"]=LoadGraph("image/cursur/cursur_outside.png");
 	figure_id["F_CURSUR_IN"]=LoadGraph("image/cursur/cursur_inside.png");
@@ -68,6 +71,7 @@ void CObject::load(){
 	figure_id["F_BLACK"]=LoadGraph("image/back/back_black.png");
 
 	figure_id["F_FINISH"]=LoadGraph("image/finish.png");
+	figure_id["F_FINISH_CYBER"]=LoadGraph("image/finish_cyber.png");
 
 	figure_id["F_HPBAR"]=LoadGraph("image/hp_bar.png");
 	figure_id["F_HPFRAME2"]=LoadGraph("image/hp_frame2.png");
@@ -112,6 +116,7 @@ void CObject::load(){
 	figure_id["F_WHITEBACK"]=LoadGraph("image/back/whiteback.png");
 	figure_id["F_BACK"]=LoadGraph("image/back/back.png");
 	figure_id["F_SCORE"]=LoadGraph("image/back/back_card2.png");
+	figure_id["F_MASK"]=LoadGraph("image/mask.png");
 
 	//白からグレーに変わるとき用
 	gray[0]=LoadGraph("image/back/grayback10.png");	
@@ -124,6 +129,17 @@ void CObject::load(){
 	gray[7]=LoadGraph("image/back/grayback3.png");	
 	gray[8]=LoadGraph("image/back/grayback2.png");	
 	gray[9]=LoadGraph("image/back/grayback1.png");
+
+
+	//game_end
+	figure_id["F_GAME_END"]=LoadGraph("image/game_end/game_end.png");
+	figure_id["F_GAME_END_G"]=LoadGraph("image/game_end/g.png");
+	figure_id["F_GAME_END_a"]=LoadGraph("image/game_end/a.png");
+	figure_id["F_GAME_END_m"]=LoadGraph("image/game_end/m.png");
+	figure_id["F_GAME_END_e"]=LoadGraph("image/game_end/small_e.png");
+	figure_id["F_GAME_END_E"]=LoadGraph("image/game_end/E.png");
+	figure_id["F_GAME_END_n"]=LoadGraph("image/game_end/n.png");
+	figure_id["F_GAME_END_d"]=LoadGraph("image/game_end/d.png");
 
 	//マップで使うアイコン
 	figure_id["F_ICONRED"]=LoadGraph("image/iconred.png");

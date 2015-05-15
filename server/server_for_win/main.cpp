@@ -410,7 +410,7 @@ void init(){
 	set_denkyu(1,false);
 	set_denkyu(2,false);
 	denkyu_timer_flag=0;
-	denkyu_flag =0;//‰Šú‰» 000
+	denkyu_flag =1;//‰Šú‰» 000
 	game_status=GAME_STATUS::GAME_WAIT;
 	item_end_time = 0;
 	for(int i=0;i<4;i++){

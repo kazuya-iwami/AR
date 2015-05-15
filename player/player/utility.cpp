@@ -332,7 +332,7 @@ bool CResult::draw(){
 			if(x == 1000) PlaySoundMem(sound_id["S_RESULT_SCORE"], DX_PLAYTYPE_BACK);
 			if(x < 360) x = 360;
 			DrawGraph(x, 150+140*i, figure_id["F_RESULT_CARD"], true);
-			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
 		}
 
 	} else {
@@ -345,10 +345,10 @@ bool CResult::draw(){
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_palam);
 				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD_WHITE"], true);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
 			} else {
 				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
-				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
 			}
 		}
 	}

@@ -316,7 +316,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					}
 					
 					//bullet生成
-					if(  key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0){
+					if( ( key_buf[ KEY_INPUT_SPACE ] == 1 && key_prev_buf[ KEY_INPUT_SPACE] == 0) ||
+						 mytank->endless_bullet_timer % 5 == 2){
 						mytank->gen_bullet(BULLET_KIND::BULLET_NOMAL);
 					}
 	

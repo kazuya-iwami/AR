@@ -59,11 +59,12 @@ public:
 
 
 class CBullet_image : public CObject {
+	int* endless_timer;
 
 public:
 	int num_bullet;//残弾数
 	const int max_bullet_num;//最大弾数
-	CBullet_image(int x_,int y_,int max_bullet_num_);
+	CBullet_image(int x_,int y_,int max_bullet_num_,int *endless_timer_);
 	bool draw();
 	void update_num_bullet(int num_bullet_);
 };

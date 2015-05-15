@@ -18,9 +18,10 @@ void requestHttp_thread(tstring direction, tstring speed);
 bool CMytank::draw() {
 	//打ちまくり状態関係
 	if(endless_bullet_flag == true){
-		endless_bullet_timer --;
-		if(endless_bullet_timer < 0){
+		endless_bullet_timer--;
+		if(endless_bullet_timer <= 0){
 			endless_bullet_flag = false;
+			endless_bullet_timer = 0;
 		}
 	}
 
@@ -146,7 +147,7 @@ CMytank::CMytank() {
 	score_info =  score_info_;
 	CObject::register_object( score_info,DRAW_LAYER::IMFOMATION_LAYER);
 
-	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet);
+	auto bullet_image_ = make_shared<CBullet_image>(10,10,num_bullet,&endless_bullet_timer);
 	bullet_image = bullet_image_;
 	CObject::register_object(bullet_image,DRAW_LAYER::IMFOMATION_LAYER);
 
@@ -242,11 +243,13 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	for(int i=0;i<3;i++){
 		if(eeic->denkyu[i].lockon)eeic->denkyu[i].attaacked();
 	}
+
 	if(marker->lockon && marker->visible){
-		if(marker->marker_id == MARKER_ID::MARKER_BULLET){
+		if(marker->marker_id == MARKER_ID::MARKER_BULLET ){
 			endless_bullet_flag = true;
 			endless_bullet_timer = 30*8;
-			bullet_charge(bullet_image->max_bullet_num);//チャージ
+			num_bullet=(bullet_image->max_bullet_num);
+			bullet_image->update_num_bullet(num_bullet);//チャージ
 		}else if(marker->marker_id == MARKER_ID::MARKER_SUMI){
 
 		}else if(marker->marker_id == MARKER_ID::MARKER_SOUND){
@@ -271,7 +274,9 @@ void CMytank::check_focus(){
 			}else eeic->denkyu[i].lockon = false;
 		}
 
-		if(marker->get_x()- ENEMY_MARGIN < focus_x && marker->get_x() + ENEMY_MARGIN > focus_x && marker->get_y() -ENEMY_MARGIN < focus_y &&marker->get_y() + ENEMY_MARGIN > focus_y){
+		if(marker->get_x()- ENEMY_MARGIN < focus_x && marker->get_x() + ENEMY_MARGIN > focus_x &&
+			marker->get_y() -ENEMY_MARGIN < focus_y &&marker->get_y() + ENEMY_MARGIN > focus_y &&
+			(marker->marker_id != MARKER_ID::MARKER_BULLET || endless_bullet_flag == false)){
 			//if(!(marker->denkyu_hit == true && marker->marker_id == MARKER_ID::MARKER_STOP)){ //切断したプレーヤーへの攻撃禁止
 					marker->lockon = true;
 			//	}

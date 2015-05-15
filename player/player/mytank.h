@@ -60,6 +60,8 @@ public:
 	int HP;//ヒットポイント-なくなるといったん死ぬ
 	VIABILITY_STATUS viability_status;//生存状態
 	int hit_counter;
+	bool endless_bullet_flag;
+	int  endless_bullet_timer;
 
 	int* wait_mode;
 

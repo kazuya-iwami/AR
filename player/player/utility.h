@@ -59,11 +59,12 @@ public:
 
 
 class CBullet_image : public CObject {
+	int* endless_timer;
 
 public:
 	int num_bullet;//残弾数
 	const int max_bullet_num;//最大弾数
-	CBullet_image(int x_,int y_,int max_bullet_num_);
+	CBullet_image(int x_,int y_,int max_bullet_num_,int *endless_timer_);
 	bool draw();
 	void update_num_bullet(int num_bullet_);
 };
@@ -144,12 +145,12 @@ public:
 class CScore_Info:public CObject {
 private:
 	
-	CScore_info_enemy score_info_enemy[4];
 	vector<pair<int, int> > rank_info;
 	int mytank_id;
 
 public:
 	CScore_Info(int mytank_id);
+	CScore_info_enemy score_info_enemy[4];
 	void update_score(int score0,int score1, int score2,int score3);
 	vector<pair<int, int> > get_rank_info(){ return rank_info; };
 	bool draw();// 描画とともに動かす
@@ -185,13 +186,21 @@ public:
 	bool draw();
 };
 
-class CMarker : public CObject,public MarkerDetector{
+
+class CPlus:public CObject{
 public:
-	bool hit;//既に攻撃されていたらtrue
+	CPlus(int* score_y_);
+	int* score_y;
+	bool draw();
+};
+
+class CMarker : public CObject,public MarkerDetector,public CNetwork{
+public:
+	bool denkyu_hit;//既に攻撃されていたらtrue
 	bool lockon;
 
 	bool draw();
-	void attaacked();//攻撃が当たった場合の処理
 	int get_x(){return x;};
 	int get_y(){return y;};
+
 };

@@ -155,7 +155,7 @@ void CEnemy::attacked(int score_){
 
 bool CBullet_image :: draw(){
 	int i;
-	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 );
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 +10*((*endless_timer)%20) );
 	for(i=0;i<num_bullet;i++){
 		DrawGraph(5 + LEFT_WINDOW_WIDTH,70+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
@@ -167,10 +167,11 @@ bool CBullet_image :: draw(){
 	return true;
 }
 
-CBullet_image :: CBullet_image(int x_, int y_, int max_bullet_num_): max_bullet_num(max_bullet_num_){
+CBullet_image :: CBullet_image(int x_, int y_, int max_bullet_num_,int* endless_timer_): max_bullet_num(max_bullet_num_){
 	x=x_;
 	y=y_;
 	num_bullet = max_bullet_num_; //残弾補充数は一定
+	endless_timer=endless_timer_;
 }
 
 //num_bulletを更新する関数
@@ -232,19 +233,20 @@ bool CFinish::draw(){
 	//音
 	if(draw_timer >= 84 && draw_timer <= 120 && draw_timer%6 == 0) PlaySoundMem(sound_id["S_PI"], DX_PLAYTYPE_BACK);
 
+	//色変化
+	if(draw_timer > 30){
+		int alpha_val = (draw_timer-30)*5;
+		if(alpha_val > 126) alpha_val = 126;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_val); 
+		DrawExtendGraph(LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+999, 730, figure_id["F_FINISH_CYBER"], true); 
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 
 	if(draw_timer == 0){
 		//GameBGM音量を小さくする
 		//serverからのみGameBGMを流すので音量変化はしない
 		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
 	} else if(draw_timer < fade_out_time) {
-		if(draw_timer > 30){
-			//画面変化
-			int alpha_val = (draw_timer-30)*8;
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_val); 
-			DrawExtendGraph(LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+999, 730, figure_id["F_FINISH_CYBER"], true); 
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		}
 	} else if(draw_timer == fade_out_time){
 	} else if(draw_timer < fade_in_start_time){
 		int black_value = (draw_timer - fade_out_time) * 15;
@@ -281,6 +283,7 @@ bool CResult::draw(){
 	if(draw_timer == 0){
 		//動画スタート
 		result_movie_handle = LoadGraph("movie/result.ogv");
+		PlaySoundMem(sound_id["S_RESULT"], DX_PLAYTYPE_BACK);
 		PlayMovieToGraph( result_movie_handle ) ;
 	}
 
@@ -314,7 +317,7 @@ bool CResult::draw(){
 		int dx = (draw_timer - float_start_time)*100;
 		for(int i = 0; i < 4; i++){
 			int x = 1400 + i*400 -dx;
-			if(x == 1000) PlaySoundMem(sound_id["S_SHU"], DX_PLAYTYPE_BACK);
+			if(x == 1000) PlaySoundMem(sound_id["S_RESULT_SCORE"], DX_PLAYTYPE_BACK);
 			if(x < 360) x = 360;
 			DrawGraph(x, 150+140*i, figure_id["F_RESULT_CARD"], true);
 			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
@@ -443,13 +446,6 @@ void Drawtitle(int flag){
 		DrawGraph(wordstart-n,360,title[13],true);*/	
 }
 
-void printinfo(){
-	//auto sysy=make_shared<CSystem_timer>(10,10,180);		
-	//sysy->draw();
-	auto bullet =make_shared<CBullet_image>(10,10,10);
-	bullet->draw();
-}
-
 void DrawDigitTime(int x, int y, float size, int space, string s){
 	for(int i = 0; i < (int)s.length(); i++){
 		switch (s[i]){
@@ -510,7 +506,10 @@ bool CWait::draw(){
 		MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
 		MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin++/10.0f,0.0f));
 		MV1DrawModel(figure_id["X_TANK"]);
-
+	if(draw_timer == 0){
+		StopSoundMem(sound_id["S_RESULT"]);
+		PlaySoundMem(sound_id["S_WAIT"], DX_PLAYTYPE_BACK);
+	}
 //	タイトル表示
 	if(mode>0){
 		//タイトルロゴ表示
@@ -567,6 +566,7 @@ bool CWait::draw(){
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			if(flag-beforeflag>=30){	
 				//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+				StopSoundMem(sound_id["S_WAIT"]);
 				beforeflag=flag;
 				waitflag=3;
 			}		
@@ -603,7 +603,14 @@ bool CWait::draw(){
 			DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_MASK"],true);
 			
 			//カーソルとかの情報をひょうじするならここ
-			printinfo();
+			//printinfo();
+			int i;
+			SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140  );
+			for(i=0;i<10;i++){
+			DrawGraph(5 + LEFT_WINDOW_WIDTH,70+9*25-25*i,figure_id["F_BULLETNOKORI"],true);	
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
 			for(int j=0;j<3*50+2;j++){
 				DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,30,figure_id["F_HPBAR"],true);
 			}
@@ -871,7 +878,7 @@ bool CScore_Info::draw(){
 
 void CDenkyu::attaacked(){
 	hit = true;
-	send_msg(encode(COMMAND_NAME::UPDATE_DENKYU,denkyu_id,1,0)); //denkyu_idをONに;
+	//send_msg(encode(COMMAND_NAME::UPDATE_DENKYU,denkyu_id,1,0)); //denkyu_idをONに;
 
 }
 
@@ -912,18 +919,33 @@ bool CBack::draw(){
 	return true;
 }
 
+
+bool CPlus::draw(){
+	int slide =draw_timer/5;
+
+	DrawGraph(x,(*score_y)+ 82 - slide,figure_id["F_PLUS1"],true);
+
+	draw_timer++;
+
+	if(draw_timer <25)return true;
+	else return false;
+}
+
+CPlus::CPlus(int* score_y_){
+	x= 1000;
+	score_y=score_y_;
+	draw_timer=0;
+}
+
 bool CMarker::draw(){
 	if(visible){
 		x = marker_x;
 		y = marker_y;
 
-		DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "marker:%d",marker_id);
+		//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "marker:%d",marker_id);
 	}
 
 	return true;
 
-}
-
-void CMarker::attaacked(){
 
 }

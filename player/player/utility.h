@@ -7,7 +7,6 @@
 #include "network.h"
 #include"main.h"
 
-
 //細かいクラスはここにかき集めている
 
 
@@ -87,11 +86,18 @@ public:
 
 class CFinish:public CObject{
 public:
-	std::vector<pair<int,int> > result;
-	CFinish(std::vector<pair<int,int> > result_);
+	std::vector<pair<int,int> > result_score;
+	CFinish(std::vector<pair<int,int> > resul_score_);
 	bool draw();
 };
 
+class CResult: public CObject{
+public:
+	int result_movie_handle;
+	std::vector<pair<int,int> > result_score;
+	CResult(vector<pair<int,int> > result_score_);
+	bool draw();
+};
 
 
 class CMap:public CObject {
@@ -111,7 +117,10 @@ public:
 	int mode; //ゲームスタートまでの映像再生状態　1:待機　0:動画再生からのGAME_PLAYへ
 	int flag;//draw_timer モドキ
 	int spin;
+	int movieflag;
 	int gameflag; // 1:動画再生の終了案内
+	int waitflag;//待機画面中のモード管理
+	int beforeflag;//前の終了時のflag
 };
 
 //結果発表で紙ふぶき飛ばしたいよね

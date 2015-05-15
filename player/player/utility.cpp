@@ -30,8 +30,10 @@ bool CSystem_timer::draw(){
 
 		if(countdown_finish_flag)system_timer--;
 		
-	}else finish_flag = true;
-
+	}else {
+		finish_flag = true;
+		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, "0:00.00");
+	}
 	//残り10秒になったら警告
 	if(system_timer<=10*30){
 		if(system_timer%30<15){
@@ -76,7 +78,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	y=y_;
 	system_timer = (game_time -1 ) * 30;
 	finish_flag = false;
-	countdown_timer= 3 * 30;
+	countdown_timer= 5 * 30 -1;
 	countdown_finish_flag = false;
 }
 
@@ -96,9 +98,7 @@ bool CEnemy::draw(){
 			if (VIABILITY_STATUS::DEAD == viability_status) {//死んでるときはlock-onできない
 				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
 			}
-			else if (enemy_id == CEnemy::just_before_shooted){
-				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "もう撃たないで(´・ω・`)");
-			}
+			
 
 		}else{ //切断されていたら
 			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
@@ -181,25 +181,129 @@ bool CUp_effect::draw(){
 }
 
 
-CFinish :: CFinish(vector<pair<int,int> > result_){
-	result = result_;
+CFinish :: CFinish(vector<pair<int,int> > result_score_){
+	result_score = result_score_;
+	draw_timer = 0;
 }
 
 
 bool CFinish::draw(){
-DrawGraph(0,0,figure_id["F_FINISH"],false);
-int i;
 
-SetDrawBlendMode(DX_BLENDMODE_SUB,200);
-DrawOriginalString(300,85,2.0,48," player "+to_string(result[0].second+1)+"\t\t\t\t\t"+to_string(result[0].first));
-for(i=1;i<4;i++){
-		DrawOriginalString(560,170+100*i,1.0,24," player "+to_string(result[i].second+1)+"\t\t\t\t\t\t\t"+to_string(result[i].first));
-	}
-SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	//DrawFormatString(0, 0, GetColor(255,255,255), "%d", draw_timer);
+	/*
+		仕様
+		・時間0:00.00を表示、「finish」等の文字を数秒出す
+		・真っ黒フェードアウト
+		・結果画面フェードイン、結果画面再生
+	*/
 
-return true;
+	//config
+	int fade_out_time = 60;
+	int fade_in_start_time = 120;
+
+	if(draw_timer == 0){
+		//GameBGM音量を小さくする
+		//serverからのみGameBGMを流すので音量変化はしない
+		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
+	} else if(draw_timer < fade_out_time) {
+		//カメラ入力はmain関数で描画
+		//finishの文字出力
+	} else if(draw_timer == fade_out_time){
+
+
+	} else if(draw_timer < fade_in_start_time){
+		int black_value = (draw_timer - fade_out_time) * 15;
+		black_value = (255 < black_value) ? 255 : black_value;
+		//真っ暗画面にフェードアウト
+		SetDrawBlendMode(DX_BLENDMODE_SUB, black_value);
+		DrawBox( 0, 0, 1350, 730,GetColor(255, 255, 255), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+	} else if(draw_timer == fade_in_start_time){
+		//BGMの変更
+		StopSoundMem(sound_id["S_GAME_BGM"]);
+
+		//描画リストの要素をすべて削除せず、リザルトレイヤーを一番上に
+		auto result = make_shared<CResult>(result_score);
+		CObject::register_object(result,DRAW_LAYER::RESULT_LAYER);
+	} 
+	draw_timer++;
+	return true;
 }
 
+
+CResult :: CResult(vector<pair<int,int> > result_score_){
+	result_score = result_score_;
+	draw_timer = 0;
+}
+
+bool CResult::draw(){
+	//config
+	int fade_in_end_time = 15;
+
+	//リザルト画面の描画
+	if(draw_timer == 0){
+		//動画スタート
+		result_movie_handle = LoadGraph("movie/result.ogv");
+		PlayMovieToGraph( result_movie_handle ) ;
+	}
+
+	//ずっと動画再生
+	if(!(ProcessMessage() == 0 && GetMovieStateToGraph( result_movie_handle ) == 1)){
+		//動画はループし続ける
+		 SeekMovieToGraph( result_movie_handle , 0 ) ;
+		 PlayMovieToGraph( result_movie_handle ) ;
+	}
+	DrawGraph( 0 , 0 , result_movie_handle , FALSE ) ;
+	// ウエイトをかけます、あまり速く描画すると画面がちらつくからです
+    WaitTimer( 17 ) ;
+
+	/*
+		仕様：
+			・はじめは動画のみ
+			・結果発表の文字登場
+			・カードが流れる
+			・自分のカードはずっと点滅
+	*/
+	int float_start_time = 60;
+	int float_end_time = 120;
+	if(draw_timer < 30){
+		//はじめは待機
+	} else if(draw_timer <  float_start_time){
+		//結果発表であることを知らせる
+		
+	} else if(draw_timer < float_end_time){
+
+		//スコアカードが流れてくる
+		int dx = (draw_timer - float_start_time)*100;
+		for(int i = 0; i < 4; i++){
+			int x = 1400 + i*400 -dx;
+			if(x == 1000) PlaySoundMem(sound_id["S_SHU"], DX_PLAYTYPE_BACK);
+			if(x < 360) x = 360;
+			DrawGraph(x, 150+140*i, figure_id["F_RESULT_CARD"], true);
+			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+		}
+
+	} else {
+		//自分のスコアは点滅
+		for(int i = 0; i < 4; i++){
+			if(PLAYER_NM == result_score[i].second){
+				int alpha_palam = 30 + draw_timer - float_end_time;
+				alpha_palam = (alpha_palam%60-30)*(alpha_palam%60-30)/3;
+				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_palam);
+				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD_WHITE"], true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+			} else {
+				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
+				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+			}
+		}
+	}
+	draw_timer++;
+	return true;
+}
 
 bool CEeic::draw(){
 	/*
@@ -273,19 +377,19 @@ bool CMap::draw(){
 	return true;
 }
 
-int setposition(int n,int i){
-	if(n>i*5){
-			return 435-(n-i*5)*(n-i*5)*(n-i*5)/20;
+int setposition(int flag,int i){
+	if(flag-i*3>0){
+			return 435-(flag-i*3)*(flag-i*3)*(flag-i*3)/20;
 		}else{
 			return 435;
 		}
 }
 
 //消えゆくタイトルを表示,流れるタイトル
-void Drawtitle(int n){
+void Drawtitle(int flag){
 	int wordstart=435;
 	for(int i =0;i<14;i++){
-		DrawGraph(setposition(n*2,i)	
+		DrawGraph(setposition(flag,i)	
 		,300,title[i],true);
 	}
 	/*	DrawGraph(wordstart-n,360,title[1],true);
@@ -300,77 +404,94 @@ void Drawtitle(int n){
 		DrawGraph(wordstart-n,360,title[10],true);
 		DrawGraph(wordstart-n,360,title[11],true);
 		DrawGraph(wordstart-n,360,title[12],true);
-		DrawGraph(wordstart-n,360,title[13],true);*/
-	
+		DrawGraph(wordstart-n,360,title[13],true);*/	
 }
 
+void printinfo(){
+	/*DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[4], true);
+	DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[5], true);
+	DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[10], true);
+	DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[10], true);*/
+
+}
 
 bool CWait::draw(){
-	if(flag<265){
-		DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
-	}else{
-		DrawGraph(0,0,figure_id["F_WAITBLACK"],false);
-	}
-	//DrawBox(0,0,1350,730,GetColor(70,70,70),TRUE);
-	
+	DrawGraph(0,0,figure_id["F_BACKGROUND_WAIT"],false);
 	int wordwidth=48;
 	int wordstart=435;
 	int wordy=300;
+	int title_end_time = 80;
+	int movie_end_time =500;
+
+	//回る戦車
+		MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
+		MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
+		MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
+		MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin++/10.0f,0.0f));
+		MV1DrawModel(figure_id["X_TANK"]);
+
 //	タイトル表示
 	if(mode>0){
+		//タイトルロゴ表示
 		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
 		DrawGraph(wordstart,wordy,figure_id["F_TITLE"],true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		//接続中表示
 		DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECT"],true);
 		if(draw_timer%160>40){
 			DrawGraph(wordstart+740,wordy+135,figure_id["F_DOTGRAY"],true);
 			if(draw_timer%160>80){
 				DrawGraph(wordstart+760,wordy+135,figure_id["F_DOTGRAY"],true);
 				if(draw_timer%160>120){
-					DrawGraph(wordstart+780,wordy+135,figure_id["F_DOTGRAY"],true);
-				}
-			}
-		}
-		MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
-		MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
-		MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
-		MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
-		MV1DrawModel(figure_id["X_TANK"]);
+					DrawGraph(wordstart+780,wordy+135,figure_id["F_DOTGRAY"],true);}}}
 	}else{//Pでモード変更
 		flag++;
-		if(flag<250){
+		if(waitflag==0){//P押してからタイトルがはけるまで
+			//タイトル移動開始
 			Drawtitle(flag);
-			int title_end_time = 80;
-			//ムービー前に戦車にはきえてもらう
-			MV1SetWireFrameDrawFlag(figure_id["X_TANK"],true);
-			MV1SetScale(figure_id["X_TANK"],VGet(5.0f,5.0f,5.0f));
-			if(flag == title_end_time) draw_timer= 40;
-			if(flag>title_end_time){
-				//戦車が回転を始める
-				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50+((flag-title_end_time)*(flag-title_end_time))/8)*1.0f,150.0f));
-				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*(draw_timer+(flag-title_end_time)*(flag-title_end_time))/50.0f,0.0f));
-				//「接続開始」の文字出力
-				if(draw_timer % 80 == 60) PlaySoundMem( sound_id["S_PI"], DX_PLAYTYPE_BACK );
-				SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%80-40)*(draw_timer%80-40))/5);
-				DrawGraph(400,wordy,figure_id["F_CONNECTED_JA"],true);
-				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			}else{
-				MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,(50)*1.0f,150.0f));
-				MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin*draw_timer/10.0f,0.0f));
-			}
-			MV1DrawModel(figure_id["X_TANK"]);
+			//conected表示
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag);
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
-		}else if(flag>=250 && flag <250+2*15){
-			//画面から物体がすべて消えた状態　フラッシュしていく
-			PlaySoundMem( sound_id["S_LINKSTART"], DX_PLAYTYPE_BACK );
-			//DrawGraph(0,0,flash[((flag-250)/2)%16],true);
-		}else if( flag>= 280 && flag <320){
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			if(flag>=title_end_time){
+				beforeflag=flag;
+				waitflag=1;
+			}
+		}else if (waitflag==1){//タイトルはけてからホワイトアウトまで
+			//if(flag == title_end_time) draw_timer= 60;
+			//「接続開始」の文字出力
+			if(draw_timer % 60 == 50) PlaySoundMem( sound_id["S_PI"], DX_PLAYTYPE_BACK );
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,((draw_timer%60-30)*(draw_timer%60-30))/5);
+			DrawGraph(400,wordy,figure_id["F_CONNECTED_JA"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			//接続開始と同時にジョジョに画面をホワイトアウト
+			//SetDrawBlendMode(DX_BLENDMODE_MULA,2*(flag-title_end_time-10));//黒使うときはこっち
+			//DrawGraph(0,0,figure_id["F_BLACKBACK"],false);
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,2*(flag-beforeflag-40));
+			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+			//SetDrawBlendMode(DX_BLENDMODE_ADD,255);//2*(flag-title_end_time-10));
 			//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
-			//DrawGraph(0,0,flash[14],true);
-		}else{
-			int movie_end_time = 440;
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);	
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag-(beforeflag));
+			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			if(2*(flag-beforeflag-40)>360){
+				waitflag=2;
+				beforeflag=flag;
+			}
+		}else if(waitflag==2){//ホワイトアウトからグレーへ
+			DrawGraph(0,0,gray[(flag-beforeflag)/3],true);
+			if(flag-beforeflag>=30){
+				DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+				beforeflag=flag;
+				waitflag=3;
+			}			
+		}else if(waitflag==3 && movieflag==-1){//ムービー再生
+			movieflag=1;
+			PlaySoundMem( sound_id["S_LINKSTART"], DX_PLAYTYPE_BACK );
+			movie_end_time=flag+150;
+			DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+		}else if (waitflag==3){
 			if(flag == movie_end_time){
 				//GameBGMの再生
 				StopSoundMem( sound_id["S_LINKSTART"] );
@@ -379,9 +500,17 @@ bool CWait::draw(){
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
 			DrawGraph(0,0,figure_id["F_BACK"],false);
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-(flag-movie_end_time)*4);
-			DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			//カーソルとかの情報をひょうじするならここ
+			printinfo();
+
+			if(flag<movie_end_time-100){
+				DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+			}else{
+				SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-(flag-movie_end_time)*4);
+				DrawGraph(0,0,figure_id["F_WHITEBACK"],true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			}
+			//明るくなったらゲーム開始
 			if(255-(flag-movie_end_time)*4<=-150){
 				gameflag=1;
 			}
@@ -503,6 +632,9 @@ CWait::CWait(){
 	spin=1;
 	flag=1;
 	gameflag=0;
+	movieflag=-1;
+	waitflag=0;
+	beforeflag=0;
 }
 
 

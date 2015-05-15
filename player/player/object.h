@@ -16,6 +16,8 @@ extern int explosion[45];
 extern int bullet[30];
 extern int bullet_start[45];
 
+//グレー変換
+extern int gray[10];
 
 //タイトル用
 extern int title[14];
@@ -48,7 +50,8 @@ enum DRAW_LAYER{ //描画レイヤー 下に行くほど前面
 	MESSAGE_LAYER,
 	MYTANK_LAYER,
 	IMFOMATION_LAYER,
-	MOVIE_LAYER
+	MOVIE_LAYER,
+	RESULT_LAYER
 };
 
 //描画、音声を取りまとめるクラス

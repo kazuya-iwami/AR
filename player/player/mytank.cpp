@@ -147,6 +147,12 @@ CMytank::CMytank() {
 	back=back_;
 	CObject::register_object(back,DRAW_LAYER::BACK_LAYER);
 
+	auto marker_ = make_shared<CMarker>();
+	marker = marker_;
+	marker->init();
+	CObject::register_object(marker,DRAW_LAYER::ENEMY_LAYER);
+
+
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため
 		enemy0 = enemy0_;
@@ -182,8 +188,10 @@ CMytank::CMytank() {
 
 void CMytank::move(tstring direction, tstring speed) {
 
-	std::thread th(requestHttp_thread,direction,speed); //httprequestスレッド開始
-	th.detach();
+	if(ope_status == OPERATION_STATUS::REGULAR){
+		std::thread th(requestHttp_thread,direction,speed); //httprequestスレッド開始
+		th.detach();
+	}
 
 }
 
@@ -218,6 +226,7 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	for(int i=0;i<3;i++){
 		if(eeic->denkyu[i].lockon)eeic->denkyu[i].attaacked();
 	}
+	if(marker->lockon)marker->attaacked();
 
 }
 
@@ -232,6 +241,12 @@ void CMytank::check_focus(){
 				}
 			}else eeic->denkyu[i].lockon = false;
 		}
+
+		if(marker->get_x()- ENEMY_MARGIN < focus_x && marker->get_x() + ENEMY_MARGIN > focus_x && marker->get_y() -ENEMY_MARGIN < focus_y &&marker->get_y() + ENEMY_MARGIN > focus_y){
+				if(marker->hit == false){ //切断したプレーヤーへの攻撃禁止
+					marker->lockon = true;
+				}
+			}else marker->lockon = false;
 
 		//敵のロックオン
 		if(id != 0){
@@ -783,8 +798,11 @@ void CMytank::get_msg(){
 			break;
 
 		case COMMAND_NAME::RETURN_DENKYU:
-			//自分or他人が電球を攻撃した場合
-			eeic->denkyu[data[1]].hit=true;
+			//他人が止まるを攻撃した場合
+			//eeic->denkyu[data[1]].hit=true;
+			if(data[1] != id){
+
+			}
 			break;
 
 		default:
@@ -806,6 +824,7 @@ void CMytank::detect_enemy(Mat image) {
 	if (id != 3)enemy3->detect(image);
 
 	eeic->detect(image);
+	marker->findMarker(image);
 }
 
 void CMytank::attacked(int score_){

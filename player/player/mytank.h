@@ -67,6 +67,7 @@ public:
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;
 	shared_ptr<CEnemy> enemy3;
+	shared_ptr<CMarker> marker; 
 	
 	shared_ptr<CBullet_image> bullet_image;//残弾描画
 	shared_ptr<CMap> map;

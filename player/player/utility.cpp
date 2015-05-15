@@ -35,14 +35,28 @@ bool CSystem_timer::draw(){
 		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, "0:00.00");
 	}
 	//残り10秒になったら警告
-	if(system_timer<=10*30){
-		if(system_timer%30<15){
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(system_timer%30));
+	if(system_timer<=10*30 && system_timer > 0){
+		int blend_palam = system_timer + 15;
+		if(blend_palam%30<15){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(blend_palam%30));
 		}else{
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(system_timer%30));
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(blend_palam%30));
 		}
-	DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	}
+	//自然に赤点滅終了
+	if(system_timer <= 0){
+		if(system_timer == 0){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, 45);
+		}else{
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,45+5*system_timer);
+		}
+		DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		if((45+5*system_timer) >= 0){
+			system_timer--;
+		}
 	}
 
 	//最初5秒カウントダウン

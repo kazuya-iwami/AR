@@ -25,7 +25,8 @@ string encode(COMMAND_NAME, int, int, int);
 enum MARKER_ID{
 	MARKER_STOP,
 	MARKER_BULLET,
-	MARKER_SUMI
+	MARKER_SUMI,
+	MARKER_SOUND
 };
 
 class Hsv {

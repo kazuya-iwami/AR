@@ -247,8 +247,11 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 			endless_bullet_flag = true;
 			endless_bullet_timer = 450;
 			bullet_charge(bullet_image->max_bullet_num);//チャージ
-		}else{
-			marker->attaacked();
+		}else if(marker->marker_id == MARKER_ID::MARKER_SUMI){
+
+		}else if(marker->marker_id == MARKER_ID::MARKER_STOP){
+			marker->denkyu_hit = true;
+			send_msg(encode(COMMAND_NAME::ATTACK_DENKYU,0,0,0)); //denkyu_idをONに;
 		}
 	}
 

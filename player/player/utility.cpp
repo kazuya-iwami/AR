@@ -951,5 +951,28 @@ bool CMarker::draw(){
 
 	return true;
 
+}
 
+bool CSumi::draw(){
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA,240 - 3*draw_timer);
+	DrawRotaGraph(x,y,scale,rota,figure_id["F_SUMI"],true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	draw_timer++;
+
+	if(draw_timer == 10 && chain_flag ){
+		auto cosumi = make_shared<CSumi>(LEFT_WINDOW_WIDTH+150+rand()%700,150+rand()%400,(rand()%100)*0.004+1,rand()%50,false);
+			CObject::register_object(cosumi,DRAW_LAYER::SUMI_LAYER);
+
+	}
+
+	if(draw_timer < 80) return true;
+	else return false;
+}
+
+CSumi::CSumi(int x_,int y_,double scale_,double rota_,bool chain){
+	x=x_;y=y_;
+	scale=scale_;
+	rota=rota_;
+	draw_timer=0;
+	chain_flag=chain;
 }

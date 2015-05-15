@@ -250,9 +250,10 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 			num_bullet=(bullet_image->max_bullet_num);
 			bullet_image->update_num_bullet(num_bullet);//チャージ
 		}else if(marker->marker_id == MARKER_ID::MARKER_SUMI){
-
+			auto sumi = make_shared<CSumi>(LEFT_WINDOW_WIDTH+150+rand()%700,150+rand()%400,(rand()%100)*0.004+1.6,rand()%50,true);
+			CObject::register_object(sumi,DRAW_LAYER::SUMI_LAYER);
 		}else if(marker->marker_id == MARKER_ID::MARKER_SOUND){
-
+			PlaySoundMem(sound_id["S_AN"],DX_PLAYTYPE_BACK);
 		}else if(marker->marker_id == MARKER_ID::MARKER_STOP){
 			marker->denkyu_hit = true;
 			send_msg(encode(COMMAND_NAME::ATTACK_DENKYU,0,0,0)); //denkyu_idをONに;
@@ -771,7 +772,7 @@ void CMytank::get_msg(){
 						{
 						enemy0->viability_status = VIABILITY_STATUS::DEAD;
 						if (enemy0->score >= 3) {
-							enemy0->score = score-3;
+							enemy0->score -= 3;
 						} else {
 							enemy0->score = 0;
 						}
@@ -781,7 +782,7 @@ void CMytank::get_msg(){
 						{
 						enemy1->viability_status = VIABILITY_STATUS::DEAD;
 						if (enemy1->score >= 3) {
-							enemy1->score = score-3;
+							enemy1->score -= 3;
 						} else {
 							enemy1->score = 0;
 						}
@@ -791,7 +792,7 @@ void CMytank::get_msg(){
 						{
 						enemy2->viability_status = VIABILITY_STATUS::DEAD;
 						if (enemy2->score >= 3) {
-							enemy2->score = score-3;
+							enemy2->score -= 3;
 						} else {
 							enemy2->score = 0;
 						}
@@ -801,7 +802,7 @@ void CMytank::get_msg(){
 						{
 						enemy3->viability_status = VIABILITY_STATUS::DEAD;
 						if (enemy3->score >= 3) {
-							enemy3->score = score-3;
+							enemy3->score -= 3;
 						} else {
 							enemy3->score = 0;
 						}

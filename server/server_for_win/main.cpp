@@ -23,6 +23,10 @@ HANDLE arduino;
 bool Ret;
 int denkyu_flag =0;//‰Šú‰» 000
 
+
+int denkyu_timer_flag;
+
+
 //server—p
 
 static int retval, nsockfd[PORT_NUM], maxfd;

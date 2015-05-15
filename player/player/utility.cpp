@@ -21,9 +21,9 @@ bool CSystem_timer::draw(){
 		std::ostringstream sout0, sout1, sout2;
 		sout0 << std::setfill('0') << std::setw(2) << (((system_timer)%30)*100)/30;
 		std::string under_sec = sout0.str();
-		sout1 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
+		sout1 << std::setfill('0') << std::setw(2) << (system_timer/30)%60;
 		std::string sec = sout1.str();
-		sout2 << std::setfill('0') << std::setw(1) << (system_timer/30 + 1)/60;
+		sout2 << std::setfill('0') << std::setw(1) << (system_timer/30)/60;
 		std::string min = sout2.str();
 		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, min+":"+sec+"."+under_sec);
 		//timerカウント
@@ -90,7 +90,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	//ChangeFont("07ロゴたいぷゴシック7");
 	x=x_;
 	y=y_;
-	system_timer = (game_time -1 ) * 30;
+	system_timer = game_time * 30;
 	finish_flag = false;
 	countdown_timer= 5 * 30 -1;
 	countdown_finish_flag = false;

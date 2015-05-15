@@ -145,7 +145,7 @@ CMytank::CMytank() {
 
 	auto marker_ = make_shared<CMarker>();
 	marker = marker_;
-	//marker->init();
+	marker->init();
 	CObject::register_object(marker,DRAW_LAYER::ENEMY_LAYER);
 
 	if (id != 0) {
@@ -807,7 +807,7 @@ void CMytank::detect_enemy(Mat image) {
 	if (id != 3)enemy3->detect(image);
 
 	eeic->detect(image);
-	//marker->findMarker(image);
+	marker->findMarker(image);
 }
 
 void CMytank::attacked(int score_){

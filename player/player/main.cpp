@@ -23,10 +23,10 @@
 using namespace std;
 	
 
-#define GAME_TIME 2 //プレー時間　300秒
+#define GAME_TIME 300 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
- #define USE_CAMERA_FLAG 1
+ #define USE_CAMERA_FLAG 2
 //0:画像 1:カメラ 2:ラズパイ
 
 

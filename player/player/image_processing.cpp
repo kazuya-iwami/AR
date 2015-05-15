@@ -152,9 +152,9 @@ int MarkerDetector::templateMatch(Mat &src)
 }
 
 void MarkerDetector::init(){
-	templates[0] = imread("bulb_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
-    templates[1] = imread("bullet_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
-    templates[2] = imread("target_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+	templates[0] = imread("marker_image/bulb_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    templates[1] = imread("marker_image/bullet_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    templates[2] = imread("marker_image/target_template.jpg", CV_LOAD_IMAGE_GRAYSCALE);
 }
 
 void MarkerDetector::findMarker(Mat &src)
@@ -162,16 +162,17 @@ void MarkerDetector::findMarker(Mat &src)
     Mat gray, preprocessed;
     cvtColor(src, gray, CV_BGRA2GRAY);
     threshold(gray, preprocessed, 150, 255, THRESH_BINARY_INV);
-
+	
     vector<vector<Point> > allContours, contours;
     vector<Vec4i> hierarchy;
     findContours(preprocessed.clone(), allContours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_NONE);
+
     for (int i = 0; i < allContours.size(); ++i) {
         if (allContours[i].size() > 10 && hierarchy[i][3] != -1) {
             contours.push_back(allContours[i]);
         }
-    }
-
+	}
+	
     vector<Point> approxCurve;
     vector<vector<Point> > candidates;
     for (int i = 0; i < contours.size(); ++i) {
@@ -197,26 +198,30 @@ void MarkerDetector::findMarker(Mat &src)
     // vector of Point2f
     vector<Point2f> copied;
     Mat image = Mat::zeros(200, 200, CV_8UC3);
-    Mat(candidates[0]).copyTo(copied);
 
-    Mat m = getPerspectiveTransform(copied, corners);
-    warpPerspective(preprocessed, image, m, image.size());
-    //cout << "Template matched: " << templateMatch(image) << endl;
-	int result = templateMatch(image);
-	if(result != -1){
-		visible = true;
-		marker_id = result;
-
-		Moments moment = moments(candidates[0]);
-		Point center = Point(moment.m10 / moment.m00, moment.m01 / moment.m00);
-		marker_x = center.x*1000/320;
-		marker_y = center.y*750/240; //画面を引き延ばしている分の補正
-	}else{
+	//マーカー取得出来なかったら抜ける
+	if(candidates.empty()){
 		visible = false;
-	}
 
-    //imshow("transformed", image);
-    //waitKey(0);
+	}else{
+		Mat(candidates[0]).copyTo(copied);
+
+		Mat m = getPerspectiveTransform(copied, corners);
+		warpPerspective(preprocessed, image, m, image.size());
+		//cout << "Template matched: " << templateMatch(image) << endl;
+		int result = templateMatch(image);
+		if(result != -1){
+			visible = true;
+			marker_id = result;
+
+			Moments moment = moments(candidates[0]);
+			Point center = Point(moment.m10 / moment.m00, moment.m01 / moment.m00);
+			marker_x = center.x*1000/320;
+			marker_y = center.y*750/240; //画面を引き延ばしている分の補正
+		}else{
+			visible = false;
+		}
+	}
 }
 
 //int main(int argc, char** argv)

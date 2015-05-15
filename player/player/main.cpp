@@ -26,7 +26,7 @@ using namespace std;
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
 
-#define USE_CAMERA_FLAG 2
+#define USE_CAMERA_FLAG 1
 
 
 //0:画像 1:カメラ 2:ラズパイ

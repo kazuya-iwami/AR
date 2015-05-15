@@ -7,7 +7,6 @@
 #include "network.h"
 #include"main.h"
 
-
 //細かいクラスはここにかき集めている
 
 

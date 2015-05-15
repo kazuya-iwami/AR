@@ -49,6 +49,8 @@ public:
 	CEnemy(int enemy_id_);
 	int get_x(){return x;}
 	int get_y(){return y;}
+	int* pget_x(){return &x;}
+	int* pget_y(){return &y;}
 	void countdown_finish(){countdown_finish_flag = true;}
 	
 	bool draw();
@@ -215,3 +217,4 @@ public:
 	bool draw();
 
 };
+

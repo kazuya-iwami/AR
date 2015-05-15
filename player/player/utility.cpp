@@ -116,12 +116,14 @@ bool CEnemy::draw(){
 			}
 
 			if (VIABILITY_STATUS::DEAD == viability_status) {//死んでるときはlock-onできない
-				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
+				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
+				//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
 			}
 			
 
 		}else{ //切断されていたら
-			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
+			DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
+			DrawFormatString(x - 120 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ切断厨(´・ω・`)");
 		}
 	}
 	// 視界に入っていないなら敵の位置情報をリセット

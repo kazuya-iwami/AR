@@ -302,13 +302,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				//					exit(1);
 				//				}
 				StopSoundMem(bgm_id);//BGM停止
-				//result_bgm
-				/*
-			    // ループ位置をセットする
-				SetLoopPosSoundMem( 0, result_sound ) ;
-				PlaySoundMem( result_sound , DX_PLAYTYPE_LOOP );
 				init();
-				*/
 			}
 
 		}

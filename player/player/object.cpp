@@ -159,6 +159,9 @@ void CObject::load(){
 	sound_id["S_LINKSTART"]=LoadSoundMem("sound/linkstart.mp3");
 	sound_id["S_PI"]=LoadSoundMem("sound/pi.mp3");
 	sound_id["S_SHU"]=LoadSoundMem("sound/shu.mp3");
+	sound_id["S_WAIT"]=LoadSoundMem("sound/wait.mp3");
+	sound_id["S_RESULT"]=LoadSoundMem("sound/result.mp3");
+	sound_id["S_RESULT_SCORE"]=LoadSoundMem("sound/result_score.mp3");
 	//BGM
 	sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
 
@@ -203,7 +206,7 @@ void CObject::load(){
 	figure_id["F_MINILIGHT_0"]=LoadGraph("image/minidenkyu0.png");
 
 	//3次元用、図と同様に扱えるっぽい?
-	figure_id["X_TANK"]=MV1LoadModel("image/tank.pmx");
+	figure_id["X_TANK"]=MV1LoadModel("image/tank.pmd");
 
 	//movie
 	/* 動画はmp4不可。ogvは必ず再生できる。 */

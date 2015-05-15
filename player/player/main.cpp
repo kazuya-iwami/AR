@@ -21,7 +21,7 @@
 #include <fstream>
 
 using namespace std;
-	
+
 #define GAME_TIME 300 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 

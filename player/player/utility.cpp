@@ -304,11 +304,56 @@ void Drawtitle(int flag){
 }
 
 void printinfo(){
-	/*DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[4], true);
-	DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[5], true);
-	DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[10], true);
-	DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[10], true);*/
+	//auto sysy=make_shared<CSystem_timer>(10,10,180);		
+	//sysy->draw();
+	auto bullet =make_shared<CBullet_image>(10,10,10);
+	bullet->draw();
+}
 
+void DrawDigitTime(int x, int y, float size, int space, string s){
+	for(int i = 0; i < (int)s.length(); i++){
+		switch (s[i]){
+		case '1':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[0], true);
+			break;
+		case '2':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[1], true);
+			break;
+		case '3':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[2], true);
+			break;
+		case '4':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[3], true);
+			break;
+		case '5':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[4], true);
+			break;
+		case '6':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[6], true);
+			break;
+		case '7':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[7], true);
+			break;
+		case '8':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[8], true);
+			break;
+		case '9':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[9], true);
+			break;
+		case '0':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[10], true);
+			break;
+		case ':':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[5], true);
+			break;
+		case '.':
+			DrawExtendGraph(x+space*i,y,x+space*i+(int)(66*size),y+(int)(80*size), digit[17], true);
+			break;
+		default:
+			exit(1);
+			break;
+		}
+	}
 }
 
 bool CWait::draw(){
@@ -396,8 +441,32 @@ bool CWait::draw(){
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
 			DrawGraph(0,0,figure_id["F_BACK"],false);
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
+			
 			//カーソルとかの情報をひょうじするならここ
 			printinfo();
+			for(int j=0;j<3*50+2;j++){
+				DrawGraph(35+LEFT_WINDOW_WIDTH+2*j,30,figure_id["F_HPBAR"],true);
+			}
+			DrawGraph(33+LEFT_WINDOW_WIDTH,28,figure_id["F_HPFRAME2"],true);
+			DrawGraph(34+LEFT_WINDOW_WIDTH,-1,figure_id["F_LIFE"],true);
+			SetDrawBright(255,255,255);
+			for(int i=0;i<4;i++){
+				DrawExtendGraph(1050, i*RANK_HEIGHT+10,1170,i*RANK_HEIGHT+RANK_HEIGHT+5, figure_id["F_SCORE"], true);
+				SetDrawBlendMode(DX_BLENDMODE_ADD,255);
+				if(0 <10){
+					DrawOriginalString(1070,i*RANK_HEIGHT + 12,0.625,16,to_string(i+1)+"P: "+to_string(0));
+				}else{
+					DrawOriginalString(1070,i*RANK_HEIGHT + 12,0.625,16,to_string(i+1)+"P:"+to_string(0));
+				}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			}
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA,200);
+			DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA,140);
+			DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTSIDEGRAY"],true);
+			DrawOriginalString(LEFT_WINDOW_WIDTH+500-30,325,2.0,0,to_string(5));
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+			DrawDigitTime(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, "3:00.00");
 
 			if(flag<movie_end_time-100){
 				DrawGraph(0,0,figure_id["F_GRAYBACK"],true);

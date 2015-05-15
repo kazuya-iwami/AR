@@ -79,6 +79,7 @@ void CObject::load(){
 
 	figure_id["F_COUNTBASE"]=LoadGraph("image/countbase.png");
 	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
+	figure_id["F_COUNTSIDEGRAY"]=LoadGraph("image/countsidegray.png");
 
 	figure_id["F_BACKGROUND_WAIT"]=LoadGraph("image/back/background_wait.png");
 

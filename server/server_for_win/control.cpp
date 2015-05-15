@@ -21,8 +21,6 @@ double diff;
 double diff_dead;
 double diff_denkyu;
 
-int denkyu_timer_flag;
-
 string explode(int n,char const *y,char const *str,string *target){
 	bool option;
 	if(target==NULL) option=false;
@@ -121,6 +119,7 @@ void recv_message(string msg, int id) {
 				set_denkyu(2,true);
 				send_message(encode(COMMAND_NAME::RETURN_DENKYU,id,0,0),4);
 				denkyu_start_time = time(NULL);
+				denkyu_timer_flag=1;
 				break;
 			default:
 				std::cout << "COMMAND_NAME ERROR" << std::endl;
@@ -177,25 +176,28 @@ void check_dead_valid() {
 }
 
 void check_denkyu_valid() {
+
+	if(denkyu_timer_flag==0)return;
+
 	denkyu_end_time = time(NULL);
-		diff_denkyu = difftime(denkyu_end_time, denkyu_start_time);
-		if (diff_denkyu > 2) {
-			std::cout << "denkyu_timer_flag : 1" << std::endl;
-			if(denkyu_timer_flag == 0){
-				denkyu_timer_flag=1;
-				set_denkyu(0,false);// 緑
-				set_denkyu(1,true);// 黄
-				set_denkyu(2,false);//赤
-				denkyu_start_time = time(NULL);
-			}else if(denkyu_timer_flag == 1){
-				std::cout << "denkyu_timer_flag : 2" << std::endl;
-				denkyu_timer_flag = 0;
-				set_denkyu(0,true);// 緑
-				set_denkyu(1,false);// 黄
-				set_denkyu(2,false);//赤
-				send_message(encode(COMMAND_NAME::RETURN2_DENKYU, 0, 0, 0), 4);
-			}
-			
+	diff_denkyu = difftime(denkyu_end_time, denkyu_start_time);
+	if (diff_denkyu > 2) {
+		std::cout << "denkyu_timer_flag : 1" << std::endl;
+		if(denkyu_timer_flag == 1){
+			denkyu_timer_flag=2;
+			set_denkyu(0,false);// 緑
+			set_denkyu(1,true);// 黄
+			set_denkyu(2,false);//赤
+			denkyu_start_time = time(NULL);
+		}else if(denkyu_timer_flag == 2){
+			std::cout << "denkyu_timer_flag : 2" << std::endl;
+			denkyu_timer_flag = 0;
+			set_denkyu(0,true);// 緑
+			set_denkyu(1,false);// 黄
+			set_denkyu(2,false);//赤
+			send_message(encode(COMMAND_NAME::RETURN2_DENKYU, 0, 0, 0), 4);
 		}
-	
+
+	}
+
 }

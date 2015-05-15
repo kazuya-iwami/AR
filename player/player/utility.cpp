@@ -218,20 +218,33 @@ bool CFinish::draw(){
 	int fade_out_time = 150;
 	int fade_in_start_time = 210;
 
+	//GameEnd文字出力
+	int putchar_start = 84;
+	if(draw_timer > putchar_start){
+		if(draw_timer >= 84) DrawGraph(LEFT_WINDOW_WIDTH+280, 200,figure_id["F_GAME_END_G"], true);
+		if(draw_timer >= 90) DrawGraph(LEFT_WINDOW_WIDTH+342, 200,figure_id["F_GAME_END_a"], true);
+		if(draw_timer >= 96) DrawGraph(LEFT_WINDOW_WIDTH+400, 200,figure_id["F_GAME_END_m"], true);
+		if(draw_timer >= 102) DrawGraph(LEFT_WINDOW_WIDTH+458, 200,figure_id["F_GAME_END_e"], true);
+		if(draw_timer >= 108) DrawGraph(LEFT_WINDOW_WIDTH+533, 200,figure_id["F_GAME_END_E"], true);
+		if(draw_timer >= 114) DrawGraph(LEFT_WINDOW_WIDTH+590, 200,figure_id["F_GAME_END_n"], true);
+		if(draw_timer >= 120) DrawGraph(LEFT_WINDOW_WIDTH+644, 200,figure_id["F_GAME_END_d"], true);
+	}
+	//音
+	if(draw_timer >= 84 && draw_timer <= 120 && draw_timer%6 == 0) PlaySoundMem(sound_id["S_PI"], DX_PLAYTYPE_BACK);
+
+
 	if(draw_timer == 0){
 		//GameBGM音量を小さくする
 		//serverからのみGameBGMを流すので音量変化はしない
 		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
 	} else if(draw_timer < fade_out_time) {
-		//画面変化
-		int alpha_val = draw_timer*8;
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_val); 
-		DrawExtendGraph(LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+999, 730, figure_id["F_FINISH_CYBER"], true); 
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		//GameEnd文字出力
-
-
-		//paの音を文字が出るたびに出す
+		if(draw_timer > 30){
+			//画面変化
+			int alpha_val = (draw_timer-30)*8;
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_val); 
+			DrawExtendGraph(LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+999, 730, figure_id["F_FINISH_CYBER"], true); 
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
 	} else if(draw_timer == fade_out_time){
 	} else if(draw_timer < fade_in_start_time){
 		int black_value = (draw_timer - fade_out_time) * 15;
@@ -248,7 +261,8 @@ bool CFinish::draw(){
 		//描画リストの要素をすべて削除せず、リザルトレイヤーを一番上に
 		auto result = make_shared<CResult>(result_score);
 		CObject::register_object(result,DRAW_LAYER::RESULT_LAYER);
-	} 
+	}
+
 	draw_timer++;
 	return true;
 }

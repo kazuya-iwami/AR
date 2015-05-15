@@ -127,6 +127,17 @@ void CObject::load(){
 	gray[8]=LoadGraph("image/back/grayback2.png");	
 	gray[9]=LoadGraph("image/back/grayback1.png");
 
+
+	//game_end
+	figure_id["F_GAME_END"]=LoadGraph("image/game_end/game_end.png");
+	figure_id["F_GAME_END_G"]=LoadGraph("image/game_end/g.png");
+	figure_id["F_GAME_END_a"]=LoadGraph("image/game_end/a.png");
+	figure_id["F_GAME_END_m"]=LoadGraph("image/game_end/m.png");
+	figure_id["F_GAME_END_e"]=LoadGraph("image/game_end/small_e.png");
+	figure_id["F_GAME_END_E"]=LoadGraph("image/game_end/E.png");
+	figure_id["F_GAME_END_n"]=LoadGraph("image/game_end/n.png");
+	figure_id["F_GAME_END_d"]=LoadGraph("image/game_end/d.png");
+
 	//マップで使うアイコン
 	figure_id["F_ICONRED"]=LoadGraph("image/iconred.png");
 	figure_id["F_ICONBLUE"]=LoadGraph("image/iconblue.png");

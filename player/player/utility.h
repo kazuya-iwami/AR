@@ -185,9 +185,9 @@ public:
 	bool draw();
 };
 
-class CMarker : public CObject,public MarkerDetector{
+class CMarker : public CObject,public MarkerDetector,public CNetwork{
 public:
-	bool hit;//既に攻撃されていたらtrue
+	bool denkyu_hit;//既に攻撃されていたらtrue
 	bool lockon;
 
 	bool draw();

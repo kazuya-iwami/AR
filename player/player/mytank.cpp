@@ -16,7 +16,15 @@ void requestHttp_thread(tstring direction, tstring speed);
 
 
 bool CMytank::draw() {
-	
+	//打ちまくり状態関係
+	if(endless_bullet_flag == true){
+		endless_bullet_timer --;
+		if(endless_bullet_timer < 0){
+			endless_bullet_flag = false;
+		}
+	}
+
+
 	//カーソル表示
 	if(!is_reloading && focus_flag){
 		attackable = false;
@@ -24,6 +32,7 @@ bool CMytank::draw() {
 		if(id != 1 && enemy1->lockon ==true) attackable = true;
 		if(id != 2 && enemy2->lockon ==true) attackable = true;
 		if(id != 3 && enemy3->lockon ==true) attackable = true;
+		if(marker->lockon ==true) attackable = true;
 		if(attackable == true){//lockon状態
 			if(!preflag){
 				PlaySoundMem(sound_id["S_LOCK"], DX_PLAYTYPE_BACK);
@@ -127,6 +136,9 @@ CMytank::CMytank() {
 	preflag=false;
 	focus_flag = false;
 
+	endless_bullet_flag = false;
+	endless_bullet_timer = 0;
+
 
 	send_msg("HELLO");
 
@@ -189,7 +201,7 @@ CMytank::CMytank() {
 	}
 };
 
-void CMytank::move(tstring direction, tstring speed) {
+void CMytank::move(tstring direction, tstring speed){
 
 	if(ope_status == OPERATION_STATUS::REGULAR){
 		std::thread th(requestHttp_thread,direction,speed); //httprequestスレッド開始
@@ -206,11 +218,12 @@ void CMytank::set_vel(int vr, int vl) {
 
 void CMytank::gen_bullet(BULLET_KIND item_data) {
 
-	//残弾処理
-	if (num_bullet == 0)return;
-	num_bullet--;
-
-	bullet_image->update_num_bullet(num_bullet);//残弾数反映
+	if(!endless_bullet_flag){
+		//残弾処理
+		if (num_bullet == 0)return;
+		num_bullet--;
+		bullet_image->update_num_bullet(num_bullet);//残弾数反映
+	}
 
 	//画面振動
 	shake_start(SHAKE_STATUS::SMALL_SHAKE);
@@ -229,7 +242,15 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	for(int i=0;i<3;i++){
 		if(eeic->denkyu[i].lockon)eeic->denkyu[i].attaacked();
 	}
-	if(marker->lockon)marker->attaacked();
+	if(marker->lockon){
+		if(marker->marker_id == MARKER_ID::MARKER_BULLET){
+			endless_bullet_flag = true;
+			endless_bullet_timer = 450;
+			bullet_charge(bullet_image->max_bullet_num);//チャージ
+		}else{
+			marker->attaacked();
+		}
+	}
 
 }
 
@@ -246,9 +267,9 @@ void CMytank::check_focus(){
 		}
 
 		if(marker->get_x()- ENEMY_MARGIN < focus_x && marker->get_x() + ENEMY_MARGIN > focus_x && marker->get_y() -ENEMY_MARGIN < focus_y &&marker->get_y() + ENEMY_MARGIN > focus_y){
-				if(marker->hit == false){ //切断したプレーヤーへの攻撃禁止
+			//if(!(marker->denkyu_hit == true && marker->marker_id == MARKER_ID::MARKER_STOP)){ //切断したプレーヤーへの攻撃禁止
 					marker->lockon = true;
-				}
+			//	}
 			}else marker->lockon = false;
 
 		//敵のロックオン
@@ -804,8 +825,15 @@ void CMytank::get_msg(){
 			//他人が止まるを攻撃した場合
 			//eeic->denkyu[data[1]].hit=true;
 			if(data[1] != id){
-
+				ope_status = OPERATION_STATUS::STOP;//動きとめる
+				move(_T("stop"), "full");
 			}
+			break;
+
+		case COMMAND_NAME::RETURN2_DENKYU:
+			//3秒経過後
+			//eeic->denkyu[data[1]].hit=true;
+			ope_status = OPERATION_STATUS::REGULAR;//動かし始める
 			break;
 
 		default:

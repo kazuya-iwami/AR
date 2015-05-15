@@ -871,7 +871,7 @@ bool CScore_Info::draw(){
 
 void CDenkyu::attaacked(){
 	hit = true;
-	send_msg(encode(COMMAND_NAME::UPDATE_DENKYU,denkyu_id,1,0)); //denkyu_idをONに;
+	//send_msg(encode(COMMAND_NAME::UPDATE_DENKYU,denkyu_id,1,0)); //denkyu_idをONに;
 
 }
 
@@ -925,5 +925,10 @@ bool CMarker::draw(){
 }
 
 void CMarker::attaacked(){
-
+	if(marker_id == MARKER_ID::MARKER_STOP){
+		denkyu_hit = true;
+		send_msg(encode(COMMAND_NAME::ATTACK_DENKYU,0,0,0)); //denkyu_idをONに;
+	}else if(marker_id == MARKER_ID::MARKER_BULLET){
+		
+	}
 }

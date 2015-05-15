@@ -22,6 +22,12 @@ extern int PLAYER_NM ;	//自分のプレイヤー番号
 
 string encode(COMMAND_NAME, int, int, int);
 
+enum MARKER_ID{
+	MARKER_STOP,
+	MARKER_BULLET,
+	MARKER_SUMI
+};
+
 class Hsv {
 public:
 	int minH, maxH;

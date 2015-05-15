@@ -79,6 +79,7 @@ void CObject::load(){
 
 	figure_id["F_COUNTBASE"]=LoadGraph("image/countbase.png");
 	figure_id["F_COUNTSIDE"]=LoadGraph("image/countside.png");
+	figure_id["F_COUNTSIDEGRAY"]=LoadGraph("image/countsidegray.png");
 
 	figure_id["F_BACKGROUND_WAIT"]=LoadGraph("image/back/background_wait.png");
 
@@ -190,6 +191,7 @@ void CObject::load(){
 	//movie
 	/* 動画はmp4不可。ogvは必ず再生できる。 */
 	figure_id["M_LINKSTART"]=LoadGraph("movie/LinkStart.ogv");
+	figure_id["M_SYBACK"]=LoadGraph("movie/syback.ogv");
 	//figure_id["M_LINKSTART"]=LoadGraph("movie/LinkStart.avi");
 }
 

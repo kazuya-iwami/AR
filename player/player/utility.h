@@ -185,3 +185,9 @@ public:
 	void detect(Mat image);
 
 };
+
+class CBack:public CObject{
+public:
+	CBack();
+	bool draw();
+};

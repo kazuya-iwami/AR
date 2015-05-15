@@ -23,7 +23,7 @@
 using namespace std;
 	
 
-#define GAME_TIME 2 //プレー時間　300秒
+#define GAME_TIME 60 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
  #define USE_CAMERA_FLAG 1
@@ -167,7 +167,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//使用する画像の読み込み
 	SetUseASyncLoadFlag(TRUE);
 	CObject::load();//すべての画像はこの中で読み込む
-	int back=LoadGraph("image/back/back.png");
 	SetUseASyncLoadFlag(FALSE);
 
 	while(GetASyncLoadNum() > 0){ //全て読み込むまで次の動作行わない
@@ -258,18 +257,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PLAY){
-
-			draw_mtx.lock(); //排他的処理
-			DrawGraph(0,0,back,false);
-			draw_mtx.unlock();
-
-			// 読みこんだグラフィックを拡大描画
-			draw_mtx.lock(); //排他的処理
-			DrawExtendGraph( mytank->shake_x + LEFT_WINDOW_WIDTH , mytank->shake_y,
-				1000+mytank->shake_x + LEFT_WINDOW_WIDTH  , 750+mytank->shake_y , camera_image_handle, false ) ;
-			draw_mtx.unlock();
-
-
 
 			//照準と敵が重なっているかチェック
 			mytank->check_focus();
@@ -429,15 +416,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
-			// 描画
-			draw_mtx.lock(); //排他的処理
-			DrawGraph(0,0,back,false);
-			draw_mtx.unlock();
-
-			draw_mtx.lock(); //排他的処理
-			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
-			draw_mtx.unlock();
 			
+
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);
 

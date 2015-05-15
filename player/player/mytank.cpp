@@ -16,7 +16,7 @@ void requestHttp_thread(tstring direction, tstring speed);
 
 
 bool CMytank::draw() {
-
+	
 	//カーソル表示
 	if(!is_reloading && focus_flag){
 		attackable = false;
@@ -142,6 +142,10 @@ CMytank::CMytank() {
 	auto eeic_ =make_shared<CEeic>();
 	eeic=eeic_;
 	CObject::register_object(eeic,DRAW_LAYER::IMFOMATION_LAYER);
+
+	auto back_ = make_shared<CBack>();
+	back=back_;
+	CObject::register_object(back,DRAW_LAYER::BACK_LAYER);
 
 	if (id != 0) {
 		auto enemy0_ = make_shared<CEnemy>(0); //スマートポインタに配列が実装されていないため

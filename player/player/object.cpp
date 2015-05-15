@@ -117,6 +117,7 @@ void CObject::load(){
 	figure_id["F_BACK"]=LoadGraph("image/back/back.png");
 	figure_id["F_SCORE"]=LoadGraph("image/back/back_card2.png");
 	figure_id["F_MASK"]=LoadGraph("image/mask.png");
+	figure_id["F_PLUS1"]=LoadGraph("image/plus1.png");
 
 	//白からグレーに変わるとき用
 	gray[0]=LoadGraph("image/back/grayback10.png");	
@@ -205,7 +206,7 @@ void CObject::load(){
 	figure_id["F_MINILIGHT_0"]=LoadGraph("image/minidenkyu0.png");
 
 	//3次元用、図と同様に扱えるっぽい?
-	figure_id["X_TANK"]=MV1LoadModel("image/tank.pmd");
+	figure_id["X_TANK"]=MV1LoadModel("image/tank.pmx");
 
 	//movie
 	/* 動画はmp4不可。ogvは必ず再生できる。 */

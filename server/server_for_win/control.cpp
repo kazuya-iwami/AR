@@ -19,6 +19,9 @@ string decode(char const *msg, string *target) {
 
 double diff;
 double diff_dead;
+double diff_denkyu;
+
+int denkyu_timer_flag;
 
 string explode(int n,char const *y,char const *str,string *target){
 	bool option;
@@ -111,10 +114,13 @@ void recv_message(string msg, int id) {
 				send_message(encode(COMMAND_NAME::INFORM_REVIVE,id,0,0),4);
 				player_param[id].viability = ALIVE;
 				break;
-			case COMMAND_NAME::UPDATE_DENKYU:
-				cout << "プレイヤー:" << id << "が電球:" << player_from << "を" << player_to << "にしました" << endl;
-				if(player_to == 1)set_denkyu(player_from,true);
-				send_message(encode(COMMAND_NAME::RETURN_DENKYU,player_from,0,0),4);
+			case COMMAND_NAME::ATTACK_DENKYU:
+				cout << "プレイヤー:" << id << "が電球をたたきました"<< endl;
+				set_denkyu(0,false);
+				set_denkyu(1,false);
+				set_denkyu(2,true);
+				send_message(encode(COMMAND_NAME::RETURN_DENKYU,id,0,0),4);
+				denkyu_start_time = time(NULL);
 				break;
 			default:
 				std::cout << "COMMAND_NAME ERROR" << std::endl;
@@ -168,4 +174,28 @@ void check_dead_valid() {
 			}
 		}
 	}
+}
+
+void check_denkyu_valid() {
+	denkyu_end_time = time(NULL);
+		diff_denkyu = difftime(denkyu_end_time, denkyu_start_time);
+		if (diff_denkyu > 2) {
+			std::cout << "denkyu_timer_flag : 1" << std::endl;
+			if(denkyu_timer_flag == 0){
+				denkyu_timer_flag=1;
+				set_denkyu(0,false);// 緑
+				set_denkyu(1,true);// 黄
+				set_denkyu(2,false);//赤
+				denkyu_start_time = time(NULL);
+			}else if(denkyu_timer_flag == 1){
+				std::cout << "denkyu_timer_flag : 2" << std::endl;
+				denkyu_timer_flag = 0;
+				set_denkyu(0,true);// 緑
+				set_denkyu(1,false);// 黄
+				set_denkyu(2,false);//赤
+				send_message(encode(COMMAND_NAME::RETURN2_DENKYU, 0, 0, 0), 4);
+			}
+			
+		}
+	
 }

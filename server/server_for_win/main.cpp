@@ -40,6 +40,7 @@ int set_tcp_socket(int portnum, struct hostent *shost);
 void recv_message(std::string msg, int n);
 void check_item_valid();
 void check_dead_valid();
+void check_denkyu_valid();
 void init();
 int kbhit(void);
 
@@ -49,6 +50,7 @@ void set_denkyu(int denkyu_id,bool flag);
 
 time_t item_start_time[4], item_end_time;
 time_t dead_start_time[4], dead_end_time;
+time_t denkyu_start_time,denkyu_end_time;
 
 //キーボード用
 char key_buf [ 256 ] ;
@@ -241,6 +243,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//check_item_valid();
 		check_dead_valid();
+		check_denkyu_valid();
 
 		FD_ZERO(&mask);
 		for (int i = 0; i < PORT_NUM; i++) {
@@ -382,9 +385,10 @@ void send_message(std::string msg, int id=4) {
 }
 
 void init(){
-	set_denkyu(0,false);
+	set_denkyu(0,true);
 	set_denkyu(1,false);
 	set_denkyu(2,false);
+	denkyu_timer_flag=0;
 	game_status=GAME_STATUS::GAME_WAIT;
 	item_end_time = 0;
 	for(int i=0;i<4;i++){

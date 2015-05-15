@@ -874,11 +874,15 @@ bool CBack::draw(){
 			SeekMovieToGraph( figure_id["M_SYBACK"] , 0 ) ;
 			PlayMovieToGraph(figure_id["M_SYBACK"]);
 	}
-	DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , FALSE );
+	DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , false );
 	WaitTimer(17);
 
 	// 読みこんだグラフィックを拡大描画
 	DrawExtendGraph(shake_x + LEFT_WINDOW_WIDTH,shake_y,1000+shake_x + LEFT_WINDOW_WIDTH, 750+shake_y , camera_image_handle,false) ;
+
+	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+	DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_MASK"],true);
 
 	return true;
 }

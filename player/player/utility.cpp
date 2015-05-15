@@ -21,9 +21,9 @@ bool CSystem_timer::draw(){
 		std::ostringstream sout0, sout1, sout2;
 		sout0 << std::setfill('0') << std::setw(2) << (((system_timer)%30)*100)/30;
 		std::string under_sec = sout0.str();
-		sout1 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
+		sout1 << std::setfill('0') << std::setw(2) << (system_timer/30)%60;
 		std::string sec = sout1.str();
-		sout2 << std::setfill('0') << std::setw(1) << (system_timer/30 + 1)/60;
+		sout2 << std::setfill('0') << std::setw(1) << (system_timer/30)/60;
 		std::string min = sout2.str();
 		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, min+":"+sec+"."+under_sec);
 		//timerカウント
@@ -35,14 +35,28 @@ bool CSystem_timer::draw(){
 		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, "0:00.00");
 	}
 	//残り10秒になったら警告
-	if(system_timer<=10*30){
-		if(system_timer%30<15){
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(system_timer%30));
+	if(system_timer<=10*30 && system_timer > 0){
+		int blend_palam = system_timer + 15;
+		if(blend_palam%30<15){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(blend_palam%30));
 		}else{
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(system_timer%30));
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(blend_palam%30));
 		}
-	DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	}
+	//自然に赤点滅終了
+	if(system_timer <= 0){
+		if(system_timer == 0){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, 45);
+		}else{
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,45+5*system_timer);
+		}
+		DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		if((45+5*system_timer) >= 0){
+			system_timer--;
+		}
 	}
 
 	//最初5秒カウントダウン
@@ -76,7 +90,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	//ChangeFont("07ロゴたいぷゴシック7");
 	x=x_;
 	y=y_;
-	system_timer = (game_time -1 ) * 30;
+	system_timer = game_time * 30;
 	finish_flag = false;
 	countdown_timer= 5 * 30 -1;
 	countdown_finish_flag = false;

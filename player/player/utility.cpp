@@ -98,7 +98,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 
 bool CEnemy::draw(){
 	x=ip_x*1000/320;//画面引き延ばしてる分の補正
-	y=ip_y*750/240;
+	y=ip_y*730/240;
 
 	if(countdown_finish_flag && visible){//視界に入っているなら
 		if(exist){
@@ -577,7 +577,7 @@ bool CWait::draw(){
 			}
 			DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , FALSE ) ;
 
-			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
+			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 730, camera_image_handle, false ) ;
 			
 			//カーソルとかの情報をひょうじするならここ
 			printinfo();
@@ -851,7 +851,7 @@ void CDenkyu::attaacked(){
 bool CDenkyu::draw(){
 
 	x=ip_x*1000/320;//画面引き延ばしてる分の補正
-	y=ip_y*750/240;
+	y=ip_y*730/240;
 
 	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "電");
 	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "気");
@@ -876,7 +876,7 @@ bool CBack::draw(){
 	WaitTimer(17);
 
 	// 読みこんだグラフィックを拡大描画
-	DrawExtendGraph(shake_x + LEFT_WINDOW_WIDTH,shake_y,1000+shake_x + LEFT_WINDOW_WIDTH, 750+shake_y , camera_image_handle,false) ;
+	DrawExtendGraph(shake_x + LEFT_WINDOW_WIDTH,shake_y,1000+shake_x + LEFT_WINDOW_WIDTH, 730+shake_y , camera_image_handle,false) ;
 
 	return true;
 }

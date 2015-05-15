@@ -30,8 +30,10 @@ bool CSystem_timer::draw(){
 
 		if(countdown_finish_flag)system_timer--;
 		
-	}else finish_flag = true;
-
+	}else {
+		finish_flag = true;
+		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, "0:00.00");
+	}
 	//残り10秒になったら警告
 	if(system_timer<=10*30){
 		if(system_timer%30<15){
@@ -179,25 +181,129 @@ bool CUp_effect::draw(){
 }
 
 
-CFinish :: CFinish(vector<pair<int,int> > result_){
-	result = result_;
+CFinish :: CFinish(vector<pair<int,int> > result_score_){
+	result_score = result_score_;
+	draw_timer = 0;
 }
 
 
 bool CFinish::draw(){
-DrawGraph(0,0,figure_id["F_FINISH"],false);
-int i;
 
-SetDrawBlendMode(DX_BLENDMODE_SUB,200);
-DrawOriginalString(300,85,2.0,48," player "+to_string(result[0].second+1)+"\t\t\t\t\t"+to_string(result[0].first));
-for(i=1;i<4;i++){
-		DrawOriginalString(560,170+100*i,1.0,24," player "+to_string(result[i].second+1)+"\t\t\t\t\t\t\t"+to_string(result[i].first));
-	}
-SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	//DrawFormatString(0, 0, GetColor(255,255,255), "%d", draw_timer);
+	/*
+		仕様
+		・時間0:00.00を表示、「finish」等の文字を数秒出す
+		・真っ黒フェードアウト
+		・結果画面フェードイン、結果画面再生
+	*/
 
-return true;
+	//config
+	int fade_out_time = 60;
+	int fade_in_start_time = 120;
+
+	if(draw_timer == 0){
+		//GameBGM音量を小さくする
+		//serverからのみGameBGMを流すので音量変化はしない
+		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
+	} else if(draw_timer < fade_out_time) {
+		//カメラ入力はmain関数で描画
+		//finishの文字出力
+	} else if(draw_timer == fade_out_time){
+
+
+	} else if(draw_timer < fade_in_start_time){
+		int black_value = (draw_timer - fade_out_time) * 15;
+		black_value = (255 < black_value) ? 255 : black_value;
+		//真っ暗画面にフェードアウト
+		SetDrawBlendMode(DX_BLENDMODE_SUB, black_value);
+		DrawBox( 0, 0, 1350, 730,GetColor(255, 255, 255), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+	} else if(draw_timer == fade_in_start_time){
+		//BGMの変更
+		StopSoundMem(sound_id["S_GAME_BGM"]);
+
+		//描画リストの要素をすべて削除せず、リザルトレイヤーを一番上に
+		auto result = make_shared<CResult>(result_score);
+		CObject::register_object(result,DRAW_LAYER::RESULT_LAYER);
+	} 
+	draw_timer++;
+	return true;
 }
 
+
+CResult :: CResult(vector<pair<int,int> > result_score_){
+	result_score = result_score_;
+	draw_timer = 0;
+}
+
+bool CResult::draw(){
+	//config
+	int fade_in_end_time = 15;
+
+	//リザルト画面の描画
+	if(draw_timer == 0){
+		//動画スタート
+		result_movie_handle = LoadGraph("movie/result.ogv");
+		PlayMovieToGraph( result_movie_handle ) ;
+	}
+
+	//ずっと動画再生
+	if(!(ProcessMessage() == 0 && GetMovieStateToGraph( result_movie_handle ) == 1)){
+		//動画はループし続ける
+		 SeekMovieToGraph( result_movie_handle , 0 ) ;
+		 PlayMovieToGraph( result_movie_handle ) ;
+	}
+	DrawGraph( 0 , 0 , result_movie_handle , FALSE ) ;
+	// ウエイトをかけます、あまり速く描画すると画面がちらつくからです
+    WaitTimer( 17 ) ;
+
+	/*
+		仕様：
+			・はじめは動画のみ
+			・結果発表の文字登場
+			・カードが流れる
+			・自分のカードはずっと点滅
+	*/
+	int float_start_time = 60;
+	int float_end_time = 120;
+	if(draw_timer < 30){
+		//はじめは待機
+	} else if(draw_timer <  float_start_time){
+		//結果発表であることを知らせる
+		
+	} else if(draw_timer < float_end_time){
+
+		//スコアカードが流れてくる
+		int dx = (draw_timer - float_start_time)*100;
+		for(int i = 0; i < 4; i++){
+			int x = 1400 + i*400 -dx;
+			if(x == 1000) PlaySoundMem(sound_id["S_SHU"], DX_PLAYTYPE_BACK);
+			if(x < 360) x = 360;
+			DrawGraph(x, 150+140*i, figure_id["F_RESULT_CARD"], true);
+			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+		}
+
+	} else {
+		//自分のスコアは点滅
+		for(int i = 0; i < 4; i++){
+			if(PLAYER_NM == result_score[i].second){
+				int alpha_palam = 30 + draw_timer - float_end_time;
+				alpha_palam = (alpha_palam%60-30)*(alpha_palam%60-30)/3;
+				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_palam);
+				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD_WHITE"], true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+			} else {
+				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
+				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+			}
+		}
+	}
+	draw_timer++;
+	return true;
+}
 
 bool CEeic::draw(){
 	/*

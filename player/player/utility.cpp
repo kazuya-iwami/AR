@@ -111,17 +111,19 @@ bool CEnemy::draw(){
 			// 敵アイコンの表示
 			DrawGraph(x-60 + LEFT_WINDOW_WIDTH + slide_x, y-40 + slide_y, figure_id["F_ICON"+to_string(enemy_id+1)],true);
 			// 前回打った敵は攻撃できない
-			if(enemy_id == CEnemy::just_before_shooted && CSystem_timer::system_timer-CEnemy::just_before_shooted_time<10*30){
+			if(enemy_id == CEnemy::just_before_shooted && CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-10*30){
 				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
 			}
 
 			if (VIABILITY_STATUS::DEAD == viability_status) {//死んでるときはlock-onできない
-				DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
+				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
+				//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
 			}
 			
 
 		}else{ //切断されていたら
-			DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");
+			DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
+			DrawFormatString(x - 120 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ切断厨(´・ω・`)");
 		}
 	}
 	// 視界に入っていないなら敵の位置情報をリセット
@@ -235,7 +237,7 @@ bool CFinish::draw(){
 		if(draw_timer >= 120) DrawGraph(LEFT_WINDOW_WIDTH+644, 200,figure_id["F_GAME_END_d"], true);
 	}
 	//音
-	if(draw_timer >= 84 && draw_timer <= 120 && draw_timer%6 == 0) PlaySoundMem(sound_id["S_PI"], DX_PLAYTYPE_BACK);
+	if(draw_timer >= 84 && draw_timer <= 120 && draw_timer%6 == 0) PlaySoundMem(sound_id["S_GAMEEND"], DX_PLAYTYPE_BACK);
 
 	//色変化
 	if(draw_timer > 30){
@@ -250,6 +252,7 @@ bool CFinish::draw(){
 		//GameBGM音量を小さくする
 		//serverからのみGameBGMを流すので音量変化はしない
 		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
+		PlaySoundMem(sound_id["S_FINISH"], DX_PLAYTYPE_BACK);
 	} else if(draw_timer < fade_out_time) {
 	} else if(draw_timer == fade_out_time){
 	} else if(draw_timer < fade_in_start_time){
@@ -283,11 +286,18 @@ bool CResult::draw(){
 	//config
 	int fade_in_end_time = 15;
 
+	if(draw_timer > 20){
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 120);
+		DrawGraph(60, 60, figure_id["F_RESULT"], true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+
 	//リザルト画面の描画
 	if(draw_timer == 0){
 		//動画スタート
 		result_movie_handle = LoadGraph("movie/result.ogv");
-		PlaySoundMem(sound_id["S_RESULT"], DX_PLAYTYPE_BACK);
+		SetLoopPosSoundMem( 0, sound_id["S_RESULT"] ) ;
+		PlaySoundMem(sound_id["S_RESULT"], DX_PLAYTYPE_LOOP);
 		PlayMovieToGraph( result_movie_handle ) ;
 	}
 
@@ -324,7 +334,7 @@ bool CResult::draw(){
 			if(x == 1000) PlaySoundMem(sound_id["S_RESULT_SCORE"], DX_PLAYTYPE_BACK);
 			if(x < 360) x = 360;
 			DrawGraph(x, 150+140*i, figure_id["F_RESULT_CARD"], true);
-			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
 		}
 
 	} else {
@@ -337,10 +347,10 @@ bool CResult::draw(){
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_palam);
 				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD_WHITE"], true);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
 			} else {
 				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
-				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
+				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
 			}
 		}
 	}
@@ -512,7 +522,8 @@ bool CWait::draw(){
 		MV1DrawModel(figure_id["X_TANK"]);
 	if(draw_timer == 0){
 		StopSoundMem(sound_id["S_RESULT"]);
-		PlaySoundMem(sound_id["S_WAIT"], DX_PLAYTYPE_BACK);
+		SetLoopPosSoundMem( 0, sound_id["S_WAIT"] ) ;
+		PlaySoundMem(sound_id["S_WAIT"], DX_PLAYTYPE_LOOP);
 	}
 //	タイトル表示
 	if(mode>0){

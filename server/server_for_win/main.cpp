@@ -136,6 +136,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//データのロード
 
 	int bgm_id=LoadSoundMem("../../player/player/sound/GameBGM.mp3");
+	//int result_sound=LoadSoundMem("../../player/player/sound/result.mp3");
+	int wait_sound=LoadSoundMem("../../player/player/sound/wait.mp3");
+
+	int bgm_timer = 0;
+
 
 	//既存のコードを踏襲
 
@@ -178,6 +183,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		// 画面に描かれているものをすべて消す
 		ClearDrawScreen() ;
+
+		if(bgm_timer == 0){
+			//wait_bgm 
+		    // ループ位置をセットする
+			SetLoopPosSoundMem( 0, wait_sound ) ;
+			PlaySoundMem( wait_sound , DX_PLAYTYPE_LOOP );
+		}
 
 		//ミニマップ処理
 		/*
@@ -227,10 +239,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				for (int i = 0;i < PORT_NUM;i++){
 					player_param[i].init();
 				}
-				//BGM再生
-				PlaySoundMem( bgm_id , DX_PLAYTYPE_BACK );
+				//BGM再生準備
+				StopSoundMem( wait_sound );
+				bgm_timer = 0;
 
 			}else if(game_status == GAME_STATUS::GAME_PLAY){
+
 				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PAUSE,0,0),4);
 				game_status = GAME_STATUS::GAME_PAUSE;
 				std::cout << "一時停止" << std::endl;
@@ -272,6 +286,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//finish状態か確認
 		if(game_status == GAME_STATUS::GAME_PLAY){
+			//game_bgm再生
+			if(bgm_timer == 500) PlaySoundMem( bgm_id , DX_PLAYTYPE_BACK );
+
 			bool all_finish_flag=true;
 			bool disconnect_flag=false;
 			for (int i = 0;i < PORT_NUM;i++){
@@ -285,7 +302,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				//					exit(1);
 				//				}
 				StopSoundMem(bgm_id);//BGM停止
+				//result_bgm
+				/*
+			    // ループ位置をセットする
+				SetLoopPosSoundMem( 0, result_sound ) ;
+				PlaySoundMem( result_sound , DX_PLAYTYPE_LOOP );
 				init();
+				*/
 			}
 
 		}
@@ -305,6 +328,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			break;
 		}
 		//if( CheckHitKey( KEY_INPUT_ESCAPE ) == 1 ) break ;
+
+		bgm_timer++;
 	}
 	for (int i = 0; i < PORT_NUM; i++) {
 		closesocket(nsockfd[i]);

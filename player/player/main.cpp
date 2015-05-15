@@ -420,7 +420,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_FINISH){
-			
+			//リロードの棒が延びないように設定
+			mytank->is_reloading = false;
 
 			if(  key_buf[ KEY_INPUT_RETURN ] == 1 && key_prev_buf[ KEY_INPUT_RETURN] == 0){
 				mytank->set_game_status(GAME_STATUS::GAME_WAIT);

@@ -653,7 +653,7 @@ int configuration(){
 	int tmp[5];
 	playnum_file >> row;
 
-	if(sscanf_s(row.c_str(),"rpi:%d,%d,%d,%d,id:%d", &tmp[0],&tmp[1],&tmp[2],&tmp[3],&tmp[4]) != 5) return 2;
+	if(sscanf_s(row.c_str(),"rpi:%d,%d,%d,%d,id:%d", &tmp[0],&tmp[1],&tmp[2],&tmp[3],&tmp[4]) != 5) return 3;
 	PLAYER_NM = tmp[4];
 	RASPI_IP_ADDRESS =  to_string(tmp[0]) + "." + to_string(tmp[1]) + "." + to_string(tmp[2]) + "." + to_string(tmp[3]);
 

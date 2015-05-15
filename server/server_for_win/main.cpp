@@ -6,8 +6,9 @@
 
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
-#define PORT_NUM 2
-#define SERIAL_PORT  "\\\\.\\COM4" //シリアルポート名  "\\\\.\\COM3"
+#define PORT_NUM 3
+
+#define SERIAL_PORT  "\\\\.\\COM3" //シリアルポート名  "\\\\.\\COM3"
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
 
 Data hsv_data;

@@ -987,16 +987,3 @@ CSumi::CSumi(int x_,int y_,double scale_,double rota_,bool chain){
 	draw_timer=0;
 	chain_flag=chain;
 }
-
-bool CSmoke::draw(){
-	
-	draw_timer++;
-	
-	if(draw_timer<90) return true;
-	else return false;
-}
-
-CSmoke::CSmoke(int* xp_,int* yp_){
-	draw_timer=0;
-	xp=xp_;yp=yp_;
-}

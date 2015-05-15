@@ -218,10 +218,3 @@ public:
 
 };
 
-class CSmoke :public CObject{
-	int* xp;
-	int* yp;
-public:
-	CSmoke(int* xp_,int* yp_);
-	bool draw();
-};

@@ -232,19 +232,20 @@ bool CFinish::draw(){
 	//音
 	if(draw_timer >= 84 && draw_timer <= 120 && draw_timer%6 == 0) PlaySoundMem(sound_id["S_PI"], DX_PLAYTYPE_BACK);
 
+	//色変化
+	if(draw_timer > 30){
+		int alpha_val = (draw_timer-30)*5;
+		if(alpha_val > 126) alpha_val = 126;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_val); 
+		DrawExtendGraph(LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+999, 730, figure_id["F_FINISH_CYBER"], true); 
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 
 	if(draw_timer == 0){
 		//GameBGM音量を小さくする
 		//serverからのみGameBGMを流すので音量変化はしない
 		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
 	} else if(draw_timer < fade_out_time) {
-		if(draw_timer > 30){
-			//画面変化
-			int alpha_val = (draw_timer-30)*8;
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_val); 
-			DrawExtendGraph(LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+999, 730, figure_id["F_FINISH_CYBER"], true); 
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		}
 	} else if(draw_timer == fade_out_time){
 	} else if(draw_timer < fade_in_start_time){
 		int black_value = (draw_timer - fade_out_time) * 15;
@@ -281,6 +282,7 @@ bool CResult::draw(){
 	if(draw_timer == 0){
 		//動画スタート
 		result_movie_handle = LoadGraph("movie/result.ogv");
+		PlaySoundMem(sound_id["S_RESULT"], DX_PLAYTYPE_BACK);
 		PlayMovieToGraph( result_movie_handle ) ;
 	}
 
@@ -314,7 +316,7 @@ bool CResult::draw(){
 		int dx = (draw_timer - float_start_time)*100;
 		for(int i = 0; i < 4; i++){
 			int x = 1400 + i*400 -dx;
-			if(x == 1000) PlaySoundMem(sound_id["S_SHU"], DX_PLAYTYPE_BACK);
+			if(x == 1000) PlaySoundMem(sound_id["S_RESULT_SCORE"], DX_PLAYTYPE_BACK);
 			if(x < 360) x = 360;
 			DrawGraph(x, 150+140*i, figure_id["F_RESULT_CARD"], true);
 			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t"+to_string(result_score[i].first));
@@ -510,7 +512,10 @@ bool CWait::draw(){
 		MV1SetPosition(figure_id["X_TANK"],VGet(180.0f,50.0f,150.0f));
 		MV1SetRotationXYZ(figure_id["X_TANK"],VGet(0.0f,spin++/10.0f,0.0f));
 		MV1DrawModel(figure_id["X_TANK"]);
-
+	if(draw_timer == 0){
+		StopSoundMem(sound_id["S_RESULT"]);
+		PlaySoundMem(sound_id["S_WAIT"], DX_PLAYTYPE_BACK);
+	}
 //	タイトル表示
 	if(mode>0){
 		//タイトルロゴ表示
@@ -567,6 +572,7 @@ bool CWait::draw(){
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			if(flag-beforeflag>=30){	
 				//DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
+				StopSoundMem(sound_id["S_WAIT"]);
 				beforeflag=flag;
 				waitflag=3;
 			}		

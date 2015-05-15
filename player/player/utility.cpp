@@ -574,6 +574,7 @@ bool CWait::draw(){
 				}
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			}
+			/*
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA,200);
 			DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA,140);
@@ -581,7 +582,7 @@ bool CWait::draw(){
 			DrawOriginalString(LEFT_WINDOW_WIDTH+500-30,325,2.0,0,to_string(5));
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			DrawDigitTime(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, "3:00.00");
-
+			*/
 			if(flag<movie_end_time-100){
 				DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
 			}else{

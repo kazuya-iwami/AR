@@ -7,7 +7,6 @@
 #include "network.h"
 #include"main.h"
 
-
 //細かいクラスはここにかき集めている
 
 
@@ -111,7 +110,10 @@ public:
 	int mode; //ゲームスタートまでの映像再生状態　1:待機　0:動画再生からのGAME_PLAYへ
 	int flag;//draw_timer モドキ
 	int spin;
+	int movieflag;
 	int gameflag; // 1:動画再生の終了案内
+	int waitflag;//待機画面中のモード管理
+	int beforeflag;//前の終了時のflag
 };
 
 //結果発表で紙ふぶき飛ばしたいよね

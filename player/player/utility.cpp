@@ -537,7 +537,7 @@ bool CWait::draw(){
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag-(beforeflag));
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			if(2*(flag-beforeflag-40)>360){
+			if(2*(flag-beforeflag-40)>390){
 				waitflag=2;
 				beforeflag=flag;
 			}
@@ -815,8 +815,15 @@ bool CScore_Info::draw(){
 
 	//描画
 	for(int i=0;i<4;i++){
-		DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
-
+		if(PLAYER_NM==i){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
+			DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}else{
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,155);
+			DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		if(score_info_enemy[i].score <10){
 			DrawOriginalString(1070,score_info_enemy[i].info_y + 86,0.625,16,to_string(i+1)+"P: "+to_string(score_info_enemy[i].score));

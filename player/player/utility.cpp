@@ -740,18 +740,6 @@ CWait::CWait(){
 	beforeflag=0;
 }
 
-
-
-bool CKamifubuki::draw(){
-	DrawExtendGraph(0,0,1500,750,kamifubuki[(draw_timer%120)/5],true);
-	draw_timer++;
-	return  true;
-}
-
-CKamifubuki::CKamifubuki(){
-	draw_timer=0;
-}
-
 bool CMovie::draw(){
 	DrawExtendGraph(0,0,1349,729,figure_id[name],false);
 	if( GetMovieStateToGraph(figure_id[name]) ==1 ) return true;

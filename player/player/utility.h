@@ -123,13 +123,6 @@ public:
 	int beforeflag;//前の終了時のflag
 };
 
-//結果発表で紙ふぶき飛ばしたいよね
-class CKamifubuki:public CObject{
-public:
-	 CKamifubuki();
-	 bool draw();
-};
-
 
 class CMovie:public CObject{
 	std::string name;

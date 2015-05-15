@@ -389,7 +389,7 @@ bool CWait::draw(){
 			//ここでスタート状態の画像を表示したい→カメラから画像をあらかじめ取得しておく必要がある？
 			DrawGraph(0,0,figure_id["F_BACK"],false);
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
-			if(flag<movie_end_time){
+			if(flag<movie_end_time-100){
 				DrawGraph(0,0,figure_id["F_GRAYBACK"],true);
 			}else{
 				SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-(flag-movie_end_time)*4);

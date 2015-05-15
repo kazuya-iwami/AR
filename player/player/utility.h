@@ -13,10 +13,10 @@
 //残り時間描画クラス
 class CSystem_timer : public CObject {
 	int countdown_timer;
-	int system_timer;
 	bool finish_flag;
 	bool countdown_finish_flag;
 public:
+	static int system_timer;
 	int handle;
 	CSystem_timer(int x_,int y_,int game_time);
 	bool draw();
@@ -41,6 +41,7 @@ public:
 	bool exist;
 	bool lockon;
 	static int just_before_shooted; // 直前にプレイヤーが撃ったenemyのidが入る
+	static int just_before_shooted_time;//直前にプレイヤーが敵を撃った時間
 	bool countdown_finish_flag; // 試合開始5秒間のカウントダウンが終了したか否か
 	int map_x;
 	int map_y;

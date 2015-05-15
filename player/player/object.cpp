@@ -83,6 +83,9 @@ void CObject::load(){
 
 	figure_id["F_BACKGROUND_WAIT"]=LoadGraph("image/back/background_wait.png");
 
+	figure_id["F_RESULT_CARD"]=LoadGraph("image/result_score_card.png");
+	figure_id["F_RESULT_CARD_WHITE"]=LoadGraph("image/result_score_card_white.png");
+
 	//タイトルのあつまり
 	figure_id["F_TITLE"]=LoadGraph("image/title/title.png");
 	title[0]=LoadGraph("image/title/titleR.png");
@@ -138,6 +141,7 @@ void CObject::load(){
 	sound_id["S_ATTACKED"]=LoadSoundMem("sound/attacked.mp3");
 	sound_id["S_LINKSTART"]=LoadSoundMem("sound/linkstart.mp3");
 	sound_id["S_PI"]=LoadSoundMem("sound/pi.mp3");
+	sound_id["S_SHU"]=LoadSoundMem("sound/shu.mp3");
 	//BGM
 	sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");
 

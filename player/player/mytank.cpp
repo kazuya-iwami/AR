@@ -253,7 +253,7 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 		}else if(marker->marker_id == MARKER_ID::MARKER_SUMI){
 
 		}else if(marker->marker_id == MARKER_ID::MARKER_SOUND){
-
+			PlaySoundMem(sound_id["S_AN"],DX_PLAYTYPE_BACK);
 		}else if(marker->marker_id == MARKER_ID::MARKER_STOP){
 			marker->denkyu_hit = true;
 			send_msg(encode(COMMAND_NAME::ATTACK_DENKYU,0,0,0)); //denkyu_idをONに;

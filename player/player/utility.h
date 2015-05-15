@@ -144,12 +144,12 @@ public:
 class CScore_Info:public CObject {
 private:
 	
-	CScore_info_enemy score_info_enemy[4];
 	vector<pair<int, int> > rank_info;
 	int mytank_id;
 
 public:
 	CScore_Info(int mytank_id);
+	CScore_info_enemy score_info_enemy[4];
 	void update_score(int score0,int score1, int score2,int score3);
 	vector<pair<int, int> > get_rank_info(){ return rank_info; };
 	bool draw();// 描画とともに動かす
@@ -182,5 +182,12 @@ public:
 class CBack:public CObject{
 public:
 	CBack();
+	bool draw();
+};
+
+class CPlus:public CObject{
+public:
+	CPlus(int* score_y_);
+	int* score_y;
 	bool draw();
 };

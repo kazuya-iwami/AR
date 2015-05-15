@@ -390,6 +390,8 @@ void CMytank::shake_start(SHAKE_STATUS shake_status){
 }
 
 void CMytank::get_msg(){
+	
+
 	string msg = check_msg();
 	int bullet_score=0; //bulletによっていくつスコアが上昇するかをscoreに格納
 	/* メッセージが送られてきた際の処理 */
@@ -437,6 +439,9 @@ void CMytank::get_msg(){
 			
 			if(kind == BULLET_KIND::BULLET_NOMAL)bullet_score=1;
 
+			auto plus=make_shared<CPlus>(&(score_info->score_info_enemy[player_from].info_y));
+			CObject::register_object(plus,DRAW_LAYER::IMFOMATION_LAYER);
+
 			switch (player_from){
 			case 0:
 				if(id != 0){ //他人の攻撃
@@ -445,6 +450,7 @@ void CMytank::get_msg(){
 					case 1:
 						if(id != 1){//攻撃先が他人
 							enemy1->attacked(bullet_score);
+
 						}else{//攻撃先が自分
 							attacked(bullet_score);
 						}

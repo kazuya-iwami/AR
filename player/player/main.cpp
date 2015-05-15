@@ -368,6 +368,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				//テスト用　H自分のポイント＋１
 				if (key_buf[KEY_INPUT_H]==1 && key_prev_buf[KEY_INPUT_H]==0) {
 					mytank->score++;
+					auto plus=make_shared<CPlus>(&(mytank->score_info->score_info_enemy[PLAYER_NM].info_y));
+					CObject::register_object(plus,DRAW_LAYER::IMFOMATION_LAYER);
 				}
 				//テスト用　J自分のポイント＋１
 				if (key_buf[KEY_INPUT_J]==1 && key_prev_buf[KEY_INPUT_J]==0) {

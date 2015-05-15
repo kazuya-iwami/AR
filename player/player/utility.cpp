@@ -911,3 +911,20 @@ bool CBack::draw(){
 
 	return true;
 }
+
+bool CPlus::draw(){
+	int slide =draw_timer/5;
+
+	DrawGraph(x,(*score_y)+ 82 - slide,figure_id["F_PLUS1"],true);
+
+	draw_timer++;
+
+	if(draw_timer <25)return true;
+	else return false;
+}
+
+CPlus::CPlus(int* score_y_){
+	x= 1000;
+	score_y=score_y_;
+	draw_timer=0;
+}

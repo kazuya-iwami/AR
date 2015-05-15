@@ -117,6 +117,7 @@ void CObject::load(){
 	figure_id["F_BACK"]=LoadGraph("image/back/back.png");
 	figure_id["F_SCORE"]=LoadGraph("image/back/back_card2.png");
 	figure_id["F_MASK"]=LoadGraph("image/mask.png");
+	figure_id["F_PLUS1"]=LoadGraph("image/plus1.png");
 
 	//白からグレーに変わるとき用
 	gray[0]=LoadGraph("image/back/grayback10.png");	

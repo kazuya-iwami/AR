@@ -287,7 +287,7 @@ void CMytank::check_focus(){
 				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy0->lockon = true;
 				}
-				if(0 == CEnemy::just_before_shooted && CSystem_timer::system_timer-CEnemy::just_before_shooted_time<10*30) { // 直前に撃った相手への攻撃禁止
+				if((0 == CEnemy::just_before_shooted) && (CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-5*30)) { // 直前に撃った相手への攻撃禁止
 					enemy0->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy0->viability_status) {
@@ -300,7 +300,7 @@ void CMytank::check_focus(){
 				if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy1->lockon = true;
 				}
-				if(1 == CEnemy::just_before_shooted && CSystem_timer::system_timer-CEnemy::just_before_shooted_time<10*30) { // 直前に撃った相手への攻撃禁止
+				if((1 == CEnemy::just_before_shooted) &&( CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-5*30)) { // 直前に撃った相手への攻撃禁止
 					enemy1->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy1->viability_status) {
@@ -313,7 +313,7 @@ void CMytank::check_focus(){
 				if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy2->lockon = true;
 				}
-				if(2 == CEnemy::just_before_shooted && CSystem_timer::system_timer-CEnemy::just_before_shooted_time<10*30) { // 直前に撃った相手への攻撃禁止
+				if((2 == CEnemy::just_before_shooted) && (CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-5*30)) { // 直前に撃った相手への攻撃禁止
 					enemy2->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy2->viability_status) {
@@ -326,7 +326,7 @@ void CMytank::check_focus(){
 				if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy3->lockon = true;
 				}
-				if(3 == CEnemy::just_before_shooted && CSystem_timer::system_timer-CEnemy::just_before_shooted_time<10*30) { // 直前に撃った相手への攻撃禁止
+				if((3 == CEnemy::just_before_shooted) && (CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-5*30)) { // 直前に撃った相手への攻撃禁止
 					enemy3->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy3->viability_status) {

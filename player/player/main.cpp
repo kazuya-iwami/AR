@@ -307,19 +307,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 					//各キーを押し続けるとその動作をする。
 					if(  key_buf[ KEY_INPUT_UP ] == 1 && key_prev_buf[ KEY_INPUT_UP] == 0 ){
 					//mytank->set_vel(1,1);//自機の速度設定 (pwm制御の場合か)
-					mytank->move(_T("forward"), _T("full"));
+					mytank->move(_T("forward"), speed);
 					}
 					if(  key_buf[ KEY_INPUT_DOWN ] == 1 && key_prev_buf[ KEY_INPUT_DOWN] == 0 ){
 					//mytank->set_vel(-1,-1);
-					mytank->move(_T("backward"), _T("full"));
+					mytank->move(_T("backward"), speed);
 					}
 					if(  key_buf[ KEY_INPUT_LEFT ] == 1 && key_prev_buf[ KEY_INPUT_LEFT] == 0 ){
 					//mytank->set_vel(-1,1);
-					mytank->move(_T("left"), _T("half"));
+					mytank->move(_T("left"), speed);
 					}
 					if(  key_buf[ KEY_INPUT_RIGHT ] == 1 && key_prev_buf[ KEY_INPUT_RIGHT] == 0 ){
 					//mytank->set_vel(1,-1);
-					mytank->move(_T("right"), _T("half"));
+					mytank->move(_T("right"), speed);
 					}
 					//各キーを離したらstop
 					if( (key_buf[ KEY_INPUT_UP ] == 0 && key_prev_buf[ KEY_INPUT_UP] == 1) || 

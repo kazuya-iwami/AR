@@ -556,7 +556,7 @@ bool CWait::draw(){
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag-(beforeflag));
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			if(2*(flag-beforeflag-40)>360){
+			if(2*(flag-beforeflag-40)>390){
 				waitflag=2;
 				beforeflag=flag;
 			}
@@ -600,6 +600,7 @@ bool CWait::draw(){
 			DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , FALSE ) ;
 
 			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 730, camera_image_handle, false ) ;
+			DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_MASK"],true);
 			
 			//カーソルとかの情報をひょうじするならここ
 			printinfo();
@@ -609,16 +610,25 @@ bool CWait::draw(){
 			DrawGraph(33+LEFT_WINDOW_WIDTH,28,figure_id["F_HPFRAME2"],true);
 			DrawGraph(34+LEFT_WINDOW_WIDTH,-1,figure_id["F_LIFE"],true);
 			SetDrawBright(255,255,255);
+
 			for(int i=0;i<4;i++){
-				DrawExtendGraph(1050, i*RANK_HEIGHT+10,1170,i*RANK_HEIGHT+RANK_HEIGHT+5, figure_id["F_SCORE"], true);
+				DrawExtendGraph(1050, i*RANK_HEIGHT+84,1170,i*RANK_HEIGHT+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
 				SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 				if(0 <10){
-					DrawOriginalString(1070,i*RANK_HEIGHT + 12,0.625,16,to_string(i+1)+"P: "+to_string(0));
+					DrawOriginalString(1070,i*RANK_HEIGHT + 86,0.625,16,to_string(i+1)+"P: "+to_string(0));
 				}else{
-					DrawOriginalString(1070,i*RANK_HEIGHT + 12,0.625,16,to_string(i+1)+"P:"+to_string(0));
+					DrawOriginalString(1070,i*RANK_HEIGHT + 86,0.625,16,to_string(i+1)+"P:"+to_string(0));
 				}
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			}
+
+			
+				int k;
+				for(k=0;k<4;k++) if(PLAYER_NM == k)DrawGraph(750+LEFT_WINDOW_WIDTH,2,figure_id["F_P"+to_string(k+1)],true);
+			
+				
+			
+
 			/*
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA,200);
 			DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
@@ -834,8 +844,15 @@ bool CScore_Info::draw(){
 
 	//描画
 	for(int i=0;i<4;i++){
-		DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
-
+		if(PLAYER_NM==i){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
+			DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}else{
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,155);
+			DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		if(score_info_enemy[i].score <10){
 			DrawOriginalString(1070,score_info_enemy[i].info_y + 86,0.625,16,to_string(i+1)+"P: "+to_string(score_info_enemy[i].score));

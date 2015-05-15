@@ -47,7 +47,10 @@ void CObject::load(){
 	figure_id["F_ICON3"] =  LoadGraph("image/icon3.png");
 	figure_id["F_ICON4"] =  LoadGraph("image/icon4.png");
 	figure_id["F_X"]=LoadGraph("image/x.png");
+	figure_id["F_P1"]=LoadGraph("image/player1.png");
+	figure_id["F_P2"]=LoadGraph("image/player2.png");
 	figure_id["F_P3"]=LoadGraph("image/player3.png");
+	figure_id["F_P4"]=LoadGraph("image/player4.png");
 
 	figure_id["F_CURSUR_OUT"]=LoadGraph("image/cursur/cursur_outside.png");
 	figure_id["F_CURSUR_IN"]=LoadGraph("image/cursur/cursur_inside.png");

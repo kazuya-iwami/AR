@@ -429,11 +429,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				
 				//描画リストの要素をすべて削除
 				CObject::drawlist.clear();
-
+				
 				
 				auto wait_ = make_shared<CWait>();
 				wait = wait_;
 				CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
+				mytank->get_mode(&(wait->mode));
 				
 			}
 

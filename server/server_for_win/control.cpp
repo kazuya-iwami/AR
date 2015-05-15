@@ -21,6 +21,8 @@ double diff;
 double diff_dead;
 double diff_denkyu;
 
+int denkyu_timer_flag;
+
 string explode(int n,char const *y,char const *str,string *target){
 	bool option;
 	if(target==NULL) option=false;

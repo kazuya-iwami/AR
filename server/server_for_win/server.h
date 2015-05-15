@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <WinSock.h>
 
+extern int denkyu_timer_flag;
 
 enum BULLET_KIND{
 	BULLET_NOMAL,

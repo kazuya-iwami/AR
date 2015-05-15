@@ -26,7 +26,7 @@ using namespace std;
 #define GAME_TIME 60 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
- #define USE_CAMERA_FLAG 1
+ #define USE_CAMERA_FLAG 2
 
 //0:画像 1:カメラ 2:ラズパイ
 
@@ -652,7 +652,8 @@ int configuration(){
 	playnum_file >> row;
 	if(sscanf_s(row.c_str(),"rpi:%d,id:%d", &tmp[0],&tmp[1]) != 2) return 2;
 	PLAYER_NM = tmp[1];
-	RASPI_IP_ADDRESS = "pi@rpi0"+to_string(tmp[0])+".local";
+	//RASPI_IP_ADDRESS = "pi@rpi0"+to_string(tmp[0])+".local";
+	RASPI_IP_ADDRESS = "192.168.10.105";
 	if(PLAYER_NM<0){
 		return 3;
 	}

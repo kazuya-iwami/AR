@@ -204,3 +204,13 @@ public:
 	int get_y(){return y;};
 
 };
+
+
+class CSumi :public CObject{
+	double scale,rota;
+	bool chain_flag;
+public:
+	CSumi(int x_,int y_, double scale_,double rota_,bool chain);
+	bool draw();
+
+};

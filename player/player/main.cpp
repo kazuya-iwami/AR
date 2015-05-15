@@ -25,7 +25,12 @@ using namespace std;
 #define GAME_TIME 300 //プレー時間　300秒
 #define FINISH_TIME 5 //結果発表の時間 5秒
 
+<<<<<<< HEAD
  #define USE_CAMERA_FLAG 1
+=======
+ #define USE_CAMERA_FLAG 2
+
+>>>>>>> 39de398eed63902be7cac797ad2a5068d48134bd
 //0:画像 1:カメラ 2:ラズパイ
 
 
@@ -139,7 +144,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	// ウインドウモードで起動
 	SetMainWindowText( "Real Tank Battle -４機の戦車が集いし時、現実と仮想空間が交差する-" ) ;
 	ChangeWindowMode( TRUE ) ;//falseならフルスクリーン
-	SetGraphMode(1350,730,32);//画面サイズ1000×750に設定
+	SetGraphMode(1350,730,32);
 	SetWindowInitPosition(0,0);
 
 	//文字サイズ
@@ -427,11 +432,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				
 				//描画リストの要素をすべて削除
 				CObject::drawlist.clear();
-
+				
 				
 				auto wait_ = make_shared<CWait>();
 				wait = wait_;
 				CObject::register_object(wait,DRAW_LAYER::IMFOMATION_LAYER);
+				mytank->get_mode(&(wait->mode));
 				
 			}
 
@@ -648,9 +654,11 @@ int configuration(){
 	string row;
 	int tmp[5];
 	playnum_file >> row;
+
 	if(sscanf_s(row.c_str(),"rpi:%d,%d,%d,%d,id:%d", &tmp[0],&tmp[1],&tmp[2],&tmp[3],&tmp[4]) != 5) return 2;
 	PLAYER_NM = tmp[4];
 	RASPI_IP_ADDRESS =  to_string(tmp[0]) + "." + to_string(tmp[1]) + "." + to_string(tmp[2]) + "." + to_string(tmp[3]);
+
 	if(PLAYER_NM<0){
 		return 3;
 	}

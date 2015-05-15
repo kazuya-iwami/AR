@@ -21,9 +21,9 @@ bool CSystem_timer::draw(){
 		std::ostringstream sout0, sout1, sout2;
 		sout0 << std::setfill('0') << std::setw(2) << (((system_timer)%30)*100)/30;
 		std::string under_sec = sout0.str();
-		sout1 << std::setfill('0') << std::setw(2) << (system_timer/30 + 1)%60;
+		sout1 << std::setfill('0') << std::setw(2) << (system_timer/30)%60;
 		std::string sec = sout1.str();
-		sout2 << std::setfill('0') << std::setw(1) << (system_timer/30 + 1)/60;
+		sout2 << std::setfill('0') << std::setw(1) << (system_timer/30)/60;
 		std::string min = sout2.str();
 		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, min+":"+sec+"."+under_sec);
 		//timerカウント
@@ -35,14 +35,28 @@ bool CSystem_timer::draw(){
 		DrawDigitNum(423+LEFT_WINDOW_WIDTH, 15, 0.4375, 26, "0:00.00");
 	}
 	//残り10秒になったら警告
-	if(system_timer<=10*30){
-		if(system_timer%30<15){
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(system_timer%30));
+	if(system_timer<=10*30 && system_timer > 0){
+		int blend_palam = system_timer + 15;
+		if(blend_palam%30<15){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,90-3*(blend_palam%30));
 		}else{
-			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(system_timer%30));
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,3*(blend_palam%30));
 		}
-	DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	}
+	//自然に赤点滅終了
+	if(system_timer <= 0){
+		if(system_timer == 0){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, 45);
+		}else{
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,45+5*system_timer);
+		}
+		DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_REDBACK"],true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		if((45+5*system_timer) >= 0){
+			system_timer--;
+		}
 	}
 
 	//最初5秒カウントダウン
@@ -76,7 +90,7 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 	//ChangeFont("07ロゴたいぷゴシック7");
 	x=x_;
 	y=y_;
-	system_timer = (game_time -1 ) * 30;
+	system_timer = game_time * 30;
 	finish_flag = false;
 	countdown_timer= 5 * 30 -1;
 	countdown_finish_flag = false;
@@ -84,12 +98,15 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 
 bool CEnemy::draw(){
 	x=ip_x*1000/320;//画面引き延ばしてる分の補正
-	y=ip_y*750/240;
+	y=ip_y*730/240;
+	int slide_x = -70;
+	int slide_y = -70;
+
 
 	if(countdown_finish_flag && visible){//視界に入っているなら
 		if(exist){
 			// 敵アイコンの表示
-			DrawGraph(x-60 + LEFT_WINDOW_WIDTH, y-40, figure_id["F_ICON"+to_string(enemy_id+1)],true);
+			DrawGraph(x-60 + LEFT_WINDOW_WIDTH + slide_x, y-40 + slide_y, figure_id["F_ICON"+to_string(enemy_id+1)],true);
 			// 前回打った敵は攻撃できない
 			if(enemy_id == CEnemy::just_before_shooted){
 				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
@@ -140,11 +157,11 @@ bool CBullet_image :: draw(){
 	int i;
 	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 140 );
 	for(i=0;i<num_bullet;i++){
-		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
+		DrawGraph(5 + LEFT_WINDOW_WIDTH,70+(max_bullet_num - 1)*25-25*i,figure_id["F_BULLETNOKORI"],true);	
 	}
 	SetDrawBlendMode( DX_BLENDMODE_ALPHA, 80 );
 	for(i=0;i<max_bullet_num - num_bullet;i++){
-		DrawGraph(5 + LEFT_WINDOW_WIDTH,150+25*i,figure_id["F_BULLETUSED"],true);
+		DrawGraph(5 + LEFT_WINDOW_WIDTH,70+25*i,figure_id["F_BULLETUSED"],true);
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	return true;
@@ -198,19 +215,37 @@ bool CFinish::draw(){
 	*/
 
 	//config
-	int fade_out_time = 60;
-	int fade_in_start_time = 120;
+	int fade_out_time = 150;
+	int fade_in_start_time = 210;
+
+	//GameEnd文字出力
+	int putchar_start = 84;
+	if(draw_timer > putchar_start){
+		if(draw_timer >= 84) DrawGraph(LEFT_WINDOW_WIDTH+280, 200,figure_id["F_GAME_END_G"], true);
+		if(draw_timer >= 90) DrawGraph(LEFT_WINDOW_WIDTH+342, 200,figure_id["F_GAME_END_a"], true);
+		if(draw_timer >= 96) DrawGraph(LEFT_WINDOW_WIDTH+400, 200,figure_id["F_GAME_END_m"], true);
+		if(draw_timer >= 102) DrawGraph(LEFT_WINDOW_WIDTH+458, 200,figure_id["F_GAME_END_e"], true);
+		if(draw_timer >= 108) DrawGraph(LEFT_WINDOW_WIDTH+533, 200,figure_id["F_GAME_END_E"], true);
+		if(draw_timer >= 114) DrawGraph(LEFT_WINDOW_WIDTH+590, 200,figure_id["F_GAME_END_n"], true);
+		if(draw_timer >= 120) DrawGraph(LEFT_WINDOW_WIDTH+644, 200,figure_id["F_GAME_END_d"], true);
+	}
+	//音
+	if(draw_timer >= 84 && draw_timer <= 120 && draw_timer%6 == 0) PlaySoundMem(sound_id["S_PI"], DX_PLAYTYPE_BACK);
+
 
 	if(draw_timer == 0){
 		//GameBGM音量を小さくする
 		//serverからのみGameBGMを流すので音量変化はしない
 		//ChangeVolumeSoundMem(126, sound_id["S_GAME_BGM"]);
 	} else if(draw_timer < fade_out_time) {
-		//カメラ入力はmain関数で描画
-		//finishの文字出力
+		if(draw_timer > 30){
+			//画面変化
+			int alpha_val = (draw_timer-30)*8;
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_val); 
+			DrawExtendGraph(LEFT_WINDOW_WIDTH, 0, LEFT_WINDOW_WIDTH+999, 730, figure_id["F_FINISH_CYBER"], true); 
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
 	} else if(draw_timer == fade_out_time){
-
-
 	} else if(draw_timer < fade_in_start_time){
 		int black_value = (draw_timer - fade_out_time) * 15;
 		black_value = (255 < black_value) ? 255 : black_value;
@@ -226,7 +261,8 @@ bool CFinish::draw(){
 		//描画リストの要素をすべて削除せず、リザルトレイヤーを一番上に
 		auto result = make_shared<CResult>(result_score);
 		CObject::register_object(result,DRAW_LAYER::RESULT_LAYER);
-	} 
+	}
+
 	draw_timer++;
 	return true;
 }
@@ -520,7 +556,7 @@ bool CWait::draw(){
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255-flag-(beforeflag));
 			DrawGraph(wordstart+500,wordy+125,figure_id["F_CONNECTED"],true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			if(2*(flag-beforeflag-40)>360){
+			if(2*(flag-beforeflag-40)>390){
 				waitflag=2;
 				beforeflag=flag;
 			}
@@ -563,7 +599,8 @@ bool CWait::draw(){
 			}
 			DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , FALSE ) ;
 
-			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 750, camera_image_handle, false ) ;
+			DrawExtendGraph(  LEFT_WINDOW_WIDTH ,0,1000 + LEFT_WINDOW_WIDTH  , 730, camera_image_handle, false ) ;
+			DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_MASK"],true);
 			
 			//カーソルとかの情報をひょうじするならここ
 			printinfo();
@@ -573,16 +610,25 @@ bool CWait::draw(){
 			DrawGraph(33+LEFT_WINDOW_WIDTH,28,figure_id["F_HPFRAME2"],true);
 			DrawGraph(34+LEFT_WINDOW_WIDTH,-1,figure_id["F_LIFE"],true);
 			SetDrawBright(255,255,255);
+
 			for(int i=0;i<4;i++){
-				DrawExtendGraph(1050, i*RANK_HEIGHT+10,1170,i*RANK_HEIGHT+RANK_HEIGHT+5, figure_id["F_SCORE"], true);
+				DrawExtendGraph(1050, i*RANK_HEIGHT+84,1170,i*RANK_HEIGHT+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
 				SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 				if(0 <10){
-					DrawOriginalString(1070,i*RANK_HEIGHT + 12,0.625,16,to_string(i+1)+"P: "+to_string(0));
+					DrawOriginalString(1070,i*RANK_HEIGHT + 86,0.625,16,to_string(i+1)+"P: "+to_string(0));
 				}else{
-					DrawOriginalString(1070,i*RANK_HEIGHT + 12,0.625,16,to_string(i+1)+"P:"+to_string(0));
+					DrawOriginalString(1070,i*RANK_HEIGHT + 86,0.625,16,to_string(i+1)+"P:"+to_string(0));
 				}
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 			}
+
+			
+				int k;
+				for(k=0;k<4;k++) if(PLAYER_NM == k)DrawGraph(750+LEFT_WINDOW_WIDTH,2,figure_id["F_P"+to_string(k+1)],true);
+			
+				
+			
+
 			/*
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA,200);
 			DrawRotaGraph(LEFT_WINDOW_WIDTH+500,375,1,0,figure_id["F_COUNTBASE"],true);
@@ -726,18 +772,6 @@ CWait::CWait(){
 	beforeflag=0;
 }
 
-
-
-bool CKamifubuki::draw(){
-	DrawExtendGraph(0,0,1500,750,kamifubuki[(draw_timer%120)/5],true);
-	draw_timer++;
-	return  true;
-}
-
-CKamifubuki::CKamifubuki(){
-	draw_timer=0;
-}
-
 bool CMovie::draw(){
 	DrawExtendGraph(0,0,1349,729,figure_id[name],false);
 	if( GetMovieStateToGraph(figure_id[name]) ==1 ) return true;
@@ -810,13 +844,20 @@ bool CScore_Info::draw(){
 
 	//描画
 	for(int i=0;i<4;i++){
-		DrawExtendGraph(1050, score_info_enemy[i].info_y+10,1170,score_info_enemy[i].info_y+RANK_HEIGHT+5, figure_id["F_SCORE"], true);
-
+		if(PLAYER_NM==i){
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
+			DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}else{
+			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,155);
+			DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		}
 		SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 		if(score_info_enemy[i].score <10){
-			DrawOriginalString(1070,score_info_enemy[i].info_y + 12,0.625,16,to_string(i+1)+"P: "+to_string(score_info_enemy[i].score));
+			DrawOriginalString(1070,score_info_enemy[i].info_y + 86,0.625,16,to_string(i+1)+"P: "+to_string(score_info_enemy[i].score));
 		}else{
-			DrawOriginalString(1070,score_info_enemy[i].info_y + 12,0.625,16,to_string(i+1)+"P:"+to_string(score_info_enemy[i].score));
+			DrawOriginalString(1070,score_info_enemy[i].info_y + 86,0.625,16,to_string(i+1)+"P:"+to_string(score_info_enemy[i].score));
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
@@ -837,7 +878,7 @@ void CDenkyu::attaacked(){
 bool CDenkyu::draw(){
 
 	x=ip_x*1000/320;//画面引き延ばしてる分の補正
-	y=ip_y*750/240;
+	y=ip_y*730/240;
 
 	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "電");
 	if(denkyu_id = 0)DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "気");
@@ -858,11 +899,15 @@ bool CBack::draw(){
 			SeekMovieToGraph( figure_id["M_SYBACK"] , 0 ) ;
 			PlayMovieToGraph(figure_id["M_SYBACK"]);
 	}
-	DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , FALSE );
+	DrawExtendGraph( 0 , 0 ,1349,729, figure_id["M_SYBACK"] , false );
 	WaitTimer(17);
 
 	// 読みこんだグラフィックを拡大描画
-	DrawExtendGraph(shake_x + LEFT_WINDOW_WIDTH,shake_y,1000+shake_x + LEFT_WINDOW_WIDTH, 750+shake_y , camera_image_handle,false) ;
+	DrawExtendGraph(shake_x + LEFT_WINDOW_WIDTH,shake_y,1000+shake_x + LEFT_WINDOW_WIDTH, 730+shake_y , camera_image_handle,false) ;
+
+	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+	DrawGraph(LEFT_WINDOW_WIDTH,0,figure_id["F_MASK"],true);
 
 	return true;
 }

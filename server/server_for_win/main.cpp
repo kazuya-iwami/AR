@@ -6,7 +6,7 @@
 
 #define BUFMAX 40
 #define BASE_PORT (u_short)20000
-#define PORT_NUM 3
+#define PORT_NUM 1
 
 #define SERIAL_PORT  "\\\\.\\COM3" //シリアルポート名  "\\\\.\\COM3"
 #define Err(x) {fprintf(stderr,"-"); perror(x); exit(0);}
@@ -58,12 +58,10 @@ time_t denkyu_start_time,denkyu_end_time;
 char key_buf [ 256 ] ;
 char key_prev_buf [ 256 ] ;
 
+int bgm_id;
+int result_sound;
+int wait_sound;
 
-
-//データのロード
-int bgm_id=LoadSoundMem("../../player/player/sound/GameBGM.mp3");
-int result_sound=LoadSoundMem("../../player/player/sound/result.mp3");
-int wait_sound=LoadSoundMem("../../player/player/sound/wait.mp3");
 
 
 
@@ -85,6 +83,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//consoleを使用可に
 	AllocConsole();
 	freopen ( "CONOUT$", "w", stdout ); 
+
+	//データのロード
+	int bgm_id=LoadSoundMem("../../player/player/sound/GameBGM.mp3");
+	int result_sound=LoadSoundMem("../../player/player/sound/result.mp3");
+	int wait_sound=LoadSoundMem("../../player/player/sound/wait.mp3");
 
 
 	//winsocket初期化
@@ -158,7 +161,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	printf("hostname is %s", shostn);
 	printf("\n");
 
-
 	shost = gethostbyname(shostn);
 	if (shost == NULL) Err("gethostbyname");
 
@@ -173,6 +175,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	std::cout << "接続完了"<<std::endl;
 
 	init();
+	PlaySoundMem( wait_sound , DX_PLAYTYPE_LOOP );
 
 	while( 1 )
 	{
@@ -187,12 +190,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		// 画面に描かれているものをすべて消す
 		ClearDrawScreen() ;
 
-		if(bgm_timer == 0){
+		//if(bgm_timer == 0){
 			//wait_bgm 
 		    // ループ位置をセットする
-			SetLoopPosSoundMem( 0, wait_sound ) ;
-			PlaySoundMem( wait_sound , DX_PLAYTYPE_LOOP );
-		}
+		//	SetLoopPosSoundMem( 0, wait_sound ) ;
+		//	PlaySoundMem( wait_sound , DX_PLAYTYPE_LOOP );
+		//}
+
 
 		//ミニマップ処理
 		/*
@@ -243,9 +247,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					player_param[i].init();
 				}
 				//BGM再生準備
-				StopSoundMem( wait_sound );
 				bgm_timer = 0;
-
+				
 			}else if(game_status == GAME_STATUS::GAME_PLAY){
 
 				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PAUSE,0,0),4);
@@ -260,10 +263,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				std::cout << "結果画面へ" << std::endl;
 				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_WAIT, 0, 0), 4);
 				//game_status = GAME_STATUS::GAME_WAIT;
+				StopSoundMem(result_sound);//BGM停止
+				PlaySoundMem(wait_sound, DX_PLAYTYPE_LOOP);
+				ChangeVolumeSoundMem( 255 , wait_sound ) ;
 				init();//waitヘ移行
 			}
 		}
-
 
 		//check_item_valid();
 		check_dead_valid();
@@ -295,8 +300,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//finish状態か確認
 		if(game_status == GAME_STATUS::GAME_PLAY){
 			//game_bgm再生
-			if(bgm_timer == 500) PlaySoundMem( bgm_id , DX_PLAYTYPE_BACK );
-
+			ChangeVolumeSoundMem( 255-bgm_timer*0.5 , wait_sound ) ;
+			if(bgm_timer == 600){
+				StopSoundMem(wait_sound);
+				PlaySoundMem( bgm_id , DX_PLAYTYPE_BACK );
+			}
 			bool all_finish_flag=true;
 			bool disconnect_flag=false;
 			for (int i = 0;i < PORT_NUM;i++){
@@ -422,8 +430,6 @@ void init(){
 	denkyu_timer_flag=0;
 	denkyu_flag =1;//初期化 000
 	game_status=GAME_STATUS::GAME_WAIT;
-	StopSoundMem(result_sound);//BGM停止
-	PlaySoundMem(wait_sound, DX_PLAYTYPE_LOOP);
 	item_end_time = 0;
 	for(int i=0;i<4;i++){
 		//item_start_time[i] = 0;

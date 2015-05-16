@@ -144,9 +144,14 @@ int main(int argc, char *argv[]) {
     Mat image;
 	Data data;
 
-    VideoCapture cap(1); // デフォルトカメラをオープン
-    if(!cap.isOpened())  // 成功したかどうかをチェック
-        return -1;
+	VideoCapture cap;
+
+
+	const std::string videoStreamAddress =std::string("http://")+"192.168.10.109"+":8080/?action=stream.mjpeg";
+
+	if(!cap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
+		 return -1;
+	}
 
 	//hsv.csv開く
 	data.open();

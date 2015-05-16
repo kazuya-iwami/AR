@@ -26,7 +26,7 @@ using namespace std;
 
 
 
-#define USE_CAMERA_FLAG 2
+#define USE_CAMERA_FLAG 1
 
 
 //0:画像 1:カメラ 2:ラズパイ
@@ -237,10 +237,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				iwami->init();
 				draw_mtx.unlock();
 			}
-			else if(  key_buf[ KEY_INPUT_P ] == 1 && key_prev_buf[ KEY_INPUT_P] == 0 && wait->mode > 0){
+			else 
+			*/
+			if(  key_buf[ KEY_INPUT_P ] == 1 && key_prev_buf[ KEY_INPUT_P] == 0 && wait->mode > 0){
 				wait->mode=0;
 			}
-			*/
+			
 			if(key_buf[KEY_INPUT_S]==1){
 				wait->spin=wait->spin+2;
 			}

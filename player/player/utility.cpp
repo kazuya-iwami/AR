@@ -329,7 +329,7 @@ bool CResult::draw(){
 
 		//スコアカードが流れてくる
 		int dx = (draw_timer - float_start_time)*100;
-		for(int i = 0; i < 4; i++){
+		for(int i = 0; i < 1; i++){
 			int x = 1400 + i*400 -dx;
 			if(x == 1000) PlaySoundMem(sound_id["S_RESULT_SCORE"], DX_PLAYTYPE_BACK);
 			if(x < 360) x = 360;
@@ -339,7 +339,7 @@ bool CResult::draw(){
 
 	} else {
 		//自分のスコアは点滅
-		for(int i = 0; i < 4; i++){
+		for(int i = 0; i < 1; i++){
 			if(PLAYER_NM == result_score[i].second){
 				int alpha_palam = 30 + draw_timer - float_end_time;
 				alpha_palam = (alpha_palam%60-30)*(alpha_palam%60-30)/3;
@@ -633,7 +633,7 @@ bool CWait::draw(){
 			DrawGraph(34+LEFT_WINDOW_WIDTH,-1,figure_id["F_LIFE"],true);
 			SetDrawBright(255,255,255);
 
-			for(int i=0;i<4;i++){
+			for(int i=0;i<1;i++){
 				DrawExtendGraph(1050, i*RANK_HEIGHT+84,1170,i*RANK_HEIGHT+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
 				SetDrawBlendMode(DX_BLENDMODE_ADD,255);
 				if(0 <10){
@@ -820,7 +820,7 @@ CScore_info_enemy::CScore_info_enemy(){
 
 CScore_Info::CScore_Info(int mytank_id_){
 	mytank_id = mytank_id_;
-	for(int i=0;i<4;i++){
+	for(int i=0;i<1;i++){
 		score_info_enemy[i].rank = i;
 		score_info_enemy[i].info_y = i*RANK_HEIGHT;
 	}
@@ -849,13 +849,13 @@ bool CScore_Info::draw(){
 	});
 
 	//rankに反映
-	for(int i=0;i<4;i++){
+	for(int i=0;i<1;i++){
 		score_info_enemy[tmp_rank[i].second].rank = i;
 	}
 	rank_info = tmp_rank;
 
 	//毎回rankとinfo_yがずれていると動かす
-	for(int i=0;i<4;i++){
+	for(int i=0;i<1;i++){
 		if(abs(score_info_enemy[i].info_y - score_info_enemy[i].rank*RANK_HEIGHT) > SORT_SPEED+1){
 			int flag = (score_info_enemy[i].info_y - score_info_enemy[i].rank*RANK_HEIGHT < 0)? 1:-1;
 			score_info_enemy[i].info_y += SORT_SPEED * flag;
@@ -865,7 +865,7 @@ bool CScore_Info::draw(){
 	}
 
 	//描画
-	for(int i=0;i<4;i++){
+	for(int i=0;i<1;i++){
 		if(PLAYER_NM==i){
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
 			DrawExtendGraph(1050, score_info_enemy[i].info_y+84,1170,score_info_enemy[i].info_y+RANK_HEIGHT+80, figure_id["F_SCORE"], true);

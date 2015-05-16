@@ -167,6 +167,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		nsockfd[i] = set_tcp_socket(BASE_PORT + i, shost);
 		if (maxfd < nsockfd[i] + 1)maxfd = nsockfd[i] + 1;
 		std::cout << "プレイヤー:" << i << "が接続しました" << std::endl;
+		if(i<3)set_denkyu(i,true);
 	}
 
 	std::cout << "接続完了"<<std::endl;
@@ -255,6 +256,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_PLAY, 0, 0), 4);
 				game_status = GAME_STATUS::GAME_PLAY;
 				std::cout << "プレー再開" << std::endl;
+			}else if(game_status == GAME_STATUS::GAME_FINISH){
+				std::cout << "結果画面へ" << std::endl;
+				send_message(encode(COMMAND_NAME::CHANGE_STATUS,GAME_STATUS::GAME_WAIT, 0, 0), 4);
+				//game_status = GAME_STATUS::GAME_WAIT;
+				init();//waitヘ移行
 			}
 		}
 
@@ -304,7 +310,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				//					exit(1);
 				//				}
 				StopSoundMem(bgm_id);//BGM停止
-				init();
+				PlaySoundMem(result_sound,DX_PLAYTYPE_LOOP);//結果画面に移る
+				game_status = GAME_STATUS::GAME_FINISH;
+
 			}
 
 		}
@@ -414,6 +422,7 @@ void init(){
 	denkyu_timer_flag=0;
 	denkyu_flag =1;//初期化 000
 	game_status=GAME_STATUS::GAME_WAIT;
+	StopSoundMem(result_sound);//BGM停止
 	PlaySoundMem(wait_sound, DX_PLAYTYPE_LOOP);
 	item_end_time = 0;
 	for(int i=0;i<4;i++){
@@ -481,9 +490,9 @@ void serial_init(){
 void set_denkyu(int denkyu_id,bool flag){
 
 	int tmp_flag = 0x00;
-	if(denkyu_id == 1)tmp_flag=0x01; //001
-	if(denkyu_id == 2)tmp_flag=0x02; //010
-	if(denkyu_id == 3)tmp_flag=0x04; //100
+	if(denkyu_id == 0)tmp_flag=0x01; //001
+	if(denkyu_id == 1)tmp_flag=0x02; //010
+	if(denkyu_id == 2)tmp_flag=0x04; //100
 
 	if(flag){
 		denkyu_flag |= tmp_flag; //あるビットをオンにする

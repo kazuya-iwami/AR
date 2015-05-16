@@ -23,7 +23,7 @@
 using namespace std;
 
 #define GAME_TIME 180 //プレー時間　300秒
-#define FINISH_TIME 5 //結果発表の時間 5秒
+
 
 
 #define USE_CAMERA_FLAG 2
@@ -101,9 +101,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	
 	//auto redback=make_shared<CEffect>();
-	
-	
-	int finish_timer=0; //結果発表画面用タイマー
 
 	//キーボード用
 	char key_buf [ 256 ] ;
@@ -244,7 +241,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				wait->mode=0;
 			}
 			*/
-			if(key_buf[KEY_INPUT_S]==1 && key_prev_buf[KEY_INPUT_S]==0){
+			if(key_buf[KEY_INPUT_S]==1){
 				wait->spin=wait->spin+2;
 			}
 			if(wait->movieflag==1){
@@ -344,10 +341,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 						mytank->focus_to_down();
 					}
 
+					/*
 					//テスト用　とりあえずX押したら画面が振動するよ
 					if(key_buf[KEY_INPUT_X]==1 && key_prev_buf[KEY_INPUT_X]==0){
 						mytank->shake_start(SHAKE_STATUS::BIG_SHAKE);
-					}
+					}*/
 
 				}
 				/* 弾丸補充中動作しない処理ここまで */
@@ -361,7 +359,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				}
 				/* 弾丸補充処理ここまで */
 
-
+				/*
 				//テスト用　Ｌを押すと攻撃を受けるよ
 				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
 					mytank->attacked(1);
@@ -381,17 +379,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				if (key_buf[KEY_INPUT_L]==1 && key_prev_buf[KEY_INPUT_L]==0) {
 					mytank->enemy2->score++;
 				}
-				
-				//テスト用　eeicのボタンでeeic点灯
-				if(key_buf[KEY_INPUT_E]==1 && key_prev_buf[KEY_INPUT_E]==0){
-					mytank->eeic->denkyu[0].attaacked();
-				}
-				if(key_buf[KEY_INPUT_I]==1 && key_prev_buf[KEY_INPUT_I]==0){
-					mytank->eeic->denkyu[1].attaacked();
-				}
-				if(key_buf[KEY_INPUT_C]==1 && key_prev_buf[KEY_INPUT_C]==0){
-					mytank->eeic->denkyu[2].attaacked();
-				}
+				*/
 			}
 
 			/*
@@ -400,12 +388,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				mytank->set_game_status(GAME_STATUS::GAME_PAUSE);
 			}
 			*/
-			//Qを押すとゲーム中だったのが終了画面へと遷移
+			
 			//時間切れるとGAME_STATUS変更
-			if(system_timer->get_finish_flag() || key_buf[ KEY_INPUT_Q ] == 1){
+			if(system_timer->get_finish_flag() /*|| key_buf[ KEY_INPUT_Q ] == 1*/){
 				mytank->finish();
-				finish_timer = FINISH_TIME*30;
-				//時間切れの処理
+				
 			}
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PAUSE){

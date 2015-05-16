@@ -29,7 +29,7 @@ int flash[16];
 int flash2[10];
 
 //グレー変換
-int gray[10];
+//int gray[10];
 
 //up_effect
 int up_effect[10];
@@ -122,6 +122,7 @@ void CObject::load(){
 	figure_id["F_SUMI"]=LoadGraph("image/sumi.png");
 
 	//白からグレーに変わるとき用
+	/*
 	gray[0]=LoadGraph("image/back/grayback10.png");	
 	gray[1]=LoadGraph("image/back/grayback9.png");	
 	gray[2]=LoadGraph("image/back/grayback8.png");	
@@ -131,7 +132,7 @@ void CObject::load(){
 	gray[6]=LoadGraph("image/back/grayback4.png");	
 	gray[7]=LoadGraph("image/back/grayback3.png");	
 	gray[8]=LoadGraph("image/back/grayback2.png");	
-	gray[9]=LoadGraph("image/back/grayback1.png");
+	gray[9]=LoadGraph("image/back/grayback1.png");*/
 
 
 	//game_end

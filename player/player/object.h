@@ -17,7 +17,7 @@ extern int bullet[30];
 extern int bullet_start[45];
 
 //グレー変換
-extern int gray[10];
+//extern int gray[10];
 
 //タイトル用
 extern int title[14];

@@ -102,8 +102,8 @@ CSystem_timer::CSystem_timer(int x_,int y_,int game_time){
 bool CEnemy::draw(){
 	x=ip_x*1000/320;//画面引き延ばしてる分の補正
 	y=ip_y*730/240;
-	int slide_x = -70;
-	int slide_y = -70;
+	int slide_x = 0;
+	int slide_y = 0;
 
 
 	if(countdown_finish_flag && visible){//視界に入っているなら

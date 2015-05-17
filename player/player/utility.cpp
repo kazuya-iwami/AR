@@ -633,6 +633,7 @@ bool CWait::draw(){
 			DrawGraph(34+LEFT_WINDOW_WIDTH,-1,figure_id["F_LIFE"],true);
 			SetDrawBright(255,255,255);
 
+			/*
 			for(int i=0;i<1;i++){
 				DrawExtendGraph(1050, i*RANK_HEIGHT+84,1170,i*RANK_HEIGHT+RANK_HEIGHT+80, figure_id["F_SCORE"], true);
 				SetDrawBlendMode(DX_BLENDMODE_ADD,255);
@@ -642,11 +643,15 @@ bool CWait::draw(){
 					DrawOriginalString(1070,i*RANK_HEIGHT + 86,0.625,16,to_string(i+1)+"P:"+to_string(0));
 				}
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-			}
+			}*/
 
 			
-				int k;
-				for(k=0;k<4;k++) if(PLAYER_NM == k)DrawGraph(750+LEFT_WINDOW_WIDTH,2,figure_id["F_P"+to_string(k+1)],true);
+			int k;
+			for(k=0;k<4;k++) if(PLAYER_NM == k)DrawGraph(750+LEFT_WINDOW_WIDTH,2,figure_id["F_P"+to_string(k+1)],true);
+
+			for(k=0;k<10;k++){
+				DrawGraph(LEFT_WINDOW_WIDTH+920,110+60*k,figure_id["F_TARGET"],true);
+			}
 			
 				
 			
@@ -865,6 +870,7 @@ bool CScore_Info::draw(){
 	}
 
 	//描画
+	/*
 	for(int i=0;i<1;i++){
 		if(PLAYER_NM==i){
 			SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,255);
@@ -882,7 +888,7 @@ bool CScore_Info::draw(){
 			DrawOriginalString(1070,score_info_enemy[i].info_y + 86,0.625,16,to_string(i+1)+"P:"+to_string(score_info_enemy[i].score));
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-	}
+	}*/
 
 	return true;
 

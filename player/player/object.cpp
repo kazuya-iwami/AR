@@ -134,6 +134,9 @@ void CObject::load(){
 	gray[8]=LoadGraph("image/back/grayback2.png");	
 	gray[9]=LoadGraph("image/back/grayback1.png");*/
 
+	//for solo play
+	figure_id["F_TARGET"]=LoadGraph("image/target.png");
+
 
 	//game_end
 	figure_id["F_GAME_END"]=LoadGraph("image/game_end/game_end.png");

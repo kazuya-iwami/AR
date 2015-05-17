@@ -397,6 +397,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				
 			}
 
+			//全て打ち終わると終了
+			if(mytank->target_num>=4){
+				mytank->finish();
+			}
+
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PAUSE){
 
 			draw_mtx.lock();

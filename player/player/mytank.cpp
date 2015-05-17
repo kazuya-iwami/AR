@@ -114,7 +114,7 @@ bool CMytank::draw() {
 		dead_time++;
 	}
 
-	int target_num = 0;
+	target_num = 0;
 	for(k=0;k<MAX_TARGET;k++) if(target_hit[k] == false) target_num++;
 	for(k=0;k<target_num;k++){
 		DrawGraph(LEFT_WINDOW_WIDTH+920,110+60*k,figure_id["F_TARGET"],true);
@@ -126,6 +126,7 @@ bool CMytank::draw() {
 CMytank::CMytank() {
 	//初期化
 
+	target_num=0;
 	for(int i =0;i<MAX_TARGET;i++){
 		target_hit[i]=false;
 	}

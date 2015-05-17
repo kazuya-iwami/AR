@@ -26,7 +26,7 @@ using namespace std;
 
 
 
-#define USE_CAMERA_FLAG 1
+#define USE_CAMERA_FLAG 2
 
 
 //0:画像 1:カメラ 2:ラズパイ

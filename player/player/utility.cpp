@@ -665,7 +665,7 @@ bool CWait::draw(){
 			for(k=0;k<4;k++) if(PLAYER_NM == k)DrawGraph(750+LEFT_WINDOW_WIDTH,2,figure_id["F_P"+to_string(k+1)],true);
 
 			for(k=0;k<10;k++){
-				DrawGraph(LEFT_WINDOW_WIDTH+920,110+60*k,figure_id["F_TARGET"],true);
+				//DrawGraph(LEFT_WINDOW_WIDTH+920,110+60*k,figure_id["F_TARGET"],true);
 			}
 			
 				

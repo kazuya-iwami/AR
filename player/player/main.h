@@ -19,6 +19,7 @@ extern std::string RASPI_IP_ADDRESS ;//"pi@rpi04.local"//ラズパイのＩＰ�
 
 extern int PLAYER_NM ;	//自分のプレイヤー番号
 
+#define MAX_TARGET 10
 
 string encode(COMMAND_NAME, int, int, int);
 

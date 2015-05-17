@@ -34,6 +34,7 @@ enum VIABILITY_STATUS { //生存状態
 class CEnemy : public CImage_processer,public CObject {
 
 public:
+	bool shooted;
 	int enemy_id;
 	int score;
 	int HP;

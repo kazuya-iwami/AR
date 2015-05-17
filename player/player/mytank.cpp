@@ -120,6 +120,10 @@ bool CMytank::draw() {
 
 CMytank::CMytank() {
 	//初期化
+
+	for(int i =0;i<MAX_TARGET;i++){
+		target_hit[i]=false;
+	}
 	score = 0;
 	HP = 3;//最初のHPは3
 	hit_counter = 0;

@@ -67,6 +67,8 @@ public:
 
 	int* wait_mode;
 
+	bool target_hit[MAX_TARGET];
+
 	shared_ptr<CEnemy> enemy0;
 	shared_ptr<CEnemy> enemy1;
 	shared_ptr<CEnemy> enemy2;

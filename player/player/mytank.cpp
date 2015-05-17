@@ -246,6 +246,23 @@ void CMytank::gen_bullet(BULLET_KIND item_data) {
 	auto bullet = make_shared<CBullet>(focus_x , focus_y, 0, BULLET_KIND::BULLET_NOMAL);
 	CObject::register_object(bullet,DRAW_LAYER::BULLET_LAYER);
 
+	
+	if (id != 0 && enemy0->lockon){
+		enemy0->shooted=true;
+		target_hit[0]=true;
+	}
+	if (id != 1 && enemy1->lockon){
+		enemy1->shooted=true;
+		target_hit[1]=true;
+	}
+	if (id != 2 && enemy2->lockon){
+		enemy2->shooted=true;
+		target_hit[2]=true;
+	}
+	if (id != 3 && enemy3->lockon){
+		enemy3->shooted=true;
+		target_hit[3]=true;
+	}
 	if (id != 0 && enemy0->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 0, (int)BULLET_KIND::BULLET_NOMAL));
 	if (id != 1 && enemy1->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 1, (int)BULLET_KIND::BULLET_NOMAL));
 	if (id != 2 && enemy2->lockon)send_msg(encode(COMMAND_NAME::SHOOT_BULLET, id, 2, (int)BULLET_KIND::BULLET_NOMAL));
@@ -302,7 +319,7 @@ void CMytank::check_focus(){
 				if(enemy0->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy0->lockon = true;
 				}
-				if((0 == CEnemy::just_before_shooted) && (CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-10*30)) { // 直前に撃った相手への攻撃禁止
+				if(enemy0->shooted) { // 直前に撃った相手への攻撃禁止
 					enemy0->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy0->viability_status) {
@@ -315,7 +332,7 @@ void CMytank::check_focus(){
 				if(enemy1->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy1->lockon = true;
 				}
-				if((1 == CEnemy::just_before_shooted) &&( CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-10*30)) { // 直前に撃った相手への攻撃禁止
+				if(enemy1->shooted) { // 直前に撃った相手への攻撃禁止
 					enemy1->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy1->viability_status) {
@@ -328,7 +345,7 @@ void CMytank::check_focus(){
 				if(enemy2->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy2->lockon = true;
 				}
-				if((2 == CEnemy::just_before_shooted) && (CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-10*30)) { // 直前に撃った相手への攻撃禁止
+				if(enemy2->shooted) { // 直前に撃った相手への攻撃禁止
 					enemy2->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy2->viability_status) {
@@ -341,7 +358,7 @@ void CMytank::check_focus(){
 				if(enemy3->exist){ //切断したプレーヤーへの攻撃禁止
 					enemy3->lockon = true;
 				}
-				if((3 == CEnemy::just_before_shooted) && (CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-10*30)) { // 直前に撃った相手への攻撃禁止
+				if(enemy3->shooted) { // 直前に撃った相手への攻撃禁止
 					enemy3->lockon = false;
 				}
 				if(VIABILITY_STATUS::DEAD == enemy3->viability_status) {

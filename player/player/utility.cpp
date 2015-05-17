@@ -116,7 +116,7 @@ bool CEnemy::draw(){
 			}
 
 			if (VIABILITY_STATUS::DEAD == viability_status) {//死んでるときはlock-onできない
-				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
+				//DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
 				//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "こいつ死んでるよ(´・ω・`)");	
 			}
 			
@@ -138,6 +138,7 @@ CEnemy::CEnemy(int enemy_id_){
 	exist=true;
 	enemy_id = enemy_id_;
 	lockon = false;
+	shooted = false;
 	just_before_shooted = -1; // 直前には誰も撃たれていない
 	just_before_shooted_time=-1;//直前には誰も撃っていない
 	countdown_finish_flag = false;

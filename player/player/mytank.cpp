@@ -971,7 +971,9 @@ void CMytank::finish(){
 	set_game_status(GAME_STATUS::GAME_FINISH);
 
 	//結果画面の描画準備
-	auto finish = make_shared<CFinish>(score_info->get_rank_info());
+	int i,tscore=0;
+	for(i=0;i<MAX_TARGET;i++) if(target_hit[i]) tscore++;
+	auto finish = make_shared<CFinish>(score_info->get_rank_info(),tscore);
 	CObject::register_object(finish,DRAW_LAYER::IMFOMATION_LAYER);
 	//auto kamifubuki=make_shared<CKamifubuki>();
 	//CObject::register_object(kamifubuki,DRAW_LAYER::IMFOMATION_LAYER);
@@ -1035,12 +1037,12 @@ void CMytank::focus_to_down(){
 };
 
 void CMytank::focus_to_right(){
-	if(focus_x > 675+150 -LEFT_WINDOW_WIDTH) return;
+	if(focus_x > 675+350 -LEFT_WINDOW_WIDTH) return;
 	focus_x += FOCUS_SPEED;
 };
 
 void CMytank::focus_to_left(){
-	if(focus_x < 675-150 -LEFT_WINDOW_WIDTH) return;
+	if(focus_x < 675-350 -LEFT_WINDOW_WIDTH) return;
 	focus_x -= FOCUS_SPEED;
 };
 

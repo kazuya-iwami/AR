@@ -90,17 +90,19 @@ public:
 };
 
 class CFinish:public CObject{
+	int tscore;
 public:
 	std::vector<pair<int,int> > result_score;
-	CFinish(std::vector<pair<int,int> > resul_score_);
+	CFinish(std::vector<pair<int,int> > resul_score_,int tscore_);
 	bool draw();
 };
 
 class CResult: public CObject{
+	int tscore;
 public:
 	int result_movie_handle;
 	std::vector<pair<int,int> > result_score;
-	CResult(vector<pair<int,int> > result_score_);
+	CResult(vector<pair<int,int> > result_score_,int tscore_);
 	bool draw();
 };
 

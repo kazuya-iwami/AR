@@ -219,7 +219,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 			
-			if( wait->gameflag==1){
+			if( wait->gameflag==1  || key_buf[KEY_INPUT_RETURN] == 1){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
 				
 				wait->gameflag=0;			
@@ -392,7 +392,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			*/
 			
 			//時間切れるとGAME_STATUS変更
-			if(system_timer->get_finish_flag() /*|| key_buf[ KEY_INPUT_Q ] == 1*/){
+			if(system_timer->get_finish_flag() || key_buf[ KEY_INPUT_Q ] == 1){
 				mytank->finish();
 				
 			}

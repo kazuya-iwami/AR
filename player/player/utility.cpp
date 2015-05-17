@@ -206,7 +206,8 @@ bool CUp_effect::draw(){
 }
 
 
-CFinish :: CFinish(vector<pair<int,int> > result_score_){
+CFinish :: CFinish(vector<pair<int,int> > result_score_,int tscore_){
+	tscore = tscore_;
 	result_score = result_score_;
 	draw_timer = 0;
 }
@@ -269,7 +270,7 @@ bool CFinish::draw(){
 		StopSoundMem(sound_id["S_GAME_BGM"]);
 
 		//描画リストの要素をすべて削除せず、リザルトレイヤーを一番上に
-		auto result = make_shared<CResult>(result_score);
+		auto result = make_shared<CResult>(result_score,tscore);
 		CObject::register_object(result,DRAW_LAYER::RESULT_LAYER);
 	}
 
@@ -278,9 +279,10 @@ bool CFinish::draw(){
 }
 
 
-CResult :: CResult(vector<pair<int,int> > result_score_){
+CResult :: CResult(vector<pair<int,int> > result_score_,int tscore_){
 	result_score = result_score_;
 	draw_timer = 0;
+	tscore = tscore_;
 }
 
 bool CResult::draw(){
@@ -311,6 +313,8 @@ bool CResult::draw(){
 	DrawGraph( 0 , 0 , result_movie_handle , FALSE ) ;
 	// ウエイトをかけます、あまり速く描画すると画面がちらつくからです
     WaitTimer( 17 ) ;
+	DrawGraph(275,100,figure_id["F_SCORELOGO"],true);
+
 
 	/*
 		仕様：
@@ -334,24 +338,31 @@ bool CResult::draw(){
 			int x = 1400 + i*400 -dx;
 			if(x == 1000) PlaySoundMem(sound_id["S_RESULT_SCORE"], DX_PLAYTYPE_BACK);
 			if(x < 360) x = 360;
-			DrawGraph(x, 150+140*i, figure_id["F_RESULT_CARD"], true);
-			DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
+			//DrawGraph(x, 150+140*i, figure_id["F_RESULT_CARD"], true);
+			//DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
+
+			DrawExtendGraph(x-160,350,x+790,550,figure_id["F_RESULT_CARD"],true);
+			DrawOriginalString(x+130,410,2,55,to_string(tscore) + " / 10");
 		}
 
 	} else {
 		//自分のスコアは点滅
 		for(int i = 0; i < 1; i++){
 			if(PLAYER_NM == result_score[i].second){
+				x=360;//for solo
 				int alpha_palam = 30 + draw_timer - float_end_time;
 				alpha_palam = (alpha_palam%60-30)*(alpha_palam%60-30)/3;
-				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
+				//DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
+				DrawExtendGraph(x-160,350,x+790,550,figure_id["F_RESULT_CARD"],true);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_palam);
-				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD_WHITE"], true);
+				//DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD_WHITE"], true);
+				DrawExtendGraph(x-160,350,x+790,550,figure_id["F_RESULT_CARD_WHITE"],true);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
-				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
+				//DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
+				DrawOriginalString(x+130,410,2,55,to_string(tscore) + " / 10");
 			} else {
-				DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
-				DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
+				//DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
+				//DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
 			}
 		}
 	}
@@ -965,6 +976,7 @@ bool CMarker::draw(){
 		y = marker_y;
 
 		//DrawFormatString(x - 50 + LEFT_WINDOW_WIDTH ,y-50 , GetColor(255,255,255), "marker:%d",marker_id);
+		DrawGraph(x+80,y-200,figure_id["F_MICON"],true);
 	}
 
 	return true;

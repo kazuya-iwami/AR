@@ -136,6 +136,8 @@ void CObject::load(){
 
 	//for solo play
 	figure_id["F_TARGET"]=LoadGraph("image/target.png");
+	figure_id["F_SCORELOGO"]=LoadGraph("image/scorelogo.png");
+	figure_id["F_MICON"]=LoadGraph("image/micon.png");
 
 
 	//game_end
@@ -168,7 +170,7 @@ void CObject::load(){
 	sound_id["S_GAMEEND"]=LoadSoundMem("sound/gameend.mp3");
 	sound_id["S_RESULT_SCORE"]=LoadSoundMem("sound/result_score.mp3");
 	sound_id["S_FINISH"]=LoadSoundMem("sound/finish.mp3");
-	sound_id["S_AN"]=LoadSoundMem("sound/an.wav");
+	sound_id["S_AN"]=LoadSoundMem("sound/zeruda.wav");
 	/*
 	//BGM
 	//sound_id["S_GAME_BGM"]=LoadSoundMem("sound/GameBGM.mp3");

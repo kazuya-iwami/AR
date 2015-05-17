@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
 	VideoCapture cap;
 
 
-	const std::string videoStreamAddress =std::string("http://")+"192.168.10.114"+":8080/?action=stream.mjpeg";
+	const std::string videoStreamAddress =std::string("http://")+"192.168.10.110"+":8080/?action=stream.mjpeg";
 
 	if(!cap.open(videoStreamAddress)) { //ラズパイからの取得はこちら
 		 return -1;

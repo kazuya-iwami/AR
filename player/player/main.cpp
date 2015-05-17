@@ -22,7 +22,7 @@
 
 using namespace std;
 
-#define GAME_TIME 180 //プレー時間　300秒
+#define GAME_TIME 60 //プレー時間　300秒
 
 
 
@@ -219,7 +219,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		if(mytank->get_game_status() == GAME_STATUS::GAME_WAIT){
 			
-			if( wait->gameflag==1  || key_buf[KEY_INPUT_RETURN] == 1){
+			if( wait->gameflag==1  || key_buf[KEY_INPUT_RETURN] == 1 ){
 				key_prev_buf[ KEY_INPUT_RETURN] = 1; //他の条件に引っかからないよう細工
 				
 				wait->gameflag=0;			
@@ -397,10 +397,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				
 			}
 
-			//全て打ち終わると終了
-			if(mytank->target_num>=4){
-				mytank->finish();
-			}
+			
 
 		} else if(mytank->get_game_status() == GAME_STATUS::GAME_PAUSE){
 

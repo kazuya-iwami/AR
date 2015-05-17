@@ -111,7 +111,7 @@ bool CEnemy::draw(){
 			// 敵アイコンの表示
 			DrawGraph(x-60 + LEFT_WINDOW_WIDTH + slide_x, y-40 + slide_y, figure_id["F_ICON"+to_string(enemy_id+1)],true);
 			// 前回打った敵は攻撃できない
-			if(shooted){
+			if(enemy_id == CEnemy::just_before_shooted && CSystem_timer::system_timer-CEnemy::just_before_shooted_time>-10*30){
 				DrawGraph(x - 60 + LEFT_WINDOW_WIDTH,y - 40,figure_id["F_X"],true);
 			}
 
@@ -342,7 +342,9 @@ bool CResult::draw(){
 			//DrawOriginalString(x+40,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
 
 			DrawExtendGraph(x-160,350,x+790,550,figure_id["F_RESULT_CARD"],true);
-			DrawOriginalString(x+130,410,2,55,to_string(tscore) + " / 10");
+			//DrawOriginalString(x+130,410,2,55,to_string(tscore) + " / 10");
+			DrawOriginalString(x+100,410,1.5,45,to_string(result_score[i].second+1)+"P"+"\t\t\t"+to_string(result_score[i].first)+"\tpoint");
+			
 		}
 
 	} else {
@@ -359,7 +361,8 @@ bool CResult::draw(){
 				DrawExtendGraph(x-160,350,x+790,550,figure_id["F_RESULT_CARD_WHITE"],true);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 				//DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
-				DrawOriginalString(x+130,410,2,55,to_string(tscore) + " / 10");
+				//DrawOriginalString(x+130,410,2,55,to_string(tscore) + " / 10");
+				DrawOriginalString(x+100,410,1.5,45,to_string(result_score[i].second+1)+"P"+"\t\t\t"+to_string(result_score[i].first)+"\tpoint");
 			} else {
 				//DrawGraph(360, 150+140*i, figure_id["F_RESULT_CARD"], true);
 				//DrawOriginalString(400,170+140*i,1.0,24,to_string(result_score[i].second+1)+"P"+"\t\t\t\t\t\t\t\t\t"+to_string(result_score[i].first)+"\tpoint");
